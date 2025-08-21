@@ -1,69 +1,31 @@
-# React + TypeScript + Vite
+# 튜닛 웹앱 (Tunit Web)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🎵 **튜터/학생 1:1 레슨 예약 서비스**의 웹 프론트엔드 레포입니다.  
+튜터는 웹앱을 통해 프로필 관리, 레슨 가능 시간 등록, 마이페이지 조회 등을 할 수 있습니다.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 기술 스택
 
-## Expanding the ESLint configuration
+- [React](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev/) (개발 서버 & 번들러)
+- [React Router](https://reactrouter.com/) (라우팅)
+- [React Hook Form](https://react-hook-form.com/) (폼 관리)
+- [ESLint](https://eslint.org/) + [Prettier](https://prettier.io/) (코드 품질/스타일)
+- CSS Modules (or Tailwind, 필요 시)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 📂 프로젝트 구조
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+tunit-web/
+  ├─ src/
+  │  ├─ pages/         # 페이지 컴포넌트 (Login, OnboardingTutor, MyPage)
+  │  ├─ components/    # 재사용 가능한 컴포넌트
+  │  ├─ lib/           # api.ts, types.ts 등 공통 유틸
+  │  ├─ styles/        # CSS 모듈
+  │  ├─ App.tsx        # 라우팅 설정
+  │  └─ main.tsx       # 엔트리 포인트
+  └─ vite.config.ts
 ```
