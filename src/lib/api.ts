@@ -1,9 +1,16 @@
 export async function api<T>(input: RequestInfo, init: RequestInit = {}): Promise<T> {
+  const hasBody = init.body != null;
+  const headers = new Headers(init.headers || {});
+
+  if (hasBody && !headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json');
+  }
+
   const res = await fetch(input, {
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json', ...(init.headers || {}) },
+    headers,
     ...init,
   });
+
   if (!res.ok) {
     let err: any = {};
     try {

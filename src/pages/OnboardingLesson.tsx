@@ -1,18 +1,16 @@
 import { useEffect, useMemo, useState } from 'react';
 import { api } from '../lib/api';
 
-// 1·2단계 데이터 로딩(가드)
-type Role = 'TUTOR' | 'STUDENT';
-type Step1 = { role: Role; nickname: string };
-type Step2 = {
-  role: Role;
-  nickname: string;
-  intro: string;
-  years: number;
-  hourlyRate: number;
-  unitMinutes: number;
-};
+// ====== 타입 ======
+type Category = { code: string; label: string };
+type SubCategory = { code: string; label: string; parentCode: string; parentLabel: string };
 
+// ====== 상수(엔드포인트) ======
+const MAIN_CATEGORIES_URL = '/api/lessons/categories';
+const SUB_CATEGORIES_URL = (mainCode: string) =>
+  `/api/lessons/categories/${encodeURIComponent(mainCode)}/subcategories`;
+
+// ====== 유틸 ======
 function load<T>(key: string): T | null {
   try {
     const raw = localStorage.getItem(key);
@@ -22,28 +20,15 @@ function load<T>(key: string): T | null {
   }
 }
 
-// 서버 응답 타입(@JsonFormat(shape=OBJECT) 가정)
-type Category = { code: string; label: string };
-type SubCategory = { code: string; label: string; parentCode: string; parentLabel: string };
-
-// TODO(back): 이후 캐싱(@Cacheable) 고려
-const MAIN_CATEGORIES_URL = '/api/lessons/categories';
-const SUB_CATEGORIES_URL = (mainCode: string) =>
-  `/api/lessons/categories/${mainCode}/subcategories`;
-
+// ====== 컴포넌트 ======
 export default function OnboardingLesson() {
-  // 가드
-  const step1 = load<Step1>('onboarding.step1');
-  const step2 = load<Step2>('onboarding.step2.tutor');
-  if (!step1 || step1.role !== 'TUTOR') {
-    window.location.replace('/onboarding');
-    return null;
-  }
-  if (!step2) {
-    window.location.replace('/onboarding/tutor');
-    return null;
-  }
+  // (선택) 이전 단계 가드가 필요하면 주석 해제
+  // const step1 = load<{ role: "TUTOR" | "STUDENT"; nickname: string }>("onboarding.step1");
+  // const step2 = load<any>("onboarding.step2.tutor");
+  // if (!step1 || step1.role !== "TUTOR") { window.location.replace("/onboarding"); return null; }
+  // if (!step2) { window.location.replace("/onboarding/tutor"); return null; }
 
+  // 상태
   const [mains, setMains] = useState<Category[]>([]);
   const [subs, setSubs] = useState<SubCategory[]>([]);
   const [mainCode, setMainCode] = useState<string>('');
@@ -51,7 +36,7 @@ export default function OnboardingLesson() {
 
   const [loadingMain, setLoadingMain] = useState(true);
   const [loadingSub, setLoadingSub] = useState(false);
-  const [err, setErr] = useState('');
+  const [selectedSubList, setSelectedSubList] = useState<Set<string>>(new Set());
 
   // 대분류 로딩
   useEffect(() => {
@@ -61,64 +46,51 @@ export default function OnboardingLesson() {
         const list = await api<Category[]>(MAIN_CATEGORIES_URL);
         setMains(list);
       } catch (e: any) {
-        setErr(e.message || '카테고리 조회 실패');
       } finally {
         setLoadingMain(false);
       }
     })();
   }, []);
 
-  // 대분류 클릭 시 소분류 로딩
   const selectMain = async (code: string) => {
-    if (code === mainCode) return;
+    if (!code || code === mainCode) return;
     setMainCode(code);
     setSubCode('');
+    setSelectedSubList(new Set());
     setSubs([]);
-    if (!code) return;
+
     try {
       setLoadingSub(true);
       const list = await api<SubCategory[]>(SUB_CATEGORIES_URL(code));
       setSubs(list);
-      setSubCode(list[0]?.code ?? '');
     } catch (e: any) {
-      setErr(e.message || '소분류 조회 실패');
     } finally {
       setLoadingSub(false);
     }
   };
 
-  const canSubmit = useMemo(() => !!mainCode && !!subCode, [mainCode, subCode]);
+  // 제출 가능 여부
+  const canSubmit = Boolean(mainCode && selectedSubList);
 
-  const submit = async () => {
-    if (!canSubmit) {
-      alert('카테고리를 선택해주세요.');
-      return;
-    }
-    const payload = {
-      role: step1.role,
-      nickname: step1.nickname,
-      intro: step2!.intro,
-      years: step2!.years,
-      hourlyRate: step2!.hourlyRate,
-      unitMinutes: step2!.unitMinutes,
-      lessonCategoryCode: mainCode,
-      lessonSubCategoryCode: subCode,
-    };
-
+  // 저장/다음
+  const goNext = async () => {
+    if (!canSubmit) return;
+    // 3단계 선택만 임시 저장 (다음 단계에서 1/2단계와 합칩니다)
     localStorage.setItem('onboarding.step3.tutor', JSON.stringify({ mainCode, subCode }));
-
-    try {
-      await api('/api/tutors/onboarding', {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      } as any);
-      window.location.href = '/mypage';
-    } catch (e: any) {
-      alert(e.message || '저장 실패');
-    }
+    // 다음 단계(지역)로 이동
+    window.location.href = '/onboarding/tutor/region';
   };
 
-  // 공용 카드 컴포넌트
+  const toggleSub = (code: string) => {
+    setSelectedSubList((prev) => {
+      const next = new Set(prev);
+      if (next.has(code)) next.delete(code);
+      else next.add(code);
+      return next;
+    });
+  };
+
+  // 공통 카드
   const Card = ({
     active,
     label,
@@ -129,19 +101,21 @@ export default function OnboardingLesson() {
     onClick?: () => void;
   }) => (
     <div
-      onClick={onClick}
       role="button"
       tabIndex={0}
+      onClick={onClick}
       onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onClick?.()}
       style={{
         border: active ? '2px solid #111' : '1px solid #ddd',
-        borderRadius: 12,
+        borderRadius: 8,
         padding: '14px 16px',
         cursor: 'pointer',
         userSelect: 'none',
-        background: active ? '#fff' : '#fafafa',
+        background: active ? '#f52a2a' : '#fafafa',
+        color: active ? 'white' : 'black',
         boxShadow: active ? '0 2px 10px rgba(0,0,0,0.06)' : 'none',
         outline: 'none',
+        transition: 'border-color .12s ease',
       }}
     >
       <div style={{ fontWeight: 700 }}>{label}</div>
@@ -150,24 +124,17 @@ export default function OnboardingLesson() {
 
   return (
     <div style={{ maxWidth: 880, margin: '60px auto', padding: '0 16px' }}>
-      {/* 닉네임 표시 */}
-      <div
-        style={{ background: '#f6f6f6', padding: '10px 12px', borderRadius: 8, marginBottom: 16 }}
-      >
-        <b>닉네임</b>: {step1.nickname}
-      </div>
-
-      <h1>튜터 온보딩 (3/3)</h1>
+      <h1>튜터 온보딩 (3/4) – 레슨 카테고리</h1>
       <p style={{ opacity: 0.8, marginTop: 8 }}>
-        대분류 카드를 선택하면, 아래에 해당 소분류 카드들이 표시됩니다.
+        대분류 카드를 선택하면, 해당 소분류 카드가 아래에 표시됩니다.
       </p>
 
-      {/* 대분류 카드 그리드 */}
+      {/* 대분류 */}
       <section style={{ marginTop: 20 }}>
         <h3 style={{ marginBottom: 8 }}>대분류</h3>
         {loadingMain ? (
           <div>대분류 불러오는 중…</div>
-        ) : (
+        ) : mains.length ? (
           <div
             style={{
               display: 'grid',
@@ -184,10 +151,12 @@ export default function OnboardingLesson() {
               />
             ))}
           </div>
+        ) : (
+          <div style={{ opacity: 0.7 }}>대분류가 없습니다.</div>
         )}
       </section>
 
-      {/* 소분류 카드 그리드 */}
+      {/* 소분류 */}
       <section style={{ marginTop: 24 }}>
         <h3 style={{ marginBottom: 8 }}>소분류</h3>
         {!mainCode ? (
@@ -202,47 +171,51 @@ export default function OnboardingLesson() {
               gap: 12,
             }}
           >
-            {subs.map((s) => (
-              <div key={s.code} style={{ position: 'relative' }}>
-                <Card
-                  label={s.label}
-                  active={subCode === s.code}
-                  onClick={() => setSubCode(s.code)}
-                />
-                {/* 선택 배지 */}
-                {subCode === s.code && (
+            {subs.map((s) => {
+              const code = String(s.code);
+              const active = selectedSubList.has(code);
+
+              return (
+                <div key={s.code} style={{ position: 'relative' }}>
                   <div
+                    role="button"
+                    data-code={code}
+                    tabIndex={0}
+                    onClick={() => {
+                      toggleSub(code);
+                    }}
+                    onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleSub(code)}
                     style={{
-                      position: 'absolute',
-                      top: 8,
-                      right: 8,
-                      fontSize: 11,
-                      background: '#111',
-                      color: '#fff',
-                      padding: '2px 6px',
-                      borderRadius: 999,
+                      border: active ? '2px solid #111' : '1px solid #ddd',
+                      borderRadius: 12,
+                      padding: '14px 16px',
+                      cursor: 'pointer',
+                      userSelect: 'none',
+                      background: active ? '#f52a2a' : '#fafafa',
+                      color: active ? 'white' : 'black',
+                      boxShadow: active ? '0 2px 10px rgba(0,0,0,0.06)' : 'none',
+                      outline: 'none',
                     }}
                   >
-                    선택됨
+                    <div style={{ fontWeight: 700 }}>{s.label}</div>
                   </div>
-                )}
-              </div>
-            ))}
+                  {active}
+                </div>
+              );
+            })}
           </div>
         ) : (
-          <div style={{ opacity: 0.7 }}>소분류가 없습니다.</div>
+          <div>선택한 값이 없습니다.</div>
         )}
       </section>
 
-      {err && <div style={{ color: '#c00', fontSize: 12, marginTop: 12 }}>{err}</div>}
-
       <button
         type="button"
-        onClick={submit}
+        onClick={goNext}
         disabled={!canSubmit}
         style={{ width: '100%', height: 44, marginTop: 28 }}
       >
-        저장 및 완료 →
+        저장 / 다음 →
       </button>
     </div>
   );
