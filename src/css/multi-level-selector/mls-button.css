@@ -1,0 +1,21 @@
+.mls-button {
+  width: 100%;
+  height: 44px;
+  border-radius: 12px;
+  border: 0;
+  background: var(--brand-red);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+.mls-button:hover {
+  filter: brightness(0.95);
+}
+.mls-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.mls-button:focus-visible {
+  outline: 2px solid var(--brand-red);
+  outline-offset: 2px;
+}

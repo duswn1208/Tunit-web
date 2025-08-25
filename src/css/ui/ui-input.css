@@ -1,0 +1,36 @@
+.ui-input,
+.ui-textarea,
+.ui-select {
+  width: 100%;
+  background: var(--input-bg);
+  color: inherit;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+.ui-textarea {
+  min-height: 112px;
+  resize: vertical;
+}
+.ui-select {
+  appearance: none;
+  background-image: none;
+}
+
+.ui-input:focus,
+.ui-textarea:focus,
+.ui-select:focus {
+  border-color: var(--brand-red);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-red) 20%, transparent);
+}
+
+/* 에러 상태 */
+.ui-has-error .ui-input,
+.ui-has-error .ui-textarea,
+.ui-has-error .ui-select {
+  border-color: #ff6b6b;
+}

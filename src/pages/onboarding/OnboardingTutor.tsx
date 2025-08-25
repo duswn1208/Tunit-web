@@ -1,4 +1,9 @@
 import { useForm } from 'react-hook-form';
+import '../css/ui/ui-tokens.css';
+import '../css/ui/ui-card.css';
+import '../css/ui/ui-form.css';
+import '../css/ui/ui-input.css';
+import '../css/ui/ui-button.css';
 
 // 1단계(역할/닉네임) 로딩 유틸
 type Role = 'TUTOR' | 'STUDENT';
@@ -62,19 +67,24 @@ export default function OnboardingTutor() {
   };
 
   return (
-    <div style={{ maxWidth: 560, margin: '60px auto', padding: '0 16px' }}>
-      <h1>튜터 온보딩 (2/4)</h1>
-      <p style={{ opacity: 0.8, marginTop: 8 }}>
-        {step1.nickname} 님 ! 소개, 경력, 레슨 단가/단위를 입력해주세요. (시간/휴무는 다음 단계에서
-        설정)
-      </p>
+    <div className="ui-card">
+      <header className="ui-card-header">
+        <h1 className="ui-card-title">튜터 온보딩 (2/4)</h1>
+        <p className="ui-card-sub">
+          {step1.nickname} 님! 소개, 경력, 레슨 단가/단위를 입력해주세요. (시간/휴무는 다음 단계에서
+          설정)
+        </p>
+      </header>
 
-      <form onSubmit={handleSubmit(onSubmit)} style={{ marginTop: 24 }}>
+      <form onSubmit={handleSubmit(onSubmit)} className="ui-card-body ui-form-body">
         {/* 소개글 */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 16 }}>
-          <label htmlFor="intro">소개글</label>
+        <div className="ui-field">
+          <label htmlFor="intro" className="ui-label">
+            소개글
+          </label>
           <textarea
             id="intro"
+            className="ui-textarea"
             rows={5}
             placeholder="예) 클래식 기타 8년 경력, 성인·초보자 환영합니다. 기초부터 곡 완주까지 탄탄히."
             {...register('intro', {
@@ -83,16 +93,17 @@ export default function OnboardingTutor() {
               maxLength: { value: 500, message: '500자 이내로 작성해주세요.' },
             })}
           />
-          {errors.intro && (
-            <span style={{ color: '#c00', fontSize: 12 }}>{errors.intro.message}</span>
-          )}
+          {errors.intro && <span className="ui-error">{errors.intro.message}</span>}
         </div>
 
         {/* 경력 연수 */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 16 }}>
-          <label htmlFor="years">경력 연수</label>
+        <div className="ui-field">
+          <label htmlFor="years" className="ui-label">
+            경력 연수
+          </label>
           <input
             id="years"
+            className="ui-input"
             type="number"
             min={0}
             step={1}
@@ -104,16 +115,17 @@ export default function OnboardingTutor() {
               max: { value: 60, message: '60년 이하로 입력해주세요.' },
             })}
           />
-          {errors.years && (
-            <span style={{ color: '#c00', fontSize: 12 }}>{errors.years.message}</span>
-          )}
+          {errors.years && <span className="ui-error">{errors.years.message}</span>}
         </div>
 
         {/* 시간당 레슨 금액 */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 16 }}>
-          <label htmlFor="hourlyRate">시간당 레슨 금액(원)</label>
+        <div className="ui-field">
+          <label htmlFor="hourlyRate" className="ui-label">
+            시간당 레슨 금액(원)
+          </label>
           <input
             id="hourlyRate"
+            className="ui-input"
             type="number"
             min={0}
             step={1000}
@@ -125,16 +137,17 @@ export default function OnboardingTutor() {
               max: { value: 1000000, message: '1,000,000원 이하로 입력해주세요.' },
             })}
           />
-          {errors.hourlyRate && (
-            <span style={{ color: '#c00', fontSize: 12 }}>{errors.hourlyRate.message}</span>
-          )}
+          {errors.hourlyRate && <span className="ui-error">{errors.hourlyRate.message}</span>}
         </div>
 
         {/* 기본 수업 단위(분) */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 24 }}>
-          <label htmlFor="unitMinutes">기본 수업 단위(분)</label>
+        <div className="ui-field">
+          <label htmlFor="unitMinutes" className="ui-label">
+            기본 수업 단위(분)
+          </label>
           <select
             id="unitMinutes"
+            className="ui-select"
             {...register('unitMinutes', { required: true, valueAsNumber: true })}
           >
             <option value={30}>30분</option>
@@ -142,14 +155,14 @@ export default function OnboardingTutor() {
             <option value={60}>60분</option>
             <option value={90}>90분</option>
           </select>
-          {errors.unitMinutes && (
-            <span style={{ color: '#c00', fontSize: 12 }}>수업 단위를 선택해주세요.</span>
-          )}
+          {errors.unitMinutes && <span className="ui-error">수업 단위를 선택해주세요.</span>}
         </div>
 
-        <button type="submit" disabled={isSubmitting} style={{ width: '100%', height: 44 }}>
-          저장 및 완료 →
-        </button>
+        <footer className="ui-card-footer">
+          <button type="submit" disabled={isSubmitting} className="ui-btn">
+            저장 및 완료 →
+          </button>
+        </footer>
       </form>
     </div>
   );

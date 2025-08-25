@@ -1,0 +1,6 @@
+/* 레슨 칩을 레드 원톤으로 쓰고 싶다면 여기서 변수만 덮어쓰기 */
+.mls-lesson {
+  --chip-bg: #ffedee;
+  --chip-border: #ffc7ca;
+  --chip-fg: var(--brand-red);
+}

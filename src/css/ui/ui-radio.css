@@ -1,0 +1,24 @@
+.ui-radio-group {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+.ui-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 14px;
+}
+.ui-radio input[type='radio'] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--brand-red);
+  cursor: pointer;
+  margin: 0;
+}
+.ui-radio input[type='radio']:focus-visible {
+  outline: 2px solid var(--brand-red);
+  outline-offset: 2px;
+}

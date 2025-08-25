@@ -1,0 +1,21 @@
+:root {
+  --brand-red: #ff5a5f;
+  --brand-mint: #1ec9bb;
+
+  --fg-muted: #6b7280;
+  --border: rgba(0, 0, 0, 0.16);
+  --border-strong: rgba(0, 0, 0, 0.24);
+  --card-bg: #fff;
+  --input-bg: #fff;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --border: rgba(255, 255, 255, 0.12);
+    --border-strong: rgba(255, 255, 255, 0.2);
+    --card-bg: #121212;
+    --input-bg: #181818;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+  }
+}

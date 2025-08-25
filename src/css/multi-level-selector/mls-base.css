@@ -1,0 +1,34 @@
+/* 색상/토큰은 index.css 의 :root 변수 사용
+   예: --brand-red, --brand-mint, --muted, --chip-bg, --chip-border, --chip-fg
+*/
+
+.mls-sub {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.mls-chips {
+  min-height: 40px;
+  padding: 8px 20px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.mls-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  background: var(--chip-bg, #e8fbf8);
+  color: var(--chip-fg, var(--brand-mint));
+  border: 1px solid var(--chip-border, #bdefe8);
+}
+.mls-chip button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  line-height: 0;
+}
