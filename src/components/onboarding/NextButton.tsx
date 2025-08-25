@@ -17,7 +17,13 @@ export default function NextButton({
   onClick?: any;
 }) {
   return (
-    <Button className={addClass} type={type} loading={loading} disabled={disabled}>
+    <Button
+      className={addClass}
+      type={type}
+      loading={loading}
+      disabled={disabled}
+      onClick={onClick}
+    >
       {label}
     </Button>
   );

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { X } from 'lucide-react';
 import { ChipList } from '../../components/ui';
 import { OnboardingLayout, NextButton } from '../..//components/onboarding';
+import type { Category, SubCategory } from '../../type/onboarding';
 import { api } from '../../lib/api';
 
 import '../../css/ui/ui-tokens.css';
@@ -14,24 +14,10 @@ import '../../css/multi-level-selector/mls-grid.css';
 import '../../css/multi-level-selector/mls-button.css';
 import '../../css/multi-level-selector/mls-lesson.css';
 
-// ====== 타입 ======
-type Category = { code: string; label: string };
-type SubCategory = { code: string; label: string; parentCode: string; parentLabel: string };
-
 // ====== 상수(엔드포인트) ======
 const MAIN_CATEGORIES_URL = '/api/lessons/categories';
 const SUB_CATEGORIES_URL = (mainCode: string) =>
   `/api/lessons/categories/${encodeURIComponent(mainCode)}/subcategories`;
-
-// ====== 유틸 ======
-function load<T>(key: string): T | null {
-  try {
-    const raw = localStorage.getItem(key);
-    return raw ? (JSON.parse(raw) as T) : null;
-  } catch {
-    return null;
-  }
-}
 
 export default function OnboardingLesson() {
   // (선택) 이전 단계 가드
@@ -99,7 +85,7 @@ export default function OnboardingLesson() {
         map.set(String(s.code), s.label);
       }
     });
-    return Array.from(map.entries());
+    return Array.from(map.entries(), ([code, label]) => ({ code, label }));
   }, [subs, selectedSubs]);
 
   const removeChip = (code: string) => {
@@ -195,7 +181,7 @@ export default function OnboardingLesson() {
                     onClick={() => toggleSub(code)}
                     onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleSub(code)}
                   >
-                    <span style={{ fontWeight: 700 }}>{s.label}</span>
+                    <span style={{ fontWeight: 700, color: '#000' }}>{s.label}</span>
                     <span className="mls-check" />
                   </div>
                 );
