@@ -1,10 +1,14 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { X, Check } from 'lucide-react';
-import '../css/multi-level-selector/mls-base.css';
-import '../css/multi-level-selector/mls-container.css';
-import '../css/multi-level-selector/mls-list.css';
-import '../css/multi-level-selector/mls-button.css';
-import '../css/multi-level-selector/mls-region.css';
+
+import { OnboardingLayout } from '../../components/onboarding';
+import { ChipList } from '../../components/ui';
+
+import '../../css/multi-level-selector/mls-base.css';
+import '../../css/multi-level-selector/mls-container.css';
+import '../../css/multi-level-selector/mls-list.css';
+import '../../css/multi-level-selector/mls-button.css';
+import '../../css/multi-level-selector/mls-region.css';
 
 type Region = { code: string; label: string };
 
@@ -103,15 +107,12 @@ const api = (base?: string) => {
   };
 };
 
-export default function ONboardingRegion({ onSubmit, initialSelected, apiBase, className }: Props) {
+export default function OnboardingRegion({ onSubmit, initialSelected, apiBase }: Props) {
   const client = useMemo(() => api(apiBase), [apiBase]);
 
   const [sidos, setSidos] = useState<Region[]>([]);
   const [activeSido, setActiveSido] = useState<Region | null>(null);
   const [subregions, setSubregions] = useState<Region[]>([]);
-  const [loadingLeft, setLoadingLeft] = useState(true);
-  const [loadingRight, setLoadingRight] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const [selectedMap, setSelectedMap] = useState<Map<string, SelectedRegion>>(() => {
     const m = new Map<string, SelectedRegion>();
@@ -124,37 +125,25 @@ export default function ONboardingRegion({ onSubmit, initialSelected, apiBase, c
 
   useEffect(() => {
     const ac = new AbortController();
-    setLoadingLeft(true);
-    setError(null);
-    client
-      .getSidos(ac.signal)
-      .then((list) => {
-        setSidos(list);
-        if (!activeSido && list.length) setActiveSido(list[0]);
-      })
-      .catch((e) => setError(e.message))
-      .finally(() => setLoadingLeft(false));
+    client.getSidos(ac.signal).then((list) => {
+      setSidos(list);
+      if (!activeSido && list.length) setActiveSido(list[0]);
+    });
     return () => ac.abort();
   }, [client]);
 
   useEffect(() => {
     if (!activeSido) return;
     const ac = new AbortController();
-    setError(null);
     const cached = subCache.current.get(activeSido.code);
     if (cached) {
       setSubregions(cached);
       return;
     }
-    setLoadingRight(true);
-    client
-      .getSubregions(activeSido.code, ac.signal)
-      .then((list) => {
-        subCache.current.set(activeSido.code, list);
-        setSubregions(list);
-      })
-      .catch((e) => setError(e.message))
-      .finally(() => setLoadingRight(false));
+    client.getSubregions(activeSido.code, ac.signal).then((list) => {
+      subCache.current.set(activeSido.code, list);
+      setSubregions(list);
+    });
     return () => ac.abort();
   }, [client, activeSido]);
 
@@ -210,86 +199,87 @@ export default function ONboardingRegion({ onSubmit, initialSelected, apiBase, c
   const handleSubmit = () => onSubmit(selectedList);
 
   return (
-    <div className="mls-card">
-      <div className="mls-header">
-        <h2 className="text-xl" style={{ fontWeight: 700 }}>
-          편한 지역이 어디예요?
-        </h2>
-        <div className="mls-sub">(중복선택 가능)</div>
-      </div>
+    <OnboardingLayout
+      step={4}
+      total={4}
+      subtitle="시/도를 선택한 뒤, 구/군을 여러 개 선택하세요. (중복 선택 가능)"
+      bodyClassName="mls-body"
+    >
+      <div className="mls-card">
+        <div className="mls-header">
+          <h2 className="text-xl" style={{ fontWeight: 700 }}>
+            편한 지역이 어디예요?
+          </h2>
+          <div className="mls-sub">(중복선택 가능)</div>
+        </div>
 
-      {/* Chips */}
-      <div className="mls-chips">
-        {selectedList.length === 0 ? (
-          <span className="mls-region-empty" style={{ fontSize: 13 }}>
-            오른쪽에서 구/군을 선택하면 이곳에 표시돼요
-          </span>
-        ) : (
-          selectedList.map((s) => (
-            <span key={s.code} className="mls-chip">
-              {s.label}
-              <button aria-label="remove" onClick={() => removeChip(s.code)}>
-                <X size={14} />
-              </button>
-            </span>
-          ))
-        )}
-      </div>
+        {/* Chips */}
+        <ChipList
+          items={selectedList} // 예: { code, label }[] 가 아니어도 됨
+          getCode={(it) => it.code} // ★ 필요 시 형식 맞게 수정: it.gugunCode 등
+          getLabel={(it) => it.label} // ★ 필요 시: stripParentPrefix(...) 적용 가능
+          onRemove={(code) => removeChip(code)}
+        />
 
-      {/* Body: 2-컬럼 */}
-      <div className="mls-body">
-        <div className="mls-two-col">
-          <div className="mls-left">
-            <ul className="mls-list" role="listbox" aria-label="시/도">
-              {sidos.map((s) => (
-                <li
-                  key={s.code}
-                  className={`mls-item ${activeSido?.code === s.code ? 'active' : ''}`}
-                  onClick={() => setActiveSido(s)}
-                  role="option"
-                >
-                  {s.label}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="mls-right">
-            <ul className="mls-list" role="listbox" aria-label="구/군">
-              {activeSido && (
-                <li
-                  key="__all__"
-                  className={`mls-item ${isSidoSelected(activeSido.code) ? 'selected' : ''}`}
-                  onClick={() => toggleSidoWhole(activeSido)}
-                  role="option"
-                >
-                  <span>{activeSido.label} 전체</span>
-                </li>
-              )}
-              {subregions.map((g) => {
-                const selected = isGugunSelected(g.code);
-                return (
+        {/* Body: 2-컬럼 */}
+        <div className="mls-body">
+          <div className="mls-two-col">
+            <div className="mls-left">
+              <ul className="mls-list" role="listbox" aria-label="시/도">
+                {sidos.map((s) => (
                   <li
-                    key={g.code}
-                    className={`mls-item ${selected ? 'selected' : ''}`}
-                    onClick={() => toggleGugun(g)}
+                    key={s.code}
+                    className={`mls-item ${activeSido?.code === s.code ? 'active' : ''}`}
+                    onClick={() => setActiveSido(s)}
                     role="option"
                   >
-                    <span>{stripParentPrefix(activeSido!.label, g.label)}</span>
-                    {selected && <Check size={16} />}
+                    {s.label}
                   </li>
-                );
-              })}
-            </ul>
+                ))}
+              </ul>
+            </div>
+
+            <div className="mls-right">
+              <ul className="mls-list" role="listbox" aria-label="구/군">
+                {activeSido && (
+                  <li
+                    key="__all__"
+                    className={`mls-item ${isSidoSelected(activeSido.code) ? 'selected' : ''}`}
+                    onClick={() => toggleSidoWhole(activeSido)}
+                    role="option"
+                  >
+                    <span>{activeSido.label} 전체</span>
+                  </li>
+                )}
+                {subregions.map((g) => {
+                  const selected = isGugunSelected(g.code);
+                  return (
+                    <li
+                      key={g.code}
+                      className={`mls-item ${selected ? 'selected' : ''}`}
+                      onClick={() => toggleGugun(g)}
+                      role="option"
+                    >
+                      <span>{stripParentPrefix(activeSido!.label, g.label)}</span>
+                      {selected && <Check size={16} />}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="mls-footer">
-        <button className="mls-button" disabled={selectedList.length === 0} onClick={handleSubmit}>
-          다음
-        </button>
+        <div className="mls-footer">
+          <button
+            className="mls-button"
+            disabled={selectedList.length === 0}
+            onClick={handleSubmit}
+          >
+            다음
+          </button>
+        </div>
       </div>
-    </div>
+    </OnboardingLayout>
   );
 }

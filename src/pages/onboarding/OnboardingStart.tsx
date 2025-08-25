@@ -1,9 +1,12 @@
 import { useForm } from 'react-hook-form';
-import '../css/ui/ui-tokens.css';
-import '../css/ui/ui-card.css';
-import '../css/ui/ui-form.css';
-import '../css/ui/ui-input.css';
-import '../css/ui/ui-button.css';
+import '../../css/ui/ui-tokens.css';
+import '../../css/ui/ui-card.css';
+import '../../css/ui/ui-form.css';
+import '../../css/ui/ui-input.css';
+import '../../css/ui/ui-button.css';
+import OnboardingCard from '../../components/onboarding/Card';
+import OnboardingNextButton from '../../components/onboarding/NextButton';
+import { RadioGroup, FormField } from '../../components/ui';
 
 type Role = 'TUTOR' | 'STUDENT';
 type FormData = {
@@ -33,65 +36,35 @@ export default function OnboardingStart() {
     }
   };
 
+  const radioOption = [
+    { label: '튜터', value: 'TUTOR' },
+    { label: '학생', value: 'STUDENT' },
+  ];
+
   return (
-    <div className="ui-card">
-      <header className="ui-card-header">
-        <h1 className="ui-card-title">온보딩 (1/2)</h1>
-        <p className="ui-card-sub">역할을 선택하고 닉네임을 설정해주세요.</p>
-      </header>
-
-      <form onSubmit={handleSubmit(onSubmit)} style={{ marginTop: 24 }}>
-        <section className="ui-card-body ui-form-body">
-          {/* 역할 선택 */}
-          <div className="ui-field">
-            <label className="ui-label">역할</label>
-            <div className="ui-radio-group">
-              <label className="ui-radio">
-                <input type="radio" value="TUTOR" {...register('role', { required: true })} />
-                &nbsp;튜터
-              </label>
-              <label>
-                <input type="radio" value="STUDENT" {...register('role', { required: true })} />
-                &nbsp;학생
-              </label>
-              {errors.role && (
-                <div style={{ color: '#c00', fontSize: 12, marginTop: 6 }}>역할을 선택하세요.</div>
-              )}
-            </div>
-          </div>
-
-          {/* 닉네임 */}
-          <div className="ui-field">
-            <label htmlFor="nickname" className="ui-label">
-              닉네임
-            </label>
-            <input
-              className="ui-input"
-              id="nickname"
-              placeholder="예) 튠잇기타왕"
-              {...register('nickname', {
-                required: '닉네임은 필수입니다.',
-                minLength: { value: 2, message: '2자 이상 입력해주세요.' },
-                maxLength: { value: 20, message: '20자 이내로 입력해주세요.' },
-                pattern: { value: /^[\w가-힣]+$/, message: '한글/영문/숫자/밑줄만 허용됩니다.' },
-              })}
-            />
-            {errors.nickname && (
-              <span style={{ color: '#c00', fontSize: 12 }}>{errors.nickname.message}</span>
-            )}
-          </div>
-        </section>
-        <footer className="ui-card-footer">
-          <button
-            className="ui-btn"
-            type="submit"
-            disabled={isSubmitting}
-            style={{ width: '100%', height: 44 }}
-          >
-            다음 →
-          </button>
-        </footer>
-      </form>
-    </div>
+    <OnboardingCard
+      title="온보딩"
+      subtitle="역할을 선택하고 닉네임을 설정해주세요."
+      as="form"
+      onSubmit={handleSubmit(onSubmit)}
+      footer={<OnboardingNextButton type="submit" label="다음 →" loading={isSubmitting} />}
+    >
+      <FormField label="역할" childrenClsx="ui-radio-group">
+        <RadioGroup name="role" options={radioOption} defaultValue="TUTOR"></RadioGroup>
+      </FormField>
+      <FormField label="닉네임" htmlFor="nickname" required error={errors.nickname?.message}>
+        <input
+          className="ui-input"
+          id="nickname"
+          placeholder="예) 튜닛"
+          {...register('nickname', {
+            required: '닉네임은 필수입니다.',
+            minLength: { value: 2, message: '2자 이상 입력해주세요.' },
+            maxLength: { value: 20, message: '20자 이내로 입력해주세요.' },
+            pattern: { value: /^[\w가-힣]+$/, message: '한글/영문/숫자/밑줄만 허용됩니다.' },
+          })}
+        />
+      </FormField>
+    </OnboardingCard>
   );
 }
