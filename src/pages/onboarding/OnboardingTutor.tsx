@@ -1,34 +1,15 @@
 import { useForm } from 'react-hook-form';
 
-import { Card, FormField, Button } from '../../components/ui';
+import { FormField } from '../../components/ui';
 import { OnboardingLayout, NextButton } from '../../components/onboarding';
+import { loadStep1 } from '../../lib/onboarding';
+import type { Step2 } from '../../type/onboarding';
 
 import '../../css/ui/ui-tokens.css';
 import '../../css/ui/ui-card.css';
 import '../../css/ui/ui-form.css';
 import '../../css/ui/ui-input.css';
 import '../../css/ui/ui-button.css';
-
-// 1단계(역할/닉네임) 로딩 유틸
-type Role = 'TUTOR' | 'STUDENT';
-type Step1 = { role: Role; nickname: string };
-
-function loadStep1(): Step1 | null {
-  try {
-    const raw = localStorage.getItem('onboarding.step1');
-    return raw ? (JSON.parse(raw) as Step1) : null;
-  } catch {
-    return null;
-  }
-}
-
-// 2단계 폼 타입
-type FormData = {
-  intro: string; // 소개글
-  years: number; // 경력 연수
-  hourlyRate: number; // 시간당 레슨 금액(원)
-  unitMinutes: 30 | 45 | 60 | 90; // 기본 수업 단위(분)
-};
 
 export default function OnboardingTutor() {
   const step1 = loadStep1();
@@ -43,7 +24,7 @@ export default function OnboardingTutor() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>({
+  } = useForm<Step2>({
     defaultValues: {
       intro: '',
       years: 0,
@@ -52,21 +33,20 @@ export default function OnboardingTutor() {
     },
   });
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: Step2) => {
     if (isSubmitting) return; // early return
 
-    // 최종 Payload: 1단계 + 2단계 합치기
-    let payload = {
-      role: step1.role, // "TUTOR"
-      nickname: step1.nickname, // 1단계 닉네임
-      intro: data.intro.trim(),
-      years: Number(data.years),
-      hourlyRate: Number(data.hourlyRate),
-      unitMinutes: Number(data.unitMinutes),
-    };
-
-    // 필요 시 임시 저장(선택)
-    localStorage.setItem('onboarding.step2.tutor', JSON.stringify(payload));
+    localStorage.setItem(
+      'onboarding.step2.tutor',
+      JSON.stringify({
+        role: step1.role,
+        nickName: step1.nickname,
+        intro: data.intro.trim(),
+        years: Number(data.years),
+        hourlyRate: Number(data.hourlyRate),
+        unitMinutes: Number(data.unitMinutes),
+      })
+    );
     window.location.href = '/onboarding/tutor/lesson'; // 여기로 이동
   };
 
@@ -148,7 +128,6 @@ export default function OnboardingTutor() {
           {...register('unitMinutes', { required: true, valueAsNumber: true })}
         >
           <option value={30}>30분</option>
-          <option value={45}>45분</option>
           <option value={60}>60분</option>
           <option value={90}>90분</option>
         </select>

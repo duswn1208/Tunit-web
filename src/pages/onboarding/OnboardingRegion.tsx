@@ -4,6 +4,7 @@ import { OnboardingLayout } from '../../components/onboarding';
 import { ChipList } from '../../components/ui';
 
 import { useOnboardingRegion } from '../../hook/onboarding/useRegion';
+import { saveTutorOnboardingNow } from '../../lib/onboarding';
 
 import '../../css/multi-level-selector/mls-base.css';
 import '../../css/multi-level-selector/mls-container.css';
@@ -15,7 +16,7 @@ export default function OnboardingRegion() {
   const {
     sidos,
     activeSido,
-    setActiveSido,
+    setSelectedSido,
     subregions,
     selectedList,
     removeChip,
@@ -26,7 +27,15 @@ export default function OnboardingRegion() {
     isGugunSelected,
   } = useOnboardingRegion();
 
-  const handleSubmit = () => {};
+  async function handleFinish() {
+    try {
+      await saveTutorOnboardingNow(selectedList);
+      window.location.replace('/onboarding/done');
+    } catch (e) {
+      console.error(e);
+      alert('제출 중 오류가 발생했습니다. 다시 시도해주세요.');
+    }
+  }
 
   return (
     <OnboardingLayout
@@ -60,7 +69,7 @@ export default function OnboardingRegion() {
                   <li
                     key={s.code}
                     className={`mls-item ${activeSido?.code === s.code ? 'active' : ''}`}
-                    onClick={() => setActiveSido(s)}
+                    onClick={() => setSelectedSido(s)}
                     role="option"
                   >
                     {s.label}
@@ -104,7 +113,7 @@ export default function OnboardingRegion() {
           <button
             className="mls-button"
             disabled={selectedList.length === 0}
-            onClick={handleSubmit}
+            onClick={handleFinish}
           >
             다음
           </button>

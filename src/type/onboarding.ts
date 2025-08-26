@@ -3,12 +3,15 @@ export type Category = { code: string; label: string };
 export type SubCategory = { code: string; label: string; parentCode: string; parentLabel: string };
 export type Region = { code: string; label: string };
 
-export type SelectedRegion = {
-  code: string;
-  label: string; // 칩에 표시될 라벨(시도 포함): "서울특별시 종로구" / "서울특별시 전체"
+export type SelectedRegion = Region & {
   type: 'sido' | 'gugun';
   parentCode?: string;
   parentLabel?: string;
+};
+
+export type UseOnboardingRegionOptions = {
+  initialSelected?: SelectedRegion[]; // ★ 훅 인자로 받기
+  defaultSidoCode?: string; // ★ 기본 선택할 시/도 코드(선택)
 };
 
 export const REGION_SIDO_ORDER = [
@@ -35,11 +38,21 @@ export type Step1 = {
   role: Role;
   nickname: string;
 };
-export type Step2 = {
+export type Step2 = Step1 & {
   intro: string;
   years: Number;
-  hourlyRage: Number;
-  unitMinutes: Number;
+  hourlyRate: Number;
+  unitMinutes: 30 | 60 | 90;
 };
 export type Step3 = { mainCode: string; subCodes: Array<string> };
-export type Step4 = {};
+
+export type RegionPayload = {
+  sidoCode: string;
+  gugunCodes: string[]; // 시/도 전체 선택이면 팀 규칙에 따라 [] 혹은 전체 나열
+};
+
+export type TutorOnboardingPayload = {
+  profile: Step2;
+  lesson: Step3;
+  regions: RegionPayload[];
+};
