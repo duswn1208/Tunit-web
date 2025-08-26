@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import { X } from 'lucide-react';
 import { ChipList } from '../../components/ui';
 import { OnboardingLayout, NextButton } from '../..//components/onboarding';
 import { api } from '../../lib/api';
@@ -114,11 +113,13 @@ export default function OnboardingLesson() {
   const canSubmit = Boolean(mainCode) && selectedSubs.size > 0;
 
   const goNext = () => {
+    console.log('go next!');
     if (!canSubmit) return;
     localStorage.setItem(
       'onboarding.step3.tutor',
       JSON.stringify({ mainCode, subCodes: Array.from(selectedSubs) })
     );
+    console.log('go next!222');
     window.location.href = '/onboarding/tutor/region';
   };
 
@@ -195,7 +196,7 @@ export default function OnboardingLesson() {
                     onClick={() => toggleSub(code)}
                     onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleSub(code)}
                   >
-                    <span style={{ fontWeight: 700 }}>{s.label}</span>
+                    <span style={{ fontWeight: 700, color: '#000' }}>{s.label}</span>
                     <span className="mls-check" />
                   </div>
                 );
