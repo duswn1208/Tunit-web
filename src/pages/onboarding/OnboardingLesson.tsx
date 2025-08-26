@@ -1,8 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
-import { X } from 'lucide-react';
 import { ChipList } from '../../components/ui';
 import { OnboardingLayout, NextButton } from '../..//components/onboarding';
-import { api } from '../../lib/api';
+import { useOnboardingLesson } from '../../hook/onboarding/useLesson';
 
 import '../../css/ui/ui-tokens.css';
 import '../../css/ui/ui-card.css';
@@ -14,104 +12,20 @@ import '../../css/multi-level-selector/mls-grid.css';
 import '../../css/multi-level-selector/mls-button.css';
 import '../../css/multi-level-selector/mls-lesson.css';
 
-// ====== 타입 ======
-type Category = { code: string; label: string };
-type SubCategory = { code: string; label: string; parentCode: string; parentLabel: string };
-
-// ====== 상수(엔드포인트) ======
-const MAIN_CATEGORIES_URL = '/api/lessons/categories';
-const SUB_CATEGORIES_URL = (mainCode: string) =>
-  `/api/lessons/categories/${encodeURIComponent(mainCode)}/subcategories`;
-
-// ====== 유틸 ======
-function load<T>(key: string): T | null {
-  try {
-    const raw = localStorage.getItem(key);
-    return raw ? (JSON.parse(raw) as T) : null;
-  } catch {
-    return null;
-  }
-}
-
 export default function OnboardingLesson() {
-  // (선택) 이전 단계 가드
-  // const step1 = load<{ role: "TUTOR" | "STUDENT"; nickname: string }>("onboarding.step1");
-  // const step2 = load<any>("onboarding.step2.tutor");
-  // if (!step1 || step1.role !== "TUTOR") { window.location.replace("/onboarding"); return null; }
-  // if (!step2) { window.location.replace("/onboarding/tutor"); return null; }
-
-  const [mains, setMains] = useState<Category[]>([]);
-  const [subs, setSubs] = useState<SubCategory[]>([]);
-  const [mainCode, setMainCode] = useState<string>('');
-  const [loadingMain, setLoadingMain] = useState(true);
-  const [loadingSub, setLoadingSub] = useState(false);
-
-  // 다중 선택(소분류)
-  const [selectedSubs, setSelectedSubs] = useState<Set<string>>(new Set());
-
-  // 대분류 로딩
-  useEffect(() => {
-    (async () => {
-      try {
-        setLoadingMain(true);
-        const list = await api<Category[]>(MAIN_CATEGORIES_URL);
-        setMains(list ?? []);
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setLoadingMain(false);
-      }
-    })();
-  }, []);
-
-  // 대분류 선택 → 소분류 로딩
-  const selectMain = async (code: string) => {
-    if (!code || code === mainCode) return;
-    setMainCode(code);
-    setSelectedSubs(new Set());
-    setSubs([]);
-    try {
-      setLoadingSub(true);
-      const list = await api<SubCategory[]>(SUB_CATEGORIES_URL(code));
-      setSubs(list ?? []);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoadingSub(false);
-    }
-  };
-
-  // 소분류 토글
-  const toggleSub = (code: string) => {
-    setSelectedSubs((prev) => {
-      const next = new Set(prev);
-      if (next.has(code)) next.delete(code);
-      else next.add(code);
-      return next;
-    });
-  };
-
-  // 칩 목록
-  const chipList = useMemo(() => {
-    const map = new Map<string, string>(); // code -> label
-    subs.forEach((s) => {
-      if (selectedSubs.has(String(s.code))) {
-        map.set(String(s.code), s.label);
-      }
-    });
-    return Array.from(map.entries());
-  }, [subs, selectedSubs]);
-
-  const removeChip = (code: string) => {
-    setSelectedSubs((prev) => {
-      const next = new Set(prev);
-      next.delete(code);
-      return next;
-    });
-  };
-
-  // 제출 가능 여부
-  const canSubmit = Boolean(mainCode) && selectedSubs.size > 0;
+  const {
+    mains,
+    mainCode,
+    subs,
+    selectedSubs,
+    loadingMain,
+    loadingSub,
+    chipList,
+    canSubmit,
+    selectMain,
+    removeChip,
+    toggleSub,
+  } = useOnboardingLesson();
 
   const goNext = () => {
     if (!canSubmit) return;
@@ -127,7 +41,7 @@ export default function OnboardingLesson() {
       step={3}
       total={4}
       subtitle="대분류를 고른 뒤, 원하는 소분류를 여러 개 선택하세요."
-      footer={<NextButton disabled={!canSubmit} onClick={goNext} label="저장 / 다음 →" />}
+      footer={<NextButton onClick={goNext} label="저장 / 다음 →" />}
     >
       {/* 칩: 레슨 페이지는 레드 칩으로 쓰고 싶으면 .mls-lesson로 변수 override */}
       <ChipList
@@ -195,7 +109,7 @@ export default function OnboardingLesson() {
                     onClick={() => toggleSub(code)}
                     onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleSub(code)}
                   >
-                    <span style={{ fontWeight: 700 }}>{s.label}</span>
+                    <span style={{ fontWeight: 700, color: '#000' }}>{s.label}</span>
                     <span className="mls-check" />
                   </div>
                 );
