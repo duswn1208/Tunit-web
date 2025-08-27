@@ -11,11 +11,6 @@ export default defineConfig({
         target: 'http://localhost:8080',
         changeOrigin: true,
       },
-      // OAuth2 인증용 엔드포인트도 백엔드로 전달
-      // '/oauth2': {
-      //   target: 'http://localhost:8080',
-      //   changeOrigin: true,
-      // },
       '/login': {
         target: 'http://localhost:8080',
         changeOrigin: true,

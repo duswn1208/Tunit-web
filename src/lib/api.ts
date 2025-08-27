@@ -8,6 +8,7 @@ export async function api<T>(input: RequestInfo, init: RequestInit = {}): Promis
 
   const res = await fetch(input, {
     headers,
+    credentials: 'include',
     ...init,
   });
 
