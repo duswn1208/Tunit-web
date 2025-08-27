@@ -6,6 +6,7 @@ import OnboardingStart from './pages/onboarding/OnboardingStart.tsx';
 import OnboardingTutor from './pages/onboarding/OnboardingTutor.tsx';
 import OnboardingLesson from './pages/onboarding/OnboardingLesson.tsx';
 import OnboardingRegion from './pages/onboarding/OnboardingRegion.tsx';
+import OnboardingAvailability from './pages/onboarding/OnboardingAvailability.tsx';
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/onboarding/tutor" element={<OnboardingTutor />} />
         <Route path="/onboarding/tutor/lesson" element={<OnboardingLesson />} />
         <Route path="/onboarding/tutor/region" element={<OnboardingRegion />} />
+        <Route path="/onboarding/tutor/availability" element={<OnboardingAvailability />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

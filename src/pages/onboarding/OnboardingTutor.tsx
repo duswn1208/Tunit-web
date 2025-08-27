@@ -57,9 +57,10 @@ export default function OnboardingTutor() {
       subtitle={`${step1.nickname} 님! 소개, 경력, 레슨 단가/단위를 입력해주세요. (시간/휴무는 다음 단계에서 설정)`}
       as="form"
       onSubmit={handleSubmit(onSubmit)}
-      footer={<NextButton type="submit" label="다음 →" loading={isSubmitting} />}
+      footer={<NextButton addClass="ui-btn--full" type="submit" loading={isSubmitting} />}
     >
       <FormField
+        className="mls-header"
         label="소개글"
         htmlFor="intro"
         required
@@ -70,6 +71,7 @@ export default function OnboardingTutor() {
           id="intro"
           className="ui-textarea"
           placeholder="예) 튜닛입니다."
+          value="튜닛입니다 저는 매니저에요"
           rows={5}
           {...register('intro', {
             required: '소개글은 필수입니다.',
@@ -79,11 +81,18 @@ export default function OnboardingTutor() {
         />
       </FormField>
 
-      <FormField label="경력 연수" htmlFor="years" required error={errors.years?.message}>
+      <FormField
+        className="mls-header"
+        label="경력 연수"
+        htmlFor="years"
+        required
+        error={errors.years?.message}
+      >
         <input
           id="years"
           className="ui-input"
           type="number"
+          value="10"
           min={0}
           step={1}
           {...register('years', {
@@ -96,6 +105,7 @@ export default function OnboardingTutor() {
       </FormField>
 
       <FormField
+        className="mls-header"
         label="시간당 레슨 금액(원)"
         htmlFor="hourlyRate"
         required
@@ -105,6 +115,7 @@ export default function OnboardingTutor() {
           id="hourlyRate"
           className="ui-input"
           type="number"
+          value="10000"
           min={0}
           step={1000}
           {...register('hourlyRate', {
@@ -117,6 +128,7 @@ export default function OnboardingTutor() {
       </FormField>
 
       <FormField
+        className="mls-header"
         label="기본 수업 단위(분)"
         htmlFor="unitMinutes"
         required

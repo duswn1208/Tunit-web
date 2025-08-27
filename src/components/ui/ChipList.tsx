@@ -30,7 +30,7 @@ export default function ChipList<T = ChipItem>({
             return (
               <span key={code} className="mls-chip">
                 {label}
-                <button aria-label="선택 해제" onClick={() => onRemove(s.code)}>
+                <button aria-label="선택 해제" onClick={() => onRemove(code)}>
                   ✕
                 </button>
               </span>

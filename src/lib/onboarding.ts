@@ -22,7 +22,7 @@ const GET_SIDO = '/api/regions';
 const GET_SUB_GUGUN = (sidoCode: string) =>
   `/api/regions/${encodeURIComponent(sidoCode)}/subregions`;
 
-const SAVE_TUTOR_INFO = '/api/onboarding/tutor';
+// const SAVE_TUTOR_INFO = '/api/onboarding/tutor';
 
 export function loadStep1<T extends Step1 = Step1>() {
   return load<T>('onboarding.step1');
