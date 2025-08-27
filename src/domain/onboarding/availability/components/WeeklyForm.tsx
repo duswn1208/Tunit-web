@@ -2,7 +2,7 @@ import DayChips from './DayChips';
 import TimeInputs from './TimeInputs';
 import EntryList from './EntryList';
 import { useWeeklyForm } from '../hooks/useWeeklyForm';
-import { NextButton } from '../../../components/onboarding';
+import OnboardingNextButton from '../../common/components/OnboardingNextButton';
 
 interface Props {
   onPrev?: () => void;
@@ -71,12 +71,12 @@ export default function WeeklyForm({ onPrev, onNext }: Props) {
       </div>
       <EntryList entries={entries} onRemove={removeEntry} />
 
-      <NextButton
+      <OnboardingNextButton
         addClass="ui-btn--full"
         onClick={handleNext}
         disabled={entries.length === 0}
         label="다음"
-      ></NextButton>
+      ></OnboardingNextButton>
     </div>
   );
 }

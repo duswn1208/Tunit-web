@@ -1,5 +1,5 @@
 import type { WeeklyAvailabilityRequest, WeeklyAvailabilityResponse } from '../types/availability';
-import { api } from '../../../lib/api';
+import { api } from '../../../../lib/api';
 
 const BASE_URL = '/api/tutors';
 

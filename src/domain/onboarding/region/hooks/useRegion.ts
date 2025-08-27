@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { Region, SelectedRegion } from '../../type/onboarding';
-import { getSidos, getSubregions, dedupeAndSortSidos } from '../../lib/onboarding';
+import type { Region, SelectedRegion } from '../../../../type/onboarding';
+import { getSidos, getSubregions, dedupeAndSortSidos } from '../../../../lib/onboarding';
 
 type UseOnboardingRegionOptions = {
   initialSelected?: SelectedRegion[];

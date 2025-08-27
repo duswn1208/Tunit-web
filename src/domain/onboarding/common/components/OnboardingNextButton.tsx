@@ -1,6 +1,6 @@
-import { Button } from '../ui';
+import { Button } from '../../../../components';
 
-export default function NextButton({
+export default function OnboardingNextButton({
   label = '다음 →',
   loading,
   disabled,

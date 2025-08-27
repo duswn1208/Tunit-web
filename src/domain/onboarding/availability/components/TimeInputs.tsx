@@ -1,5 +1,5 @@
-import { FormField } from '../../../components/ui';
-import { NextButton } from '../../../components/onboarding';
+import { FormField } from '../../../../components';
+import OnboardingNextButton from '../../common/components/OnboardingNextButton';
 import '../css/availability.css';
 
 interface Props {
@@ -37,7 +37,11 @@ export default function TimeInputs({
           className="time-input"
         />
       </FormField>
-      <NextButton addClass="ui-btn--accent py-6" onClick={onAdd} label="+ 구간 추가"></NextButton>
+      <OnboardingNextButton
+        addClass="ui-btn--accent py-6"
+        onClick={onAdd}
+        label="+ 구간 추가"
+      ></OnboardingNextButton>
     </div>
   );
 }

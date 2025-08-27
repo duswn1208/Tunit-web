@@ -1,6 +1,6 @@
 import type { DayOfWeek } from '../types/availability';
 import type { Entry } from '../hooks/useWeeklyForm';
-import { NextButton } from '../../../components/onboarding';
+import OnboardingNextButton from '../../common/components/OnboardingNextButton';
 
 const DAY_LABELS: Record<DayOfWeek, string> = {
   1: '월',
@@ -27,11 +27,11 @@ export default function EntryList({ entries, onRemove }: Props) {
             <span className="font-medium">{e.days.map((d) => DAY_LABELS[d]).join(', ')}</span>{' '}
             {e.startTime} ~ {e.endTime}
           </div>
-          <NextButton
+          <OnboardingNextButton
             onClick={() => onRemove(idx)}
             addClass="ui-btn--accent"
             label="삭제"
-          ></NextButton>
+          ></OnboardingNextButton>
         </li>
       ))}
     </ul>
