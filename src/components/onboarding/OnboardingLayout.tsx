@@ -1,6 +1,11 @@
 import React from 'react';
 import { Card } from '../ui';
 
+import '../../css/multi-level-selector/mls-base.css';
+import '../../css/multi-level-selector/mls-container.css';
+import '../../css/multi-level-selector/mls-list.css';
+import '../../css/ui/ui-button.css';
+
 type Props = {
   step?: number;
   total?: number;

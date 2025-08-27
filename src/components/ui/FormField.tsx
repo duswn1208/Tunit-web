@@ -29,7 +29,7 @@ export default function FormField({
           {label} {required ? <span aria-hidden="true">*</span> : null}
         </label>
       )}
-      <div className={childrenClsx}>{children}</div>
+      <div className={(clsx('ui-input'), childrenClsx)}>{children}</div>
       {hint && !error ? <div className="ui-hint">{hint}</div> : null}
       {error ? <div className="ui-error">{error}</div> : null}
     </div>

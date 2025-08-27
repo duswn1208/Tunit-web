@@ -5,7 +5,7 @@
   --fg-muted: #6b7280;
   --border: rgba(0, 0, 0, 0.16);
   --border-strong: rgba(0, 0, 0, 0.24);
-  --card-bg: #fff;
+  --card-bg: #3e3e3e;
   --input-bg: #fff;
   --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
@@ -14,8 +14,8 @@
   :root {
     --border: rgba(255, 255, 255, 0.12);
     --border-strong: rgba(255, 255, 255, 0.2);
-    --card-bg: #121212;
-    --input-bg: #181818;
+    --card-bg: #3e3e3e;
+    --input-bg: #f6f2f2;
     --shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
   }
 }
