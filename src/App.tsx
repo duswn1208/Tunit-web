@@ -2,11 +2,11 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from './pages/HomePage.tsx';
 import LoginPage from './pages/LoginPage.tsx';
 import MyPage from './pages/MyPage.tsx';
-import OnboardingStart from './pages/onboarding/OnboardingStart.tsx';
-import OnboardingTutor from './pages/onboarding/OnboardingTutor.tsx';
-import OnboardingLesson from './pages/onboarding/OnboardingLesson.tsx';
-import OnboardingRegion from './pages/onboarding/OnboardingRegion.tsx';
-import OnboardingAvailability from './pages/onboarding/OnboardingAvailability.tsx';
+import OnboardingStart from './domain/onboarding/pages/OnboardingStart.tsx';
+import OnboardingTutor from './domain/onboarding/pages/OnboardingTutor.tsx';
+import OnboardingLesson from './domain/onboarding/pages/OnboardingLesson.tsx';
+import OnboardingRegion from './domain/onboarding/pages/OnboardingRegion.tsx';
+import OnboardingAvailability from './domain/onboarding/pages/OnboardingAvailability.tsx';
 
 export default function App() {
   return (

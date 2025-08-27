@@ -1,16 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 
-import { ChipList } from '../../components/ui';
-import { OnboardingLayout, NextButton } from '../..//components/onboarding';
-import { useOnboardingLesson } from '../../hook/onboarding/useLesson';
-
-import '../../css/ui/ui-tokens.css';
-import '../../css/ui/ui-card.css';
-import '../../css/ui/ui-button.css';
-
-import '../../css/multi-level-selector/mls-base.css';
-import '../../css/multi-level-selector/mls-container.css';
-import '../../css/multi-level-selector/mls-grid.css';
+import { ChipList } from '../../../components';
+import OnboardingLayout from '../common/components/OnboardingLayout';
+import { useOnboardingLesson } from '../lesson/hooks/useLesson';
+import OnboardingNextButton from '../common/components/OnboardingNextButton';
 
 export default function OnboardingLesson() {
   const navigate = useNavigate();
@@ -42,7 +35,7 @@ export default function OnboardingLesson() {
       step={3}
       total={4}
       subtitle="레슨 유형을 고른 뒤, 상세 레슨을 여러 개 선택하세요."
-      footer={<NextButton addClass="ui-btn--full" onClick={goNext} />}
+      footer={<OnboardingNextButton addClass="ui-btn--full" onClick={goNext} />}
     >
       <div className="mls-header">
         <h2 className="text-xl" style={{ fontWeight: 700 }}>

@@ -1,10 +1,10 @@
 import { Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-import { NextButton, OnboardingLayout } from '../../components/onboarding';
-import { ChipList } from '../../components/ui';
+import { ChipList } from '../../../components';
 
-import { useOnboardingRegion } from '../../hook/onboarding/useRegion';
+import { useOnboardingRegion } from '../region/hooks/useRegion';
+import OnboardingLayout from '../common/components/OnboardingLayout';
 
 export default function OnboardingRegion() {
   const navigate = useNavigate();

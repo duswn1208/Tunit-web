@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { OnboardingLayout } from '../../components/onboarding';
-import OnboardingStepWeekly from '../../domain/availability/components/OnboardingStepWeekly';
+import OnboardingStepWeekly from '../availability/components/OnboardingStepWeekly';
+import OnboardingLayout from '../common/components/OnboardingLayout';
 
 export default function OnboardingAvailability() {
   const navigate = useNavigate();
@@ -18,6 +18,7 @@ export default function OnboardingAvailability() {
       total={6}
       subtitle="수업 가능한 날짜와 시간을 선택해주세요."
       bodyClassName="mls-body"
+      goPrev={goPrev}
     >
       <OnboardingStepWeekly onPrev={goPrev} onNext={goNext} />
     </OnboardingLayout>

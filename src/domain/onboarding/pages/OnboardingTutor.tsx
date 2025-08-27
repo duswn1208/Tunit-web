@@ -1,15 +1,11 @@
 import { useForm } from 'react-hook-form';
 
-import { FormField } from '../../components/ui';
-import { OnboardingLayout, NextButton } from '../../components/onboarding';
-import { loadStep1 } from '../../lib/onboarding';
-import type { Step2 } from '../../type/onboarding';
+import { loadStep1 } from '../../../lib/onboarding';
+import type { Step2 } from '../../../type/onboarding';
 
-import '../../css/ui/ui-tokens.css';
-import '../../css/ui/ui-card.css';
-import '../../css/ui/ui-form.css';
-import '../../css/ui/ui-input.css';
-import '../../css/ui/ui-button.css';
+import OnboardingNextButton from '../common/components/OnboardingNextButton';
+import OnboardingLayout from '../common/components/OnboardingLayout';
+import { FormField } from '../../../components';
 
 export default function OnboardingTutor() {
   const step1 = loadStep1();
@@ -57,7 +53,7 @@ export default function OnboardingTutor() {
       subtitle={`${step1.nickname} 님! 소개, 경력, 레슨 단가/단위를 입력해주세요. (시간/휴무는 다음 단계에서 설정)`}
       as="form"
       onSubmit={handleSubmit(onSubmit)}
-      footer={<NextButton addClass="ui-btn--full" type="submit" loading={isSubmitting} />}
+      footer={<OnboardingNextButton addClass="ui-btn--full" type="submit" loading={isSubmitting} />}
     >
       <FormField
         className="mls-header"

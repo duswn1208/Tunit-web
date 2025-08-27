@@ -1,13 +1,7 @@
 import { useForm } from 'react-hook-form';
-import '../../css/ui/ui-tokens.css';
-import '../../css/ui/ui-card.css';
-import '../../css/ui/ui-form.css';
-import '../../css/ui/ui-input.css';
-import '../../css/ui/ui-button.css';
-import OnboardingCard from '../../components/onboarding/Card';
-import NextButton from '../../components/onboarding/NextButton';
-import { RadioGroup, FormField } from '../../components/ui';
-import { OnboardingLayout } from '../../components/onboarding';
+import OnboardingNextButton from '../common/components/OnboardingNextButton';
+import { RadioGroup, FormField } from '../../../components';
+import OnboardingLayout from '../common/components/OnboardingLayout';
 
 type Role = 'TUTOR' | 'STUDENT';
 type FormData = {
@@ -47,7 +41,7 @@ export default function OnboardingStart() {
       title="온보딩"
       subtitle="역할을 선택하고 닉네임을 설정해주세요."
       footer={
-        <NextButton
+        <OnboardingNextButton
           addClass="ui-btn--full"
           onClick={handleSubmit(onSubmit)}
           loading={isSubmitting}
