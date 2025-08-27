@@ -9,7 +9,10 @@
 }
 .ui-label {
   font-weight: 700;
-  font-size: 14px;
+  font-size: 20px;
+}
+.ui-input {
+  background-color: #fff;
 }
 .ui-hint {
   font-size: 12px;

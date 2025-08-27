@@ -1,0 +1,42 @@
+/* 가로 정렬용 래퍼 */
+.time-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap; /* 공간 부족 시 다음 줄로만 내려가게 */
+  white-space: nowrap; /* 라벨/구분자 줄바꿈 방지(선택) */
+}
+
+/* time input 투명 + 가로 배치 */
+.time-input {
+  display: inline-flex; /* 옆으로 붙게 */
+  width: 110px; /* 필요 폭 지정 */
+  height: 40px;
+  padding: 0 10px;
+  background: transparent;
+  color: #5f5959;
+  border: 1px solid rgba(37, 35, 35, 0.3);
+  border-radius: 8px;
+}
+
+/* WebKit 내부 파트 투명화(기존 그대로) */
+.time-input::-webkit-datetime-edit,
+.time-input::-webkit-datetime-edit-fields-wrapper,
+.time-input::-webkit-datetime-edit-ampm-field,
+.time-input::-webkit-datetime-edit-hour-field,
+.time-input::-webkit-datetime-edit-minute-field {
+  background: transparent;
+  color: inherit;
+}
+.time-input::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.7;
+}
+.time-input::-webkit-clear-button,
+.time-input::-webkit-inner-spin-button {
+  display: none;
+}
+.time-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--brand-red, #e60023);
+}

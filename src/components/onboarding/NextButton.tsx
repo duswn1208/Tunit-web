@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button } from '../ui';
 
 export default function NextButton({
@@ -17,14 +16,16 @@ export default function NextButton({
   onClick?: any;
 }) {
   return (
-    <Button
-      className={addClass}
-      type={type}
-      loading={loading}
-      disabled={disabled}
-      onClick={onClick}
-    >
-      {label}
-    </Button>
+    <div className="mls-footer">
+      <Button
+        className={addClass}
+        type={type}
+        loading={loading}
+        disabled={disabled}
+        onClick={onClick}
+      >
+        {label}
+      </Button>
+    </div>
   );
 }

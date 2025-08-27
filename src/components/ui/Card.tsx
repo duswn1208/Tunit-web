@@ -37,8 +37,14 @@ export default function Card({
         className={clsx('ui-card-body', bodyClassName)}
         {...(as === 'form' ? { onSubmit } : {})}
       >
-        {children}
-        {footer ? <footer className="ui-card-footer">{footer}</footer> : null}
+        <div className="mls-card">
+          {children}
+          {footer ? (
+            <footer>
+              <div className="mls-footer">{footer}</div>
+            </footer>
+          ) : null}
+        </div>
       </Body>
     </div>
   );

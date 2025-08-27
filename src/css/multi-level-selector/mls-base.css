@@ -1,7 +1,6 @@
 /* 색상/토큰은 index.css 의 :root 변수 사용
    예: --brand-red, --brand-mint, --muted, --chip-bg, --chip-border, --chip-fg
 */
-
 .mls-sub {
   font-size: 12px;
   color: #6b7280;

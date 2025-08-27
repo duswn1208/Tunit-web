@@ -5,8 +5,9 @@ import '../../css/ui/ui-form.css';
 import '../../css/ui/ui-input.css';
 import '../../css/ui/ui-button.css';
 import OnboardingCard from '../../components/onboarding/Card';
-import OnboardingNextButton from '../../components/onboarding/NextButton';
+import NextButton from '../../components/onboarding/NextButton';
 import { RadioGroup, FormField } from '../../components/ui';
+import { OnboardingLayout } from '../../components/onboarding';
 
 type Role = 'TUTOR' | 'STUDENT';
 type FormData = {
@@ -42,17 +43,27 @@ export default function OnboardingStart() {
   ];
 
   return (
-    <OnboardingCard
+    <OnboardingLayout
       title="온보딩"
       subtitle="역할을 선택하고 닉네임을 설정해주세요."
-      as="form"
-      onSubmit={handleSubmit(onSubmit)}
-      footer={<OnboardingNextButton type="submit" label="다음 →" loading={isSubmitting} />}
+      footer={
+        <NextButton
+          addClass="ui-btn--full"
+          onClick={handleSubmit(onSubmit)}
+          loading={isSubmitting}
+        />
+      }
     >
-      <FormField label="역할" childrenClsx="ui-radio-group">
+      <FormField className="mls-header" label="역할" childrenClsx="ui-radio-group">
         <RadioGroup name="role" options={radioOption} defaultValue="TUTOR"></RadioGroup>
       </FormField>
-      <FormField label="닉네임" htmlFor="nickname" required error={errors.nickname?.message}>
+      <FormField
+        className="mls-header"
+        label="닉네임"
+        htmlFor="nickname"
+        required
+        error={errors.nickname?.message}
+      >
         <input
           className="ui-input"
           id="nickname"
@@ -65,6 +76,6 @@ export default function OnboardingStart() {
           })}
         />
       </FormField>
-    </OnboardingCard>
+    </OnboardingLayout>
   );
 }
