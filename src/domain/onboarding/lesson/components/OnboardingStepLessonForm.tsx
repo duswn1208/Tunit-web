@@ -1,10 +1,21 @@
 import LessonSelectedChipList from './LessonSelectedChipList';
 import LessonMainCategory from './LessonMainCategory';
 import LessonSubCategory from './LessonSubCategory';
-import { useOnboardingLesson } from '../../lesson/hooks/useLesson';
 import Header from '../../../../components/Header';
+interface OnboardingStepLessonFormProps {
+  mains: any[];
+  mainCode: string;
+  subs: any[];
+  selectedSubs: Set<string>;
+  loadingMain: boolean;
+  loadingSub: boolean;
+  chipList: any[];
+  selectMain: (code: string) => void;
+  removeChip: (code: string) => void;
+  toggleSub: (code: string) => void;
+}
 
-export default function OnboardingStepLessonForm() {
+export default function OnboardingStepLessonForm(props: OnboardingStepLessonFormProps) {
   const {
     mains,
     mainCode,
@@ -16,7 +27,7 @@ export default function OnboardingStepLessonForm() {
     selectMain,
     removeChip,
     toggleSub,
-  } = useOnboardingLesson();
+  } = props;
 
   return (
     <div>

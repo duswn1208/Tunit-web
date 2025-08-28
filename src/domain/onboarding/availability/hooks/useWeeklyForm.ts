@@ -44,7 +44,7 @@ export function useWeeklyForm() {
 
   function saveToLocalStorage() {
     const items = flattenAll(entries);
-    localStorage.setItem('onboarding.tutor.availability', JSON.stringify({ items }));
+    setAvailability(JSON.stringify(items));
   }
 
   return {
@@ -69,6 +69,7 @@ export function useWeeklyForm() {
 // 유틸 (폼 내부 전개용) — 필요 시 lib로 분리 가능
 import type { Entry as _Entry } from './useWeeklyForm';
 import type { DayOfWeek as _DayOfWeek } from '../types/availability';
+import { setAvailability } from '../../../../lib/onboarding';
 function flattenToDayRanges(entries: _Entry[], day: _DayOfWeek) {
   return entries
     .filter((e) => e.days.includes(day))
