@@ -1,15 +1,21 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import OnboardingStepWeekly from '../availability/components/OnboardingStepWeekly';
 import OnboardingLayout from '../common/components/OnboardingLayout';
+import OnboardingNextButton from '../common/components/OnboardingNextButton';
+import { useWeeklyForm } from '../availability/hooks/useWeeklyForm';
 
 export default function OnboardingAvailability() {
   const navigate = useNavigate();
-  const [availability] = useState<any[]>([]); // 주간 가능시간 상태
+  const { saveToLocalStorage, entries } = useWeeklyForm();
   const goPrev = () => navigate('/onboarding/tutor/region');
   const goNext = () => {
-    localStorage.setItem('onboarding.step4.tutor', JSON.stringify(availability));
-    navigate('/onboarding/tutor/nextStep');
+    if (entries.length === 0) {
+      alert('최소 하나 이상의 가능 시간을 선택해주세요.');
+      return; // 엔트리가 없으면 진행하지 않음
+    }
+    saveToLocalStorage();
+
+    //회원가입
   };
 
   return (
@@ -18,9 +24,16 @@ export default function OnboardingAvailability() {
       total={6}
       subtitle="수업 가능한 날짜와 시간을 선택해주세요."
       bodyClassName="mls-body"
-      goPrev={goPrev}
+      footer={
+        <OnboardingNextButton
+          addClass="ui-btn--full"
+          onClick={goNext}
+          disabled={entries.length === 0}
+          label="다음"
+        ></OnboardingNextButton>
+      }
     >
-      <OnboardingStepWeekly onPrev={goPrev} onNext={goNext} />
+      <OnboardingStepWeekly />
     </OnboardingLayout>
   );
 }
