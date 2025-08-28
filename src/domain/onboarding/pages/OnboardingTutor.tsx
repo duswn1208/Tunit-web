@@ -14,7 +14,7 @@ export default function OnboardingTutor() {
 
   // 가드: 1단계 미완료/역할 불일치 시 1단계로 보냄
   if (!step1 || step1.role !== 'TUTOR') {
-    window.location.replace('/onboarding');
+    navigate('/onboarding');
     return null;
   }
 
@@ -41,7 +41,7 @@ export default function OnboardingTutor() {
       durationMin: data.durationMin,
     });
 
-    alert(loadTutorProfile());
+    alert(JSON.stringify(loadTutorProfile()));
     navigate('/onboarding/tutor/lesson');
   };
 

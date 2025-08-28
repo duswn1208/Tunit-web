@@ -4,26 +4,29 @@ import OnboardingNextButton from '../common/components/OnboardingNextButton';
 
 import { api } from '../../../lib/api';
 import { useWeeklyForm } from '../availability/hooks/useWeeklyForm';
+import {
+  loadUserRole,
+  loadTutorProfile,
+  loadLessonCategory,
+  loadRegion,
+  loadAvailability,
+} from '../../../lib/onboarding';
 
 // 튜터 가입 요청 함수(api.ts 사용)
 async function submitTutorJoin() {
-  // 1. 각 단계별 데이터 로드
-  const step1 = JSON.parse(localStorage.getItem('onboarding.step1') || '{}');
-  const step2 = JSON.parse(localStorage.getItem('onboarding.step2.tutor') || '{}');
-  const step3 = JSON.parse(localStorage.getItem('onboarding.step3.tutor') || '{}');
-  const step4 = JSON.parse(localStorage.getItem('onboarding.step4.tutor') || '{}');
-  const step5 = JSON.parse(localStorage.getItem('onboarding.step5.tutor') || '{}');
-  const step6 = JSON.parse(localStorage.getItem('onboarding.step6.tutor') || '{}');
-  const availability = JSON.parse(localStorage.getItem('onboarding.tutor.availability') || '{}');
+  const userRole = loadUserRole();
+  const tutorProfile = loadTutorProfile();
+  const lessonCategory = loadLessonCategory();
+  const region = loadRegion();
+  const availability = loadAvailability();
 
-  // 2. DTO 변환 (예시, 실제 필드명/구조에 맞게 수정 필요)
+  // 2. DTO 변환 (실제 필드명/구조에 맞게 수정 필요)
   const payload = {
-    ...step1,
-    ...step2,
-    ...step3,
-    ...step4,
-    ...step5,
-    ...step6,
+    ...userRole,
+    ...tutorProfile,
+    mainCategory: lessonCategory?.mainCode,
+    subCategoryList: lessonCategory?.subCodes,
+    regionList: region,
     tutorAvailableTimeSaveDtoList: (availability.items || []).map((item: any) => ({
       dayOfWeekNum: item.dayOfWeek,
       startTime: item.startTime,
