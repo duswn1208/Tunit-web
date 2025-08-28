@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Region, SelectedRegion } from '../../../../type/onboarding';
-import { getSidos, getSubregions, dedupeAndSortSidos } from '../../../../lib/onboarding';
+import { getSidos, getSubregions } from '../../../../lib/onboarding/regionApi';
 
 type UseOnboardingRegionOptions = {
   initialSelected?: SelectedRegion[];
@@ -199,4 +199,24 @@ export function useOnboardingRegion(opts: UseOnboardingRegionOptions = {}) {
     // cache (필요하면 노출)
     subCache,
   };
+}
+
+import { REGION_SIDO_ORDER } from '../../../../type/onboarding';
+function dedupeAndSortSidos(list: Region[]) {
+  // label 기준 중복 제거 및 우선순위 정렬
+  const map = new Map<string, Region>();
+  for (const r of list) {
+    const key = r.label;
+    if (!map.has(key)) map.set(key, r);
+  }
+  const arr = Array.from(map.values());
+  arr.sort((a, b) => {
+    const ai = REGION_SIDO_ORDER.indexOf(a.label);
+    const bi = REGION_SIDO_ORDER.indexOf(b.label);
+    if (ai !== -1 && bi !== -1) return ai - bi;
+    if (ai !== -1) return -1;
+    if (bi !== -1) return 1;
+    return a.label.localeCompare(b.label, 'ko');
+  });
+  return arr;
 }

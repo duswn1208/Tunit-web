@@ -3,15 +3,15 @@ import OnboardingStepLessonForm from '../lesson/components/OnboardingStepLessonF
 import OnboardingLayout from '../common/components/OnboardingLayout';
 import OnboardingNextButton from '../common/components/OnboardingNextButton';
 import { useOnboardingLesson } from '../lesson/hooks/useLesson';
+import { loadLessonCategory, setLessonCategory } from '../../../lib/onboarding';
 
 export default function OnboardingLesson() {
   const navigate = useNavigate();
-  const { mainCode, selectedSubs } = useOnboardingLesson();
+  const lesson = useOnboardingLesson();
+  const { mainCode, selectedSubs } = lesson;
   async function goNext() {
-    localStorage.setItem(
-      'onboarding.step3.tutor',
-      JSON.stringify({ mainCode, subCodes: Array.from(selectedSubs) })
-    );
+    setLessonCategory({ mainCode, subCodes: Array.from(selectedSubs) });
+    alert(JSON.stringify(loadLessonCategory()));
     navigate('/onboarding/tutor/region');
   }
 
@@ -23,7 +23,7 @@ export default function OnboardingLesson() {
       bodyClassName="mls-body"
       footer={<OnboardingNextButton addClass="ui-btn--full" onClick={goNext} />}
     >
-      <OnboardingStepLessonForm />
+      <OnboardingStepLessonForm {...lesson} />
     </OnboardingLayout>
   );
 }

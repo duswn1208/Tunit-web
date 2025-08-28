@@ -1,14 +1,16 @@
 import { useForm } from 'react-hook-form';
 
-import { loadStep1 } from '../../../lib/onboarding';
 import type { Step2 } from '../../../type/onboarding';
 
 import OnboardingNextButton from '../common/components/OnboardingNextButton';
 import OnboardingLayout from '../common/components/OnboardingLayout';
 import { FormField } from '../../../components';
+import { loadTutorProfile, loadUserRole, setTutorProfile } from '../../../lib/onboarding';
+import { useNavigate } from 'react-router-dom';
 
 export default function OnboardingTutor() {
-  const step1 = loadStep1();
+  const step1 = loadUserRole();
+  const navigate = useNavigate();
 
   // 가드: 1단계 미완료/역할 불일치 시 1단계로 보냄
   if (!step1 || step1.role !== 'TUTOR') {
@@ -22,28 +24,25 @@ export default function OnboardingTutor() {
     formState: { errors, isSubmitting },
   } = useForm<Step2>({
     defaultValues: {
-      intro: '',
-      years: 0,
-      hourlyRate: 0,
-      unitMinutes: 60,
+      introduce: '',
+      careerYears: 0,
+      pricePerHour: 0,
+      durationMin: 60,
     },
   });
 
   const onSubmit = async (data: Step2) => {
     if (isSubmitting) return; // early return
 
-    localStorage.setItem(
-      'onboarding.step2.tutor',
-      JSON.stringify({
-        role: step1.role,
-        nickName: step1.nickname,
-        intro: data.intro.trim(),
-        years: Number(data.years),
-        hourlyRate: Number(data.hourlyRate),
-        unitMinutes: Number(data.unitMinutes),
-      })
-    );
-    window.location.href = '/onboarding/tutor/lesson'; // 여기로 이동
+    setTutorProfile({
+      introduce: data.introduce.trim(),
+      careerYears: Number(data.careerYears),
+      pricePerHour: Number(data.pricePerHour),
+      durationMin: data.durationMin,
+    });
+
+    alert(loadTutorProfile());
+    navigate('/onboarding/tutor/lesson');
   };
 
   return (
@@ -58,18 +57,18 @@ export default function OnboardingTutor() {
       <FormField
         className="mls-header"
         label="소개글"
-        htmlFor="intro"
+        htmlFor="introduce"
         required
-        error={errors.intro?.message}
+        error={errors.introduce?.message}
         hint="10~500자"
       >
         <textarea
-          id="intro"
+          id="introduce"
           className="ui-textarea"
           placeholder="예) 튜닛입니다."
           value="튜닛입니다 저는 매니저에요"
           rows={5}
-          {...register('intro', {
+          {...register('introduce', {
             required: '소개글은 필수입니다.',
             minLength: { value: 10, message: '10자 이상' },
             maxLength: { value: 500, message: '500자 이내' },
@@ -80,18 +79,18 @@ export default function OnboardingTutor() {
       <FormField
         className="mls-header"
         label="경력 연수"
-        htmlFor="years"
+        htmlFor="careerYears"
         required
-        error={errors.years?.message}
+        error={errors.careerYears?.message}
       >
         <input
-          id="years"
+          id="careerYears"
           className="ui-input"
           type="number"
           value="10"
           min={0}
           step={1}
-          {...register('years', {
+          {...register('careerYears', {
             required: '경력 연수를 입력해주세요.',
             valueAsNumber: true,
             min: { value: 0, message: '0 이상' },
@@ -103,18 +102,18 @@ export default function OnboardingTutor() {
       <FormField
         className="mls-header"
         label="시간당 레슨 금액(원)"
-        htmlFor="hourlyRate"
+        htmlFor="pricePerHour"
         required
-        error={errors.hourlyRate?.message}
+        error={errors.pricePerHour?.message}
       >
         <input
-          id="hourlyRate"
+          id="pricePerHour"
           className="ui-input"
           type="number"
           value="10000"
           min={0}
           step={1000}
-          {...register('hourlyRate', {
+          {...register('pricePerHour', {
             required: '시간당 금액을 입력해주세요.',
             valueAsNumber: true,
             min: { value: 0, message: '0원 이상' },
@@ -126,14 +125,14 @@ export default function OnboardingTutor() {
       <FormField
         className="mls-header"
         label="기본 수업 단위(분)"
-        htmlFor="unitMinutes"
+        htmlFor="durationMin"
         required
-        error={errors.unitMinutes && '수업 단위를 선택해주세요.'}
+        error={errors.durationMin && '수업 단위를 선택해주세요.'}
       >
         <select
-          id="unitMinutes"
+          id="durationMin"
           className="ui-select"
-          {...register('unitMinutes', { required: true, valueAsNumber: true })}
+          {...register('durationMin', { required: true, valueAsNumber: true })}
         >
           <option value={30}>30분</option>
           <option value={60}>60분</option>

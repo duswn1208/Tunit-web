@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import OnboardingNextButton from '../common/components/OnboardingNextButton';
 import { RadioGroup, FormField } from '../../../components';
 import OnboardingLayout from '../common/components/OnboardingLayout';
+import { setUserRole } from '../../../lib/onboarding';
 
 type Role = 'TUTOR' | 'STUDENT';
 type FormData = {
@@ -19,9 +20,10 @@ export default function OnboardingStart() {
   const onSubmit = (data: FormData) => {
     if (isSubmitting) return;
     // 1단계 저장
-    localStorage.setItem('onboarding.step1', JSON.stringify(data));
+    setUserRole(data);
 
     // 역할에 따라 2단계 라우팅
+    alert(JSON.stringify(data));
     if (data.role === 'TUTOR') {
       window.location.href = '/onboarding/tutor';
     } else {

@@ -1,22 +1,23 @@
 import DayChips from './DayChips';
 import TimeInputs from './TimeInputs';
 import EntryList from './EntryList';
-import { useWeeklyForm } from '../hooks/useWeeklyForm';
 import Header from '../../../../components/Header';
 
-export default function WeeklyForm() {
-  const {
-    selectedDays,
-    startTime,
-    endTime,
-    entries,
-    setStartTime,
-    setEndTime,
-    toggleDay,
-    addEntry,
-    removeEntry,
-  } = useWeeklyForm();
+import type { useWeeklyForm } from '../hooks/useWeeklyForm';
 
+type WeeklyFormProps = ReturnType<typeof useWeeklyForm>;
+
+export default function WeeklyForm({
+  selectedDays,
+  startTime,
+  endTime,
+  entries,
+  setStartTime,
+  setEndTime,
+  toggleDay,
+  addEntry,
+  removeEntry,
+}: WeeklyFormProps) {
   const handleAdd = () => {
     const r = addEntry();
     if (r && !r.ok) alert(r.msg);

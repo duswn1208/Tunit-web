@@ -38,11 +38,11 @@ export type Step1 = {
   role: Role;
   nickname: string;
 };
-export type Step2 = Step1 & {
-  intro: string;
-  years: Number;
-  hourlyRate: Number;
-  unitMinutes: 30 | 60 | 90;
+export type Step2 = {
+  introduce: string;
+  careerYears: Number;
+  pricePerHour: Number;
+  durationMin: 30 | 60 | 90;
 };
 export type Step3 = { mainCode: string; subCodes: Array<string> };
 

@@ -6,6 +6,8 @@ export async function api<T>(input: RequestInfo, init: RequestInit = {}): Promis
     headers.set('Content-Type', 'application/json');
   }
 
+  console.log(init.body);
+
   const res = await fetch(input, {
     headers,
     credentials: 'include',
