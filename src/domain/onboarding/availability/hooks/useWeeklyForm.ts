@@ -44,7 +44,7 @@ export function useWeeklyForm() {
 
   function saveToLocalStorage() {
     const items = flattenAll(entries);
-    localStorage.setItem('onboarding.availability', JSON.stringify({ items }));
+    localStorage.setItem('onboarding.tutor.availability', JSON.stringify({ items }));
   }
 
   return {

@@ -5,6 +5,7 @@ import { ChipList } from '../../../components';
 
 import { useOnboardingRegion } from '../region/hooks/useRegion';
 import OnboardingLayout from '../common/components/OnboardingLayout';
+import OnboardingNextButton from '../common/components/OnboardingNextButton';
 
 export default function OnboardingRegion() {
   const navigate = useNavigate();
@@ -34,12 +35,12 @@ export default function OnboardingRegion() {
       subtitle="시/도를 선택한 뒤, 구/군을 여러 개 선택하세요. (중복 선택 가능)"
       bodyClassName="mls-body"
       footer={
-        <NextButton
+        <OnboardingNextButton
           addClass="ui-btn--full"
           disabled={selectedList.length === 0}
           onClick={goNext}
           label="다음"
-        ></NextButton>
+        ></OnboardingNextButton>
       }
     >
       <div className="mls-header">

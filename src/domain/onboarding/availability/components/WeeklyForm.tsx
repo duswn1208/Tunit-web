@@ -2,14 +2,9 @@ import DayChips from './DayChips';
 import TimeInputs from './TimeInputs';
 import EntryList from './EntryList';
 import { useWeeklyForm } from '../hooks/useWeeklyForm';
-import OnboardingNextButton from '../../common/components/OnboardingNextButton';
+import Header from '../../../../components/Header';
 
-interface Props {
-  onPrev?: () => void;
-  onNext?: () => void;
-}
-
-export default function WeeklyForm({ onPrev, onNext }: Props) {
+export default function WeeklyForm() {
   const {
     selectedDays,
     startTime,
@@ -20,7 +15,6 @@ export default function WeeklyForm({ onPrev, onNext }: Props) {
     toggleDay,
     addEntry,
     removeEntry,
-    saveToLocalStorage,
   } = useWeeklyForm();
 
   const handleAdd = () => {
@@ -28,55 +22,21 @@ export default function WeeklyForm({ onPrev, onNext }: Props) {
     if (r && !r.ok) alert(r.msg);
   };
 
-  const handleNext = () => {
-    if (entries.length === 0) {
-      alert('최소 1개 이상의 구간을 등록해주세요.');
-      return;
-    }
-    saveToLocalStorage();
-    onNext?.();
-  };
-
   return (
-    <div>
-      <section>
-        <div className="mls-header">
-          <h2 className="text-xl" style={{ fontWeight: 700 }}>
-            수업 가능한 요일을 선택해주세요
-          </h2>
-          <div className="mls-sub">(중복선택 가능)</div>
-        </div>
-        <DayChips selected={selectedDays} onToggle={toggleDay} />
-      </section>
+    <section>
+      <Header title="수업 가능한 요일을 선택해주세요" subtitle="(중복선택 가능)" />
+      <DayChips selected={selectedDays} onToggle={toggleDay} />
+      <Header title="수업 가능한 시간 범위를 입력해주세요" />
+      <TimeInputs
+        startTime={startTime}
+        endTime={endTime}
+        onChangeStart={setStartTime}
+        onChangeEnd={setEndTime}
+        onAdd={handleAdd}
+      />
 
-      <section>
-        <div className="mls-header">
-          <h2 className="text-xl" style={{ fontWeight: 700 }}>
-            수업 가능한 시간 범위를 입력해주세요
-          </h2>
-        </div>
-        <TimeInputs
-          startTime={startTime}
-          endTime={endTime}
-          onChangeStart={setStartTime}
-          onChangeEnd={setEndTime}
-          onAdd={handleAdd}
-        />
-      </section>
-
-      <div className="mls-header">
-        <h2 className="text-xl" style={{ fontWeight: 700 }}>
-          등록한 구간이 맞나요 ?
-        </h2>
-      </div>
+      <Header title="등록한 구간이 맞나요?" />
       <EntryList entries={entries} onRemove={removeEntry} />
-
-      <OnboardingNextButton
-        addClass="ui-btn--full"
-        onClick={handleNext}
-        disabled={entries.length === 0}
-        label="다음"
-      ></OnboardingNextButton>
-    </div>
+    </section>
   );
 }
