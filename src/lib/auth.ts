@@ -5,7 +5,7 @@ export type MeResp = {
 };
 
 export async function getMe(): Promise<MeResp> {
-  const res = await fetch('/api/auth/me', { credentials: 'include' });
+  const res = await fetch('/api/users/auth/me', { credentials: 'include' });
   if (!res.ok) return { authenticated: false, role: 'NONE' };
   return res.json();
 }
