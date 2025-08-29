@@ -1,22 +1,21 @@
 import { useNavigate } from 'react-router-dom';
-import { api } from '../lib/api';
+import { useEffect } from 'react';
+import { getMe } from '../lib/auth';
 
 export default function LoginPage() {
   const navigate = useNavigate();
 
+  useEffect(() => {
+    (async () => {
+      const me = await getMe();
+      if (me.authenticated) {
+        navigate('/');
+      }
+    })();
+  }, [navigate]);
+
   const naverLogin = async () => {
     window.location.href = 'http://localhost:8080/oauth2/authorization/naver';
-
-    // try {
-    //   const data = await api<any>('/api/tutor/profile/me');
-    //   if (!data || Object.keys(data).length === 0) {
-    //     navigate('/onboarding/start');
-    //   } else {
-    //     navigate('/');
-    //   }
-    // } catch {
-    //   navigate('/onboarding/start');
-    // }
   };
 
   return (
