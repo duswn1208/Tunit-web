@@ -1,7 +1,22 @@
+import { useNavigate } from 'react-router-dom';
+import { api } from '../lib/api';
+
 export default function LoginPage() {
-  const naverLogin = () => {
-    // Spring Security OAuth2 엔드포인트 (백엔드 프록시: vite.config.ts에 /oauth2 프록시 설정)
+  const navigate = useNavigate();
+
+  const naverLogin = async () => {
     window.location.href = 'http://localhost:8080/oauth2/authorization/naver';
+
+    // try {
+    //   const data = await api<any>('/api/tutor/profile/me');
+    //   if (!data || Object.keys(data).length === 0) {
+    //     navigate('/onboarding/start');
+    //   } else {
+    //     navigate('/');
+    //   }
+    // } catch {
+    //   navigate('/onboarding/start');
+    // }
   };
 
   return (

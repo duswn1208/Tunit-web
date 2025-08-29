@@ -11,6 +11,7 @@ import {
   loadRegion,
   loadAvailability,
 } from '../../../lib/onboarding';
+import { useNavigate } from 'react-router-dom';
 
 // 튜터 가입 요청 함수(api.ts 사용)
 async function submitTutorJoin() {
@@ -42,6 +43,7 @@ async function submitTutorJoin() {
 }
 
 export default function OnboardingAvailability() {
+  const navigate = useNavigate();
   const weeklyForm = useWeeklyForm();
   const { saveToLocalStorage, entries } = weeklyForm;
 
@@ -54,7 +56,7 @@ export default function OnboardingAvailability() {
     try {
       await submitTutorJoin();
       alert('튜터 가입이 완료되었습니다!');
-      // TODO: 가입 완료 후 이동할 경로로 라우팅
+      navigate('/');
     } catch (e: any) {
       alert(e.message || '가입 요청 중 오류가 발생했습니다.');
     }
