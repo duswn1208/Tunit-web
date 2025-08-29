@@ -23,6 +23,7 @@
   "homepage": "https://github.com/duswn1208/Tunit-web#readme",
   "dependencies": {
     "22": "^0.0.0",
+    "@tailwindcss/vite": "^4.1.12",
     "cls": "^0.1.5",
     "clsx": "^2.1.1",
     "lucide-react": "^0.541.0",
