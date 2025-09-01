@@ -23,7 +23,6 @@ export default function OnboardingStart() {
     setUserRole(data);
 
     // 역할에 따라 2단계 라우팅
-    alert(JSON.stringify(data));
     if (data.role === 'TUTOR') {
       window.location.href = '/onboarding/tutor';
     } else {

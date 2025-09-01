@@ -1,19 +1,4 @@
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import { getMe } from '../lib/auth';
-
 export default function LoginPage() {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    (async () => {
-      const me = await getMe();
-      if (me.authenticated) {
-        navigate('/');
-      }
-    })();
-  }, [navigate]);
-
   const naverLogin = async () => {
     window.location.href = 'http://localhost:8080/oauth2/authorization/naver';
   };

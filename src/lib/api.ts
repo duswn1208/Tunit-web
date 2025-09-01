@@ -2,11 +2,14 @@ export async function api<T>(input: RequestInfo, init: RequestInit = {}): Promis
   const hasBody = init.body != null;
   const headers = new Headers(init.headers || {});
 
+  // FormData일 경우 Content-Type을 명시하지 않음 (fetch가 boundary 포함 자동 처리)
   if (hasBody && !headers.has('Content-Type')) {
-    headers.set('Content-Type', 'application/json');
+    if (!(init.body instanceof FormData)) {
+      headers.set('Content-Type', 'application/json');
+    }
   }
 
-  console.log(init.body);
+  // console.log(init.body);
 
   const res = await fetch(input, {
     headers,
