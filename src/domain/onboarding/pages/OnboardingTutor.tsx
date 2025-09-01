@@ -41,7 +41,6 @@ export default function OnboardingTutor() {
       durationMin: data.durationMin,
     });
 
-    alert(JSON.stringify(loadTutorProfile()));
     navigate('/onboarding/tutor/lesson');
   };
 

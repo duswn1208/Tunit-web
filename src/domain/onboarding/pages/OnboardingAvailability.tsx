@@ -36,7 +36,7 @@ async function submitTutorJoin() {
   };
 
   // 3. API 요청 (api.ts 사용)
-  return await api('/api/tutor/join', {
+  return await api('/api/tutor/profile/join', {
     method: 'POST',
     body: JSON.stringify(payload),
   });

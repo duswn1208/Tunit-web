@@ -14,7 +14,6 @@ export default function OnboardingRegion() {
 
   async function goNext() {
     setRegion(selectedList);
-    alert('Selected Regions: ' + JSON.stringify(selectedList));
     navigate('/onboarding/tutor/availability');
   }
 

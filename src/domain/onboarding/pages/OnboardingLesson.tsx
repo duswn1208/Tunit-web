@@ -11,7 +11,6 @@ export default function OnboardingLesson() {
   const { mainCode, selectedSubs } = lesson;
   async function goNext() {
     setLessonCategory({ mainCode, subCodes: Array.from(selectedSubs) });
-    alert(JSON.stringify(loadLessonCategory()));
     navigate('/onboarding/tutor/region');
   }
 

@@ -31,7 +31,7 @@ export async function saveTutorOnboardingNow(
   };
 
   console.log('Submitting Tutor Onboarding Payload:', JSON.stringify(payload));
-  await api<void>(opts?.endpoint ?? '/api/tutor/join', {
+  await api<void>(opts?.endpoint ?? '/api/tutor/profile/join', {
     method: 'POST',
     credentials: 'include',
     signal: opts?.signal,
