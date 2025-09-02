@@ -1,0 +1,90 @@
+/* src/components/header.css */
+.app-header {
+  position: sticky;
+  top: 0;
+  background: var(--brand-red);
+  color: #fff;
+  border-bottom: 1px solid #222;
+  z-index: 10;
+}
+.app-header__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+}
+.brand {
+  font-weight: 700;
+  font-size: 20px;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+}
+.nav a {
+  color: #ccc;
+  text-decoration: none;
+  margin: 0 8px;
+}
+.nav a:hover {
+  color: #fff;
+}
+.right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.login {
+  background: #fff;
+  color: #111;
+  border: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.user {
+  position: relative;
+}
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid #666;
+  background: #666;
+  color: #fff;
+  cursor: pointer;
+}
+.menu {
+  position: absolute;
+  right: 0;
+  top: 42px;
+  background: #1b1b1b;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 8px;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.menu a,
+.menu button {
+  color: #ddd;
+  background: none;
+  border: 0;
+  text-align: left;
+  padding: 6px 8px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.menu a:hover,
+.menu button:hover {
+  background: #2a2a2a;
+}
+.menu__name {
+  color: #b9bfc5;
+  padding: 4px 8px;
+  font-size: 12px;
+}
