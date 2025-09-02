@@ -1,0 +1,19 @@
+/* src/layouts/layout.css */
+.layout {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px;
+  width: 100%;
+  flex: 1;
+}
+.footer {
+  border-top: 1px solid #eee;
+  color: var(--brand-font-red);
+  padding: 16px 20px;
+  background-color: var(--brand-red);
+}
