@@ -26,7 +26,7 @@ export default function WeeklyForm({
   return (
     <section>
       <Header title="수업 가능한 요일을 선택해주세요" subtitle="(중복선택 가능)" />
-      <DayChips selected={selectedDays} onToggle={toggleDay} />
+      <DayChips multi={true} selected={selectedDays} onToggle={toggleDay} />
       <Header title="수업 가능한 시간 범위를 입력해주세요" />
       <TimeInputs
         startTime={startTime}

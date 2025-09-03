@@ -1,8 +1,9 @@
-import LessonDetailCard from './LessonDetailCard';
-import CommonCalendar from '../../../components/CommonCalendar';
+import { Calendar as BigCalendar, dateFnsLocalizer, Views } from 'react-big-calendar';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { format, parse, startOfWeek, getDay } from 'date-fns';
+import { ko } from 'date-fns/locale/ko';
 import { useState, useEffect } from 'react';
 import '../../../css/components/common-calendar.css';
-import '../../../css/components/lesson-calendar-card.css';
 import { api } from '../../../lib/api';
 
 // 캘린더 localizer 설정
@@ -39,12 +40,7 @@ export default function LessonCalendarLayout() {
       try {
         const parsed = JSON.parse(cached);
         setEvents(
-          parsed.map((e: any) => ({
-            ...e,
-            date: new Date(e.date),
-            start: new Date(e.start),
-            end: new Date(e.end),
-          }))
+          parsed.map((e: any) => ({ ...e, start: new Date(e.start), end: new Date(e.end) }))
         );
         return;
       } catch {}
@@ -88,16 +84,85 @@ export default function LessonCalendarLayout() {
       <h2 style={{ fontSize: 28, fontWeight: 700, color: 'var(--brand-mint)', marginBottom: 32 }}>
         레슨 일정관리
       </h2>
-
       <div style={{ display: 'flex', gap: 32 }}>
-        <div style={{ flex: 1 }}>
-          <CommonCalendar
-            events={events}
-            onSelectEvent={(event) => setSelectedEvent(event as LessonEvent)}
-          />
+        <div className="common-calendar-card" style={{ flex: 1 }}>
+          <div className="common-calendar-content">
+            <BigCalendar
+              localizer={localizer}
+              events={events}
+              startAccessor="start"
+              endAccessor="end"
+              views={[Views.MONTH, Views.WEEK, Views.DAY]}
+              defaultView={Views.MONTH}
+              culture="ko"
+              style={{ height: '100%' }}
+              messages={{
+                month: '월',
+                week: '주',
+                day: '일',
+                today: '오늘',
+                previous: '이전',
+                next: '다음',
+              }}
+              onSelectEvent={(event) => setSelectedEvent(event)}
+            />
+          </div>
         </div>
         {selectedEvent && (
-          <LessonDetailCard event={selectedEvent} onClose={() => setSelectedEvent(null)} />
+          <div
+            style={{
+              minWidth: 280,
+              maxWidth: 340,
+              background: '#fff',
+              borderRadius: 16,
+              boxShadow: '0 4px 24px 0 rgba(30,201,187,0.10)',
+              border: '2px solid var(--brand-mint)',
+              padding: 24,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 12,
+              alignSelf: 'flex-start',
+              color: '#222',
+            }}
+          >
+            <div
+              style={{ fontSize: 20, fontWeight: 700, color: 'var(--brand-mint)', marginBottom: 8 }}
+            >
+              {selectedEvent.studentName}
+            </div>
+            <div>
+              <b>날짜:</b> {selectedEvent.date.toLocaleDateString()}
+            </div>
+            <div>
+              <b>시간:</b> {selectedEvent.start.toLocaleTimeString()} ~{' '}
+              {selectedEvent.end.toLocaleTimeString()}
+            </div>
+            <div>
+              <b>상태:</b> {selectedEvent.status}
+            </div>
+            <div style={{ marginTop: 16 }}>
+              <button
+                type="button"
+                style={{
+                  background: 'var(--brand-mint)',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: 8,
+                  padding: '8px 0',
+                  cursor: 'pointer',
+                  width: '100%',
+                  fontWeight: 600,
+                  fontSize: 16,
+                  transition: 'background 0.2s',
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.background = '#159e99')}
+                onMouseOut={(e) => (e.currentTarget.style.background = 'var(--brand-mint)')}
+                onClick={() => setSelectedEvent(null)}
+              >
+                닫기
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </div>
