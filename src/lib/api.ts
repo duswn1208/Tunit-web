@@ -22,7 +22,10 @@ export async function api<T>(input: RequestInfo, init: RequestInit = {}): Promis
     } catch {}
 
     if (res.status === 401) {
-      window.location.href = '/auth/login';
+      if (window.location.pathname !== '/auth/login') {
+        window.location.href = '/auth/login';
+      }
+      // /auth/login 경로에서는 아무 동작도 하지 않음
     }
 
     throw new Error(err.message || `HTTP ${res.status}`);
