@@ -36,22 +36,28 @@ export default function StudentRegister() {
     <div style={{ marginTop: 24, padding: 24, background: '#f8f8f8', borderRadius: 8 }}>
       <h3 style={{ fontWeight: 700, fontSize: 18, marginBottom: 16 }}>학생등록</h3>
       <div style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
-        <label htmlFor="excel-upload" style={{ display: 'block' }}>
-          <button
-            type="button"
-            style={{
-              padding: '8px 16px',
-              background: '#1976d2',
-              color: '#fff',
-              border: 'none',
-              borderRadius: 4,
-              cursor: 'pointer',
-              fontWeight: 500,
-            }}
-          >
-            엑셀 업로드
-          </button>
-        </label>
+        <input
+          id="excel-upload"
+          type="file"
+          accept=".xlsx,.xls"
+          style={{ display: 'none' }}
+          onChange={handleFileUpload}
+        />
+        <button
+          type="button"
+          onClick={() => document.getElementById('excel-upload')?.click()}
+          style={{
+            padding: '8px 16px',
+            background: '#1976d2',
+            color: '#fff',
+            border: 'none',
+            borderRadius: 4,
+            cursor: 'pointer',
+            fontWeight: 500,
+          }}
+        >
+          엑셀 업로드
+        </button>
         <button
           type="button"
           onClick={handleDirectInput}
