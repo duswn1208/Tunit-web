@@ -14,8 +14,24 @@ const ALL_DAYS: DayOfWeek[] = [1, 2, 3, 4, 5, 6, 7];
 interface Props {
   selected: Set<DayOfWeek>;
   onToggle: (d: DayOfWeek) => void;
+  multi?: boolean; // true: 다중선택, false: 단일선택
 }
-export default function DayChips({ selected, onToggle }: Props) {
+
+export default function DayChips({ selected, onToggle, multi = true }: Props) {
+  const handleClick = (d: DayOfWeek) => {
+    if (multi) {
+      onToggle(d);
+    } else {
+      // 단일 선택: 이미 선택된 값이 아니면 해당 값만 남기기
+      if (!selected.has(d) || selected.size > 1) {
+        // selected를 d만 남기도록 onToggle 호출
+        selected.forEach((v) => {
+          if (v !== d) onToggle(v); // 기존 선택 해제
+        });
+        if (!selected.has(d)) onToggle(d); // 새 선택
+      }
+    }
+  };
   return (
     <div className="mls-chips">
       {ALL_DAYS.map((d) => {
@@ -24,7 +40,7 @@ export default function DayChips({ selected, onToggle }: Props) {
           <button
             key={d}
             type="button"
-            onClick={() => onToggle(d)}
+            onClick={() => handleClick(d)}
             className={
               'px-3 py-2 rounded-full border transition-colors ' +
               (isOn
