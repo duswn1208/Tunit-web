@@ -13,10 +13,10 @@ export default function StudentRegister() {
   const [form, setForm] = useState({
     studentName: '',
     phone: '',
-    lessonName: '',
-    startDate: '',
+    lesson: '',
+    firstLessonDate: '',
     startTime: '',
-    dayOfWeek: new Set<DayOfWeek>(),
+    dayOfWeekSet: new Set<DayOfWeek>(),
   });
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,10 +50,10 @@ export default function StudentRegister() {
 
   const handleDayToggle = (d: DayOfWeek) => {
     setForm((prev) => {
-      const next = new Set(prev.dayOfWeek);
+      const next = new Set(prev.dayOfWeekSet);
       if (next.has(d)) next.delete(d);
       else next.add(d);
-      return { ...prev, dayOfWeek: next };
+      return { ...prev, dayOfWeekSet: next };
     });
   };
 
@@ -61,10 +61,11 @@ export default function StudentRegister() {
     // dayOfWeek를 배열로 변환해서 전송
     const payload = {
       ...form,
-      dayOfWeek: Array.from(form.dayOfWeek),
+      dayOfWeekSet: Array.from(form.dayOfWeekSet),
     };
     try {
-      await api('/api/fixed-lessons/register', {
+      alert(JSON.stringify(payload));
+      await api('/api/fixed-lessons/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -74,10 +75,10 @@ export default function StudentRegister() {
       setForm({
         studentName: '',
         phone: '',
-        lessonName: '',
-        startDate: '',
+        lesson: '',
+        firstLessonDate: '',
         startTime: '',
-        dayOfWeek: new Set<DayOfWeek>(),
+        dayOfWeekSet: new Set<DayOfWeek>(),
       });
     } catch (err) {
       alert('등록 실패: ' + (err as Error).message);
@@ -159,9 +160,9 @@ export default function StudentRegister() {
             </FormField>
             <FormField label="레슨명" htmlFor="lessonName" required>
               <input
-                id="lessonName"
-                name="lessonName"
-                value={form.lessonName}
+                id="lesson"
+                name="lesson"
+                value={form.lesson}
                 onChange={handleChange}
                 placeholder="레슨명"
                 className="ui-input"
@@ -169,9 +170,9 @@ export default function StudentRegister() {
             </FormField>
             <FormField label="첫 시작 날짜" htmlFor="startDate" required>
               <input
-                id="startDate"
-                name="startDate"
-                value={form.startDate}
+                id="firstLessonDate"
+                name="firstLessonDate"
+                value={form.firstLessonDate}
                 onChange={handleChange}
                 type="date"
                 className="ui-input"
@@ -188,14 +189,9 @@ export default function StudentRegister() {
               />
             </FormField>
             <FormField label="요일" required>
-              <DayChips multi={false} selected={form.dayOfWeek} onToggle={handleDayToggle} />
+              <DayChips multi={true} selected={form.dayOfWeekSet} onToggle={handleDayToggle} />
             </FormField>
-            <Button
-              type="button"
-              onClick={handleRegister}
-              className="ui-btn ui-btn-success"
-              style={{ fontWeight: 600, fontSize: 16 }}
-            >
+            <Button type="button" onClick={handleRegister} className="ui-btn ui-btn-success">
               등록
             </Button>
           </div>

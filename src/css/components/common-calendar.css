@@ -1,6 +1,16 @@
+[class^='rbc-'],
+[class*=' rbc-'] {
+  color: #979494 !important;
+}
+.rbc-event {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
 .common-calendar-card {
   max-width: 900px;
-  margin: 32px auto;
+  /* margin: 32px auto; */
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 4px 24px 0 rgba(30, 201, 187, 0.1);
@@ -21,4 +31,14 @@
 
 .common-calendar-content {
   height: 600px;
+}
+
+.brand-chip-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  /* border-radius: 50%; */
+  background: var(--brand-red);
+  margin: 0 auto;
+  color: var(--brand-red);
 }
