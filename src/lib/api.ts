@@ -30,5 +30,11 @@ export async function api<T>(input: RequestInfo, init: RequestInit = {}): Promis
 
     throw new Error(err.message || `HTTP ${res.status}`);
   }
-  return res.status === 204 ? (undefined as T) : await res.json();
+  if (res.status === 204) return undefined as T;
+  const contentType = res.headers.get('Content-Type') || '';
+  if (contentType.includes('application/json')) {
+    return await res.json();
+  } else {
+    return (await res.text()) as unknown as T;
+  }
 }
