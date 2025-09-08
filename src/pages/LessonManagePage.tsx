@@ -1,9 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  colorMap,
-  type LessonEvent,
-  type LessonSummary,
-} from '../domain/lesson/types/lessonCalendar';
+import { type LessonEvent, type LessonSummary } from '../domain/lesson/types/lessonCalendar';
 import { api } from '../lib/api';
 import LessonCalendarSection from '../domain/lesson/components/LessonCalendarSection';
 import LessonCardSection from '../domain/lesson/components/LessonCardSection';
