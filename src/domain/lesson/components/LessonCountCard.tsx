@@ -7,7 +7,6 @@ interface LessonCountCardProps {
   nextWeekCount: number;
   totalCount: number;
   className?: string;
-  style?: React.CSSProperties;
 }
 
 const LessonCountCard = memo(
@@ -17,7 +16,6 @@ const LessonCountCard = memo(
     nextWeekCount,
     totalCount,
     className,
-    style,
   }: LessonCountCardProps) => {
     const items = [
       { label: '오늘 예정 레슨', count: todayCount },
@@ -26,7 +24,7 @@ const LessonCountCard = memo(
       { label: '이번달 전체 레슨', count: totalCount },
     ];
     return (
-      <div className={`lesson-count-card${className ? ' ' + className : ''}`} style={style}>
+      <div className={`lesson-count-card${className ? ' ' + className : ''}`}>
         {items.map(({ label, count }) => (
           <div key={label} style={{ marginBottom: 4 }}>
             {label}: <b>{count}</b>개

@@ -3,9 +3,11 @@ import '../../../css/components/lesson-manage.css';
 import IconButton from '../../../components/IconButton';
 import '../../../css/components/ui-button.css';
 import { format } from 'date-fns';
+import Header from '../../../components/Header';
 
 interface LessonDetailCardProps {
   studentName: string;
+  category: string;
   date: Date;
   start: Date;
   end: Date;
@@ -18,10 +20,13 @@ interface LessonDetailCardProps {
   statusText: string;
   onClose: () => void;
   onDelete?: () => void;
+  lessonId?: number;
+  onChangeStatus?: (lessonId: number, nextStatus: string) => void;
 }
 
 const LessonDetailCard: React.FC<LessonDetailCardProps> = ({
   studentName,
+  category,
   date,
   start,
   end,
@@ -30,31 +35,44 @@ const LessonDetailCard: React.FC<LessonDetailCardProps> = ({
   statusText,
   onClose,
   onDelete,
+  lessonId,
+  onChangeStatus,
 }) => {
-  // 상태 변경 핸들러 예시 (실제 API 연동 필요)
-  const handleChangeStatus = (lessonId: number, nextStatus: string) => {};
+  // 상태 변경 핸들러: 상위에서 onChangeStatus prop으로 전달받아 처리
+  const handleChangeStatus = (nextStatus: { label: string; name: string }) => {
+    if (lessonId && onChangeStatus) {
+      alert(`레슨 상태를 ${nextStatus.label}(으)로 변경하시겠습니까?`);
+      onChangeStatus(lessonId, nextStatus.name);
+    }
+  };
 
   return (
     <div className="lesson-modal-card">
-      <IconButton.Close onClick={onClose} className="lesson-modal-close-btn" />
-      <div className="lesson-modal-card-title">{studentName}</div>
+      <div className="lesson-modal-header-row">
+        <Header title={category + ' 레슨'} addClass="lesson-modal-card-title" />
+        <IconButton.Close onClick={onClose} className="lesson-modal-close-btn" />
+      </div>
       <div>
-        <b>예약 날짜:</b> {date ? format(date, 'yyyy년 MM월 dd일, ') : ''}{' '}
-        {start ? format(start, 'HH시 mm분') : ''} ~ {end ? format(end, 'HH시 mm분') : ''}
+        <b>학생 이름:</b> {studentName}
+      </div>
+      <div>
+        <b>날짜:</b> {date ? format(date, 'yyyy년 MM월 dd일') : ''}
+      </div>
+      <div>
+        <b>시간:</b> {start ? format(start, 'HH시 mm분') : ''} ~{' '}
+        {end ? format(end, 'HH시 mm분') : ''}
       </div>
       <div className="lesson-modal-card-status-row">
         <b>상태:</b>
-        <span className="lesson-modal-status-dot" style={{ background: color }} />
-        <span className="lesson-modal-status-text" style={{ color }}>
-          {statusText}
-        </span>
+        <span className="lesson-modal-status-dot" />
+        <span className="lesson-modal-status-text">{statusText}</span>
         <div className="lesson-modal-btn-group">
           {status.allowedNextStatuses.map((next) => (
             <button
               key={next.name}
               type="button"
               className="lesson-modal-btn"
-              onClick={() => handleChangeStatus(next.name)}
+              onClick={() => handleChangeStatus(next)}
             >
               {next.label}
             </button>

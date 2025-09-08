@@ -13,14 +13,15 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-interface CommonCalendarProps {
+interface TuCalendarProps {
   events: any[];
   onSelectEvent?: (event: any) => void;
+  statusStyleMap?: Record<string, { dot: string; text: string }>;
 }
 
 import { useState } from 'react';
 
-export default function CommonCalendar({ events, onSelectEvent }: CommonCalendarProps) {
+export default function TuCalendar({ events, onSelectEvent, statusStyleMap }: TuCalendarProps) {
   const [view, setView] = useState<View>(Views.MONTH);
   const [date, setDate] = useState(new Date());
 
@@ -61,12 +62,27 @@ export default function CommonCalendar({ events, onSelectEvent }: CommonCalendar
           }}
           onSelectEvent={onSelectEvent}
           components={{
-            event: ({ event }: { event: any }) => (
-              <div>
-                <span className="brand-chip-dot"></span>
-                <b className="lesson-calendar-name">{event.title}</b>
-              </div>
-            ),
+            event: ({ event }: { event: any }) => {
+              const status = event.status?.name || event.status;
+              const style = statusStyleMap?.[status] || { dot: '#636e72', text: '#636e72' };
+              return (
+                <div>
+                  <span
+                    className="brand-chip-dot"
+                    style={{ background: style.dot, marginRight: 6, verticalAlign: 'middle' }}
+                  ></span>
+                  <b
+                    className="lesson-calendar-name"
+                    style={{
+                      color: style.text,
+                      textDecoration: status === 'CANCELED' ? 'line-through' : undefined,
+                    }}
+                  >
+                    {event.title}
+                  </b>
+                </div>
+              );
+            },
           }}
         />
       </div>

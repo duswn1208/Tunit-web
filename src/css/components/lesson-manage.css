@@ -1,4 +1,44 @@
-/* 레슨 개수 요약 카드 스타일 복구 */
+/* 모달 헤더: 타이틀과 닫기 버튼을 한 줄에 나란히 */
+.lesson-modal-header-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+/* 모달 오버레이와 컨텐츠: 항상 화면 위에 오버레이 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.modal-content {
+  position: relative;
+  z-index: 10000;
+}
+.lesson-manage-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 80vh;
+}
+.lesson-calendar-section {
+  min-width: 900px;
+  transition: width 0.2s;
+}
+.lesson-card-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
 .lesson-count-card {
   background: var(--brand-red);
   color: #fff;
@@ -9,12 +49,6 @@
   box-shadow: 0 2px 8px 0 rgba(30, 201, 187, 0.1);
   min-width: 220px;
   margin-bottom: 8px;
-}
-.lesson-calendar-name {
-  color: var(--brand-red);
-}
-.lesson-count-card {
-  background-color: var(--brand-red);
 }
 .lesson-modal-card {
   position: relative;
@@ -35,14 +69,14 @@
   font-size: 20px;
   font-weight: 700;
   color: var(--brand-mint);
-  margin-bottom: 8px;
+  padding: 0 6px;
 }
 
 .lesson-modal-card-status-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   position: relative;
 }
 
@@ -56,7 +90,7 @@
 }
 
 .lesson-modal-status-text {
-  font-weight: 600;
+  /* font-weight: 600; */
   min-width: 100px;
   display: inline-block;
 }
@@ -87,9 +121,6 @@
 }
 
 .lesson-modal-delete-btn {
-  position: absolute;
-  right: 16px;
-  bottom: 16px;
   background: var(--brand-red);
   color: #fff;
   border: none;
@@ -102,6 +133,7 @@
   transition: background 0.2s;
   min-width: 56px;
   z-index: 2;
+  align-self: flex-end;
 }
 
 .lesson-modal-delete-btn:hover {
