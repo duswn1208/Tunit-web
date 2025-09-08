@@ -1,7 +1,6 @@
 import HomeFeatures from '../domain/home/components/HomeFeatures';
 import HomeActions from '../domain/home/components/HomeActions';
 import HomeHeader from '../domain/home/components/HomeHeader';
-import { useLessonCheckAndRedirect } from '../domain/home/hooks/useLessonCheckAndRedirect';
 
 export default function HomePage() {
   // useLessonCheckAndRedirect();

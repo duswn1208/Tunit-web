@@ -1,42 +1,20 @@
-import TuCalendar from '../../../components/TuCalendar';
-import { format } from 'date-fns';
-// 상태별 컬러/네이밍 매핑 상수
-const colorMap: Record<string, string> = {
-  REQUESTED: 'var(--brand-mint)',
-  ACTIVE: 'var(--brand-chip)',
-  CANCELED: 'var(--brand-gray)',
-  EXPIRED: 'var(--brand-gray)',
-  NOSHOW: 'var(--brand-gray)',
-};
-
-const statusText: Record<string, string> = {
-  REQUESTED: '예약요청',
-  ACTIVE: '진행중',
-  CANCELED: '취소됨',
-  EXPIRED: '만료됨',
-  NOSHOW: '결석',
-};
 import { useState, useEffect } from 'react';
 import '../../../css/components/common-calendar.css';
 import { api } from '../../../lib/api';
 import { ko } from 'date-fns/locale';
+import TuCalendar from '../../../components/TuCalendar';
 import LessonDetailCard from './LessonDetailCard';
+import Modal from '../../../components/Modal';
+import '../../../css/components/modal.css';
+import LessonCountCard from './LessonCountCard';
+import { type LessonEvent, type LessonSummary, colorMap } from '../types/lessonCalendar';
 
 // 캘린더 localizer 설정
 const locales = { ko };
 
-export type LessonEvent = {
-  studentName: string;
-  status: 'REQUESTED | ACTIVE | CANCELED | EXPIRED | NOSHOW';
-  date: Date;
-  start: Date;
-  end: Date;
-  allDay?: boolean;
-  title: string;
-};
-
-export default function LessonCalendarLayout() {
-  const [events, setEvents] = useState<LessonEvent[]>([]);
+export function LessonCalendarLayout() {
+  // API에서 받은 전체 레슨 데이터 상태
+  const [lessonSummary, setLessonSummary] = useState<LessonSummary | null>(null);
   const [selectedEvent, setSelectedEvent] = useState<LessonEvent | null>(null);
 
   // 이번달 시작/끝 날짜 구하기
@@ -44,34 +22,48 @@ export default function LessonCalendarLayout() {
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
 
-  useEffect(() => {
-    // API 호출(예시: /api/lessons?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD)
+  // 레슨 목록 불러오기 함수로 분리
+  const fetchLessons = () => {
     api(
       `/api/lessons?startDate=${monthStart.toISOString().slice(0, 10)}&endDate=${monthEnd
         .toISOString()
         .slice(0, 10)}`
-    ).then((data) => {
-      // 응답값 확인
-      // 서버 응답을 LessonEvent[]로 변환
-      const lessonEvents = data.map((item: any) => {
-        // item: { lessonReservationNo, studentName, startTime, endTime, date, status }
-        const start = new Date(`${item.date}T${item.startTime}`);
-        const end = new Date(`${item.date}T${item.endTime}`);
-        const date = new Date(item.date);
-        return {
-          id: item.lessonReservationNo,
-          studentName: item.studentName,
-          status: item.status,
-          date,
-          start,
-          end,
-          allDay: false,
-          title: `${format(start, 'HH:mm')}(${item.studentName})`,
-        };
+    ).then((data: any) => {
+      const formatTime = (time: string) => time.slice(0, 5); // HH:mm:ss → HH:mm
+      const mappedLessonList = (data.lessonList ?? []).map((item: any) => ({
+        title: `${item.studentName}(${formatTime(item.startTime)})`,
+        status: item.status, // 객체 전체 전달
+        studentName: item.studentName,
+        date: new Date(item.date),
+        start: new Date(`${item.date}T${item.startTime}`),
+        end: new Date(`${item.date}T${item.endTime}`),
+        allDay: false,
+        id: item.lessonReservationNo,
+      }));
+      setLessonSummary({
+        ...data,
+        lessonList: mappedLessonList,
       });
-      setEvents(lessonEvents);
     });
+  };
+
+  useEffect(() => {
+    fetchLessons();
   }, []);
+
+  // 삭제 API 연동 메서드
+  const deleteLesson = async (lessonId?: string) => {
+    alert('해당 레슨을 삭제하시겠습니까 ?');
+    if (!lessonId) return;
+    try {
+      await api(`/api/lessons/${lessonId}`, { method: 'DELETE' });
+      alert('삭제되었습니다.');
+      fetchLessons(); // 삭제 후 목록 새로고침
+      setSelectedEvent(null); // 카드 닫기
+    } catch (err) {
+      alert('삭제에 실패했습니다.');
+    }
+  };
 
   return (
     <div
@@ -85,24 +77,38 @@ export default function LessonCalendarLayout() {
       <h2 style={{ fontSize: 28, fontWeight: 700, color: 'var(--brand-mint)', marginBottom: 32 }}>
         레슨 일정관리
       </h2>
-      <div style={{ display: 'flex', gap: 32 }}>
-        <div
-          style={{ width: '1200px', minWidth: '900px', maxWidth: '100%', transition: 'width 0.2s' }}
-        >
-          <TuCalendar events={events} onSelectEvent={setSelectedEvent} />
+      <div style={{ display: 'flex', gap: 16 }}>
+        <div style={{ minWidth: '900px', maxWidth: '100%', transition: 'width 0.2s' }}>
+          <TuCalendar events={lessonSummary?.lessonList ?? []} onSelectEvent={setSelectedEvent} />
         </div>
-        {selectedEvent && (
-          <LessonDetailCard
-            studentName={selectedEvent.studentName}
-            date={selectedEvent.date}
-            start={selectedEvent.start}
-            end={selectedEvent.end}
-            status={selectedEvent.status}
-            color={colorMap[selectedEvent.status]}
-            statusText={statusText[selectedEvent.status]}
-            onClose={() => setSelectedEvent(null)}
+        <div
+          style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 16 }}
+        >
+          <LessonCountCard
+            todayCount={lessonSummary?.todayLessonCount ?? 0}
+            thisWeekAfterTodayLessonCount={lessonSummary?.thisWeekAfterTodayLessonCount ?? 0}
+            nextWeekCount={lessonSummary?.nextWeekLessonCount ?? 0}
+            totalCount={lessonSummary?.totalLessonCount ?? 0}
           />
-        )}
+        </div>
+        <Modal open={!!selectedEvent} onClose={() => setSelectedEvent(null)}>
+          {selectedEvent && (
+            <LessonDetailCard
+              studentName={selectedEvent.studentName}
+              date={selectedEvent.date}
+              start={selectedEvent.start}
+              end={selectedEvent.end}
+              status={
+                (lessonSummary?.lessonList.find((l) => l.id === (selectedEvent as any).id) as any)
+                  ?.status
+              }
+              color={colorMap[selectedEvent.status.name]}
+              statusText={selectedEvent.status.label}
+              onDelete={() => deleteLesson((selectedEvent as any).id)}
+              onClose={() => setSelectedEvent(null)}
+            />
+          )}
+        </Modal>
       </div>
     </div>
   );

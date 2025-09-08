@@ -1,4 +1,4 @@
-import LessonCalendarLayout from '../domain/lesson/components/LessonCalendarLayout';
+import { LessonCalendarLayout } from '../domain/lesson/components/LessonCalendarLayout';
 
 export default function LessonManage() {
   return (
