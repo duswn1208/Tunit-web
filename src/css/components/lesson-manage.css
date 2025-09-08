@@ -1,0 +1,126 @@
+/* 레슨 개수 요약 카드 스타일 복구 */
+.lesson-count-card {
+  background: var(--brand-red);
+  color: #fff;
+  border-radius: 12px;
+  padding: 16px 24px;
+  font-weight: 600;
+  font-size: 18px;
+  box-shadow: 0 2px 8px 0 rgba(30, 201, 187, 0.1);
+  min-width: 220px;
+  margin-bottom: 8px;
+}
+.lesson-calendar-name {
+  color: var(--brand-red);
+}
+.lesson-count-card {
+  background-color: var(--brand-red);
+}
+.lesson-modal-card {
+  position: relative;
+  min-width: 280px;
+  max-width: 560px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px 0 rgba(30, 201, 187, 0.1);
+  border: 2px solid var(--brand-mint);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: #222;
+}
+
+.lesson-modal-card-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--brand-mint);
+  margin-bottom: 8px;
+}
+
+.lesson-modal-card-status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.lesson-modal-status-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.lesson-modal-status-text {
+  font-weight: 600;
+  min-width: 100px;
+  display: inline-block;
+}
+
+.lesson-modal-btn-group {
+  display: flex;
+  gap: 4px;
+  margin-left: 8px;
+}
+
+.lesson-modal-btn {
+  background: var(--brand-mint);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: background 0.2s;
+  min-width: 56px;
+  max-width: 100px;
+  flex: none;
+}
+
+.lesson-modal-btn:hover {
+  background: #159e99;
+}
+
+.lesson-modal-delete-btn {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  background: var(--brand-red);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  box-shadow: 0 2px 8px 0 rgba(30, 201, 187, 0.08);
+  transition: background 0.2s;
+  min-width: 56px;
+  z-index: 2;
+}
+
+.lesson-modal-delete-btn:hover {
+  background: #b91c1c;
+}
+
+.lesson-modal-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  color: #888;
+  cursor: pointer;
+  z-index: 2;
+  transition: color 0.2s;
+}
+
+.lesson-modal-close-btn:hover {
+  color: var(--brand-mint);
+}

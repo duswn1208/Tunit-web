@@ -21,7 +21,7 @@ interface CommonCalendarProps {
 import { useState } from 'react';
 
 export default function CommonCalendar({ events, onSelectEvent }: CommonCalendarProps) {
-  const [view, setView] = useState(Views.MONTH);
+  const [view, setView] = useState<View>(Views.MONTH);
   const [date, setDate] = useState(new Date());
 
   type CalendarEvent = {
@@ -31,11 +31,6 @@ export default function CommonCalendar({ events, onSelectEvent }: CommonCalendar
     end: Date | string;
     [key: string]: any;
   };
-
-  // 일정 이동/리사이즈 핸들러
-  const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>(events);
-
-  // Removed DragAndDrop functionality
 
   return (
     <div className="common-calendar-card">
@@ -67,7 +62,10 @@ export default function CommonCalendar({ events, onSelectEvent }: CommonCalendar
           onSelectEvent={onSelectEvent}
           components={{
             event: ({ event }: { event: any }) => (
-              <span className="brand-chip-dot">{event.title}</span>
+              <div>
+                <span className="brand-chip-dot"></span>
+                <b className="lesson-calendar-name">{event.title}</b>
+              </div>
             ),
           }}
         />
