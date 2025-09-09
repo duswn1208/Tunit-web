@@ -6,6 +6,7 @@ import type { DayOfWeek } from '../../onboarding/availability/types/availability
 import { api } from '../../../lib/api';
 import { RadioGroup } from '../../../components';
 import type { LessonStatus } from '../../lesson/types/lessonCalendar';
+import LessonCalendarPicker from '../../lesson/components/LessonCalendarPicker';
 
 interface StudentForm {
   studentName: string;
@@ -21,6 +22,10 @@ interface StudentForm {
 
 // Props 타입 중복 제거
 export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => void }) {
+  const getToday = () => {
+    const d = new Date();
+    return d.toISOString().slice(0, 10);
+  };
   const [form, setForm] = useState<StudentForm>({
     studentName: '',
     phone: '',
@@ -29,7 +34,7 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
     startTime: '',
     dayOfWeekSet: new Set<DayOfWeek>(),
     reservationStatus: 'TRIAL_REQUESTED',
-    lessonDate: '',
+    lessonDate: getToday(),
     lessonType: 'single',
   });
 
@@ -48,40 +53,36 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
   };
 
   const handleRegister = async () => {
-    const payload = {};
     try {
       const uri = form.lessonType === 'single' ? '/api/lessons/reserve' : '/api/fixed-lessons/save';
-      if (form.lessonType === 'single') {
-        await api(uri, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...form,
-          }),
-        });
-      } else {
-        await api(uri, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...form,
-            dayOfWeekSet: Array.from(form.dayOfWeekSet),
-          }),
-        });
-      }
+      const payload =
+        form.lessonType === 'single'
+          ? { ...form }
+          : { ...form, dayOfWeekSet: Array.from(form.dayOfWeekSet) };
 
-      alert('레슨 등록 성공!');
-      setForm({
-        studentName: '',
-        phone: '',
-        lesson: '',
-        firstLessonDate: '',
-        startTime: '',
-        dayOfWeekSet: new Set<DayOfWeek>(),
-        reservationStatus: 'TRIAL_REQUESTED',
-        lessonDate: '',
-        lessonType: 'single',
+      await api(uri, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      }).then((res) => {
+        if (res.ok) {
+          alert('레슨 등록 요청 성공!');
+          setForm({
+            studentName: '',
+            phone: '',
+            lesson: '',
+            firstLessonDate: '',
+            startTime: '',
+            dayOfWeekSet: new Set<DayOfWeek>(),
+            reservationStatus: 'TRIAL_REQUESTED',
+            lessonDate: '',
+            lessonType: 'single',
+          });
+          return;
+        }
+
+        throw new Error('레슨 등록에 실패했습니다.');
       });
+
       if (typeof onSuccess === 'function') onSuccess();
     } catch (err) {
       alert('등록 실패: ' + (err as Error).message);
@@ -154,27 +155,18 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
             className="ui-input"
           />
         </FormField>
-        <FormField label="시작 시간" htmlFor="startTime" required>
-          <input
-            id="startTime"
-            name="startTime"
-            value={form.startTime}
-            onChange={handleChange}
-            type="time"
-            className="ui-input"
-          />
-        </FormField>
         {/* 일회성 레슨 입력 */}
         {form.lessonType === 'single' && (
           <>
             <FormField label="레슨일" htmlFor="lessonDate" required>
-              <input
-                id="lessonDate"
-                name="lessonDate"
-                value={form.lessonDate}
-                onChange={handleChange}
-                type="date"
-                className="ui-input"
+              <LessonCalendarPicker
+                startDate={form.lessonDate || '2025-09-01'}
+                endDate={'2025-09-30'}
+                date={form.lessonDate}
+                time={form.startTime}
+                onChange={(date, time) =>
+                  setForm((prev) => ({ ...prev, lessonDate: date, startTime: time }))
+                }
               />
             </FormField>
             <FormField label="레슨 유형" htmlFor="reservationStatus" required>

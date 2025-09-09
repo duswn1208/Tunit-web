@@ -3,9 +3,10 @@ import React from 'react';
 interface Props {
   mode: 'excel' | 'manual';
   onChange: (mode: 'excel' | 'manual') => void;
+  onExcelClick?: () => void;
 }
 
-export default function StudentRegisterButtonGroup({ mode, onChange }: Props) {
+export default function StudentRegisterButtonGroup({ mode, onChange, onExcelClick }: Props) {
   return (
     <div style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
       <button
@@ -19,7 +20,10 @@ export default function StudentRegisterButtonGroup({ mode, onChange }: Props) {
           cursor: 'pointer',
           fontWeight: 500,
         }}
-        onClick={() => onChange('excel')}
+        onClick={() => {
+          onChange('excel');
+          if (onExcelClick) onExcelClick();
+        }}
       >
         엑셀 업로드
       </button>

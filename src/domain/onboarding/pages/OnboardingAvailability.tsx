@@ -28,12 +28,14 @@ async function submitTutorJoin() {
     mainCategory: lessonCategory?.mainCode,
     subCategoryList: lessonCategory?.subCodes,
     regionList: region,
-    tutorAvailableTimeSaveDtoList: (availability.items || []).map((item: any) => ({
+    tutorAvailableTimeSaveDtoList: (availability || []).map((item: any) => ({
       dayOfWeekNum: item.dayOfWeek,
       startTime: item.startTime,
       endTime: item.endTime,
     })),
   };
+
+  alert(JSON.stringify(payload, null, 2)); // payload 확인용
 
   // 3. API 요청 (api.ts 사용)
   return await api('/api/tutor/profile/join', {

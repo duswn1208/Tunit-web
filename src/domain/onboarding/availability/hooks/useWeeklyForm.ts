@@ -44,7 +44,8 @@ export function useWeeklyForm() {
 
   function saveToLocalStorage() {
     const items = flattenAll(entries);
-    setAvailability(JSON.stringify(items));
+    alert(JSON.stringify(items)); // 확인용
+    setAvailability(items);
   }
 
   return {
