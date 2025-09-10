@@ -30,9 +30,6 @@ export default function InlineDateTimePicker({
 
   const handleDateChange = (value: any) => {
     setSelectedDate(value ?? null);
-    // 날짜가 바뀌면 무조건 onChange 호출 (시간이 없으면 빈 문자열)
-    console.log(format(new Date(value), 'yyyy-MM-dd'));
-
     onChange(value ? format(value, 'yyyy-MM-dd') : '', selectedTime);
   };
 

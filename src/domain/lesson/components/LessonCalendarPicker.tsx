@@ -41,18 +41,11 @@ export default function LessonCalendarPicker({
     // console.log('calendarStatus or date changed:', calendarStatus, date);
     if (calendarStatus && date) {
       if (calendarStatus?.lessonReservations) {
-        console.log(calendarStatus.lessonReservations);
-
         const reserved = calendarStatus.lessonReservations
           .filter((reservation) => {
-            console.log('date: ' + date);
-            console.log('reservation.date: ' + reservation.date);
-
             return reservation.date === date;
           })
           .map((reservation) => reservation.startTime.slice(0, 5));
-        console.log('reserved:', reserved);
-
         setReservedTimes(reserved);
       }
       // 날짜에서 요일 구해서 availableTimes에서 조회

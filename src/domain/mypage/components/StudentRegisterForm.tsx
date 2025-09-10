@@ -1,9 +1,14 @@
-import { useState } from 'react';
+import SelectBox from '../../../components/SelectBox';
+import { useState, useEffect } from 'react';
 import FormField from '../../../components/FormField';
 import Button from '../../../components/Button';
 import DayChips from '../../onboarding/availability/components/DayChips';
 import type { DayOfWeek } from '../../onboarding/availability/types/availability';
 import { api } from '../../../lib/api';
+import {
+  fetchLessonCategories,
+  type TutorLessonsCategory,
+} from '../../lesson/api/lessonCategoryApi';
 import { RadioGroup } from '../../../components';
 import type { LessonStatus } from '../../lesson/types/lessonCalendar';
 import LessonCalendarPicker from '../../lesson/components/LessonCalendarPicker';
@@ -22,6 +27,23 @@ interface StudentForm {
 
 // Props 타입 중복 제거
 export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => void }) {
+  const [lessonCategories, setLessonCategories] = useState<TutorLessonsCategory[]>([]);
+  const [loadingCategories, setLoadingCategories] = useState(false);
+  const [categoryError, setCategoryError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setLoadingCategories(true);
+    fetchLessonCategories()
+      .then((data) => {
+        setLessonCategories(data);
+        setCategoryError(null);
+      })
+      .catch((err) => {
+        setCategoryError(err.message);
+        setLessonCategories([]);
+      })
+      .finally(() => setLoadingCategories(false));
+  }, []);
   const getToday = () => {
     const d = new Date();
     return d.toISOString().slice(0, 10);
@@ -101,30 +123,53 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         <FormField label="레슨 유형" htmlFor="lessonType" required>
-          <label style={{ marginRight: 16 }}>
-            <input
-              type="radio"
-              name="lessonType"
-              value="single"
-              checked={form.lessonType === 'single'}
-              onChange={handleChange}
-              style={{ marginRight: 4 }}
-            />
-            일회성 레슨
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="lessonType"
-              value="fixed"
-              checked={form.lessonType === 'fixed'}
-              onChange={handleChange}
-              style={{ marginRight: 4 }}
-            />
-            고정 레슨
-          </label>
+          <RadioGroup
+            name="lessonType"
+            defaultValue="single"
+            onChange={(value: string) =>
+              setForm((prev) => ({ ...prev, lessonType: value as 'single' | 'fixed' }))
+            }
+            options={[
+              { label: '일회성 레슨', value: 'single' },
+              { label: '고정 레슨', value: 'fixed' },
+            ]}
+          />
         </FormField>
-        {/* 공통 입력 */}
+        <FormField label="레슨 유형" htmlFor="reservationStatus" required>
+          <RadioGroup
+            name="reservationStatus"
+            defaultValue={form.reservationStatus}
+            onChange={(value: string) =>
+              setForm((prev) => ({ ...prev, reservationStatus: value as LessonStatus }))
+            }
+            options={[
+              { label: '레슨 신청', value: 'REQUESTED' },
+              { label: '상담/체험레슨 신청', value: 'TRIAL_REQUESTED' },
+            ]}
+          />
+        </FormField>
+        <FormField label="레슨명" htmlFor="lesson" required>
+          {loadingCategories ? (
+            <div style={{ padding: '8px 0' }}>레슨명 불러오는 중...</div>
+          ) : categoryError ? (
+            <div style={{ color: 'red', padding: '8px 0' }}>
+              레슨명 불러오기 실패: {categoryError}
+            </div>
+          ) : (
+            <SelectBox
+              id="lesson"
+              name="lesson"
+              value={form.lesson}
+              options={lessonCategories.map((cat) => ({
+                value: cat.lessonCategory.code,
+                label: cat.lessonCategory.label,
+              }))}
+              onChange={(value) => setForm((prev) => ({ ...prev, lesson: value }))}
+              placeholder="레슨명 선택"
+              className="ui-input"
+            />
+          )}
+        </FormField>
         <FormField label="학생 이름" htmlFor="studentName" required>
           <input
             id="studentName"
@@ -145,62 +190,22 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
             className="ui-input"
           />
         </FormField>
-        <FormField label="레슨명" htmlFor="lessonName" required>
-          <input
-            id="lesson"
-            name="lesson"
-            value={form.lesson}
-            onChange={handleChange}
-            placeholder="레슨명"
-            className="ui-input"
+        <FormField label="레슨일" htmlFor="lessonDate" required>
+          <LessonCalendarPicker
+            startDate={form.lessonDate || '2025-09-01'}
+            endDate={'2025-09-30'}
+            date={form.lessonDate}
+            time={form.startTime}
+            onChange={(date, time) =>
+              setForm((prev) => ({ ...prev, lessonDate: date, startTime: time }))
+            }
           />
         </FormField>
-        {/* 일회성 레슨 입력 */}
-        {form.lessonType === 'single' && (
-          <>
-            <FormField label="레슨일" htmlFor="lessonDate" required>
-              <LessonCalendarPicker
-                startDate={form.lessonDate || '2025-09-01'}
-                endDate={'2025-09-30'}
-                date={form.lessonDate}
-                time={form.startTime}
-                onChange={(date, time) =>
-                  setForm((prev) => ({ ...prev, lessonDate: date, startTime: time }))
-                }
-              />
-            </FormField>
-            <FormField label="레슨 유형" htmlFor="reservationStatus" required>
-              <RadioGroup
-                name="reservationStatus"
-                defaultValue={form.reservationStatus}
-                onChange={(value: string) =>
-                  setForm((prev) => ({ ...prev, reservationStatus: value as LessonStatus }))
-                }
-                options={[
-                  { label: '레슨 신청', value: 'REQUESTED' },
-                  { label: '상담/체험레슨 신청', value: 'TRIAL_REQUESTED' },
-                ]}
-              />
-            </FormField>
-          </>
-        )}
-        {/* 고정 레슨 입력 */}
+
         {form.lessonType === 'fixed' && (
-          <>
-            <FormField label="첫 시작 날짜" htmlFor="startDate" required>
-              <input
-                id="firstLessonDate"
-                name="firstLessonDate"
-                value={form.firstLessonDate}
-                onChange={handleChange}
-                type="date"
-                className="ui-input"
-              />
-            </FormField>
-            <FormField label="요일" required>
-              <DayChips multi={true} selected={form.dayOfWeekSet} onToggle={handleDayToggle} />
-            </FormField>
-          </>
+          <FormField label="요일" required>
+            <DayChips multi={true} selected={form.dayOfWeekSet} onToggle={handleDayToggle} />
+          </FormField>
         )}
         <Button onClick={handleRegister}>등록</Button>
       </div>
