@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import InlineDateTimePicker from '../../../components/InlineDateTimePicker';
 import { fetchLessonCalendarStatus } from '../../mypage/api/lessonScheduleApi';
 import type { LessonCalendarStatusDto } from '../../mypage/api/lessonScheduleApi';
-import { ca } from 'date-fns/locale';
 
 interface LessonCalendarPickerProps {
   teacherId?: number;
@@ -38,18 +37,27 @@ export default function LessonCalendarPicker({
 
   // 날짜가 선택될 때 예약된 시간 추출
   useEffect(() => {
-    // console.log('calendarStatus or date changed:', calendarStatus, date);
     if (calendarStatus && date) {
+      let fixed: string[] = [];
+      let reserved: string[] = [];
+      const dayOfWeekNum = new Date(date).getDay();
+      if (calendarStatus?.fixedLessonReservations) {
+        fixed = calendarStatus.fixedLessonReservations
+          .filter((reservation) => reservation.dayOfWeekNum === dayOfWeekNum)
+          .map((reservation) => reservation.startTime.slice(0, 5));
+      }
       if (calendarStatus?.lessonReservations) {
-        const reserved = calendarStatus.lessonReservations
+        reserved = calendarStatus.lessonReservations
           .filter((reservation) => {
             return reservation.date === date;
           })
           .map((reservation) => reservation.startTime.slice(0, 5));
-        setReservedTimes(reserved);
       }
+
+      const allReserved = Array.from(new Set([...fixed, ...reserved]));
+      setReservedTimes(allReserved);
+
       // 날짜에서 요일 구해서 availableTimes에서 조회
-      const dayOfWeekNum = new Date(date).getDay();
       const available = Object.values(calendarStatus.availableTimes).find(
         (v) => v.dayOfWeekNum === dayOfWeekNum
       );

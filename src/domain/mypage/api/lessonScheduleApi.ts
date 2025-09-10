@@ -16,13 +16,23 @@ export interface AvailableTimeInfo {
 export interface ReservedTimeInfo {
   date: string;
   startTime: string; // HH:mm
+  endTime: string; // HH:mm
   lessonReservationNo?: number;
+}
+
+export interface FixedLessonReservationInfo {
+  dayOfWeekNum: number;
+  startTime: string; // HH:mm
+  endTime: string; // HH:mm
+  startDate: string;
+  fixedLessonReservationNo?: number;
 }
 
 export interface LessonCalendarStatusDto {
   holidays: HolidayInfo[];
   availableTimes: AvailableTimeInfo[];
   lessonReservations: ReservedTimeInfo[];
+  fixedLessonReservations: FixedLessonReservationInfo[];
 }
 
 export interface LessonScheduleRequest {

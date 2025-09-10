@@ -42,18 +42,20 @@ export default function InlineDateTimePicker({
 
   return (
     <div>
-      <Calendar
-        value={selectedDate}
-        onChange={handleDateChange}
-        minDate={new Date()}
-        locale="ko-KR"
-        tileDisabled={({ date }) => {
-          // enabledDayOfWeeks에 없는 요일의 모든 날짜 비활성화
-          if (!enabledDayOfWeeks || enabledDayOfWeeks.length === 0) return false;
-          const dayOfWeekNum = date.getDay(); // 0(일)~6(토)
-          return !enabledDayOfWeeks.includes(dayOfWeekNum);
-        }}
-      />
+      <div style={{ width: '100%' }}>
+        <Calendar
+          value={selectedDate}
+          onChange={handleDateChange}
+          minDate={new Date()}
+          locale="ko-KR"
+          tileDisabled={({ date }) => {
+            // enabledDayOfWeeks에 없는 요일의 모든 날짜 비활성화
+            if (!enabledDayOfWeeks || enabledDayOfWeeks.length === 0) return false;
+            const dayOfWeekNum = date.getDay(); // 0(일)~6(토)
+            return !enabledDayOfWeeks.includes(dayOfWeekNum);
+          }}
+        />
+      </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 16 }}>
         {times.map((t) => {
           let disabled = false;
