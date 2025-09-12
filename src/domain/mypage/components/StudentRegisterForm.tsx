@@ -80,29 +80,28 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
       const payload =
         form.lessonType === 'single'
           ? { ...form }
-          : { ...form, dayOfWeekSet: Array.from(form.dayOfWeekSet) };
+          : {
+              ...form,
+              firstLessonDate: form.lessonDate,
+              dayOfWeekSet: Array.from(form.dayOfWeekSet),
+            };
 
       await api(uri, {
         method: 'POST',
         body: JSON.stringify(payload),
       }).then((res) => {
-        if (res.ok) {
-          alert('레슨 등록 요청 성공!');
-          setForm({
-            studentName: '',
-            phone: '',
-            lesson: '',
-            firstLessonDate: '',
-            startTime: '',
-            dayOfWeekSet: new Set<DayOfWeek>(),
-            reservationStatus: 'TRIAL_REQUESTED',
-            lessonDate: '',
-            lessonType: 'single',
-          });
-          return;
-        }
-
-        throw new Error('레슨 등록에 실패했습니다.');
+        alert(res);
+        setForm({
+          studentName: '',
+          phone: '',
+          lesson: '',
+          firstLessonDate: '',
+          startTime: '',
+          dayOfWeekSet: new Set<DayOfWeek>(),
+          reservationStatus: 'TRIAL_REQUESTED',
+          lessonDate: '',
+          lessonType: 'single',
+        });
       });
 
       if (typeof onSuccess === 'function') onSuccess();
