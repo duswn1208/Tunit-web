@@ -32,7 +32,7 @@ const LessonDetailModal: React.FC<LessonDetailModalProps> = ({
         statusText={event.status?.label ?? ''}
         lessonId={event.id}
         onChangeStatus={onChangeStatus}
-        onDelete={() => onDelete(event.id)}
+        onDelete={onDelete}
         onClose={onClose}
       />
     </Modal>

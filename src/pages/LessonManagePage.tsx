@@ -7,12 +7,16 @@ import LessonDetailModal from '../domain/lessonManage/components/LessonDetailMod
 import Header from '../components/Header';
 import '../css/components/lesson-manage.css';
 import SelectBox from '../components/SelectBox';
+import LessonListSection from '../domain/lessonManage/components/LessonListSection';
+import LessonFilterSection from '../domain/lessonManage/components/LessonFilterSection';
+import LessonManageViewToggle from '../domain/lessonManage/components/LessonManageViewToggle';
 
 export default function LessonManageLayout() {
   const [filterStudent, setFilterStudent] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [lessonSummary, setLessonSummary] = useState<LessonSummary | null>(null);
   const [selectedEvent, setSelectedEvent] = useState<LessonEvent | null>(null);
+  const [viewType, setViewType] = useState<'calendar' | 'list'>('calendar');
 
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -87,36 +91,27 @@ export default function LessonManageLayout() {
   return (
     <div className="lesson-manage-layout">
       <Header title="레슨 관리" />
-      {/* 필터 영역 */}
-      <div className="lesson-manage-filter">
-        <input
-          type="text"
-          placeholder="학생명 검색"
-          value={filterStudent}
-          onChange={(e) => setFilterStudent(e.target.value)}
+      <div className="lesson-manage-sub-header">
+        <LessonFilterSection
+          filterStudent={filterStudent}
+          setFilterStudent={setFilterStudent}
+          filterStatus={filterStatus}
+          setFilterStatus={setFilterStatus}
         />
-
-        <SelectBox
-          id="lesson-status-filter"
-          name="lessonStatus"
-          value={filterStatus}
-          options={[
-            { value: '', label: '레슨 상태 전체' },
-            { value: 'REQUESTED', label: '레슨 신청' },
-            { value: 'TRIAL_REQUESTED', label: '상담/체험 신청' },
-            { value: 'CONFIRMED', label: '확정' },
-            { value: 'CANCELLED', label: '취소' },
-          ]}
-          onChange={(value) => setFilterStatus(value)}
-          placeholder="레슨 상태 선택"
-          className="lesson-status-select"
-        />
+        <LessonManageViewToggle viewType={viewType} setViewType={setViewType} />
       </div>
       <div style={{ display: 'flex', gap: 16, marginTop: 16 }}>
-        <LessonCalendarSection
-          lessonEvents={lessonSummary?.lessonList ?? []}
-          onSelectEvent={setSelectedEvent}
-        />
+        {viewType === 'calendar' ? (
+          <LessonCalendarSection
+            lessonEvents={lessonSummary?.lessonList ?? []}
+            onSelectEvent={setSelectedEvent}
+          />
+        ) : (
+          <LessonListSection
+            lessonEvents={lessonSummary?.lessonList ?? []}
+            onSelectEvent={setSelectedEvent}
+          />
+        )}
         <LessonCardSection lessonSummary={lessonSummary} />
       </div>
       <LessonDetailModal
