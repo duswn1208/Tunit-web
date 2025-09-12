@@ -8,10 +8,10 @@ import { api } from '../../../lib/api';
 import {
   fetchLessonCategories,
   type TutorLessonsCategory,
-} from '../../lesson/api/lessonCategoryApi';
+} from '../../lessonManage/api/lessonCategoryApi';
 import { RadioGroup } from '../../../components';
-import type { LessonStatus } from '../../lesson/types/lessonCalendar';
-import LessonCalendarPicker from '../../lesson/components/LessonCalendarPicker';
+import type { LessonStatus } from '../../lessonManage/types/lessonCalendar';
+import LessonCalendarPicker from '../../lessonManage/components/LessonCalendarPicker';
 
 interface StudentForm {
   studentName: string;

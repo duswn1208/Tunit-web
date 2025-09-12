@@ -50,6 +50,14 @@
   min-width: 220px;
   margin-bottom: 8px;
 }
+.lesson-status-color-desc {
+  /* margin-left: 32px; */
+  display: flex;
+  gap: 16px;
+  /* align-items: center; */
+  font-size: 13px;
+  flex-wrap: wrap;
+}
 .lesson-modal-card {
   position: relative;
   min-width: 280px;
@@ -155,4 +163,17 @@
 
 .lesson-modal-close-btn:hover {
   color: var(--brand-mint);
+}
+.lesson-manage-filter {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+  align-items: center;
+}
+.lesson-manage-filter input,
+.lesson-manage-filter select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  min-width: 120px;
 }
