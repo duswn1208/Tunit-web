@@ -1,5 +1,5 @@
 import SelectBox from '../../../components/SelectBox';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import FormField from '../../../components/FormField';
 import Button from '../../../components/Button';
 import DayChips from '../../onboarding/availability/components/DayChips';
@@ -23,6 +23,7 @@ interface StudentForm {
   reservationStatus: LessonStatus;
   lessonDate: string;
   lessonType: 'single' | 'fixed';
+  memo?: string;
 }
 
 // Props 타입 중복 제거
@@ -30,6 +31,7 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
   const [lessonCategories, setLessonCategories] = useState<TutorLessonsCategory[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [categoryError, setCategoryError] = useState<string | null>(null);
+  const memoRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     setLoadingCategories(true);
@@ -58,6 +60,7 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
     reservationStatus: 'TRIAL_REQUESTED',
     lessonDate: getToday(),
     lessonType: 'single',
+    memo: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,6 +79,9 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
 
   const handleRegister = async () => {
     try {
+      //memo 추가
+      setForm((prev) => ({ ...prev, memo: memoRef.current?.value || '' }));
+
       const uri = form.lessonType === 'single' ? '/api/lessons/reserve' : '/api/fixed-lessons/save';
       const payload =
         form.lessonType === 'single'
@@ -111,16 +117,8 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
   };
 
   return (
-    <div
-      style={{
-        marginBottom: 24,
-        padding: 16,
-        background: '#fff',
-        borderRadius: 8,
-        boxShadow: '0 2px 8px #eee',
-      }}
-    >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+    <div className="student-register-form">
+      <div className="student-register-fields">
         <FormField label="레슨 유형" htmlFor="lessonType" required>
           <RadioGroup
             name="lessonType"
@@ -190,14 +188,12 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
           />
         </FormField>
         <FormField label="레슨일" htmlFor="lessonDate" required>
-          <LessonCalendarPicker
-            startDate={form.lessonDate || '2025-09-01'}
-            endDate={'2025-09-30'}
-            date={form.lessonDate}
-            time={form.startTime}
-            onChange={(date, time) =>
-              setForm((prev) => ({ ...prev, lessonDate: date, startTime: time }))
-            }
+          <input
+            id="lessonDate"
+            name="lessonDate"
+            value={form.lessonDate}
+            readOnly
+            className="ui-input"
           />
         </FormField>
 
@@ -206,6 +202,18 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
             <DayChips multi={true} selected={form.dayOfWeekSet} onToggle={handleDayToggle} />
           </FormField>
         )}
+
+        <FormField label="메모" htmlFor="memo">
+          <textarea
+            id="memo"
+            name="memo"
+            value={''}
+            ref={memoRef}
+            placeholder="해당 레슨에 대해 기억해야 할 내용이 있으면 적어주세요"
+            className="ui-textarea"
+          />
+        </FormField>
+
         <Button onClick={handleRegister}>등록</Button>
       </div>
     </div>

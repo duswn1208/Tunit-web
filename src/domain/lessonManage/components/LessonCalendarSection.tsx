@@ -5,12 +5,14 @@ import TuCalendar from '../../../components/TuCalendar';
 interface LessonCalendarSectionProps {
   lessonEvents: LessonEvent[];
   onSelectEvent: (event: LessonEvent) => void;
+  onSelectSlot?: (slotInfo: any) => void;
   statusStyleMap?: Record<string, { dot: string; text: string }>;
 }
 
 const LessonCalendarSection: React.FC<LessonCalendarSectionProps> = ({
   lessonEvents,
   onSelectEvent,
+  onSelectSlot,
   statusStyleMap = statusStyle,
 }) => {
   return (
@@ -18,6 +20,7 @@ const LessonCalendarSection: React.FC<LessonCalendarSectionProps> = ({
       <TuCalendar
         events={lessonEvents}
         onSelectEvent={onSelectEvent}
+        onSelectSlot={onSelectSlot}
         statusStyleMap={statusStyleMap}
       />
     </div>

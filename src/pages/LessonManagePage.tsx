@@ -10,6 +10,7 @@ import SelectBox from '../components/SelectBox';
 import LessonListSection from '../domain/lessonManage/components/LessonListSection';
 import LessonFilterSection from '../domain/lessonManage/components/LessonFilterSection';
 import LessonManageViewToggle from '../domain/lessonManage/components/LessonManageViewToggle';
+import LessonRegisterModal from '../domain/lessonManage/components/LessonRegisterModal';
 
 export default function LessonManageLayout() {
   const [filterStudent, setFilterStudent] = useState('');
@@ -17,6 +18,7 @@ export default function LessonManageLayout() {
   const [lessonSummary, setLessonSummary] = useState<LessonSummary | null>(null);
   const [selectedEvent, setSelectedEvent] = useState<LessonEvent | null>(null);
   const [viewType, setViewType] = useState<'calendar' | 'list'>('calendar');
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
 
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -100,11 +102,20 @@ export default function LessonManageLayout() {
         />
         <LessonManageViewToggle viewType={viewType} setViewType={setViewType} />
       </div>
+      <button
+        type="button"
+        className="ui-button"
+        style={{ height: 36 }}
+        onClick={() => setShowRegisterModal(true)}
+      >
+        레슨 등록
+      </button>
       <div style={{ display: 'flex', gap: 16, marginTop: 16 }}>
         {viewType === 'calendar' ? (
           <LessonCalendarSection
             lessonEvents={lessonSummary?.lessonList ?? []}
             onSelectEvent={setSelectedEvent}
+            onSelectSlot={() => setShowRegisterModal(true)}
           />
         ) : (
           <LessonListSection
@@ -114,6 +125,7 @@ export default function LessonManageLayout() {
         )}
         <LessonCardSection lessonSummary={lessonSummary} />
       </div>
+      <LessonRegisterModal open={showRegisterModal} onClose={() => setShowRegisterModal(false)} />
       <LessonDetailModal
         open={!!selectedEvent}
         event={selectedEvent}

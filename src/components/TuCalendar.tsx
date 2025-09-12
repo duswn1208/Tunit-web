@@ -16,12 +16,18 @@ const localizer = dateFnsLocalizer({
 interface TuCalendarProps {
   events: any[];
   onSelectEvent?: (event: any) => void;
+  onSelectSlot?: (slotInfo: any) => void;
   statusStyleMap?: Record<string, { dot: string; text: string }>;
 }
 
 import { useState } from 'react';
 
-export default function TuCalendar({ events, onSelectEvent, statusStyleMap }: TuCalendarProps) {
+export default function TuCalendar({
+  events,
+  onSelectEvent,
+  onSelectSlot,
+  statusStyleMap,
+}: TuCalendarProps) {
   const [view, setView] = useState<View>(Views.MONTH);
   const [date, setDate] = useState(new Date());
 
@@ -61,6 +67,8 @@ export default function TuCalendar({ events, onSelectEvent, statusStyleMap }: Tu
             next: '다음',
           }}
           onSelectEvent={onSelectEvent}
+          onSelectSlot={onSelectSlot}
+          selectable={!!onSelectSlot}
           components={{
             event: ({ event }: { event: any }) => {
               const status = event.status?.name || event.status;
