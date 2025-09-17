@@ -8,12 +8,14 @@ import {
 export function useOnboardingLesson() {
   const [mains, setMains] = useState<Category[]>([]);
   const [subs, setSubs] = useState<SubCategory[]>([]);
+  // 모든 소분류 누적 저장
+  const [allSubs, setAllSubs] = useState<SubCategory[]>([]);
   const [mainCode, setMainCode] = useState<string>('');
   const [loadingMain, setLoadingMain] = useState(true);
   const [loadingSub, setLoadingSub] = useState(false);
 
-  // 다중 선택(소분류)
-  const [selectedSubs, setSelectedSubs] = useState<Set<string>>(new Set());
+  // 다중 선택(소분류) - Map<code, label>
+  const [selectedSubs, setSelectedSubs] = useState<Map<string, string>>(new Map());
 
   // 대분류 로딩
   useEffect(() => {
@@ -34,12 +36,17 @@ export function useOnboardingLesson() {
   const selectMain = async (code: string) => {
     if (!code || code === mainCode) return;
     setMainCode(code);
-    setSelectedSubs(new Set());
     setSubs([]);
     try {
       setLoadingSub(true);
       const list = await getSubLessonCategory(code);
       setSubs(list ?? []);
+      // allSubs에 누적 추가 (중복 제거)
+      setAllSubs((prev) => {
+        const map = new Map(prev.map((s) => [String(s.code), s]));
+        (list ?? []).forEach((s) => map.set(String(s.code), s));
+        return Array.from(map.values());
+      });
     } catch (e) {
       console.error(e);
     } finally {
@@ -48,29 +55,23 @@ export function useOnboardingLesson() {
   };
 
   // 소분류 토글
-  const toggleSub = (code: string) => {
+  const toggleSub = (code: string, label: string) => {
     setSelectedSubs((prev) => {
-      const next = new Set(prev);
+      const next = new Map(prev);
       if (next.has(code)) next.delete(code);
-      else next.add(code);
+      else next.set(code, label);
       return next;
     });
   };
 
   // 칩 목록
   const chipList = useMemo(() => {
-    const map = new Map<string, string>(); // code -> label
-    subs.forEach((s) => {
-      if (selectedSubs.has(String(s.code))) {
-        map.set(String(s.code), s.label);
-      }
-    });
-    return Array.from(map.entries(), ([code, label]) => ({ code, label }));
-  }, [subs, selectedSubs]);
+    return Array.from(selectedSubs, ([code, label]) => ({ code, label }));
+  }, [selectedSubs]);
 
   const removeChip = (code: string) => {
     setSelectedSubs((prev) => {
-      const next = new Set(prev);
+      const next = new Map(prev);
       next.delete(code);
       return next;
     });

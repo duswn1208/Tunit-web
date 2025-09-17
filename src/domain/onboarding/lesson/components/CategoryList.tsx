@@ -7,7 +7,7 @@ interface CategoryListProps {
   emptyText: string;
   items: { code: string; label: string }[];
   isActive: (code: string) => boolean;
-  onClick: (code: string) => void;
+  onClick: (code: string, label: string) => void;
   style?: React.CSSProperties;
 }
 
@@ -34,7 +34,7 @@ export default function CategoryList({
               code={item.code}
               label={item.label}
               active={isActive(item.code)}
-              onClick={onClick}
+              onClick={() => onClick(item.code, item.label)}
             />
           ))}
         </div>

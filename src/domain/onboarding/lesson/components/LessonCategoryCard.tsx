@@ -2,7 +2,7 @@ interface LessonCategoryCardProps {
   code: string;
   label: string;
   active: boolean;
-  onClick: (code: string) => void;
+  onClick: () => void;
 }
 
 export default function LessonCategoryCard({
@@ -16,8 +16,8 @@ export default function LessonCategoryCard({
       className={`mls-card-item ${active ? 'active' : ''}`}
       role="button"
       tabIndex={0}
-      onClick={() => onClick(code)}
-      onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onClick(code)}
+      onClick={onClick}
+      onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onClick()}
     >
       <span style={{ fontWeight: 700, color: '#000' }}>{label}</span>
       <span className="mls-check" />

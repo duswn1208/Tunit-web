@@ -10,6 +10,7 @@ import OnboardingRegion from './domain/onboarding/pages/OnboardingRegion.tsx';
 import OnboardingAvailability from './domain/onboarding/pages/OnboardingAvailability.tsx';
 import { AuthProvider } from './auth/AuthContext.tsx';
 import RootLayout from './layouts/RootLayout.tsx';
+import OnboardingStudent from './domain/onboarding/pages/OnboardingStudent.tsx';
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/my/lessons" element={<LessonManage />} />
             <Route path="/onboarding" element={<OnboardingStart />} />
+            <Route path="/onboarding/student" element={<OnboardingStudent />} />
             <Route path="/onboarding/tutor" element={<OnboardingTutor />} />
             <Route path="/onboarding/tutor/lesson" element={<OnboardingLesson />} />
             <Route path="/onboarding/tutor/region" element={<OnboardingRegion />} />

@@ -14,21 +14,17 @@ export default function OnboardingStart() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({ defaultValues: { role: 'TUTOR', nickname: '' } });
 
   const onSubmit = (data: FormData) => {
     if (isSubmitting) return;
-    // 1단계 저장
     setUserRole(data);
-
-    // 역할에 따라 2단계 라우팅
     if (data.role === 'TUTOR') {
       window.location.href = '/onboarding/tutor';
     } else {
-      // 학생 온보딩 준비되기 전까지 임시로 마이페이지/메인으로 유도
-      // window.location.href = "/onboarding/student";
-      window.location.href = '/mypage';
+      window.location.href = '/onboarding/student';
     }
   };
 
@@ -50,7 +46,12 @@ export default function OnboardingStart() {
       }
     >
       <FormField className="mls-header" label="역할" childrenClsx="ui-radio-group">
-        <RadioGroup name="role" options={radioOption} defaultValue="TUTOR"></RadioGroup>
+        <RadioGroup
+          name="role"
+          options={radioOption}
+          defaultValue="TUTOR"
+          onChange={(value) => setValue('role', value)}
+        />
       </FormField>
       <FormField
         className="mls-header"

@@ -1,11 +1,11 @@
 import CategoryList from './CategoryList';
 
 interface LessonSubCategoryProps {
-  subs: any[];
+  subs: { code: string; label: string }[];
   mainCode: string;
-  selectedSubs: Set<string>;
+  selectedSubs: Set<string> | Map<string, string>;
   loadingSub: boolean;
-  toggleSub: (code: string) => void;
+  toggleSub: (code: string, label: string) => void;
 }
 
 export default function LessonSubCategory({
@@ -32,8 +32,12 @@ export default function LessonSubCategory({
       loadingText="상세 레슨 불러오는 중…"
       emptyText="상세 레슨이 없습니다."
       items={subs}
-      isActive={(code: string) => selectedSubs.has(String(code))}
-      onClick={toggleSub}
+      isActive={(code: string) =>
+        selectedSubs instanceof Map
+          ? selectedSubs.has(String(code))
+          : selectedSubs.has(String(code))
+      }
+      onClick={(code, label) => toggleSub(code, label)}
       style={{ padding: '0 20px 16px' }}
     />
   );
