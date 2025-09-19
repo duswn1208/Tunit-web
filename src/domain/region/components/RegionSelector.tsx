@@ -34,13 +34,25 @@ export default function RegionSelector(props: RegionSelectorProps) {
     onConfirm,
   } = props;
 
-  // 항상 '시도 전체' 항목을 구군 리스트 맨 위에 추가
+  // 시/도명 접두사 제거 함수
+  function stripParentPrefix(parent: string, child: string) {
+    const withSpace = parent + ' ';
+    return child.startsWith(withSpace) ? child.slice(withSpace.length) : child;
+  }
+
+  // 항상 '시도 전체' 항목을 구군 리스트 맨 위에 추가, 구군 label에서 시도명 제거
   const rightOptionsMap = React.useMemo(() => {
     const map: Record<string, { code: string; label: string }[]> = {};
     sidos.forEach((sido) => {
       let list = sido.code === activeSido?.code ? subregions : [];
       if (sido.code === activeSido?.code) {
-        list = [{ code: `__WHOLE__${sido.code}`, label: `${sido.label} 전체` }, ...list];
+        list = [
+          { code: `__WHOLE__${sido.code}`, label: `${sido.label} 전체` },
+          ...subregions.map((g) => ({
+            code: g.code,
+            label: stripParentPrefix(sido.label, g.label),
+          })),
+        ];
       }
       map[sido.code] = list;
     });

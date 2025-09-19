@@ -1,31 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/tutor-search.css';
 import RegionSelector from '../../region/components/RegionSelector';
 import { useRegionSelect } from '../../region/hooks/useRegionSelect';
 import TwoColumnSelector from '../../../components/TwoColumnSelector';
-
-// 예시: 과목 대분류/소분류 데이터 (실제 API 연동 시 대체)
-const LESSON_CATEGORIES = [
-  { code: 'eng', label: '영어' },
-  { code: 'math', label: '수학' },
-  { code: 'sci', label: '과학' },
-];
-const LESSON_SUBJECTS: Record<string, { code: string; label: string }[]> = {
-  eng: [
-    { code: 'eng-conv', label: '회화' },
-    { code: 'eng-gram', label: '문법' },
-    { code: 'eng-read', label: '독해' },
-  ],
-  math: [
-    { code: 'math-basic', label: '기초수학' },
-    { code: 'math-high', label: '고등수학' },
-  ],
-  sci: [
-    { code: 'sci-phy', label: '물리' },
-    { code: 'sci-chem', label: '화학' },
-    { code: 'sci-bio', label: '생물' },
-  ],
-};
+import { getMainLessonCategory, getSubLessonCategory } from '../../lesson/api/categoryApi';
+import type { Category, SubCategory } from '../../../type/onboarding';
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = React.useState(false);
@@ -43,7 +22,21 @@ export default function TutorFilterBar() {
   const [lessonSheetOpen, setLessonSheetOpen] = useState(false);
   const [selectedLessons, setSelectedLessons] = useState<string[]>([]);
   const [selectedLessonCategory, setSelectedLessonCategory] = useState<string | null>(null);
+  const [lessonCategories, setLessonCategories] = useState<Category[]>([]);
+  const [lessonSubjects, setLessonSubjects] = useState<Record<string, SubCategory[]>>({});
   const isMobile = useIsMobile();
+
+  // 레슨 카테고리/세부카테고리 fetch
+  useEffect(() => {
+    getMainLessonCategory().then((data) => setLessonCategories(data));
+  }, []);
+  useEffect(() => {
+    if (!selectedLessonCategory) return;
+    if (lessonSubjects[selectedLessonCategory]) return;
+    getSubLessonCategory(selectedLessonCategory).then((data) =>
+      setLessonSubjects((prev) => ({ ...prev, [selectedLessonCategory]: data }))
+    );
+  }, [selectedLessonCategory, lessonSubjects]);
 
   // 지역 상태를 useRegionSelect로 관리 (컨트롤드)
   const region = useRegionSelect();
@@ -71,12 +64,21 @@ export default function TutorFilterBar() {
     selectedLessons.length === 0
       ? '전체 레슨'
       : selectedLessons.length === 1
-      ? LESSON_SUBJECTS[selectedLessonCategory || '']?.find((l) => l.code === selectedLessons[0])
+      ? lessonSubjects[selectedLessonCategory || '']?.find((l) => l.code === selectedLessons[0])
           ?.label || selectedLessons[0]
       : `${
-          LESSON_SUBJECTS[selectedLessonCategory || '']?.find((l) => l.code === selectedLessons[0])
+          lessonSubjects[selectedLessonCategory || '']?.find((l) => l.code === selectedLessons[0])
             ?.label || selectedLessons[0]
         } 외 ${selectedLessons.length - 1}개`;
+
+  // TwoColumnSelector용 데이터 변환
+  const lessonRightMap = React.useMemo(() => {
+    const map: Record<string, { code: string; label: string }[]> = {};
+    lessonCategories.forEach((cat) => {
+      map[cat.code] = lessonSubjects[cat.code] || [];
+    });
+    return map;
+  }, [lessonCategories, lessonSubjects]);
 
   return (
     <div className="tutor-filter-bar" style={{ position: 'relative' }}>
@@ -121,10 +123,10 @@ export default function TutorFilterBar() {
         <div className="bottom-sheet" onClick={() => setLessonSheetOpen(false)}>
           <div className="bottom-sheet-content" onClick={(e) => e.stopPropagation()}>
             <TwoColumnSelector
-              leftOptions={LESSON_CATEGORIES}
-              rightOptionsMap={LESSON_SUBJECTS}
-              leftTitle="과목"
-              rightTitle="세부과목"
+              leftOptions={lessonCategories}
+              rightOptionsMap={lessonRightMap}
+              leftTitle="레슨"
+              rightTitle="세부 레슨"
               selectedLeft={selectedLessonCategory}
               setSelectedLeft={setSelectedLessonCategory}
               selectedRight={selectedLessons}
@@ -133,10 +135,8 @@ export default function TutorFilterBar() {
                   prev.includes(code) ? prev.filter((v) => v !== code) : [...prev, code]
                 )
               }
+              onConfirm={() => setLessonSheetOpen(false)}
             />
-            <div className="sheet-confirm" onClick={() => setLessonSheetOpen(false)}>
-              확인
-            </div>
           </div>
         </div>
       )}

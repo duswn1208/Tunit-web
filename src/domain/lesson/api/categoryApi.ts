@@ -1,5 +1,5 @@
-import { api } from '../api';
-import type { Category, SubCategory } from '../../type/onboarding';
+import { api } from '../../../lib/api';
+import type { Category, SubCategory } from '../../../type/onboarding';
 
 const MAIN_CATEGORIES_URL = '/api/lessons/categories';
 const SUB_CATEGORIES_URL = (mainCode: string) =>

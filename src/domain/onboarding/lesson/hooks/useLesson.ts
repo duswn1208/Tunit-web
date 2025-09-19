@@ -1,9 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { Category, SubCategory } from '../../../../type/onboarding';
-import {
-  getMainLessonCategory,
-  getSubLessonCategory,
-} from '../../../../lib/onboarding/categoryApi';
+import { getMainLessonCategory, getSubLessonCategory } from '../../../lesson/api/categoryApi';
 
 export function useOnboardingLesson() {
   const [mains, setMains] = useState<Category[]>([]);
