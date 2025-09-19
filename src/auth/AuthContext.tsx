@@ -2,7 +2,12 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { api } from '../lib/api';
 
-type User = { userNo: number; name: string; nickname?: string } | null;
+type User = {
+  userNo: number;
+  name: string;
+  nickname?: string;
+  userRole?: 'student' | 'tutor';
+} | null;
 type AuthCtx = { user: User; loading: boolean; login: () => void; logout: () => Promise<void> };
 
 const Ctx = createContext<AuthCtx | null>(null);

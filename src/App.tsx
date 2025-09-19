@@ -10,7 +10,9 @@ import OnboardingRegion from './domain/onboarding/pages/OnboardingRegion.tsx';
 import OnboardingAvailability from './domain/onboarding/pages/OnboardingAvailability.tsx';
 import { AuthProvider } from './auth/AuthContext.tsx';
 import RootLayout from './layouts/RootLayout.tsx';
-import OnboardingStudent from './domain/onboarding/pages/OnboardingStudent.tsx';
+import OnboardingStudentLesson from './domain/onboarding/pages/OnboardingStudentLesson.tsx';
+import OnboardingStudentRegion from './domain/onboarding/pages/OnboardingStudentRegion.tsx';
+import TutorSearchPage from './domain/tutorSearch/pages/TutorSearchPage.tsx';
 
 export default function App() {
   return (
@@ -21,9 +23,11 @@ export default function App() {
           <Route element={<RootLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/mypage" element={<MyPage />} />
+            <Route path="/find/lessons" element={<TutorSearchPage />} />
             <Route path="/my/lessons" element={<LessonManage />} />
             <Route path="/onboarding" element={<OnboardingStart />} />
-            <Route path="/onboarding/student" element={<OnboardingStudent />} />
+            <Route path="/onboarding/student" element={<OnboardingStudentLesson />} />
+            <Route path="/onboarding/student/region" element={<OnboardingStudentRegion />} />
             <Route path="/onboarding/tutor" element={<OnboardingTutor />} />
             <Route path="/onboarding/tutor/lesson" element={<OnboardingLesson />} />
             <Route path="/onboarding/tutor/region" element={<OnboardingRegion />} />

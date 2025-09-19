@@ -3,6 +3,7 @@ import LessonMainCategory from './LessonMainCategory';
 import LessonSubCategory from './LessonSubCategory';
 import Header from '../../../../components/Header';
 interface OnboardingStepLessonFormProps {
+  title: string;
   mains: any[];
   mainCode: string;
   subs: any[];
@@ -17,6 +18,7 @@ interface OnboardingStepLessonFormProps {
 
 export default function OnboardingStepLessonForm(props: OnboardingStepLessonFormProps) {
   const {
+    title,
     mains,
     mainCode,
     subs,
@@ -31,7 +33,7 @@ export default function OnboardingStepLessonForm(props: OnboardingStepLessonForm
 
   return (
     <div>
-      <Header title="가르칠 레슨 유형을 선택해주세요" subtitle="(중복선택 가능)" />
+      <Header title={title} subtitle="(중복선택 가능)" />
       <LessonSelectedChipList chipList={chipList} removeChip={removeChip} />
       <div className="mls-body">
         <LessonMainCategory

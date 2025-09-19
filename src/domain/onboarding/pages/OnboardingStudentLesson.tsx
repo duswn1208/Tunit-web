@@ -5,13 +5,13 @@ import OnboardingNextButton from '../common/components/OnboardingNextButton';
 import { useOnboardingLesson } from '../lesson/hooks/useLesson';
 import { setLessonCategory } from '../../../lib/onboarding';
 
-export default function OnboardingLesson() {
+export default function OnboardingStudentLesson() {
   const navigate = useNavigate();
   const lesson = useOnboardingLesson();
   const { mainCode, selectedSubs } = lesson;
   async function goNext() {
     setLessonCategory({ mainCode, subCodes: Array.from(selectedSubs.keys()) });
-    navigate('/onboarding/tutor/region');
+    navigate('/onboarding/student/region');
   }
 
   return (
@@ -22,7 +22,7 @@ export default function OnboardingLesson() {
       bodyClassName="mls-body"
       footer={<OnboardingNextButton addClass="ui-btn--full" onClick={goNext} />}
     >
-      <OnboardingStepLessonForm {...lesson} title="가르칠 레슨을 선택해주세요" />
+      <OnboardingStepLessonForm {...lesson} title="어떤 레슨을 희망하시나요?" />
     </OnboardingLayout>
   );
 }
