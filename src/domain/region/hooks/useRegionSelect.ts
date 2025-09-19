@@ -35,7 +35,7 @@ export function useRegionSelect(opts: UseRegionSelectOptions = {}) {
       initialSelected.forEach((s) => m.set(s.code, s));
       return m;
     });
-  }, [initialSelected]);
+  }, [initialSelected && JSON.stringify(initialSelected)]);
 
   const selectedList = useMemo(() => Array.from(selectedMap.values()), [selectedMap]);
 
@@ -49,6 +49,7 @@ export function useRegionSelect(opts: UseRegionSelectOptions = {}) {
         const list = await getSidos();
         if (!alive) return;
         setSidos(list);
+
         if (!selectedSido && list.length) {
           const pre = defaultSidoCode
             ? list.find((s) => s.code === defaultSidoCode) ?? list[0]
