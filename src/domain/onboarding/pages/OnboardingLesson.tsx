@@ -22,7 +22,11 @@ export default function OnboardingLesson() {
       bodyClassName="mls-body"
       footer={<OnboardingNextButton addClass="ui-btn--full" onClick={goNext} />}
     >
-      <OnboardingStepLessonForm {...lesson} title="가르칠 레슨을 선택해주세요" />
+      <OnboardingStepLessonForm
+        {...lesson}
+        selectedSubs={new Set(lesson.selectedSubs.keys())}
+        title="가르칠 레슨을 선택해주세요"
+      />
     </OnboardingLayout>
   );
 }

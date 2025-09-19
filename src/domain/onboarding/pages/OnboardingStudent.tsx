@@ -3,14 +3,14 @@ import OnboardingStepLessonForm from '../lesson/components/OnboardingStepLessonF
 import OnboardingLayout from '../common/components/OnboardingLayout';
 import OnboardingNextButton from '../common/components/OnboardingNextButton';
 import { useOnboardingLesson } from '../lesson/hooks/useLesson';
-import { loadLessonCategory, setLessonCategory } from '../../../lib/onboarding';
+import { setLessonCategory } from '../../../lib/onboarding';
 
 export default function OnboardingStudent() {
   const navigate = useNavigate();
   const lesson = useOnboardingLesson();
   const { mainCode, selectedSubs } = lesson;
   async function goNext() {
-    setLessonCategory({ mainCode, subCodes: Array.from(selectedSubs) });
+    setLessonCategory({ mainCode, subCodes: Array.from(selectedSubs.keys()) });
     navigate('/onboarding/tutor/region');
   }
   return (
@@ -21,7 +21,12 @@ export default function OnboardingStudent() {
       bodyClassName="mls-body"
       footer={<OnboardingNextButton addClass="ui-btn--full" onClick={goNext} />}
     >
-      <OnboardingStepLessonForm {...lesson} />
+      <OnboardingStepLessonForm
+        title={'레슨을 선택해주세요'}
+        {...lesson}
+        selectedSubs={lesson.selectedSubs}
+        toggleSub={lesson.toggleSub}
+      />
     </OnboardingLayout>
   );
 }

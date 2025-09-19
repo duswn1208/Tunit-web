@@ -6,7 +6,6 @@ import LessonCardSection from '../domain/lessonManage/components/LessonCardSecti
 import LessonDetailModal from '../domain/lessonManage/components/LessonDetailModal';
 import Header from '../components/Header';
 import '../css/components/lesson-manage.css';
-import SelectBox from '../components/SelectBox';
 import LessonListSection from '../domain/lessonManage/components/LessonListSection';
 import LessonFilterSection from '../domain/lessonManage/components/LessonFilterSection';
 import LessonManageViewToggle from '../domain/lessonManage/components/LessonManageViewToggle';
@@ -44,12 +43,16 @@ export default function LessonManageLayout() {
       }));
       // 필터 적용
       if (filterStudent) {
-        mappedLessonList = mappedLessonList.filter((l) => l.studentName.includes(filterStudent));
+        mappedLessonList = mappedLessonList.filter((l: { studentName: string | string[] }) =>
+          l.studentName.includes(filterStudent)
+        );
       }
       if (filterStatus) {
         console.log(mappedLessonList);
 
-        mappedLessonList = mappedLessonList.filter((l) => l.status.name === filterStatus);
+        mappedLessonList = mappedLessonList.filter(
+          (l: { status: { name: string } }) => l.status.name === filterStatus
+        );
       }
       setLessonSummary({
         ...data,

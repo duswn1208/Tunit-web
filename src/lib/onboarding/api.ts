@@ -1,5 +1,6 @@
 import { api } from '../api';
-import type { SelectedRegion, TutorOnboardingPayload } from '../../type/onboarding';
+import type { TutorOnboardingPayload } from '../../type/onboarding';
+import type { SelectedRegion } from '../../domain/region/types/regions';
 import { toRegionPayload } from './mapper';
 import { loadAvailability, loadLessonCategory, loadRegion, loadTutorProfile } from './storage';
 

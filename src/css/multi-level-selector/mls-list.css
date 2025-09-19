@@ -38,9 +38,11 @@
   background: #fff;
   font-weight: 600;
   box-shadow: inset 4px 0 0 var(--brand-red);
+  color: var(--brand-red);
 }
 
 /* 우측 선택표기 */
 .mls-right .mls-item.selected {
   font-weight: 600;
+  color: var(--brand-red);
 }

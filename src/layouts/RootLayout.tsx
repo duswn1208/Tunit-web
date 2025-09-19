@@ -8,8 +8,8 @@ import { useAuth } from '../auth/AuthContext';
 export default function RootLayout() {
   const { user } = useAuth();
   let HeaderComponent = RootHeaderStudent;
-  if (user?.userRole === 'tutor') HeaderComponent = RootHeaderTutor;
-  else if (user?.userRole === 'student') HeaderComponent = RootHeaderStudent;
+  if (user?.userRole === 'TUTOR') HeaderComponent = RootHeaderTutor;
+  else if (user?.userRole === 'STUDENT') HeaderComponent = RootHeaderStudent;
   return (
     <div className="layout">
       <HeaderComponent />

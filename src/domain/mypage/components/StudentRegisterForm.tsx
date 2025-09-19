@@ -11,7 +11,6 @@ import {
 } from '../../lessonManage/api/lessonCategoryApi';
 import { RadioGroup } from '../../../components';
 import type { LessonStatus } from '../../lessonManage/types/lessonCalendar';
-import LessonCalendarPicker from '../../lessonManage/components/LessonCalendarPicker';
 
 interface StudentForm {
   studentName: string;

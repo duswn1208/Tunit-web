@@ -1,8 +1,31 @@
 import React, { useState } from 'react';
 import '../css/tutor-search.css';
+import RegionSelector from '../../region/components/RegionSelector';
+import { useRegionSelect } from '../../region/hooks/useRegionSelect';
+import TwoColumnSelector from '../../../components/TwoColumnSelector';
 
-const REGIONS = ['서울', '경기', '부산', '대구', '광주'];
-const LESSONS = ['영어', '수학', '과학', '국어', '코딩'];
+// 예시: 과목 대분류/소분류 데이터 (실제 API 연동 시 대체)
+const LESSON_CATEGORIES = [
+  { code: 'eng', label: '영어' },
+  { code: 'math', label: '수학' },
+  { code: 'sci', label: '과학' },
+];
+const LESSON_SUBJECTS: Record<string, { code: string; label: string }[]> = {
+  eng: [
+    { code: 'eng-conv', label: '회화' },
+    { code: 'eng-gram', label: '문법' },
+    { code: 'eng-read', label: '독해' },
+  ],
+  math: [
+    { code: 'math-basic', label: '기초수학' },
+    { code: 'math-high', label: '고등수학' },
+  ],
+  sci: [
+    { code: 'sci-phy', label: '물리' },
+    { code: 'sci-chem', label: '화학' },
+    { code: 'sci-bio', label: '생물' },
+  ],
+};
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = React.useState(false);
@@ -16,101 +39,107 @@ function useIsMobile() {
 }
 
 export default function TutorFilterBar() {
-  // 다중 선택 상태
-  const [selectedRegions, setSelectedRegions] = useState<string[]>(['서울']);
-  const [selectedLessons, setSelectedLessons] = useState<string[]>(['영어']);
-  const [open, setOpen] = useState<'region' | 'lesson' | null>(null);
+  const [regionSheetOpen, setRegionSheetOpen] = useState(false);
+  const [lessonSheetOpen, setLessonSheetOpen] = useState(false);
+  const [selectedLessons, setSelectedLessons] = useState<string[]>([]);
+  const [selectedLessonCategory, setSelectedLessonCategory] = useState<string | null>(null);
   const isMobile = useIsMobile();
 
-  // 다중 선택 토글
-  const toggleSelect = (type: 'region' | 'lesson', value: string) => {
-    if (type === 'region') {
-      setSelectedRegions((prev) =>
-        prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
-      );
-    } else {
-      setSelectedLessons((prev) =>
-        prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
-      );
-    }
-  };
+  // 지역 상태를 useRegionSelect로 관리 (컨트롤드)
+  const region = useRegionSelect();
+  const {
+    selectedList,
+    sidos,
+    activeSido,
+    setSelectedSido,
+    subregions,
+    isSidoSelected,
+    toggleSidoWhole,
+    isGugunSelected,
+    toggleGugun,
+    stripParentPrefix,
+  } = region;
 
   // 칩에 표시될 텍스트
   const regionLabel =
-    selectedRegions.length === 0
+    selectedList.length === 0
       ? '전체 지역'
-      : selectedRegions.length === 1
-      ? selectedRegions[0]
-      : `${selectedRegions[0]} 외 ${selectedRegions.length - 1}개`;
+      : selectedList.length === 1
+      ? selectedList[0].label
+      : `${selectedList[0].label} 외 ${selectedList.length - 1}개`;
   const lessonLabel =
     selectedLessons.length === 0
       ? '전체 레슨'
       : selectedLessons.length === 1
-      ? selectedLessons[0]
-      : `${selectedLessons[0]} 외 ${selectedLessons.length - 1}개`;
-
-  // 바텀시트/드롭다운 공통 렌더
-  const renderSelectSheet = (type: 'region' | 'lesson') => {
-    const options = type === 'region' ? REGIONS : LESSONS;
-    const selected = type === 'region' ? selectedRegions : selectedLessons;
-    const onSelect = (v: string) => toggleSelect(type, v);
-    return (
-      <div className={isMobile ? 'bottom-sheet' : 'dropdown'} onClick={() => setOpen(null)}>
-        <div
-          className={isMobile ? 'bottom-sheet-content' : ''}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className={isMobile ? 'sheet-title' : 'dropdown-title'}>
-            {type === 'region' ? '지역 선택' : '레슨 선택'}
-          </div>
-          {options.map((opt) => (
-            <div
-              key={opt}
-              className={
-                (isMobile ? 'sheet-option' : 'dropdown-option') +
-                (selected.includes(opt) ? ' selected' : '')
-              }
-              onClick={() => onSelect(opt)}
-            >
-              <input
-                type="checkbox"
-                checked={selected.includes(opt)}
-                readOnly
-                style={{ marginRight: 8 }}
-              />
-              {opt}
-            </div>
-          ))}
-          <div
-            className={isMobile ? 'sheet-confirm' : 'dropdown-confirm'}
-            onClick={() => setOpen(null)}
-            style={{ marginTop: 16, textAlign: 'right', color: '#2563eb', cursor: 'pointer' }}
-          >
-            확인
-          </div>
-        </div>
-      </div>
-    );
-  };
+      ? LESSON_SUBJECTS[selectedLessonCategory || '']?.find((l) => l.code === selectedLessons[0])
+          ?.label || selectedLessons[0]
+      : `${
+          LESSON_SUBJECTS[selectedLessonCategory || '']?.find((l) => l.code === selectedLessons[0])
+            ?.label || selectedLessons[0]
+        } 외 ${selectedLessons.length - 1}개`;
 
   return (
     <div className="tutor-filter-bar" style={{ position: 'relative' }}>
       <button
-        className={'filter-chip' + (selectedRegions.length ? ' selected' : '')}
-        onClick={() => setOpen('region')}
+        className={'filter-chip' + (selectedList.length ? ' selected' : '')}
+        onClick={() => setRegionSheetOpen(true)}
       >
         {regionLabel} ▾
       </button>
       <button
         className={'filter-chip' + (selectedLessons.length ? ' selected' : '')}
-        onClick={() => setOpen('lesson')}
+        onClick={() => setLessonSheetOpen(true)}
       >
         {lessonLabel} ▾
       </button>
       <button className="filter-chip">후기 많은 순</button>
 
-      {/* 선택 UI */}
-      {open && renderSelectSheet(open)}
+      {/* 지역 선택 UI */}
+      {regionSheetOpen && (
+        <div className="bottom-sheet" onClick={() => setRegionSheetOpen(false)}>
+          <div className="bottom-sheet-content" onClick={(e) => e.stopPropagation()}>
+            <RegionSelector
+              sidos={sidos}
+              activeSido={activeSido}
+              setSelectedSido={setSelectedSido}
+              subregions={subregions}
+              isSidoSelected={isSidoSelected}
+              toggleSidoWhole={toggleSidoWhole}
+              isGugunSelected={isGugunSelected}
+              toggleGugun={toggleGugun}
+              loadingSido={region.loadingSido}
+              loadingSub={region.loadingSub}
+              error={region.error}
+              onConfirm={() => setRegionSheetOpen(false)}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* 레슨 2단 바텀시트 */}
+      {lessonSheetOpen && (
+        <div className="bottom-sheet" onClick={() => setLessonSheetOpen(false)}>
+          <div className="bottom-sheet-content" onClick={(e) => e.stopPropagation()}>
+            <TwoColumnSelector
+              leftOptions={LESSON_CATEGORIES}
+              rightOptionsMap={LESSON_SUBJECTS}
+              leftTitle="과목"
+              rightTitle="세부과목"
+              selectedLeft={selectedLessonCategory}
+              setSelectedLeft={setSelectedLessonCategory}
+              selectedRight={selectedLessons}
+              toggleRight={(code) =>
+                setSelectedLessons((prev) =>
+                  prev.includes(code) ? prev.filter((v) => v !== code) : [...prev, code]
+                )
+              }
+            />
+            <div className="sheet-confirm" onClick={() => setLessonSheetOpen(false)}>
+              확인
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

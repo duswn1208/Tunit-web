@@ -6,7 +6,7 @@ type User = {
   userNo: number;
   name: string;
   nickname?: string;
-  userRole?: 'student' | 'tutor';
+  userRole?: 'STUDENT' | 'TUTOR';
 } | null;
 type AuthCtx = { user: User; loading: boolean; login: () => void; logout: () => Promise<void> };
 

@@ -5,7 +5,7 @@ import OnboardingNextButton from '../common/components/OnboardingNextButton';
 import OnboardingRegionForm from '../region/components/OnboardingRegionForm';
 
 import { setRegion } from '../../../lib/onboarding/storage';
-import { useOnboardingRegion } from '../region/hooks/useRegion';
+import useOnboardingRegion from '../region/hooks/useRegion';
 
 export default function OnboardingRegion() {
   const navigate = useNavigate();

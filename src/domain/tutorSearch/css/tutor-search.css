@@ -22,8 +22,8 @@
 .filter-chip:active,
 .filter-chip.selected {
   background: #e6f0ff;
-  border-color: #339af0;
-  color: #1864ab;
+  border-color: var(--brand-red);
+  color: var(--brand-red);
 }
 .tutor-profile-list {
   display: flex;
@@ -106,11 +106,11 @@
 .dropdown-confirm {
   padding: 8px 20px;
   font-weight: bold;
-  color: #2563eb;
+  color: var(--brand-red);
   cursor: pointer;
 }
 .dropdown-option input[type='checkbox'] {
-  accent-color: #2563eb;
+  accent-color: var(--brand-red);
 }
 .bottom-sheet {
   position: fixed;
@@ -125,32 +125,35 @@
 }
 .bottom-sheet-content {
   background: #fff;
+  color: #222;
   width: 100%;
   border-radius: 16px 16px 0 0;
   padding: 24px 16px 16px;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 .sheet-title {
   font-weight: bold;
   margin-bottom: 16px;
 }
 .sheet-option {
-  padding: 14px 0;
+  padding: 14px 0 14px 14px;
   border-bottom: 1px solid #eee;
   cursor: pointer;
   display: flex;
   align-items: center;
 }
 .sheet-option.selected {
-  color: #2563eb;
+  color: var(--brand-red);
   font-weight: bold;
 }
 .sheet-option input[type='checkbox'] {
-  accent-color: #2563eb;
+  accent-color: var(--brand-red);
 }
 .sheet-confirm {
   padding: 14px 0 0 0;
   text-align: right;
-  color: #2563eb;
+  color: var(--brand-red);
   font-weight: bold;
   cursor: pointer;
 }

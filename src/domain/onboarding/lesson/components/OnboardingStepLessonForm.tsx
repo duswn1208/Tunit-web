@@ -7,13 +7,13 @@ interface OnboardingStepLessonFormProps {
   mains: any[];
   mainCode: string;
   subs: any[];
-  selectedSubs: Set<string>;
+  selectedSubs: Set<string> | Map<string, string>;
   loadingMain: boolean;
   loadingSub: boolean;
   chipList: any[];
   selectMain: (code: string) => void;
   removeChip: (code: string) => void;
-  toggleSub: (code: string) => void;
+  toggleSub: (code: string, label: string) => void;
 }
 
 export default function OnboardingStepLessonForm(props: OnboardingStepLessonFormProps) {

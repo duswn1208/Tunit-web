@@ -1,4 +1,4 @@
-import { ChipList } from '../../../../components';
+import { ChipList } from '../../../components';
 
 interface RegionChipListProps {
   items: any[];
