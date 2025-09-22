@@ -7,7 +7,7 @@ export function TutorFilterBar({
   initialLessons = [],
 }: {
   initialRegion?: any[];
-  initialLessons?: string[];
+  initialLessons?: any[];
 }) {
   return (
     <div className="tutor-filter-bar" style={{ position: 'relative' }}>

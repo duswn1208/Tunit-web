@@ -24,19 +24,9 @@ export function useRegionSelect(opts: UseRegionSelectOptions = {}) {
   // 선택된 항목 map
   const [selectedMap, setSelectedMap] = useState<Map<string, SelectedRegion>>(() => {
     const m = new Map<string, SelectedRegion>();
-    (initialSelected ?? []).forEach((s) => m.set(s.code, s));
+    (initialSelected ?? []).forEach((s) => m.set(String(s.code), s));
     return m;
   });
-
-  useEffect(() => {
-    if (!initialSelected) return;
-    setSelectedMap(() => {
-      const m = new Map<string, SelectedRegion>();
-      initialSelected.forEach((s) => m.set(s.code, s));
-      return m;
-    });
-  }, [initialSelected && JSON.stringify(initialSelected)]);
-
   const selectedList = useMemo(() => Array.from(selectedMap.values()), [selectedMap]);
 
   // Sido 목록 로딩
@@ -66,6 +56,15 @@ export function useRegionSelect(opts: UseRegionSelectOptions = {}) {
       alive = false;
     };
   }, [defaultSidoCode]);
+
+  // 시/도 목록과 initialSelected가 모두 준비된 후, selectedSido를 자동 세팅
+  useEffect(() => {
+    if (!sidos.length || !initialSelected?.length) return;
+    const first = initialSelected.find((s) => s.type === 'sido') || initialSelected[0];
+    const sidoCode = first.type === 'sido' ? first.code : first.parentCode;
+    const match = sidos.find((s) => String(s.code) === String(sidoCode));
+    if (match) setSelectedSido(match);
+  }, [sidos, initialSelected]);
 
   // activeSido 변경 시 subregions 로딩
   useEffect(() => {
@@ -101,25 +100,31 @@ export function useRegionSelect(opts: UseRegionSelectOptions = {}) {
   }, [selectedSido]);
 
   // 선택 상태 조회
-  const isSidoSelected = (code: string) => selectedMap.get(code)?.type === 'sido';
-  const isGugunSelected = (code: string) => selectedMap.get(code)?.type === 'gugun';
+  const isSidoSelected = (code: string | number) => {
+    const result = selectedMap.get(String(code))?.type === 'sido';
+    return result;
+  };
+  const isGugunSelected = (code: string | number) => {
+    const result = selectedMap.get(String(code))?.type === 'gugun';
+    return result;
+  };
 
   // 시/도 전체 토글
   const toggleSidoWhole = (sido: Region) => {
     setSelectedMap((prev) => {
       const next = new Map(prev);
       if (isSidoSelected(sido.code)) {
-        next.delete(sido.code);
+        next.delete(String(sido.code));
         return next;
       }
       for (const [k, v] of next) {
-        if (v.type === 'gugun' && v.parentCode === sido.code) next.delete(k);
+        if (v.type === 'gugun' && v.parentCode === String(sido.code)) next.delete(k);
       }
-      next.set(sido.code, {
-        code: sido.code,
+      next.set(String(sido.code), {
+        code: String(sido.code),
         label: `${sido.label} 전체`,
         type: 'sido',
-        parentCode: sido.code,
+        parentCode: String(sido.code),
         parentLabel: sido.label,
       });
       return next;
@@ -137,15 +142,15 @@ export function useRegionSelect(opts: UseRegionSelectOptions = {}) {
     if (!selectedSido) return;
     setSelectedMap((prev) => {
       const next = new Map(prev);
-      if (isSidoSelected(selectedSido.code)) next.delete(selectedSido.code);
+      if (isSidoSelected(selectedSido.code)) next.delete(String(selectedSido.code));
       if (isGugunSelected(g.code)) {
-        next.delete(g.code);
+        next.delete(String(g.code));
       } else {
-        next.set(g.code, {
-          code: g.code,
+        next.set(String(g.code), {
+          code: String(g.code),
           label: `${selectedSido.label} ${stripParentPrefix(selectedSido.label, g.label)}`,
           type: 'gugun',
-          parentCode: selectedSido.code,
+          parentCode: String(selectedSido.code),
           parentLabel: selectedSido.label,
         });
       }

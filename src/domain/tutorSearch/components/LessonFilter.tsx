@@ -9,55 +9,53 @@ export interface LessonFilterProps {
 }
 
 function getLessonLabel(
-  code: string,
+  firstCategoryName: string,
   mainCategories: Category[],
   subCategories: Record<string, SubCategory[]>
 ) {
   for (const cat of mainCategories) {
-    const found = subCategories[cat.code]?.find((l) => l.code === code);
+    const found = subCategories[cat.code]?.find((l) => l.code === firstCategoryName);
     if (found) return found.label;
   }
-  return code;
+  return firstCategoryName;
 }
 
 export default function LessonFilter({ initialLessons = [] }: LessonFilterProps) {
   const [sheetOpen, setSheetOpen] = useState(false);
-  const [selectedSubCategories, setSelectedSubCategories] = useState<string[]>(initialLessons);
+  const [selectedSubCategories, setSelectedSubCategories] = useState<any[]>(initialLessons);
 
   useEffect(() => {
     setSelectedSubCategories(initialLessons);
   }, [initialLessons]);
 
   const { mainCategories, subCategories, selectedMainCategory, setSelectedMainCategory } =
-    useLessonFilter(selectedSubCategories);
+    useLessonFilter(
+      selectedSubCategories.map((obj) => (typeof obj === 'object' ? obj.lessonSubCategory : obj))
+    );
 
-  // selectedLessons가 string[]이 아닐 경우(code 대신 객체가 들어올 경우) 보정
-  const normalizedSelectedLessons: string[] = React.useMemo(() => {
+  const selectedLessonCodes: string[] = React.useMemo(() => {
     if (selectedSubCategories.length === 0) return [];
     if (typeof selectedSubCategories[0] === 'string') return selectedSubCategories as string[];
+
     // 객체 배열일 경우 code만 추출
     return (selectedSubCategories as any[]).map((l) => l.code || l.lessonSubCategory?.code || '');
   }, [selectedSubCategories]);
-
-  const labelMap = useMemo(() => {
-    const map: Record<string, string> = {};
-    mainCategories.forEach((cat) => {
-      subCategories[cat.code]?.forEach((sub) => {
-        map[sub.code] = sub.label;
-      });
-    });
-    return map;
-  }, [mainCategories, subCategories]);
 
   // 표시할 라벨 계산
   const lessonLabel = useMemo(() => {
     if (selectedSubCategories.length === 0) return '전체 레슨';
     if (selectedSubCategories.length === 1) {
-      return getLessonLabel(selectedSubCategories[0], mainCategories, subCategories);
+      return getLessonLabel(
+        selectedSubCategories[0].lessonSubCategory.label,
+        mainCategories,
+        subCategories
+      );
     }
-    return `${getLessonLabel(selectedSubCategories[0], mainCategories, subCategories)} 외 ${
-      selectedSubCategories.length - 1
-    }개`;
+    return `${getLessonLabel(
+      selectedSubCategories[0].lessonSubCategory.label,
+      mainCategories,
+      subCategories
+    )} 외 ${selectedSubCategories.length - 1}개`;
   }, [selectedSubCategories, mainCategories, subCategories]);
 
   const lessonRightMap = useMemo(() => {
@@ -68,10 +66,26 @@ export default function LessonFilter({ initialLessons = [] }: LessonFilterProps)
     return map;
   }, [mainCategories, subCategories]);
 
+  useEffect(() => {
+    if (!mainCategories.length || !selectedSubCategories.length || selectedMainCategory) return;
+    const found = mainCategories.find((cat) =>
+      (subCategories[cat.code] || []).some(
+        (sub) => String(sub.code) === String(selectedSubCategories[0])
+      )
+    );
+    if (found) setSelectedMainCategory(found.code);
+  }, [
+    mainCategories,
+    subCategories,
+    selectedSubCategories,
+    selectedMainCategory,
+    setSelectedMainCategory,
+  ]);
+
   return (
     <>
       <button
-        className={'filter-chip' + (normalizedSelectedLessons.length ? ' selected' : '')}
+        className={'filter-chip' + (selectedLessonCodes.length ? ' selected' : '')}
         onClick={() => setSheetOpen(true)}
       >
         {lessonLabel} ▾
@@ -86,7 +100,7 @@ export default function LessonFilter({ initialLessons = [] }: LessonFilterProps)
               rightTitle="세부 레슨"
               selectedLeft={selectedMainCategory}
               setSelectedLeft={setSelectedMainCategory}
-              selectedRight={normalizedSelectedLessons}
+              selectedRight={selectedLessonCodes}
               toggleRight={(code) => {
                 setSelectedSubCategories((prev) => {
                   const arr =
@@ -97,9 +111,7 @@ export default function LessonFilter({ initialLessons = [] }: LessonFilterProps)
                 });
               }}
               onConfirm={() => setSheetOpen(false)}
-              key={
-                sheetOpen ? normalizedSelectedLessons.join(',') + (selectedMainCategory || '') : ''
-              }
+              key={sheetOpen ? selectedLessonCodes.join(',') + (selectedMainCategory || '') : ''}
             />
           </div>
         </div>

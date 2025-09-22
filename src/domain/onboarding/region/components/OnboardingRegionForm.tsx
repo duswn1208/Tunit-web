@@ -19,7 +19,6 @@ export default function OnboardingRegionForm({ regionForm }: OnboardingRegionFor
     toggleSidoWhole,
     isGugunSelected,
     toggleGugun,
-    stripParentPrefix,
   } = regionForm;
 
   return (
@@ -40,7 +39,6 @@ export default function OnboardingRegionForm({ regionForm }: OnboardingRegionFor
         toggleSidoWhole={toggleSidoWhole}
         isGugunSelected={isGugunSelected}
         toggleGugun={toggleGugun}
-        stripParentPrefix={stripParentPrefix}
       />
     </div>
   );

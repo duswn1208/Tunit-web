@@ -41,6 +41,7 @@ export interface StudentProfileResponse {
 }
 
 export default function TutorSearchPage() {
+  const [loading, setLoading] = useState(true);
   const [studentLessons, setStudentLessons] = useState<StudentLesson[]>([]);
   const [studentRegions, setStudentRegions] = useState<StudentRegion[]>([]);
   useEffect(() => {
@@ -51,14 +52,17 @@ export default function TutorSearchPage() {
         setStudentLessons(profile.studentInfo.lessonSubcategoryList);
         setStudentRegions(profile.studentInfo.regionList);
 
-        console.log('학생 레슨', profile.studentInfo.lessonSubcategoryList);
-        console.log('학생 지역', profile.studentInfo.regionList);
+        setLoading(false);
       })
       .catch((e) => {
         console.error('학생 프로필 조회 실패', e);
+        setLoading(false);
       });
   }, []);
 
+  if (loading) {
+    return <div>로딩 중...</div>;
+  }
   return (
     <div>
       <Header title="튜터 찾기" />
@@ -67,7 +71,7 @@ export default function TutorSearchPage() {
           studentRegions.length ? studentRegions : [] // 전체 지역(빈 배열)
         }
         initialLessons={
-          studentLessons.length ? studentLessons.map((l) => l.lessonSubCategory.label) : [] // 전체 레슨(빈 배열)
+          studentLessons.length ? studentLessons : [] // 전체 레슨(빈 배열)
         }
       />
       {/* 필터바, 프로필 리스트 등 컴포넌트 배치 예정 */}

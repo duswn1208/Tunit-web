@@ -47,7 +47,7 @@ export default function RegionSelector(props: RegionSelectorProps) {
       let list = sido.code === activeSido?.code ? subregions : [];
       if (sido.code === activeSido?.code) {
         list = [
-          { code: `__WHOLE__${sido.code}`, label: `${sido.label} 전체` },
+          { code: `${sido.code}`, label: `${sido.label} 전체` },
           ...subregions.map((g) => ({
             code: g.code,
             label: stripParentPrefix(sido.label, g.label),
@@ -62,16 +62,16 @@ export default function RegionSelector(props: RegionSelectorProps) {
   // 선택된 항목: 전체만 선택 or 구군만 선택
   const selectedRight = React.useMemo(() => {
     if (!activeSido) return [];
-    if (isSidoSelected(activeSido.code)) {
-      return [`__WHOLE__${activeSido.code}`];
+    if (isSidoSelected(String(activeSido.code))) {
+      return [String(activeSido.code)];
     }
-    return subregions.filter((g) => isGugunSelected(g.code)).map((g) => g.code);
+    return subregions.filter((g) => isGugunSelected(String(g.code))).map((g) => String(g.code));
   }, [activeSido, isSidoSelected, subregions, isGugunSelected]);
 
   // 토글: 전체 클릭 시 구군 선택 해제, 구군 클릭 시 전체 해제
   const handleToggleRight = (code: string) => {
     if (!activeSido) return;
-    if (code === `__WHOLE__${activeSido.code}`) {
+    if (code === `${activeSido.code}`) {
       if (isSidoSelected(activeSido.code)) {
         toggleSidoWhole(activeSido);
       } else {

@@ -9,7 +9,8 @@ export interface RegionFilterProps {
 export default function RegionFilter({ initialRegion = [] }: RegionFilterProps) {
   const [sheetOpen, setSheetOpen] = React.useState(false);
 
-  const region = useRegionSelect({ initialSelected: initialRegion });
+  const region = useRegionSelect({ initialSelected: initialRegion, defaultSidoCode: '11' });
+  // console.log(region);
 
   const regionLabel =
     region.selectedList.length === 0

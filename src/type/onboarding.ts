@@ -1,7 +1,7 @@
 import type { SelectedRegion } from '../domain/region/types/regions';
 
 export type Role = 'TUTOR' | 'STUDENT';
-export type Category = { code: string; label: string };
+export type Category = { code: string; label: string; subCategories?: SubCategory[] };
 export type SubCategory = { code: string; label: string; parentCode: string; parentLabel: string };
 
 export type UseOnboardingRegionOptions = {

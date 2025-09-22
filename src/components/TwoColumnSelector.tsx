@@ -39,8 +39,6 @@ const TwoColumnSelector: React.FC<TwoColumnSelectorProps> = ({
 }) => {
   const rightOptions = selectedLeft ? rightOptionsMap[selectedLeft] || [] : [];
 
-  console.log('TwoColumnSelector 렌더', { selectedLeft, selectedRight, rightOptions });
-
   const content = (
     <div className="two-col-selector-root" style={{ minHeight }}>
       <div className="two-col-cols">
