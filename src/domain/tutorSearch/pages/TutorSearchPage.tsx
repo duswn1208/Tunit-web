@@ -1,31 +1,12 @@
 import '../css/tutor-search.css';
 import TutorProfileList from '../components/TutorProfileList';
 import type { TutorProfile } from '../components/TutorProfileCard';
+import { fetchTutors } from '../api/tutorSearchApi';
 import Header from '../../../components/Header';
 import { TutorFilterBar } from '../components/TutorFilterBar';
 import { useEffect, useState } from 'react';
 import { api } from '../../../lib/api';
-import type { StudentLesson, StudentRegion } from '../../../type/student';
-
-// 샘플 데이터 (실제 개발 시 API 연동)
-const sampleTutors: TutorProfile[] = [
-  {
-    id: '1',
-    name: '김튜터',
-    region: '서울 강남구',
-    lessons: ['영어', '수학'],
-    rating: 4.8,
-    photoUrl: '',
-  },
-  {
-    id: '2',
-    name: '이선생',
-    region: '경기 성남시',
-    lessons: ['과학'],
-    rating: 4.5,
-    photoUrl: '',
-  },
-];
+import type { StudentRegion } from '../../../type/student';
 
 // 학생 프로필 응답 타입 정의
 export interface StudentProfileResponse {
@@ -33,32 +14,47 @@ export interface StudentProfileResponse {
   phone: string;
   userStatus: string;
   studentInfo: {
-    lessonSubcategoryList: StudentLesson[];
+    lessonSubcategoryList: { code: string; label: string }[];
     regionList: StudentRegion[];
-    // ...추가 필드 필요시 여기에
   };
-  // ...추가 필드 필요시 여기에
 }
 
 export default function TutorSearchPage() {
   const [loading, setLoading] = useState(true);
-  const [studentLessons, setStudentLessons] = useState<StudentLesson[]>([]);
+  const [studentLessons, setStudentLessons] = useState<{ code: string; label: string }[]>([]);
   const [studentRegions, setStudentRegions] = useState<StudentRegion[]>([]);
+  // 필터 상태
+  const [selectedRegionCodes, setSelectedRegionCodes] = useState<string[]>([]);
+  const [selectedLessonCodes, setSelectedLessonCodes] = useState<string[]>([]);
+  // 튜터 리스트
+  const [tutors, setTutors] = useState<TutorProfile[]>([]);
   useEffect(() => {
     api('/api/users/profile/me', { method: 'GET' })
       .then((res) => {
         const profile = res as StudentProfileResponse;
-        // console.log('학생 프로필', profile);
         setStudentLessons(profile.studentInfo.lessonSubcategoryList);
         setStudentRegions(profile.studentInfo.regionList);
-
         setLoading(false);
+        // 프로필 기반 초기값 세팅
+        setSelectedRegionCodes(profile.studentInfo.regionList.map((r) => r.code));
+        setSelectedLessonCodes(profile.studentInfo.lessonSubcategoryList.map((l) => l.code));
       })
       .catch((e) => {
         console.error('학생 프로필 조회 실패', e);
         setLoading(false);
       });
   }, []);
+
+  // 필터 값이 바뀔 때마다 tutor 리스트 조회
+  useEffect(() => {
+    if (loading) return;
+    fetchTutors({ regionCodes: selectedRegionCodes, lessonCodes: selectedLessonCodes })
+      .then(setTutors)
+      .catch((e) => {
+        console.error('튜터 리스트 조회 실패', e);
+        setTutors([]);
+      });
+  }, [selectedRegionCodes, selectedLessonCodes, loading]);
 
   if (loading) {
     return <div>로딩 중...</div>;
@@ -67,15 +63,17 @@ export default function TutorSearchPage() {
     <div>
       <Header title="튜터 찾기" />
       <TutorFilterBar
-        initialRegion={
-          studentRegions.length ? studentRegions : [] // 전체 지역(빈 배열)
+        initialRegion={studentRegions}
+        initialLessons={studentLessons}
+        // 필터 변경 시 region/lesson code 배열을 업데이트
+        onRegionChange={(regionList: any[]) =>
+          setSelectedRegionCodes(regionList.map((r) => r.code))
         }
-        initialLessons={
-          studentLessons.length ? studentLessons : [] // 전체 레슨(빈 배열)
+        onLessonChange={(lessonList: any[]) =>
+          setSelectedLessonCodes(lessonList.map((l) => l.code))
         }
       />
-      {/* 필터바, 프로필 리스트 등 컴포넌트 배치 예정 */}
-      <TutorProfileList tutors={sampleTutors} />
+      <TutorProfileList tutors={tutors} />
     </div>
   );
 }

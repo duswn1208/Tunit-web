@@ -9,7 +9,7 @@ export interface TwoColumnSelectorProps {
   selectedLeft: string | null;
   setSelectedLeft: (code: string) => void;
   selectedRight: string[];
-  toggleRight: (code: string) => void;
+  toggleRight: (code: string, label: string) => void;
   loading?: boolean;
   error?: string | null;
   minHeight?: number;

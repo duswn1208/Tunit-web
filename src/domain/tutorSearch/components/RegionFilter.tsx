@@ -1,16 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import RegionSelector from '../../region/components/RegionSelector';
 import { useRegionSelect } from '../../region/hooks/useRegionSelect';
 
 export interface RegionFilterProps {
   initialRegion?: any[];
+  onChange?: (regionList: any[]) => void;
 }
 
-export default function RegionFilter({ initialRegion = [] }: RegionFilterProps) {
+export default function RegionFilter({ initialRegion = [], onChange }: RegionFilterProps) {
   const [sheetOpen, setSheetOpen] = React.useState(false);
 
   const region = useRegionSelect({ initialSelected: initialRegion, defaultSidoCode: '11' });
-  // console.log(region);
+
+  // 선택이 바뀔 때마다 상위로 전달
+  useEffect(() => {
+    if (typeof onChange === 'function') {
+      onChange(region.selectedList);
+    }
+  }, [region.selectedList]);
 
   const regionLabel =
     region.selectedList.length === 0

@@ -69,7 +69,7 @@ export default function RegionSelector(props: RegionSelectorProps) {
   }, [activeSido, isSidoSelected, subregions, isGugunSelected]);
 
   // 토글: 전체 클릭 시 구군 선택 해제, 구군 클릭 시 전체 해제
-  const handleToggleRight = (code: string) => {
+  const handleToggleRight = (code: string, label: string) => {
     if (!activeSido) return;
     if (code === `${activeSido.code}`) {
       if (isSidoSelected(activeSido.code)) {
@@ -88,8 +88,8 @@ export default function RegionSelector(props: RegionSelectorProps) {
       if (isSidoSelected(activeSido.code)) {
         toggleSidoWhole(activeSido);
       }
-      const gugun = subregions.find((g) => g.code === code);
-      if (gugun) toggleGugun(gugun);
+      const gugun = { code, label };
+      toggleGugun(gugun);
     }
   };
 

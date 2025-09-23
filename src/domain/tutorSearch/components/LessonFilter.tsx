@@ -1,62 +1,41 @@
 import React from 'react';
 import { useState, useEffect, useMemo } from 'react';
 import TwoColumnSelector from '../../../components/TwoColumnSelector';
-import type { Category, SubCategory } from '../../../type/onboarding';
 import { useLessonFilter } from '../hooks/useLessonFilter';
 
 export interface LessonFilterProps {
   initialLessons?: string[];
+  onChange?: (selected: any[]) => void;
 }
 
-function getLessonLabel(
-  firstCategoryName: string,
-  mainCategories: Category[],
-  subCategories: Record<string, SubCategory[]>
-) {
-  for (const cat of mainCategories) {
-    const found = subCategories[cat.code]?.find((l) => l.code === firstCategoryName);
-    if (found) return found.label;
-  }
-  return firstCategoryName;
-}
-
-export default function LessonFilter({ initialLessons = [] }: LessonFilterProps) {
+export default function LessonFilter({ initialLessons = [], onChange }: LessonFilterProps) {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [selectedSubCategories, setSelectedSubCategories] = useState<any[]>(initialLessons);
 
+  // 선택이 바뀔 때마다 상위로 전달
   useEffect(() => {
-    setSelectedSubCategories(initialLessons);
-  }, [initialLessons]);
+    if (typeof onChange === 'function') {
+      onChange(selectedSubCategories);
+    }
+  }, [selectedSubCategories]);
 
   const { mainCategories, subCategories, selectedMainCategory, setSelectedMainCategory } =
-    useLessonFilter(
-      selectedSubCategories.map((obj) => (typeof obj === 'object' ? obj.lessonSubCategory : obj))
-    );
+    useLessonFilter(selectedSubCategories);
 
   const selectedLessonCodes: string[] = React.useMemo(() => {
     if (selectedSubCategories.length === 0) return [];
-    if (typeof selectedSubCategories[0] === 'string') return selectedSubCategories as string[];
 
-    // 객체 배열일 경우 code만 추출
-    return (selectedSubCategories as any[]).map((l) => l.code || l.lessonSubCategory?.code || '');
+    return (selectedSubCategories as any[]).map((l) => l?.code || '');
   }, [selectedSubCategories]);
 
   // 표시할 라벨 계산
   const lessonLabel = useMemo(() => {
     if (selectedSubCategories.length === 0) return '전체 레슨';
     if (selectedSubCategories.length === 1) {
-      return getLessonLabel(
-        selectedSubCategories[0].lessonSubCategory.label,
-        mainCategories,
-        subCategories
-      );
+      return selectedSubCategories[0].label;
     }
-    return `${getLessonLabel(
-      selectedSubCategories[0].lessonSubCategory.label,
-      mainCategories,
-      subCategories
-    )} 외 ${selectedSubCategories.length - 1}개`;
-  }, [selectedSubCategories, mainCategories, subCategories]);
+    return `${selectedSubCategories[0].label} 외 ${selectedSubCategories.length - 1}개`;
+  }, [selectedSubCategories]);
 
   const lessonRightMap = useMemo(() => {
     const map: Record<string, { code: string; label: string }[]> = {};
@@ -101,13 +80,14 @@ export default function LessonFilter({ initialLessons = [] }: LessonFilterProps)
               selectedLeft={selectedMainCategory}
               setSelectedLeft={setSelectedMainCategory}
               selectedRight={selectedLessonCodes}
-              toggleRight={(code) => {
+              toggleRight={(code, label) => {
                 setSelectedSubCategories((prev) => {
-                  const arr =
-                    typeof prev[0] === 'string'
-                      ? prev
-                      : (prev as any[]).map((l) => l.code || l.lessonSubCategory?.code || '');
-                  return arr.includes(code) ? arr.filter((v) => v !== code) : [...arr, code];
+                  const exists = prev.find((l) => l.code === code);
+                  if (exists) {
+                    return prev.filter((l) => l.code !== code);
+                  } else {
+                    return [...prev, { code, label }];
+                  }
                 });
               }}
               onConfirm={() => setSheetOpen(false)}
