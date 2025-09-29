@@ -1,6 +1,7 @@
 export default function LoginPage() {
   const naverLogin = async () => {
     window.location.href = 'http://localhost:8080/oauth2/authorization/naver';
+    // window.location.href = 'http://172.21.25.92:8080/oauth2/authorization/naver';
   };
 
   return (

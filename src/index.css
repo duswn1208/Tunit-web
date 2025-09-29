@@ -1,3 +1,4 @@
+@import '@fortawesome/fontawesome-free/css/all.min.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -27,6 +28,7 @@ body,
   --chip-border: #ffc7ca;
   --chip-fg: var(--brand-red);
   --brand-font-red: #b00020;
+  --default-font-color: #1f2937;
 }
 
 a {

@@ -1,18 +1,26 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
   server: {
     port: 5173, // 기본 dev 서버 포트 (생략 가능)
     proxy: {
       // API 호출을 백엔드로 프록시
       '/api': {
         target: 'http://localhost:8080',
+        // target: 'http://172.21.25.92:8080',
         changeOrigin: true,
       },
       '/login': {
         target: 'http://localhost:8080',
+        // target: 'http://172.21.25.92:8080',
         changeOrigin: true,
       },
     },

@@ -1,0 +1,124 @@
+.mls-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  border-radius: 16px;
+  font-weight: 500;
+  cursor: default;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+/* Sizes */
+.mls-chip-sm {
+  height: 24px;
+  font-size: 12px;
+}
+
+.mls-chip-md {
+  height: 32px;
+  font-size: 14px;
+}
+
+.mls-chip-lg {
+  height: 40px;
+  font-size: 16px;
+}
+
+/* Variants */
+.chip.filled {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.chip.filled:hover {
+  background-color: #e5e7eb;
+}
+
+.chip.outlined {
+  border: 1px solid #e5e7eb;
+  color: #4b5563;
+}
+
+.chip.outlined:hover {
+  background-color: #f9fafb;
+}
+
+.mls-chip-blue {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.mls-chip-blue:hover {
+  background-color: #bfdbfe;
+}
+
+.mls-chip-green {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.mls-chip-green:hover {
+  background-color: #bbf7d0;
+}
+
+.mls-chip-yellow {
+  background-color: #fef9c3;
+  color: #a16207;
+}
+
+.mls-chip-yellow:hover {
+  background-color: #fef08a;
+}
+
+.mls-chip-gray {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.mls-chip-gray:hover {
+  background-color: #e5e7eb;
+}
+
+/* Selected state */
+.mls-chip.selected {
+  border: 1px solid;
+  border-color: currentColor;
+}
+
+/* Selected variants */
+.mls-chip-blue.selected {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.mls-chip-green.selected {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.mls-chip-yellow.selected {
+  background-color: #fef9c3;
+  color: #a16207;
+}
+
+/* Remove button */
+.chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: transparent;
+  color: currentColor;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+.chip-remove:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.05);
+}

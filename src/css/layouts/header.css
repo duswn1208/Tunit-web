@@ -48,13 +48,17 @@
   position: relative;
 }
 .avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
+  min-width: 34px;
+  height: auto;
+  padding: 8px;
+  border-radius: 8px;
   border: 1px solid #666;
   background: #666;
   color: #fff;
   cursor: pointer;
+  white-space: normal;
+  word-break: keep-all;
+  line-height: 1.2;
 }
 .menu {
   position: absolute;

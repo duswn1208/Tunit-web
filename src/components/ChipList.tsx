@@ -1,13 +1,21 @@
 import React from 'react';
-export type ChipItem = { code: string; label: string };
+import Chip, { type ChipStyle } from './Chip';
+
+export type ChipItem = {
+  code: string;
+  label: string;
+  style?: ChipStyle;
+};
 
 type Props<T = ChipItem> = {
   items: T[];
-  onRemove: (code: string) => void;
+  onRemove?: (code: string) => void;
   emptyText?: React.ReactNode;
   className?: string;
   getCode?: (item: T) => string;
   getLabel?: (item: T) => string;
+  getStyle?: (item: T) => ChipStyle;
+  defaultStyle?: ChipStyle;
 };
 
 export default function ChipList<T = ChipItem>({
@@ -17,6 +25,8 @@ export default function ChipList<T = ChipItem>({
   className,
   getCode = (i: any) => i.code,
   getLabel = (i: any) => i.label,
+  getStyle = (i: any) => i.style,
+  defaultStyle,
 }: Props<T>) {
   return (
     <div className={['mls-chips', className].filter(Boolean).join(' ')}>
@@ -27,13 +37,15 @@ export default function ChipList<T = ChipItem>({
         : items.map((item) => {
             const code = getCode(item);
             const label = getLabel(item);
+            const style = getStyle(item);
             return (
-              <span key={code} className="mls-chip">
-                {label}
-                <button aria-label="선택 해제" onClick={() => onRemove(code)}>
-                  ✕
-                </button>
-              </span>
+              <Chip
+                key={code}
+                label={label}
+                {...defaultStyle}
+                {...style}
+                onRemove={onRemove ? () => onRemove(code) : undefined}
+              />
             );
           })}
     </div>
