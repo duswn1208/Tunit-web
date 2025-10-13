@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import InlineDateTimePicker from '../../../components/InlineDateTimePicker';
-import { fetchLessonCalendarStatus } from '../../mypage/api/lessonScheduleApi';
-import type { LessonCalendarStatusDto } from '../../mypage/api/lessonScheduleApi';
+import { fetchTutorSchedule } from '../api/scheduleApi';
+import type { LessonCalendarStatusDto } from '../types/lessonCalendar.types';
 
 interface LessonCalendarPickerProps {
   teacherId?: number;
@@ -10,6 +10,7 @@ interface LessonCalendarPickerProps {
   date?: string;
   time?: string;
   onChange: (date: string, time: string) => void;
+  size?: 'small' | 'medium' | 'large';
 }
 
 export default function LessonCalendarPicker({
@@ -19,6 +20,7 @@ export default function LessonCalendarPicker({
   date,
   time,
   onChange,
+  size = 'medium',
 }: LessonCalendarPickerProps) {
   const [calendarStatus, setCalendarStatus] = useState<LessonCalendarStatusDto | null>(null);
   const [reservedTimes, setReservedTimes] = useState<string[]>([]);
@@ -28,9 +30,10 @@ export default function LessonCalendarPicker({
   } | null>(null);
 
   useEffect(() => {
-    fetchLessonCalendarStatus({ startDate, endDate }, teacherId)
-      .then((data) => {
+    fetchTutorSchedule({ startDate, endDate }, teacherId)
+      .then((data: LessonCalendarStatusDto) => {
         setCalendarStatus(data);
+        console.log(data);
       })
       .catch(() => setCalendarStatus(null));
   }, [teacherId, startDate, endDate]);
@@ -40,54 +43,54 @@ export default function LessonCalendarPicker({
     if (calendarStatus && date) {
       let fixed: string[] = [];
       let reserved: string[] = [];
-      const dayOfWeekNum = new Date(date).getDay();
-      if (calendarStatus?.fixedLessonReservations) {
-        fixed = calendarStatus.fixedLessonReservations
-          .filter((reservation) => reservation.dayOfWeekNum === dayOfWeekNum)
-          .map((reservation) => reservation.startTime.slice(0, 5));
-      }
-      if (calendarStatus?.lessonReservations) {
-        reserved = calendarStatus.lessonReservations
-          .filter((reservation) => {
-            return reservation.date === date;
-          })
-          .map((reservation) => reservation.startTime.slice(0, 5));
-      }
 
-      const allReserved = Array.from(new Set([...fixed, ...reserved]));
-      setReservedTimes(allReserved);
+      // 0(일) ~ 6(토)를 1(월) ~ 7(일)로 변환
+      const jsDay = new Date(date).getDay();
+      const dayOfWeekNum = jsDay === 0 ? 7 : jsDay;
 
-      // 날짜에서 요일 구해서 availableTimes에서 조회
-      const available = Object.values(calendarStatus.availableTimes).find(
-        (v) => v.dayOfWeekNum === dayOfWeekNum
-      );
+      // 요일에 해당하는 가용 시간 찾기
+      const available = calendarStatus.availableTimes?.find((v) => v.dayOfWeekNum === dayOfWeekNum);
       if (available) {
         setAvailableTimeRange({ start: available.startTime, end: available.endTime });
       } else {
         setAvailableTimeRange(null);
       }
+
+      // 고정 예약 시간 필터링
+      if (calendarStatus?.fixedLessonReservations) {
+        fixed = calendarStatus.fixedLessonReservations
+          .filter((reservation) => reservation.dayOfWeekNum === dayOfWeekNum)
+          .map((reservation) => reservation.startTime.slice(0, 5));
+      }
+
+      // 일반 예약 시간 필터링
+      if (calendarStatus?.lessonReservations) {
+        reserved = calendarStatus.lessonReservations
+          .filter((reservation) => reservation.date === date)
+          .map((reservation) => reservation.startTime.slice(0, 5));
+      }
+
+      const allReserved = Array.from(new Set([...fixed, ...reserved]));
+      setReservedTimes(allReserved);
     } else {
       setReservedTimes([]);
       setAvailableTimeRange(null);
     }
   }, [calendarStatus, date]);
 
-  // availableTimes, holidays 등 추가 활용 가능
+  // 기본 시간 범위 설정 (availableTimeRange가 없는 경우)
+  const timeRange = availableTimeRange || { start: '09:00', end: '22:00' };
 
-  // 날짜 비활성화: availableTimes에 없는 날짜는 선택 불가
-  const disabledDates = calendarStatus
-    ? Object.keys(calendarStatus.availableTimes).length > 0
-      ? undefined
-      : []
-    : [];
-
-  // 시간 버튼 비활성화: 기본 06:00~12:00, availableTimeRange 범위 밖은 disabled
-
-  const timeRange = availableTimeRange || { start: '06:00', end: '24:00' };
-
-  // availableTimes에 포함된 요일만 활성화
-  const enabledDayOfWeeks = calendarStatus
-    ? Array.from(new Set(Object.values(calendarStatus.availableTimes).map((v) => v.dayOfWeekNum)))
+  // availableTimes에 포함된 요일만 활성화 (0 -> 7로 변환)
+  const enabledDayOfWeeks = calendarStatus?.availableTimes
+    ? Array.from(
+        new Set(
+          calendarStatus.availableTimes.map((v) => {
+            // 백엔드는 1(월) ~ 7(일)를 사용하므로 그대로 사용
+            return v.dayOfWeekNum;
+          })
+        )
+      )
     : [];
 
   return (
@@ -98,6 +101,7 @@ export default function LessonCalendarPicker({
       onChange={onChange}
       availableTimeRange={timeRange}
       enabledDayOfWeeks={enabledDayOfWeeks}
+      size={size}
     />
   );
 }

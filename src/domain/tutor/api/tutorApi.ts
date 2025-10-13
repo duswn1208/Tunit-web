@@ -1,7 +1,7 @@
 import { api } from '@/lib/api';
 
 export type TutorDetailResponse = {
-  tutorProfileNo: string;
+  tutorProfileNo: number;
   nickname: string;
   photoUrl?: string;
   introduce: string;
@@ -26,10 +26,13 @@ export type TutorDetailResponse = {
     startTime: string;
     endTime: string;
   }[];
+  tutorHolidayList: {
+    dayOfWeekNum: number;
+    startTime: string;
+    endTime: string;
+  }[];
 };
 
-export async function fetchTutorDetail(tutorId: string): Promise<TutorDetailResponse> {
-  return api<TutorDetailResponse>(`/api/tutors/${tutorId}`, {
-    method: 'GET',
-  });
+export async function fetchTutorDetail(tutorId: number): Promise<TutorDetailResponse> {
+  return api.get<TutorDetailResponse>(`/api/tutors/${tutorId}`);
 }

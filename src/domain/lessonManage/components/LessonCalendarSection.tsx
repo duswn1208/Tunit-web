@@ -7,6 +7,7 @@ interface LessonCalendarSectionProps {
   onSelectEvent: (event: LessonEvent) => void;
   onSelectSlot?: (slotInfo: any) => void;
   statusStyleMap?: Record<string, { dot: string; text: string }>;
+  size?: 'small' | 'medium' | 'large';
 }
 
 const LessonCalendarSection: React.FC<LessonCalendarSectionProps> = ({
@@ -14,10 +15,12 @@ const LessonCalendarSection: React.FC<LessonCalendarSectionProps> = ({
   onSelectEvent,
   onSelectSlot,
   statusStyleMap = statusStyle,
+  size = 'medium',
 }) => {
   return (
     <div className="lesson-calendar-section">
       <TuCalendar
+        size={size}
         events={lessonEvents}
         onSelectEvent={onSelectEvent}
         onSelectSlot={onSelectSlot}

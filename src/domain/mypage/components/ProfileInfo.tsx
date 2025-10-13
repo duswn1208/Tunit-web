@@ -5,7 +5,7 @@ export default function ProfileInfo() {
   const [profile, setProfile] = useState<any>(null);
 
   useEffect(() => {
-    api('/api/users/profile/me', { method: 'GET' }).then(setProfile);
+    api.get('/api/users/profile/me').then(setProfile);
   }, []);
 
   if (!profile) return null;

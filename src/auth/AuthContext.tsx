@@ -17,7 +17,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api('/api/users/auth/me', { credentials: 'include' })
+    api
+      .get('/api/users/auth/me')
       .then(setUser)
       .finally(() => setLoading(false));
   }, []);
@@ -28,7 +29,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = async () => {
-    api('/api/users/logout', { method: 'POST', credentials: 'include' }).then(() => {
+    api.post('/api/users/logout').then(() => {
       setUser(null);
       window.location.href = '/'; // 세션 정리 후 홈으로
     });

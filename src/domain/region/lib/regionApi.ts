@@ -6,14 +6,14 @@ const GET_SUB_GUGUN = (sidoCode: string) =>
   `/api/regions/${encodeURIComponent(sidoCode)}/subregions`;
 
 export function getSidos<T extends Region = Region>() {
-  return api<T[]>(GET_SIDO).then((list) => {
+  return api.get<T[]>(GET_SIDO).then((list) => {
     // 시/도 목록을 REGION_SIDO_ORDER 순서로 정렬
     return dedupeAndSortSidos(list);
   });
 }
 
 export function getSubregions<T extends Region = Region>(sidoCode: string) {
-  return api<T[]>(GET_SUB_GUGUN(sidoCode));
+  return api.get<T[]>(GET_SUB_GUGUN(sidoCode));
 }
 
 function dedupeAndSortSidos(list: Region[]) {

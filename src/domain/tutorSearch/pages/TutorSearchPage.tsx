@@ -29,7 +29,8 @@ export default function TutorSearchPage() {
   // 튜터 리스트
   const [tutors, setTutors] = useState<TutorProfile[]>([]);
   useEffect(() => {
-    api('/api/users/profile/me', { method: 'GET' })
+    api
+      .get('/api/users/profile/me')
       .then((res) => {
         const profile = res as StudentProfileResponse;
         setStudentLessons(profile.studentInfo.lessonSubcategoryList);

@@ -13,7 +13,5 @@ export type TutorDetailResponse = {
 };
 
 export async function fetchTutorDetail(tutorId: number): Promise<TutorDetailResponse> {
-  return api<TutorDetailResponse>(`/api/tutors/${tutorId}`, {
-    method: 'GET',
-  });
+  return api.get<TutorDetailResponse>(`/api/tutors/${tutorId}`);
 }

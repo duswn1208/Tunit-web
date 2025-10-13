@@ -1,0 +1,165 @@
+.inline-datepicker-container {
+  width: 100%;
+}
+
+.calendar-wrapper {
+  width: 100%;
+}
+
+/* Override react-calendar default styles */
+.react-calendar {
+  width: 100% !important;
+  max-width: none !important;
+  border: 1px solid #e0e0e0;
+  line-height: 1.125;
+  padding: 1rem;
+  background-color: white;
+}
+
+/* Navigation arrows and month view */
+.react-calendar__navigation {
+  margin-bottom: 1rem;
+}
+
+.react-calendar__navigation button {
+  min-width: 44px;
+  background: none;
+  font-size: 1.2em;
+}
+
+/* Month grid */
+.react-calendar__month-view__weekdays {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.875em;
+}
+
+.react-calendar__month-view__days__day {
+  padding: 1em !important;
+  height: 100px;
+}
+
+/* Size variations */
+.small .react-calendar__month-view__days__day {
+  padding: 0.5em !important;
+  height: 60px;
+}
+
+.medium .react-calendar__month-view__days__day {
+  padding: 0.75em !important;
+  height: 80px;
+}
+
+.large .react-calendar__month-view__days__day {
+  padding: 1em !important;
+  height: 100px;
+}
+ {
+  width: 100%;
+}
+
+.calendar-wrapper.small .react-calendar {
+  width: 300px;
+  max-width: 100%;
+}
+
+.calendar-wrapper.medium .react-calendar {
+  width: 500px;
+  max-width: 100%;
+}
+
+.calendar-wrapper.large .react-calendar {
+  width: 800px;
+  max-width: 100%;
+}
+
+.react-calendar {
+  border: 1px solid #e0e0e0;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.react-calendar__month-view__days__day {
+  font-size: 1rem;
+}
+
+.small .react-calendar__month-view__days__day {
+  font-size: 0.875rem;
+  padding: 0.5em;
+}
+
+.medium .react-calendar__month-view__days__day {
+  font-size: 1rem;
+  padding: 0.75em;
+}
+
+.large .react-calendar__month-view__days__day {
+  font-size: 1.25rem;
+  padding: 1em;
+}
+
+.time-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.time-button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #333;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.time-button.selected {
+  border: 2px solid #1976d2;
+  background: #1976d2;
+  color: #fff;
+}
+
+.time-button.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.selected-datetime {
+  margin-top: 12px;
+  font-weight: 500;
+}
+
+/* Calendar size adjustments */
+.calendar-small .react-calendar__tile {
+  padding: 0.5em;
+  line-height: 1.5;
+}
+
+.calendar-medium .react-calendar__tile {
+  padding: 0.75em;
+  line-height: 2;
+}
+
+.calendar-large .react-calendar__tile {
+  padding: 1em;
+  line-height: 2.5;
+}
+
+/* Time button size adjustments */
+.calendar-small .time-button {
+  padding: 6px 12px;
+  font-size: 0.8em;
+}
+
+.calendar-medium .time-button {
+  padding: 8px 16px;
+  font-size: 1em;
+}
+
+.calendar-large .time-button {
+  padding: 10px 20px;
+  font-size: 1.2em;
+}

@@ -13,9 +13,5 @@ export interface TutorProfile {
 }
 
 export async function fetchTutors(params: TutorSearchParams): Promise<TutorProfile[]> {
-  return api<TutorProfile[]>('/api/tutors/search', {
-    method: 'POST',
-    body: JSON.stringify(params),
-    headers: { 'Content-Type': 'application/json' },
-  });
+  return api.post<TutorProfile[]>('/api/tutors/search', params);
 }

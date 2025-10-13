@@ -45,10 +45,7 @@ export async function fetchLessonCalendarStatus(
   teacherId?: number
 ): Promise<LessonCalendarStatusDto> {
   const url = teacherId
-    ? `/api/lessons/schedule/info?tutorProfileNo=${teacherId}&startDate=${body.startDate}&endDate=${body.endDate}`
-    : `/api/lessons/schedule/info?startDate=${body.startDate}&endDate=${body.endDate}`;
-  return api<LessonCalendarStatusDto>(url, {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
-  });
+    ? `/api/lessons/schedule/me?tutorProfileNo=${teacherId}&startDate=${body.startDate}&endDate=${body.endDate}`
+    : `/api/lessons/schedule/me?startDate=${body.startDate}&endDate=${body.endDate}`;
+  return api.get<LessonCalendarStatusDto>(url);
 }

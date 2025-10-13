@@ -18,10 +18,8 @@ export default function ExcelUploader({ inputRef }: ExcelUploaderProps) {
     formData.append('file', file);
     let result;
     try {
-      result = await api<FailResult>('/api/fixed-lessons/upload/excel', {
-        method: 'POST',
-        body: formData,
-      });
+      // FormData의 경우 api.post가 자동으로 Content-Type을 처리
+      result = await api.post<FailResult>('/api/fixed-lessons/upload/excel', formData);
       setFailedResult(result);
       if (result.failCount === 0) {
         alert('업로드 성공! 모든 회원이 정상 등록되었습니다.');

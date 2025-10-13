@@ -1,19 +1,25 @@
-import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useTutorDetail } from '../hooks/useTutorDetail';
-import { format } from 'date-fns';
-import Chip, { type ChipStyle } from '../../../components/Chip';
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import Chip from '../../../components/Chip';
 import TutorProfileCard from '../components/TutorProfileCard';
-import LessonCalendarSection from '../../lessonManage/components/LessonCalendarSection';
+import LessonCalendarPicker from '../../lessonManage/components/LessonCalendarPicker';
+import { useTutorDetail } from '../hooks/useTutorDetail';
 import '../css/tutor-detail.css';
+import '../css/tutor-calendar.css';
 
 const DAYS_OF_WEEK = ['월', '화', '수', '목', '금', '토', '일'] as const;
 
 export default function TutorDetailPage() {
   const { tutorId } = useParams();
-  const navigate = useNavigate();
   const { data, isLoading, error } = useTutorDetail(tutorId!);
-  const [showBookingCalendar, setShowBookingCalendar] = React.useState(false);
+  const [showBookingCalendar, setShowBookingCalendar] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string>();
+  const [selectedTime, setSelectedTime] = useState<string>();
+
+  // 캘린더 날짜 범위 설정
+  const now = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
 
   if (isLoading) {
     return (
@@ -46,7 +52,7 @@ export default function TutorDetailPage() {
     <div className="tutor-detail-page">
       <div className="tutor-detail-container">
         {/* 프로필 헤더 */}
-        <TutorProfileCard tutor={data} variant="full" />
+        <TutorProfileCard tutor={{ ...data, tutorId: parseInt(tutorId!, 10) }} variant="full" />
       </div>
 
       <div className="info-grid">
@@ -130,23 +136,16 @@ export default function TutorDetailPage() {
               </button>
             </div>
             <div className="calendar-container">
-              <LessonCalendarSection
-                lessonEvents={[]}
-                onSelectEvent={() => {}}
-                onSelectSlot={(slotInfo: { start: Date }) => {
-                  const selectedDate = slotInfo.start;
-                  const dayOfWeek = selectedDate.getDay();
-
-                  // 튜터의 가능한 시간대 확인
-                  const available = data.tutorAvailableTimeList?.find(
-                    (time) => time.dayOfWeekNum === dayOfWeek
-                  );
-
-                  if (available) {
-                    // TODO: 예약 모달 표시
-                  } else {
-                    alert('선택하신 날짜는 레슨이 불가능합니다.');
-                  }
+              <LessonCalendarPicker
+                teacherId={parseInt(tutorId!, 10)}
+                startDate={monthStart.toISOString().split('T')[0]}
+                endDate={monthEnd.toISOString().split('T')[0]}
+                date={selectedDate}
+                time={selectedTime}
+                size="large"
+                onChange={(date, time) => {
+                  setSelectedDate(date);
+                  setSelectedTime(time);
                 }}
               />
             </div>

@@ -9,7 +9,8 @@
   padding: 0 !important;
 }
 .common-calendar-card {
-  max-width: 900px;
+  width: 100%;
+  max-width: 1200px; /* 더 큰 최대 너비로 조정 */
   /* margin: 32px auto; */
   background: #fff;
   border-radius: 16px;
@@ -29,8 +30,48 @@
   letter-spacing: -1px;
 }
 
-.common-calendar-content {
-  height: 600px;
+.react-calendar {
+  width: 100% !important;
+  max-width: none !important;
+  border: 1px solid #e0e0e0;
+  line-height: 1.125;
+  padding: 1rem;
+}
+
+.react-calendar button {
+  margin: 0;
+  border: 0;
+  outline: none;
+}
+
+.react-calendar__month-view__days__day {
+  padding: 1em !important;
+  height: 100px;
+}
+
+/* Calendar size variations */
+.small .react-calendar {
+  font-size: 0.875rem;
+}
+
+.small .react-calendar__month-view__days__day {
+  height: 80px;
+}
+
+.medium .react-calendar {
+  font-size: 1rem;
+}
+
+.medium .react-calendar__month-view__days__day {
+  height: 100px;
+}
+
+.large .react-calendar {
+  font-size: 1.125rem;
+}
+
+.large .react-calendar__month-view__days__day {
+  height: 120px;
 }
 
 .brand-chip-dot {

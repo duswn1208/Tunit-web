@@ -91,10 +91,7 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
               dayOfWeekSet: Array.from(form.dayOfWeekSet),
             };
 
-      await api(uri, {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      }).then((res) => {
+      await api.post(uri, payload).then((res) => {
         alert(res);
         setForm({
           studentName: '',

@@ -18,6 +18,7 @@ interface TuCalendarProps {
   onSelectEvent?: (event: any) => void;
   onSelectSlot?: (slotInfo: any) => void;
   statusStyleMap?: Record<string, { dot: string; text: string }>;
+  size?: 'small' | 'medium' | 'large';
 }
 
 import { useState } from 'react';
@@ -27,6 +28,7 @@ export default function TuCalendar({
   onSelectEvent,
   onSelectSlot,
   statusStyleMap,
+  size = 'medium',
 }: TuCalendarProps) {
   const [view, setView] = useState<View>(Views.MONTH);
   const [date, setDate] = useState(new Date());
@@ -41,7 +43,7 @@ export default function TuCalendar({
 
   return (
     <div className="common-calendar-card">
-      <div className="common-calendar-content">
+      <div className={`common-calendar-content tunit-calendar ${size}`}>
         <Calendar
           events={events}
           localizer={localizer}

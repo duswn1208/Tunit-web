@@ -24,41 +24,44 @@ export default function LessonManageLayout() {
   const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
 
   const fetchLessons = () => {
-    api(
-      `/api/lessons?startDate=${monthStart.toISOString().slice(0, 10)}&endDate=${monthEnd
-        .toISOString()
-        .slice(0, 10)}`
-    ).then((data: any) => {
-      const formatTime = (time: string) => time.slice(0, 5);
-      let mappedLessonList = (data.lessonList ?? []).map((item: any) => ({
-        title: `${item.studentName}(${formatTime(item.startTime)})`,
-        status: item.status,
-        studentName: item.studentName,
-        date: new Date(item.date),
-        start: new Date(`${item.date}T${item.startTime}`),
-        end: new Date(`${item.date}T${item.endTime}`),
-        allDay: false,
-        id: item.lessonReservationNo,
-        category: item.category,
-      }));
-      // 필터 적용
-      if (filterStudent) {
-        mappedLessonList = mappedLessonList.filter((l: { studentName: string | string[] }) =>
-          l.studentName.includes(filterStudent)
-        );
-      }
-      if (filterStatus) {
-        console.log(mappedLessonList);
+    api
+      .get(`/api/lessons`, {
+        params: {
+          startDate: monthStart.toISOString().slice(0, 10),
+          endDate: monthEnd.toISOString().slice(0, 10),
+        },
+      })
+      .then((data: any) => {
+        const formatTime = (time: string) => time.slice(0, 5);
+        let mappedLessonList = (data.lessonList ?? []).map((item: any) => ({
+          title: `${item.studentName}(${formatTime(item.startTime)})`,
+          status: item.status,
+          studentName: item.studentName,
+          date: new Date(item.date),
+          start: new Date(`${item.date}T${item.startTime}`),
+          end: new Date(`${item.date}T${item.endTime}`),
+          allDay: false,
+          id: item.lessonReservationNo,
+          category: item.category,
+        }));
+        // 필터 적용
+        if (filterStudent) {
+          mappedLessonList = mappedLessonList.filter((l: { studentName: string | string[] }) =>
+            l.studentName.includes(filterStudent)
+          );
+        }
+        if (filterStatus) {
+          console.log(mappedLessonList);
 
-        mappedLessonList = mappedLessonList.filter(
-          (l: { status: { name: string } }) => l.status.name === filterStatus
-        );
-      }
-      setLessonSummary({
-        ...data,
-        lessonList: mappedLessonList,
+          mappedLessonList = mappedLessonList.filter(
+            (l: { status: { name: string } }) => l.status.name === filterStatus
+          );
+        }
+        setLessonSummary({
+          ...data,
+          lessonList: mappedLessonList,
+        });
       });
-    });
   };
 
   useEffect(() => {
@@ -69,7 +72,7 @@ export default function LessonManageLayout() {
   const deleteLesson = async (lessonId?: number) => {
     if (!lessonId) return;
     try {
-      await api(`/api/lessons/${lessonId}`, { method: 'DELETE' });
+      await api.delete(`/api/lessons/${lessonId}`);
       fetchLessons();
       setSelectedEvent(null);
     } catch (err) {
@@ -80,11 +83,7 @@ export default function LessonManageLayout() {
   // 상태변경 메서드: 상위에서 API 호출 및 리패치
   const changeLessonStatus = async (lessonId: number, nextStatus: string) => {
     try {
-      await api(`/api/lessons/${lessonId}/status`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: nextStatus }),
-      });
+      await api.post(`/api/lessons/${lessonId}/status`, { status: nextStatus });
       fetchLessons();
       setSelectedEvent(null);
       alert('변경되었습니다.');

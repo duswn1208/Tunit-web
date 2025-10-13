@@ -2,6 +2,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { useState } from 'react';
 import { format } from 'date-fns';
+import './InlineDateTimePicker.css';
 
 interface Props {
   date?: string;
@@ -10,6 +11,7 @@ interface Props {
   onChange: (date: string, time: string) => void;
   availableTimeRange?: { start: string; end: string };
   enabledDayOfWeeks?: number[];
+  size?: 'small' | 'medium' | 'large';
 }
 
 const times = Array.from({ length: 19 }, (_, i) => {
@@ -24,6 +26,7 @@ export default function InlineDateTimePicker({
   onChange,
   availableTimeRange,
   enabledDayOfWeeks,
+  size = 'medium',
 }: Props) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(date ? new Date(date) : null);
   const [selectedTime, setSelectedTime] = useState<string>(time || '');
@@ -41,13 +44,14 @@ export default function InlineDateTimePicker({
   };
 
   return (
-    <div>
-      <div style={{ width: '100%' }}>
+    <div className="inline-datepicker-container">
+      <div className={`calendar-wrapper ${size}`}>
         <Calendar
           value={selectedDate}
           onChange={handleDateChange}
           minDate={new Date()}
           locale="ko-KR"
+          className={size}
           tileDisabled={({ date }) => {
             // enabledDayOfWeeks에 없는 요일의 모든 날짜 비활성화
             if (!enabledDayOfWeeks || enabledDayOfWeeks.length === 0) return false;

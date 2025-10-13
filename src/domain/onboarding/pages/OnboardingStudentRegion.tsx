@@ -31,10 +31,7 @@ export default function OnboardingStudentRegion() {
     alert(JSON.stringify(payload, null, 2)); // payload 확인용
 
     // 3. API 요청 (api.ts 사용)
-    return await api('/api/students/profile/join', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    });
+    return await api.post('/api/students/profile/join', payload);
   }
 
   const goNext = async () => {

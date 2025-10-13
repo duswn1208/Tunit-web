@@ -12,11 +12,7 @@ export interface TutorLessonsCategory {
 }
 
 export async function fetchLessonCategories(): Promise<TutorLessonsCategory[]> {
-  const res = await api('/api/lessons/tutor/categories');
-  if (!res) throw new Error('레슨 카테고리 불러오기 실패');
-
-  if (Array.isArray(res)) {
-    return res as TutorLessonsCategory[];
-  }
-  return [];
+  const categories = await api.get<TutorLessonsCategory[]>('/api/lessons/tutor/categories');
+  if (!categories) return [];
+  return categories;
 }
