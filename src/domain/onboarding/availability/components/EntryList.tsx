@@ -1,16 +1,6 @@
-import type { DayOfWeek } from '../types/availability';
 import type { Entry } from '../hooks/useWeeklyForm';
 import OnboardingNextButton from '../../common/components/OnboardingNextButton';
-
-const DAY_LABELS: Record<DayOfWeek, string> = {
-  1: '월',
-  2: '화',
-  3: '수',
-  4: '목',
-  5: '금',
-  6: '토',
-  7: '일',
-};
+import { DAY_LABELS } from '../../../../constants/date';
 
 interface Props {
   entries: Entry[];

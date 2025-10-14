@@ -1,5 +1,4 @@
-// 요일: 1=Mon ... 7=Sun (DB/백엔드와 동일하게 사용)
-export type DayOfWeek = 1 | 2 | 3 | 4 | 5 | 6 | 7;
+import type { DayOfWeekNumber } from '@/constants/date';
 
 // 시간 구간 (HH:mm 문자열)
 export interface TimeRange {
@@ -9,7 +8,7 @@ export interface TimeRange {
 
 // 요일별 가능 시간 아이템
 export interface WeeklyItem {
-  dayOfWeek: DayOfWeek;
+  dayOfWeek: DayOfWeekNumber;
   ranges: TimeRange[];
 }
 
@@ -21,7 +20,7 @@ export interface WeeklyAvailability {
 // API 요청/응답 DTO
 export interface WeeklyAvailabilityRequest {
   items: {
-    dayOfWeek: DayOfWeek;
+    dayOfWeek: DayOfWeekNumber;
     startTime: string;
     endTime: string;
   }[];
@@ -30,7 +29,7 @@ export interface WeeklyAvailabilityRequest {
 export interface WeeklyAvailabilityResponse {
   items: {
     id: number;
-    dayOfWeek: DayOfWeek;
+    dayOfWeek: DayOfWeekNumber;
     startTime: string;
     endTime: string;
   }[];

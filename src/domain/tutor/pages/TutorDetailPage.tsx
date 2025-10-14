@@ -3,23 +3,61 @@ import { useParams } from 'react-router-dom';
 import Chip from '../../../components/Chip';
 import TutorProfileCard from '../components/TutorProfileCard';
 import LessonCalendarPicker from '../../lessonManage/components/LessonCalendarPicker';
+import { api } from '../../../lib/api';
 import { useTutorDetail } from '../hooks/useTutorDetail';
+import { DAYS_OF_WEEK, getCalendarRange } from '../../../constants/date';
 import '../css/tutor-detail.css';
 import '../css/tutor-calendar.css';
-
-const DAYS_OF_WEEK = ['월', '화', '수', '목', '금', '토', '일'] as const;
 
 export default function TutorDetailPage() {
   const { tutorId } = useParams();
   const { data, isLoading, error } = useTutorDetail(tutorId!);
   const [showBookingCalendar, setShowBookingCalendar] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<string>();
+  const [selectedDate, setSelectedDate] = useState<string>(
+    () => new Date().toISOString().split('T')[0]
+  );
   const [selectedTime, setSelectedTime] = useState<string>();
+  const [selectedLesson, setSelectedLesson] = useState<string>();
+  const [requestMessage, setRequestMessage] = useState<string>('');
 
   // 캘린더 날짜 범위 설정
-  const now = new Date();
-  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-  const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+  const { start: monthStart, end: monthEnd } = getCalendarRange();
+
+  // 레슨 예약 제출 처리
+  const handleReservationSubmit = async () => {
+    if (!selectedDate || !selectedTime) {
+      alert('날짜와 시간을 선택해주세요.');
+      return;
+    }
+    if (!selectedLesson) {
+      alert('레슨 과목을 선택해주세요.');
+      return;
+    }
+
+    try {
+      await api.post('/api/lessons/reserve', {
+        tutorProfileNo: parseInt(tutorId!, 10),
+        startTime: selectedTime,
+        lesson: {
+          tutorLessonNo: parseInt(selectedLesson!, 10),
+        },
+        lessonDate: selectedDate,
+        reservationStatus: 'PENDING',
+        memo: requestMessage || null,
+      });
+
+      alert('상담/체험 레슨 예약 요청이 전송되었습니다.');
+      setShowBookingCalendar(false);
+    } catch (error) {
+      alert('예약 요청 중 오류가 발생했습니다. 다시 시도해주세요.');
+      console.error('Reservation error:', error);
+    }
+  };
+
+  // 페이지 로드 시 자동으로 예약 캘린더 표시
+  React.useEffect(() => {
+    setShowBookingCalendar(true);
+  }, []);
 
   if (isLoading) {
     return (
@@ -148,6 +186,44 @@ export default function TutorDetailPage() {
                   setSelectedTime(time);
                 }}
               />
+
+              {/* 레슨 선택 및 요청사항 입력 */}
+              <div className="booking-form">
+                <div className="lesson-select-container">
+                  <label htmlFor="lessonSelect">레슨 과목 선택</label>
+                  <select
+                    id="lessonSelect"
+                    className="lesson-select"
+                    value={selectedLesson || ''}
+                    onChange={(e) => setSelectedLesson(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      레슨 과목을 선택해주세요
+                    </option>
+                    {data.lessonSubcategoryList?.map((lesson) => (
+                      <option key={lesson.tutorLessonNo} value={lesson.tutorLessonNo}>
+                        {lesson.lessonCategory.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="request-input-container">
+                  <label htmlFor="requestMessage">요청사항</label>
+                  <textarea
+                    id="requestMessage"
+                    className="request-input"
+                    placeholder="튜터에게 전달할 요청사항을 입력해주세요. (선택사항)"
+                    value={requestMessage}
+                    onChange={(e) => setRequestMessage(e.target.value)}
+                    rows={4}
+                  />
+                </div>
+                <div className="booking-buttons">
+                  <button className="booking-button" onClick={handleReservationSubmit}>
+                    상담/체험 레슨 예약
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )}

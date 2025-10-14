@@ -1,21 +1,21 @@
 // src/domain/availability/hooks/useWeeklyForm.ts
 import { useMemo, useState } from 'react';
-import type { DayOfWeek } from '../types/availability';
+import type { DayOfWeekNumber } from '../../../../constants/date';
 import { isValidRange, hasOverlap, toMinutes } from '../lib/timeUtils';
 
-export type Entry = { days: DayOfWeek[]; startTime: string; endTime: string };
+export type Entry = { days: DayOfWeekNumber[]; startTime: string; endTime: string };
 
-const ALL_DAYS: DayOfWeek[] = [1, 2, 3, 4, 5, 6, 7];
+const ALL_DAYS: DayOfWeekNumber[] = [1, 2, 3, 4, 5, 6, 7];
 
 export function useWeeklyForm() {
-  const [selectedDays, setSelectedDays] = useState<Set<DayOfWeek>>(new Set());
+  const [selectedDays, setSelectedDays] = useState<Set<DayOfWeekNumber>>(new Set());
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('12:00');
   const [entries, setEntries] = useState<Entry[]>([]);
 
   const dayArray = useMemo(() => ALL_DAYS.filter((d) => selectedDays.has(d)), [selectedDays]);
 
-  function toggleDay(d: DayOfWeek) {
+  function toggleDay(d: DayOfWeekNumber) {
     setSelectedDays((prev) => {
       const next = new Set(prev);
       next.has(d) ? next.delete(d) : next.add(d);

@@ -1,24 +1,15 @@
-import type { DayOfWeek } from '../types/availability';
+import { type DayOfWeekNumber, DAY_LABELS } from '../../../../constants/date';
 
-const DAY_LABELS: Record<DayOfWeek, string> = {
-  1: '월',
-  2: '화',
-  3: '수',
-  4: '목',
-  5: '금',
-  6: '토',
-  7: '일',
-};
-const ALL_DAYS: DayOfWeek[] = [1, 2, 3, 4, 5, 6, 7];
+const ALL_DAYS: DayOfWeekNumber[] = [1, 2, 3, 4, 5, 6, 7];
 
 interface Props {
-  selected: Set<DayOfWeek>;
-  onToggle: (d: DayOfWeek) => void;
+  selected: Set<DayOfWeekNumber>;
+  onToggle: (d: DayOfWeekNumber) => void;
   multi?: boolean; // true: 다중선택, false: 단일선택
 }
 
 export default function DayChips({ selected, onToggle, multi = true }: Props) {
-  const handleClick = (d: DayOfWeek) => {
+  const handleClick = (d: DayOfWeekNumber) => {
     if (multi) {
       onToggle(d);
     } else {
