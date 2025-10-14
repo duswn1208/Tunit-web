@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import Chip from '../../../components/Chip';
 import TutorProfileCard from '../components/TutorProfileCard';
 import LessonCalendarPicker from '../../lessonManage/components/LessonCalendarPicker';
 import { api } from '../../../lib/api';
 import { useTutorDetail } from '../hooks/useTutorDetail';
+import { useReservationState } from '../hooks/useReservationState';
 import { DAYS_OF_WEEK, getCalendarRange } from '../../../constants/date';
 import '../css/tutor-detail.css';
 import '../css/tutor-calendar.css';
@@ -12,13 +13,13 @@ import '../css/tutor-calendar.css';
 export default function TutorDetailPage() {
   const { tutorId } = useParams();
   const { data, isLoading, error } = useTutorDetail(tutorId!);
-  const [showBookingCalendar, setShowBookingCalendar] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<string>(
-    () => new Date().toISOString().split('T')[0]
-  );
-  const [selectedTime, setSelectedTime] = useState<string>();
-  const [selectedLesson, setSelectedLesson] = useState<string>();
-  const [requestMessage, setRequestMessage] = useState<string>('');
+  const {
+    state: { showBookingCalendar, selectedDate, selectedTime, selectedLesson, requestMessage },
+    toggleCalendar,
+    setDateTime,
+    setLesson,
+    setMessage,
+  } = useReservationState();
 
   // 캘린더 날짜 범위 설정
   const { start: monthStart, end: monthEnd } = getCalendarRange();
@@ -47,7 +48,7 @@ export default function TutorDetailPage() {
       });
 
       alert('상담/체험 레슨 예약 요청이 전송되었습니다.');
-      setShowBookingCalendar(false);
+      toggleCalendar(false);
     } catch (error) {
       alert('예약 요청 중 오류가 발생했습니다. 다시 시도해주세요.');
       console.error('Reservation error:', error);
@@ -56,7 +57,7 @@ export default function TutorDetailPage() {
 
   // 페이지 로드 시 자동으로 예약 캘린더 표시
   React.useEffect(() => {
-    setShowBookingCalendar(true);
+    toggleCalendar(true);
   }, []);
 
   if (isLoading) {
@@ -135,7 +136,7 @@ export default function TutorDetailPage() {
             <div className="info-card">
               <div className="schedule-header">
                 <h2 className="info-title">레슨 가능 시간</h2>
-                <button className="booking-button" onClick={() => setShowBookingCalendar(true)}>
+                <button className="booking-button" onClick={() => toggleCalendar(true)}>
                   레슨 예약하기
                 </button>
               </div>
@@ -169,7 +170,7 @@ export default function TutorDetailPage() {
           <div className="info-card full-width">
             <div className="schedule-header">
               <h2 className="info-title">레슨 예약</h2>
-              <button className="back-button" onClick={() => setShowBookingCalendar(false)}>
+              <button className="back-button" onClick={() => toggleCalendar(false)}>
                 뒤로 가기
               </button>
             </div>
@@ -182,8 +183,7 @@ export default function TutorDetailPage() {
                 time={selectedTime}
                 size="large"
                 onChange={(date, time) => {
-                  setSelectedDate(date);
-                  setSelectedTime(time);
+                  setDateTime(date, time);
                 }}
               />
 
@@ -195,7 +195,7 @@ export default function TutorDetailPage() {
                     id="lessonSelect"
                     className="lesson-select"
                     value={selectedLesson || ''}
-                    onChange={(e) => setSelectedLesson(e.target.value)}
+                    onChange={(e) => setLesson(e.target.value)}
                   >
                     <option value="" disabled>
                       레슨 과목을 선택해주세요
@@ -214,7 +214,7 @@ export default function TutorDetailPage() {
                     className="request-input"
                     placeholder="튜터에게 전달할 요청사항을 입력해주세요. (선택사항)"
                     value={requestMessage}
-                    onChange={(e) => setRequestMessage(e.target.value)}
+                    onChange={(e) => setMessage(e.target.value)}
                     rows={4}
                   />
                 </div>
