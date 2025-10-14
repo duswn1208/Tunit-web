@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
-import OnboardingStepLessonForm from '../lesson/components/OnboardingStepLessonForm';
-import OnboardingLayout from '../common/components/OnboardingLayout';
-import OnboardingNextButton from '../common/components/OnboardingNextButton';
-import { useOnboardingLesson } from '../lesson/hooks/useLesson';
+import OnboardingStepLessonForm from '@/domain/onboarding/components/OnboardingStepLessonForm.tsx';
+import OnboardingLayout from '@/domain/onboarding/components/OnboardingLayout';
+import OnboardingNextButton from '@/domain/onboarding/components/OnboardingNextButton';
+import { useOnboardingLesson } from '../../lesson/hooks/useLesson.ts';
 import { setLessonCategory } from '../../../lib/onboarding';
 
 export default function OnboardingStudentLesson() {

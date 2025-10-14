@@ -1,4 +1,4 @@
-import ProfileInfo from '../domain/mypage/components/ProfileInfo';
+import ProfileInfo from '../domain/profile/components/ProfileInfo.tsx';
 import StudentRegister from '../domain/mypage/components/StudentRegister';
 import MyPageLayout from '../domain/mypage/components/MyPageLayout';
 

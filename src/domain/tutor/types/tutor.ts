@@ -1,4 +1,4 @@
-import type { TutorProfile } from '../../tutorSearch/components/TutorProfileCard';
+import type { TutorProfile } from '@/domain/search/components/TutorProfileCard';
 
 export interface TutorDetailResponse {
   tutor: TutorProfile;

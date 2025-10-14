@@ -1,9 +1,9 @@
-import OnboardingStepWeekly from '../availability/components/OnboardingStepWeekly';
-import OnboardingLayout from '../common/components/OnboardingLayout';
-import OnboardingNextButton from '../common/components/OnboardingNextButton';
+import OnboardingStepWeekly from '@/domain/dayTime/components/OnboardingStepWeekly';
+import OnboardingLayout from '@/domain/onboarding/components/OnboardingLayout';
+import OnboardingNextButton from '@/domain/onboarding/components/OnboardingNextButton';
 
 import { api } from '../../../lib/api';
-import { useWeeklyForm } from '../availability/hooks/useWeeklyForm';
+import { useWeeklyForm } from '@/domain/dayTime/hooks/useWeeklyForm';
 import {
   loadUserRole,
   loadTutorProfile,

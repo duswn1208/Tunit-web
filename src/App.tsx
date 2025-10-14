@@ -13,7 +13,7 @@ import { AuthProvider } from './auth/AuthContext.tsx';
 import RootLayout from './layouts/RootLayout.tsx';
 import OnboardingStudentLesson from './domain/onboarding/pages/OnboardingStudentLesson.tsx';
 import OnboardingStudentRegion from './domain/onboarding/pages/OnboardingStudentRegion.tsx';
-import TutorSearchPage from './domain/tutorSearch/pages/TutorSearchPage.tsx';
+import TutorSearchPage from '@/domain/search/pages/TutorSearchPage.tsx';
 import TutorDetailPage from './domain/tutor/pages/TutorDetailPage.tsx';
 
 // React Query 클라이언트 생성

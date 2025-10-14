@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 
-import OnboardingLayout from '../common/components/OnboardingLayout';
-import OnboardingNextButton from '../common/components/OnboardingNextButton';
-import OnboardingRegionForm from '../region/components/OnboardingRegionForm';
+import OnboardingLayout from '@/domain/onboarding/components/OnboardingLayout';
+import OnboardingNextButton from '@/domain/onboarding/components/OnboardingNextButton';
+import OnboardingRegionForm from '@/domain/onboarding/components/OnboardingRegionForm.tsx';
 
 import { setRegion } from '../../../lib/onboarding/storage';
-import useOnboardingRegion from '../region/hooks/useRegion';
+import useOnboardingRegion from '../hooks/useRegion.ts';
 
 import { loadUserRole, loadLessonCategory, loadRegion } from '../../../lib/onboarding';
 import { api } from '../../../lib/api';

@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import { type LessonEvent, type LessonSummary } from '../domain/lessonManage/types/lessonCalendar';
+import { type LessonEvent, type LessonSummary } from '@/domain/lesson/types/lessonCalendar';
 import { api } from '../lib/api';
-import LessonCalendarSection from '../domain/lessonManage/components/LessonCalendarSection';
-import LessonCardSection from '../domain/lessonManage/components/LessonCardSection';
-import LessonDetailModal from '../domain/lessonManage/components/LessonDetailModal';
+import LessonCalendarSection from '@/domain/lesson/components/LessonCalendarSection';
+import LessonCardSection from '@/domain/lesson/components/LessonCardSection';
+import LessonDetailModal from '@/domain/lesson/components/LessonDetailModal';
 import Header from '../components/Header';
 import '../css/components/lesson-manage.css';
-import LessonListSection from '../domain/lessonManage/components/LessonListSection';
-import LessonFilterSection from '../domain/lessonManage/components/LessonFilterSection';
-import LessonManageViewToggle from '../domain/lessonManage/components/LessonManageViewToggle';
-import LessonRegisterModal from '../domain/lessonManage/components/LessonRegisterModal';
+import LessonListSection from '@/domain/lesson/components/LessonListSection';
+import LessonFilterSection from '@/domain/lesson/components/LessonFilterSection';
+import LessonManageViewToggle from '@/domain/lesson/components/LessonManageViewToggle';
+import LessonRegisterModal from '@/domain/lesson/components/LessonRegisterModal';
 
 export default function LessonManageLayout() {
   const [filterStudent, setFilterStudent] = useState('');

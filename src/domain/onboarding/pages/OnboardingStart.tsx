@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
-import OnboardingNextButton from '../common/components/OnboardingNextButton';
+import OnboardingNextButton from '@/domain/onboarding/components/OnboardingNextButton';
 import { RadioGroup, FormField } from '../../../components';
-import OnboardingLayout from '../common/components/OnboardingLayout';
+import OnboardingLayout from '@/domain/onboarding/components/OnboardingLayout';
 import { setUserRole } from '../../../lib/onboarding';
 
 type Role = 'TUTOR' | 'STUDENT';

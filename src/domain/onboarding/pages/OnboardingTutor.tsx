@@ -2,8 +2,8 @@ import { useForm } from 'react-hook-form';
 
 import type { Step2 } from '../../../type/onboarding';
 
-import OnboardingNextButton from '../common/components/OnboardingNextButton';
-import OnboardingLayout from '../common/components/OnboardingLayout';
+import OnboardingNextButton from '@/domain/onboarding/components/OnboardingNextButton';
+import OnboardingLayout from '@/domain/onboarding/components/OnboardingLayout';
 import { FormField } from '../../../components';
 import { loadTutorProfile, loadUserRole, setTutorProfile } from '../../../lib/onboarding';
 import { useNavigate } from 'react-router-dom';

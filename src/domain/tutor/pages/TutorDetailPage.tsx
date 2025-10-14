@@ -1,8 +1,8 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import Chip from '../../../components/Chip';
-import TutorProfileCard from '../components/TutorProfileCard';
-import LessonCalendarPicker from '../../lessonManage/components/LessonCalendarPicker';
+import TutorProfileCard from '../../profile/components/TutorProfileCard.tsx';
+import LessonCalendarPicker from '@/domain/lesson/components/LessonCalendarPicker';
 import { api } from '../../../lib/api';
 import { useTutorDetail } from '../hooks/useTutorDetail';
 import { useReservationState } from '../hooks/useReservationState';

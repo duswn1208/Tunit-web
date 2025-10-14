@@ -2,15 +2,15 @@ import SelectBox from '../../../components/SelectBox';
 import { useState, useEffect, useRef } from 'react';
 import FormField from '../../../components/FormField';
 import Button from '../../../components/Button';
-import DayChips from '../../onboarding/availability/components/DayChips';
-import type { DayOfWeek } from '../../onboarding/availability/types/availability';
+import DayChips from '@/domain/dayTime/components/DayChips';
+import type { DayOfWeek } from '@/domain/dayTime/types/availability';
 import { api } from '../../../lib/api';
 import {
   fetchLessonCategories,
   type TutorLessonsCategory,
-} from '../../lessonManage/api/lessonCategoryApi';
+} from '@/domain/lesson/api/lessonCategoryApi';
 import { RadioGroup } from '../../../components';
-import type { LessonStatus } from '../../lessonManage/types/lessonCalendar';
+import type { LessonStatus } from '@/domain/lesson/types/lessonCalendar';
 
 interface StudentForm {
   studentName: string;
