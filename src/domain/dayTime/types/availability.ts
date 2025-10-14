@@ -1,4 +1,4 @@
-import type { DayOfWeekNumber } from '@/constants/date.ts';
+import type { DayOfWeekNumber } from '@/shared/constants/date.ts';
 
 // 시간 구간 (HH:mm 문자열)
 export interface TimeRange {

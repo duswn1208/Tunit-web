@@ -1,4 +1,4 @@
-import { ChipList } from '../../../components';
+import { ChipList } from '../../../shared/components';
 
 interface LessonSelectedChipProps {
   chipList: any[];

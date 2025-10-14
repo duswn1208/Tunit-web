@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect, useMemo } from 'react';
-import TwoColumnSelector from '../../../components/TwoColumnSelector';
+import TwoColumnSelector from '@/shared/components/TwoColumnSelector';
 import { useLessonFilter } from '../hooks/useLessonFilter';
 
 export interface LessonFilterProps {

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { api } from '../../../lib/api';
+import { api } from '../../../shared/lib/api.ts';
 import FailedLessonTable from './FailedLessonTable';
 import type { FailResult } from '../types';
 import type { RefObject } from 'react';

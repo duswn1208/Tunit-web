@@ -1,4 +1,4 @@
-import type { SelectedRegion } from '../domain/region/types/regions';
+import type { SelectedRegion } from '../../region/types/regions.ts';
 
 export type Role = 'TUTOR' | 'STUDENT';
 export type Category = { code: string; label: string; subCategories?: SubCategory[] };

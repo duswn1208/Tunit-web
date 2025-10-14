@@ -1,15 +1,15 @@
-import SelectBox from '../../../components/SelectBox';
+import SelectBox from '@/shared/components/SelectBox';
 import { useState, useEffect, useRef } from 'react';
-import FormField from '../../../components/FormField';
-import Button from '../../../components/Button';
+import FormField from '@/shared/components/FormField';
+import Button from '@/shared/components/Button';
 import DayChips from '@/domain/dayTime/components/DayChips';
 import type { DayOfWeek } from '@/domain/dayTime/types/availability';
-import { api } from '../../../lib/api';
+import { api } from '../../../shared/lib/api.ts';
 import {
   fetchLessonCategories,
   type TutorLessonsCategory,
 } from '@/domain/lesson/api/lessonCategoryApi';
-import { RadioGroup } from '../../../components';
+import { RadioGroup } from '../../../shared/components';
 import type { LessonStatus } from '@/domain/lesson/types/lessonCalendar';
 
 interface StudentForm {

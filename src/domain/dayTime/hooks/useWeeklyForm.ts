@@ -1,6 +1,6 @@
 // src/domain/availability/hooks/useWeeklyForm.ts
 import { useMemo, useState } from 'react';
-import type { DayOfWeekNumber } from '../../../constants/date.ts';
+import type { DayOfWeekNumber } from '@/shared/constants/date.ts';
 import { isValidRange, hasOverlap, toMinutes } from '../lib/timeUtils.ts';
 
 export type Entry = { days: DayOfWeekNumber[]; startTime: string; endTime: string };
@@ -70,7 +70,7 @@ export function useWeeklyForm() {
 // 유틸 (폼 내부 전개용) — 필요 시 lib로 분리 가능
 import type { Entry as _Entry } from './useWeeklyForm.ts';
 import type { DayOfWeek as _DayOfWeek } from '../types/availability.ts';
-import { setAvailability } from '../../../lib/onboarding.ts';
+import { setAvailability } from '../../onboarding/lib/onboarding.ts';
 function flattenToDayRanges(entries: _Entry[], day: _DayOfWeek) {
   return entries
     .filter((e) => e.days.includes(day))

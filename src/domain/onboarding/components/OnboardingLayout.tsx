@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from '../../../components';
+import { Card } from '../../../shared/components';
 
 type Props = {
   step?: number;

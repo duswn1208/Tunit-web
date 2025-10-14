@@ -1,5 +1,5 @@
 import React from 'react';
-import TwoColumnSelector from '../../../components/TwoColumnSelector';
+import TwoColumnSelector from '@/shared/components/TwoColumnSelector';
 
 export interface RegionSelectorProps {
   sidos: Array<{ code: string; label: string }>;

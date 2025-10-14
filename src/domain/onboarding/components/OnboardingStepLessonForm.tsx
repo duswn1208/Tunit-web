@@ -1,7 +1,7 @@
 import LessonSelectedChipList from '../../lesson/components/LessonSelectedChipList.tsx';
 import LessonMainCategory from '../../lesson/components/LessonMainCategory.tsx';
 import LessonSubCategory from '../../lesson/components/LessonSubCategory.tsx';
-import Header from '../../../components/Header.tsx';
+import Header from '@/shared/components/Header.tsx';
 interface OnboardingStepLessonFormProps {
   title: string;
   mains: any[];

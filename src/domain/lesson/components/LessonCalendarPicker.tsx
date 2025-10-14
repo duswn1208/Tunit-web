@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import InlineDateTimePicker from '../../../components/InlineDateTimePicker';
+import InlineDateTimePicker from '@/shared/components/InlineDateTimePicker';
 import { fetchTutorSchedule } from '../api/scheduleApi';
 import type { LessonCalendarStatusDto } from '../types/lessonCalendar.types';
 

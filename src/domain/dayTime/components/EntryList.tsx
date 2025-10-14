@@ -1,6 +1,6 @@
 import type { Entry } from '../hooks/useWeeklyForm.ts';
 import OnboardingNextButton from '@/domain/onboarding/components/OnboardingNextButton.tsx';
-import { DAY_LABELS } from '../../../constants/date.ts';
+import { DAY_LABELS } from '@/shared/constants/date.ts';
 
 interface Props {
   entries: Entry[];

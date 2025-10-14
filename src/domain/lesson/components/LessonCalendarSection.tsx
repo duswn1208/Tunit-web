@@ -1,6 +1,6 @@
 import React from 'react';
 import { statusStyle, type LessonEvent } from '../types/lessonCalendar';
-import TuCalendar from '../../../components/TuCalendar';
+import TuCalendar from '@/shared/components/TuCalendar';
 
 interface LessonCalendarSectionProps {
   lessonEvents: LessonEvent[];

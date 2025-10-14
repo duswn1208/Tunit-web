@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getMainLessonCategory, getSubLessonCategory } from '../../lesson/api/categoryApi';
-import type { Category, SubCategory } from '../../../type/onboarding';
+import type { Category, SubCategory } from '../../onboarding/types/onboarding.ts';
 
 export function useLessonFilter(selectedSubCategories: any[]) {
   const [mainCategories, setMainCategories] = useState<Category[]>([]);

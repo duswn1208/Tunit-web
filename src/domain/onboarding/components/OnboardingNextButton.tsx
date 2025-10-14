@@ -1,4 +1,4 @@
-import { Button } from '../../../components';
+import { Button } from '../../../shared/components';
 
 export default function OnboardingNextButton({
   label = '다음 →',

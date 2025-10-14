@@ -1,4 +1,4 @@
-import { api } from '../../../lib/api';
+import { api } from '../../../shared/lib/api.ts';
 import type { LessonCalendarStatusDto } from '../types/lessonCalendar.types';
 
 export async function fetchTutorSchedule(

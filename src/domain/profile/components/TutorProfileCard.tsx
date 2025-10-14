@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-import Chip from '../../../components/Chip.tsx';
+import Chip from '@/shared/components/Chip.tsx';
 import type { TutorDetail } from '../../tutor/api/types.ts';
 
 interface TutorProfileCardProps {

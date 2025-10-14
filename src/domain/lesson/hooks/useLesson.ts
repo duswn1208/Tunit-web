@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import type { Category, SubCategory } from '../../../type/onboarding.ts';
+import type { Category, SubCategory } from '../../onboarding/types/onboarding.ts';
 import { getMainLessonCategory, getSubLessonCategory } from '../api/categoryApi';
 
 export function useOnboardingLesson() {

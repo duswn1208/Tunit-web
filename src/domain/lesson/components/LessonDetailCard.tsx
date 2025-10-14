@@ -1,9 +1,9 @@
 import React from 'react';
-import '../../../css/components/lesson-manage.css';
-import IconButton from '../../../components/IconButton';
-import '../../../css/components/ui-button.css';
+import '@/shared/css/components/lesson-manage.css';
+import IconButton from '@/shared/components/IconButton';
+import '@/shared/css/components/ui-button.css';
 import { format } from 'date-fns';
-import Header from '../../../components/Header';
+import Header from '@/shared/components/Header';
 
 interface LessonDetailCardProps {
   studentName: string;

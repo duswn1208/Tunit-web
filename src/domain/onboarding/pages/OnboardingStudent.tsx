@@ -3,7 +3,7 @@ import OnboardingStepLessonForm from '@/domain/onboarding/components/OnboardingS
 import OnboardingLayout from '@/domain/onboarding/components/OnboardingLayout';
 import OnboardingNextButton from '@/domain/onboarding/components/OnboardingNextButton';
 import { useOnboardingLesson } from '../../lesson/hooks/useLesson.ts';
-import { setLessonCategory } from '../../../lib/onboarding';
+import { setLessonCategory } from '../lib/onboarding.ts';
 
 export default function OnboardingStudent() {
   const navigate = useNavigate();

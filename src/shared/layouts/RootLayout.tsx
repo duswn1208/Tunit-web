@@ -1,9 +1,9 @@
 // src/layouts/RootLayout.tsx
 import { Outlet } from 'react-router-dom';
-import '../css/layouts/layout.css';
-import RootHeaderStudent from './RootHeaderStudent';
-import RootHeaderTutor from './RootHeaderTutor';
-import { useAuth } from '../auth/AuthContext';
+import '@/shared/css/layouts/layout.css';
+import RootHeaderStudent from './RootHeaderStudent.tsx';
+import RootHeaderTutor from './RootHeaderTutor.tsx';
+import { useAuth } from '@/shared/auth/AuthContext.tsx';
 
 export default function RootLayout() {
   const { user } = useAuth();

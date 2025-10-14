@@ -2,7 +2,7 @@ import OnboardingStepWeekly from '@/domain/dayTime/components/OnboardingStepWeek
 import OnboardingLayout from '@/domain/onboarding/components/OnboardingLayout';
 import OnboardingNextButton from '@/domain/onboarding/components/OnboardingNextButton';
 
-import { api } from '../../../lib/api';
+import { api } from '../../../shared/lib/api.ts';
 import { useWeeklyForm } from '@/domain/dayTime/hooks/useWeeklyForm';
 import {
   loadUserRole,
@@ -10,7 +10,7 @@ import {
   loadLessonCategory,
   loadRegion,
   loadAvailability,
-} from '../../../lib/onboarding';
+} from '../lib/onboarding.ts';
 import { useNavigate } from 'react-router-dom';
 
 // 튜터 가입 요청 함수(api.ts 사용)

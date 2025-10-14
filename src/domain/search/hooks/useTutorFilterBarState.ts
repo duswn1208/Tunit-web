@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRegionSelect } from '../../region/hooks/useRegionSelect';
 import { getMainLessonCategory, getSubLessonCategory } from '../../lesson/api/categoryApi';
-import type { Category, SubCategory } from '../../../type/onboarding';
+import type { Category, SubCategory } from '../../onboarding/types/onboarding.ts';
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = React.useState(false);

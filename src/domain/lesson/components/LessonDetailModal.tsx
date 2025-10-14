@@ -1,5 +1,5 @@
 import React from 'react';
-import Modal from '../../../components/Modal';
+import Modal from '@/shared/components/Modal';
 import LessonDetailCard from './LessonDetailCard';
 import { type LessonEvent } from '../types/lessonCalendar';
 

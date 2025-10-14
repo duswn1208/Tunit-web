@@ -2,16 +2,16 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './index.css';
-import './css/multi-level-selector/mls-base.css';
-import './css/multi-level-selector/mls-container.css';
-import './css/multi-level-selector/mls-grid.css';
-import './css/multi-level-selector/mls-list.css';
-import './css/ui/ui-button.css';
-import './css/ui/ui-tokens.css';
-import './css/ui/ui-card.css';
-import './css/ui/ui-form.css';
-import './css/ui/ui-input.css';
-import './css/ui/ui-button.css';
+import '@/shared/css/multi-level-selector/mls-base.css';
+import '@/shared/css/multi-level-selector/mls-container.css';
+import '@/shared/css/multi-level-selector/mls-grid.css';
+import '@/shared/css/multi-level-selector/mls-list.css';
+import '@/shared/css/ui/ui-button.css';
+import '@/shared/css/ui/ui-tokens.css';
+import '@/shared/css/ui/ui-card.css';
+import '@/shared/css/ui/ui-form.css';
+import '@/shared/css/ui/ui-input.css';
+import '@/shared/css/ui/ui-button.css';
 import App from './App.tsx';
 
 // React Query 클라이언트 생성

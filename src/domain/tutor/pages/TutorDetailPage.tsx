@@ -1,12 +1,12 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import Chip from '../../../components/Chip';
+import Chip from '@/shared/components/Chip';
 import TutorProfileCard from '../../profile/components/TutorProfileCard.tsx';
 import LessonCalendarPicker from '@/domain/lesson/components/LessonCalendarPicker';
-import { api } from '../../../lib/api';
+import { api } from '../../../shared/lib/api.ts';
 import { useTutorDetail } from '../hooks/useTutorDetail';
 import { useReservationState } from '../hooks/useReservationState';
-import { DAYS_OF_WEEK, getCalendarRange } from '../../../constants/date';
+import { DAYS_OF_WEEK, getCalendarRange } from '@/shared/constants/date';
 import '../css/tutor-detail.css';
 import '../css/tutor-calendar.css';
 

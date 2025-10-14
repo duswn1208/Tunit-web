@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { api } from '../../../lib/api.ts';
+import { api } from '../../../shared/lib/api.ts';
 
 export default function ProfileInfo() {
   const [profile, setProfile] = useState<any>(null);

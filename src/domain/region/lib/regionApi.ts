@@ -1,4 +1,4 @@
-import { api } from '../../../lib/api';
+import { api } from '../../../shared/lib/api.ts';
 import { REGION_SIDO_ORDER, type Region } from '../types/regions';
 
 const GET_SIDO = '/api/regions';

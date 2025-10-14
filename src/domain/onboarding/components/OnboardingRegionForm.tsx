@@ -1,4 +1,4 @@
-import Header from '../../../components/Header.tsx';
+import Header from '@/shared/components/Header.tsx';
 import RegionChipList from '../../region/components/RegionChipList.tsx';
 import RegionSelector from '../../region/components/RegionSelector.tsx';
 import type useOnboardingRegion from '../hooks/useRegion.ts';

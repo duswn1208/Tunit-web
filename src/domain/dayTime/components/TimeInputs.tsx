@@ -1,4 +1,4 @@
-import { FormField } from '../../../components';
+import { FormField } from '../../../shared/components';
 import OnboardingNextButton from '@/domain/onboarding/components/OnboardingNextButton.tsx';
 import '../css/availability.css';
 

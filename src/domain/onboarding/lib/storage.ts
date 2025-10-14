@@ -2,7 +2,7 @@ import type {
   Step1 as UserRole,
   Step2 as TutorProfile,
   Step3 as LessonCategory,
-} from '../../type/onboarding';
+} from '../types/onboarding.ts';
 // 온보딩 단계별 localStorage key 상수화
 export const ONBOARDING_KEY = {
   userRole: 'onboarding.user.role',

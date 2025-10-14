@@ -1,6 +1,6 @@
 import React from 'react';
 import StudentRegisterForm from '../../mypage/components/StudentRegisterForm';
-import Modal from '../../../components/Modal';
+import Modal from '@/shared/components/Modal';
 
 interface LessonRegisterModalProps {
   open: boolean;

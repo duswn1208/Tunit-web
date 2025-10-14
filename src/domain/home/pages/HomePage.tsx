@@ -1,6 +1,6 @@
-import HomeFeatures from '../domain/home/components/HomeFeatures';
-import HomeActions from '../domain/home/components/HomeActions';
-import HomeHeader from '../domain/home/components/HomeHeader';
+import HomeFeatures from '../components/HomeFeatures.tsx';
+import HomeActions from '../components/HomeActions.tsx';
+import HomeHeader from '../components/HomeHeader.tsx';
 
 export default function HomePage() {
   // useLessonCheckAndRedirect();

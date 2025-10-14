@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Header from '../../../components/Header';
+import Header from '@/shared/components/Header';
 import ExcelUploader from './ExcelUploader';
 import { useRef } from 'react';
 import StudentRegisterButtonGroup from './StudentRegisterButtonGroup';

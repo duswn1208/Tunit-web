@@ -1,11 +1,11 @@
 import { useForm } from 'react-hook-form';
 
-import type { Step2 } from '../../../type/onboarding';
+import type { Step2 } from '../types/onboarding.ts';
 
 import OnboardingNextButton from '@/domain/onboarding/components/OnboardingNextButton';
 import OnboardingLayout from '@/domain/onboarding/components/OnboardingLayout';
-import { FormField } from '../../../components';
-import { loadTutorProfile, loadUserRole, setTutorProfile } from '../../../lib/onboarding';
+import { FormField } from '../../../shared/components';
+import { loadTutorProfile, loadUserRole, setTutorProfile } from '../lib/onboarding.ts';
 import { useNavigate } from 'react-router-dom';
 
 export default function OnboardingTutor() {

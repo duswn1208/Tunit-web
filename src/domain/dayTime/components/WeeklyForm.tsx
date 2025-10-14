@@ -1,7 +1,7 @@
 import DayChips from './DayChips.tsx';
 import TimeInputs from './TimeInputs.tsx';
 import EntryList from './EntryList.tsx';
-import Header from '../../../components/Header.tsx';
+import Header from '@/shared/components/Header.tsx';
 
 import type { useWeeklyForm } from '../hooks/useWeeklyForm.ts';
 

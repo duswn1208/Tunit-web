@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/components/two-column-selector.css';
+import '@/shared/css/components/two-column-selector.css';
 
 export interface TwoColumnSelectorProps {
   leftOptions: Array<{ code: string; label: string }>;

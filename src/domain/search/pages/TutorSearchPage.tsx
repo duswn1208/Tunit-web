@@ -2,11 +2,11 @@ import '../css/tutor-search.css';
 import TutorProfileList from '../../profile/components/TutorProfileList.tsx';
 import type { TutorProfile } from '../components/TutorProfileCard';
 import { fetchTutors } from '../api/tutorSearchApi';
-import Header from '../../../components/Header';
+import Header from '@/shared/components/Header';
 import { TutorFilterBar } from '../components/TutorFilterBar';
 import { useEffect, useState } from 'react';
-import { api } from '../../../lib/api';
-import type { StudentRegion } from '../../../type/student';
+import { api } from '../../../shared/lib/api.ts';
+import type { StudentRegion } from '../../region/types/student.ts';
 
 // 학생 프로필 응답 타입 정의
 export interface StudentProfileResponse {

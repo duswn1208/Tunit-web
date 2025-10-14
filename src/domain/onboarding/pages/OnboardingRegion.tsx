@@ -4,7 +4,7 @@ import OnboardingLayout from '@/domain/onboarding/components/OnboardingLayout';
 import OnboardingNextButton from '@/domain/onboarding/components/OnboardingNextButton';
 import OnboardingRegionForm from '@/domain/onboarding/components/OnboardingRegionForm.tsx';
 
-import { setRegion } from '../../../lib/onboarding/storage';
+import { setRegion } from '../lib/storage.ts';
 import useOnboardingRegion from '../hooks/useRegion.ts';
 
 export default function OnboardingRegion() {

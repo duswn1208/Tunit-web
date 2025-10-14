@@ -1,4 +1,4 @@
-import { type DayOfWeekNumber, DAY_LABELS } from '../../../constants/date.ts';
+import { type DayOfWeekNumber, DAY_LABELS } from '@/shared/constants/date.ts';
 
 const ALL_DAYS: DayOfWeekNumber[] = [1, 2, 3, 4, 5, 6, 7];
 

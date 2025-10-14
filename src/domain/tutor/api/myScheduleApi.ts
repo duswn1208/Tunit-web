@@ -1,4 +1,4 @@
-import { api } from '../../../lib/api';
+import { api } from '../../../shared/lib/api.ts';
 
 export interface MyScheduleRequest {
   startDate: string; // YYYY-MM-DD

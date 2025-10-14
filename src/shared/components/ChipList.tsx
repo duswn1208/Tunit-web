@@ -1,5 +1,5 @@
 import React from 'react';
-import Chip, { type ChipStyle } from './Chip';
+import Chip, { type ChipStyle } from './Chip.tsx';
 
 export type ChipItem = {
   code: string;

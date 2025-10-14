@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import '../../../css/components/lesson-manage.css';
+import '@/shared/css/components/lesson-manage.css';
 
 interface LessonCountCardProps {
   todayCount: number;

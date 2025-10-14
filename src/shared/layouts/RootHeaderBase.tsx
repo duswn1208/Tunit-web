@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../css/layouts/header.css';
-import { useAuth } from '../auth/AuthContext';
+import '@/shared/css/layouts/header.css';
+import { useAuth } from '@/shared/auth/AuthContext.tsx';
 
 export default function RootHeaderBase({ nav }: { nav: React.ReactNode }) {
   const { user, loading, login, logout } = useAuth();

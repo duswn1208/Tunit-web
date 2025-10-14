@@ -1,6 +1,6 @@
 // src/auth/AuthContext.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { api } from '../lib/api';
+import { api } from '../lib/api.ts';
 
 type User = {
   userNo: number;

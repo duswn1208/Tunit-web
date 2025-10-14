@@ -1,4 +1,4 @@
-import type { Category } from '../../../type/onboarding';
+import type { Category } from '../../onboarding/types/onboarding.ts';
 import type { Region } from '../../region/types/regions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';

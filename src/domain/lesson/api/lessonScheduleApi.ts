@@ -1,4 +1,4 @@
-import {api} from '../../../lib/api.ts';
+import {api} from '../../../shared/lib/api.ts';
 
 export interface HolidayInfo {
     date: string; // YYYY-MM-DD

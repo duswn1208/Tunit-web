@@ -1,5 +1,5 @@
 import React from 'react';
-import SelectBox from '../../../components/SelectBox';
+import SelectBox from '@/shared/components/SelectBox';
 
 interface LessonFilterSectionProps {
   filterStudent: string;

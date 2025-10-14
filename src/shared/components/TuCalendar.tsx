@@ -2,7 +2,7 @@ import { Calendar, Views, dateFnsLocalizer, type View } from 'react-big-calendar
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { ko } from 'date-fns/locale/ko';
-import '../css/components/common-calendar.css';
+import '@/shared/css/components/common-calendar.css';
 
 const locales = { ko };
 const localizer = dateFnsLocalizer({
