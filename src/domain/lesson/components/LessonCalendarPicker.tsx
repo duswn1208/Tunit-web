@@ -11,6 +11,7 @@ interface LessonCalendarPickerProps {
   time?: string;
   onChange: (date: string, time: string) => void;
   size?: 'small' | 'medium' | 'large';
+  disabledSlots?: Array<{ date: string; time: string }>;
 }
 
 export default function LessonCalendarPicker({
@@ -21,6 +22,7 @@ export default function LessonCalendarPicker({
   time,
   onChange,
   size = 'medium',
+  disabledSlots = [],
 }: LessonCalendarPickerProps) {
   const [calendarStatus, setCalendarStatus] = useState<LessonCalendarStatusDto | null>(null);
   const [reservedTimes, setReservedTimes] = useState<string[]>([]);
@@ -43,6 +45,7 @@ export default function LessonCalendarPicker({
     if (calendarStatus && date) {
       let fixed: string[] = [];
       let reserved: string[] = [];
+      let localDisabled: string[] = [];
 
       // 0(일) ~ 6(토)를 1(월) ~ 7(일)로 변환
       const jsDay = new Date(date).getDay();
@@ -70,13 +73,18 @@ export default function LessonCalendarPicker({
           .map((reservation) => reservation.startTime.slice(0, 5));
       }
 
-      const allReserved = Array.from(new Set([...fixed, ...reserved]));
+      // 방금 예약된 시간 필터링
+      if (disabledSlots) {
+        localDisabled = disabledSlots.filter((slot) => slot.date === date).map((slot) => slot.time);
+      }
+
+      const allReserved = Array.from(new Set([...fixed, ...reserved, ...localDisabled]));
       setReservedTimes(allReserved);
     } else {
       setReservedTimes([]);
       setAvailableTimeRange(null);
     }
-  }, [calendarStatus, date]);
+  }, [calendarStatus, date, disabledSlots]);
 
   // 기본 시간 범위 설정 (availableTimeRange가 없는 경우)
   const timeRange = availableTimeRange || { start: '09:00', end: '22:00' };

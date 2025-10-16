@@ -3,14 +3,14 @@ import { useState, useEffect, useRef } from 'react';
 import FormField from '@/shared/components/FormField';
 import Button from '@/shared/components/Button';
 import DayChips from '@/domain/dayTime/components/DayChips';
-import type { DayOfWeek } from '@/domain/dayTime/types/availability';
 import { api } from '../../../shared/lib/api.ts';
 import {
   fetchLessonCategories,
   type TutorLessonsCategory,
 } from '@/domain/lesson/api/lessonCategoryApi';
 import { RadioGroup } from '../../../shared/components';
-import type { LessonStatus } from '@/domain/lesson/types/lessonCalendar';
+import { LessonStatus, LessonType } from '@/domain/lesson/types/lesson';
+import type { DayOfWeekNumber } from '@/shared/constants/date.ts';
 
 interface StudentForm {
   studentName: string;
@@ -18,10 +18,10 @@ interface StudentForm {
   lesson: string;
   firstLessonDate: string;
   startTime: string;
-  dayOfWeekSet: Set<DayOfWeek>;
+  dayOfWeekSet: Set<DayOfWeekNumber>;
   reservationStatus: LessonStatus;
   lessonDate: string;
-  lessonType: 'single' | 'fixed';
+  lessonType: LessonType;
   memo?: string;
 }
 
@@ -55,10 +55,10 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
     lesson: '',
     firstLessonDate: '',
     startTime: '',
-    dayOfWeekSet: new Set<DayOfWeek>(),
-    reservationStatus: 'TRIAL_REQUESTED',
+    dayOfWeekSet: new Set<DayOfWeekNumber>(),
     lessonDate: getToday(),
-    lessonType: 'single',
+    lessonType: LessonType.SINGLE,
+    reservationStatus: LessonStatus.TRIAL_REQUESTED,
     memo: '',
   });
 
@@ -67,7 +67,7 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleDayToggle = (d: DayOfWeek) => {
+  const handleDayToggle = (d: DayOfWeekNumber) => {
     setForm((prev) => {
       const next = new Set(prev.dayOfWeekSet);
       if (next.has(d)) next.delete(d);
@@ -81,9 +81,10 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
       //memo 추가
       setForm((prev) => ({ ...prev, memo: memoRef.current?.value || '' }));
 
-      const uri = form.lessonType === 'single' ? '/api/lessons/reserve' : '/api/fixed-lessons/save';
+      const uri =
+        form.lessonType === LessonType.SINGLE ? '/api/lessons/reserve' : '/api/fixed-lessons/save';
       const payload =
-        form.lessonType === 'single'
+        form.lessonType === LessonType.SINGLE
           ? { ...form }
           : {
               ...form,
@@ -99,7 +100,7 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
           lesson: '',
           firstLessonDate: '',
           startTime: '',
-          dayOfWeekSet: new Set<DayOfWeek>(),
+          dayOfWeekSet: new Set<DayOfWeekNumber>(),
           reservationStatus: 'TRIAL_REQUESTED',
           lessonDate: '',
           lessonType: 'single',
@@ -120,11 +121,11 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
             name="lessonType"
             defaultValue="single"
             onChange={(value: string) =>
-              setForm((prev) => ({ ...prev, lessonType: value as 'single' | 'fixed' }))
+              setForm((prev) => ({ ...prev, lessonType: value as LessonType }))
             }
             options={[
-              { label: '일회성 레슨', value: 'single' },
-              { label: '고정 레슨', value: 'fixed' },
+              { label: '일회성 레슨', value: LessonType.SINGLE },
+              { label: '고정 레슨', value: LessonType.FIXED },
             ]}
           />
         </FormField>

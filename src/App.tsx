@@ -10,6 +10,7 @@ import OnboardingLesson from './domain/onboarding/pages/OnboardingLesson.tsx';
 import OnboardingRegion from './domain/onboarding/pages/OnboardingRegion.tsx';
 import OnboardingAvailability from './domain/onboarding/pages/OnboardingAvailability.tsx';
 import { AuthProvider } from '@/shared/auth/AuthContext.tsx';
+import { ToastProvider } from '@/shared/contexts/ToastContext';
 import RootLayout from './shared/layouts/RootLayout.tsx';
 import OnboardingStudentLesson from './domain/onboarding/pages/OnboardingStudentLesson.tsx';
 import OnboardingStudentRegion from './domain/onboarding/pages/OnboardingStudentRegion.tsx';
@@ -31,26 +32,28 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/auth/login" element={<LoginPage />} />
-            <Route element={<RootLayout />}>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/mypage" element={<MyPage />} />
-              <Route path="/find/lessons" element={<TutorSearchPage />} />
-              <Route path="/tutors/:tutorId" element={<TutorDetailPage />} />
-              <Route path="/my/lessons" element={<LessonManage />} />
-              <Route path="/onboarding" element={<OnboardingStart />} />
-              <Route path="/onboarding/student" element={<OnboardingStudentLesson />} />
-              <Route path="/onboarding/student/region" element={<OnboardingStudentRegion />} />
-              <Route path="/onboarding/tutor" element={<OnboardingTutor />} />
-              <Route path="/onboarding/tutor/lesson" element={<OnboardingLesson />} />
-              <Route path="/onboarding/tutor/region" element={<OnboardingRegion />} />
-              <Route path="/onboarding/tutor/availability" element={<OnboardingAvailability />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
+        <ToastProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/auth/login" element={<LoginPage />} />
+              <Route element={<RootLayout />}>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/mypage" element={<MyPage />} />
+                <Route path="/find/lessons" element={<TutorSearchPage />} />
+                <Route path="/tutors/:tutorId" element={<TutorDetailPage />} />
+                <Route path="/my/lessons" element={<LessonManage />} />
+                <Route path="/onboarding" element={<OnboardingStart />} />
+                <Route path="/onboarding/student" element={<OnboardingStudentLesson />} />
+                <Route path="/onboarding/student/region" element={<OnboardingStudentRegion />} />
+                <Route path="/onboarding/tutor" element={<OnboardingTutor />} />
+                <Route path="/onboarding/tutor/lesson" element={<OnboardingLesson />} />
+                <Route path="/onboarding/tutor/region" element={<OnboardingRegion />} />
+                <Route path="/onboarding/tutor/availability" element={<OnboardingAvailability />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </ToastProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
