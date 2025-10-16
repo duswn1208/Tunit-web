@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { TutorDetailResponse } from '../api/tutorApi';
 import { LessonStatus } from '@/domain/lesson/types/lesson';
 import LessonCalendarPicker from '@/domain/lesson/components/LessonCalendarPicker';
 import { api } from '@/shared/lib/api';
 import { useToast } from '@/shared/contexts/ToastContext';
+import SelectBox from '@/shared/components/SelectBox';
 
 interface LessonBookingFormProps {
   tutorProfileNo: string;
@@ -32,6 +33,11 @@ export default function LessonBookingForm({
 }: LessonBookingFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [disabledSlots, setDisabledSlots] = useState<Array<{ date: string; time: string }>>([]);
+
+  // disabledSlots 변경 감지
+  useEffect(() => {
+    console.log('Updated disabledSlots:', disabledSlots);
+  }, [disabledSlots]);
   const { showToast } = useToast();
 
   const handleReservationSubmit = async () => {
@@ -55,8 +61,21 @@ export default function LessonBookingForm({
         memo: requestMessage || null,
       });
 
-      // 성공한 예약 슬롯을 비활성화 목록에 추가
-      setDisabledSlots((prev) => [...prev, { date: selectedDate, time: selectedTime }]);
+      // 성공한 예약 슬롯을 즉시 비활성화 목록에 추가
+      const newDisabledSlot = {
+        date: selectedDate,
+        time: selectedTime.length === 5 ? selectedTime : selectedTime.slice(0, 5),
+      };
+
+      setDisabledSlots((prev) => {
+        // 중복 방지를 위한 검사
+        const exists = prev.some(
+          (slot) => slot.date === newDisabledSlot.date && slot.time === newDisabledSlot.time
+        );
+        const updatedSlots = exists ? prev : [...prev, newDisabledSlot];
+        console.log('Updated disabled slots:', updatedSlots); // 디버깅용 로그
+        return updatedSlots;
+      });
 
       showToast('상담/체험 레슨 예약 요청이 전송되었습니다.', 'success');
       // 예약 폼 초기화 (시간 선택은 유지)
@@ -106,21 +125,18 @@ export default function LessonBookingForm({
         <div className="booking-form">
           <div className="lesson-select-container">
             <label htmlFor="lessonSelect">레슨 과목 선택</label>
-            <select
+            <SelectBox
               id="lessonSelect"
-              className="lesson-select"
               value={selectedLesson}
-              onChange={(e) => onLessonChange(e.target.value)}
-            >
-              <option value="" disabled>
-                레슨 과목을 선택해주세요
-              </option>
-              {lessonData.lessonSubcategoryList?.map((lesson) => (
-                <option key={lesson.tutorLessonNo} value={String(lesson.tutorLessonNo)}>
-                  {lesson.lessonCategory.label}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => onLessonChange(value)}
+              placeholder="레슨 과목을 선택해주세요"
+              options={
+                lessonData.lessonSubcategoryList?.map((lesson) => ({
+                  value: String(lesson.tutorLessonNo),
+                  label: lesson.lessonCategory.label,
+                })) || []
+              }
+            />
           </div>
           <div className="request-input-container">
             <label htmlFor="requestMessage">요청사항</label>

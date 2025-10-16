@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import ErrorState from '@/shared/components/ErrorState';
 import TutorLessonInfo from '../components/TutorLessonInfo';
 import TutorScheduleInfo from '../components/TutorScheduleInfo';
@@ -12,19 +11,22 @@ import '../css/tutor-calendar.css';
 
 export default function TutorDetailPage() {
   const { tutorId: tutorProfileNo } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const showBookingParam = new URLSearchParams(location.search).get('booking');
   const { data, isLoading, error } = useTutorDetail(tutorProfileNo!);
   const {
-    state: { showBookingCalendar, selectedDate, selectedTime, selectedLesson, requestMessage },
-    toggleCalendar,
+    state: { selectedDate, selectedTime, selectedLesson, requestMessage },
     setDateTime,
     setLesson,
     setMessage,
   } = useReservationState();
 
-  // 페이지 로드 시 자동으로 예약 캘린더 표시
-  useEffect(() => {
-    toggleCalendar(true);
-  }, [toggleCalendar]);
+  const showBookingCalendar = showBookingParam === 'true';
+
+  const toggleCalendar = (show: boolean) => {
+    navigate(`/tutors/${tutorProfileNo}${show ? '?booking=true' : ''}`, { replace: true });
+  };
 
   if (isLoading) {
     return (

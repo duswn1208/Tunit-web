@@ -42,6 +42,7 @@ export default function LessonCalendarPicker({
 
   // 날짜가 선택될 때 예약된 시간 추출
   useEffect(() => {
+    console.log('Current disabledSlots:', disabledSlots); // 디버깅용 로그
     if (calendarStatus && date) {
       let fixed: string[] = [];
       let reserved: string[] = [];
@@ -74,11 +75,15 @@ export default function LessonCalendarPicker({
       }
 
       // 방금 예약된 시간 필터링
-      if (disabledSlots) {
-        localDisabled = disabledSlots.filter((slot) => slot.date === date).map((slot) => slot.time);
+      if (disabledSlots && disabledSlots.length > 0) {
+        localDisabled = disabledSlots
+          .filter((slot) => slot.date === date)
+          .map((slot) => slot.time.slice(0, 5)); // HH:mm 형식으로 통일
       }
 
+      // 모든 비활성화할 시간 슬롯을 하나의 배열로 합치고 중복 제거
       const allReserved = Array.from(new Set([...fixed, ...reserved, ...localDisabled]));
+      console.log('Date:', date, 'All reserved times:', allReserved); // 디버깅용 로그
       setReservedTimes(allReserved);
     } else {
       setReservedTimes([]);

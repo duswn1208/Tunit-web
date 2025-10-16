@@ -14,6 +14,8 @@ interface SelectBoxProps {
   className?: string;
 }
 
+import '@/shared/css/components/select-box.css';
+
 export default function SelectBox({
   id,
   name,
@@ -31,10 +33,11 @@ export default function SelectBox({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       disabled={disabled}
-      className={className}
-      style={{ minWidth: 120 }}
+      className={`select-box ${className}`}
     >
-      <option value="">{placeholder}</option>
+      <option value="" disabled>
+        {placeholder}
+      </option>
       {options.map((opt) => (
         <option key={opt.value} value={opt.value}>
           {opt.label}

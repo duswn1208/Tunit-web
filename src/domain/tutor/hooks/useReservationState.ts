@@ -1,7 +1,6 @@
-import { useReducer } from 'react';
+import { useReducer, useCallback } from 'react';
 
 interface ReservationState {
-  showBookingCalendar: boolean;
   selectedDate: string;
   selectedTime: string | undefined;
   selectedLesson: string | undefined;
@@ -9,27 +8,20 @@ interface ReservationState {
 }
 
 type ReservationAction =
-  | { type: 'TOGGLE_CALENDAR'; payload: boolean }
   | { type: 'SET_DATE_TIME'; payload: { date: string; time: string | undefined } }
   | { type: 'SET_LESSON'; payload: string }
   | { type: 'SET_MESSAGE'; payload: string }
   | { type: 'RESET' };
 
-const initialState: ReservationState = {
-  showBookingCalendar: true,
+const getInitialState = (): ReservationState => ({
   selectedDate: new Date().toISOString().split('T')[0],
   selectedTime: undefined,
   selectedLesson: undefined,
   requestMessage: '',
-};
+});
 
 function reservationReducer(state: ReservationState, action: ReservationAction): ReservationState {
   switch (action.type) {
-    case 'TOGGLE_CALENDAR':
-      return {
-        ...state,
-        showBookingCalendar: action.payload,
-      };
     case 'SET_DATE_TIME':
       return {
         ...state,
@@ -47,22 +39,36 @@ function reservationReducer(state: ReservationState, action: ReservationAction):
         requestMessage: action.payload,
       };
     case 'RESET':
-      return initialState;
+      return getInitialState();
     default:
       return state;
   }
 }
 
 export function useReservationState() {
-  const [state, dispatch] = useReducer(reservationReducer, initialState);
+  const [state, dispatch] = useReducer(reservationReducer, getInitialState());
+
+  const setDateTime = useCallback((date: string, time: string | undefined) => {
+    dispatch({ type: 'SET_DATE_TIME', payload: { date, time } });
+  }, []);
+
+  const setLesson = useCallback((lesson: string) => {
+    dispatch({ type: 'SET_LESSON', payload: lesson });
+  }, []);
+
+  const setMessage = useCallback((message: string) => {
+    dispatch({ type: 'SET_MESSAGE', payload: message });
+  }, []);
+
+  const reset = useCallback(() => {
+    dispatch({ type: 'RESET' });
+  }, []);
 
   return {
     state,
-    toggleCalendar: (show: boolean) => dispatch({ type: 'TOGGLE_CALENDAR', payload: show }),
-    setDateTime: (date: string, time: string | undefined) =>
-      dispatch({ type: 'SET_DATE_TIME', payload: { date, time } }),
-    setLesson: (lesson: string) => dispatch({ type: 'SET_LESSON', payload: lesson }),
-    setMessage: (message: string) => dispatch({ type: 'SET_MESSAGE', payload: message }),
-    reset: () => dispatch({ type: 'RESET' }),
+    setDateTime,
+    setLesson,
+    setMessage,
+    reset,
   };
 }
