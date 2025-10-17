@@ -41,6 +41,28 @@
   align-items: center;
   gap: 8px;
 }
+
+.auth-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.login-button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.login-button:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
 .login {
   background: #fff;
   color: #111;

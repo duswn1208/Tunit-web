@@ -17,9 +17,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // 메인 페이지와 로그인 페이지에서는 로그인 체크를 조용히 처리
+    const isPublicPath = ['/', '/auth/login'].includes(window.location.pathname);
+
     api
       .get('/api/users/auth/me')
       .then(setUser)
+      .catch((error) => {
+        if (!isPublicPath) {
+          console.error('Auth check failed:', error);
+        }
+      })
       .finally(() => setLoading(false));
   }, []);
 

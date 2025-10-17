@@ -14,19 +14,29 @@ export default function RootHeaderBase({ nav }: { nav: React.ReactNode }) {
         </Link>
         {user?.userRole && nav}
         <div className="right">
-          {!loading && user?.userRole && (
-            <div className="user">
-              <button className="avatar" onClick={() => setOpen(!open)}>
-                {user.nickname ?? user.name}
-              </button>
-              {open && (
-                <div className="menu" onMouseLeave={() => setOpen(false)}>
-                  <div className="menu__name">{user.nickname ?? user.name}</div>
-                  <Link to="/mypage">마이페이지</Link>
-                  <button onClick={logout}>로그아웃</button>
+          {!loading && (
+            <>
+              {user?.userRole ? (
+                <div className="user">
+                  <button className="avatar" onClick={() => setOpen(!open)}>
+                    {user.nickname ?? user.name}
+                  </button>
+                  {open && (
+                    <div className="menu" onMouseLeave={() => setOpen(false)}>
+                      <div className="menu__name">{user.nickname ?? user.name}</div>
+                      <Link to="/mypage">마이페이지</Link>
+                      <button onClick={logout}>로그아웃</button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="auth-buttons">
+                  <Link to="/auth/login" className="login-button">
+                    로그인
+                  </Link>
                 </div>
               )}
-            </div>
+            </>
           )}
         </div>
       </div>

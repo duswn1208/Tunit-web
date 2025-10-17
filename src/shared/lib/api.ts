@@ -23,7 +23,9 @@ async function baseApi<T>(input: RequestInfo, init: RequestInit = {}): Promise<T
     }
 
     if (res.status === 401) {
-      if (window.location.pathname !== '/auth/login') {
+      // 메인 페이지와 로그인 페이지는 리다이렉션하지 않음
+      const publicPaths = ['/', '/auth/login'];
+      if (!publicPaths.includes(window.location.pathname)) {
         window.location.href = '/auth/login';
       }
     }
