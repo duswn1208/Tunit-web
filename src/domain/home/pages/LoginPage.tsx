@@ -1,30 +1,74 @@
+import { useLocation } from 'react-router-dom';
+import { useToast } from '@/shared/contexts/ToastContext';
+import '../css/login.css';
+
 export default function LoginPage() {
+  const location = useLocation();
+  const from = location.state?.from || '/';
+  const { showToast } = useToast();
+
   const naverLogin = async () => {
-    window.location.href = 'http://localhost:8080/oauth2/authorization/naver';
-    // window.location.href = 'http://172.21.25.92:8080/oauth2/authorization/naver';
+    // 로그인 후 리다이렉트 경로를 state로 전달
+    const redirectUri = encodeURIComponent(from);
+    window.location.href = `http://localhost:8080/oauth2/authorization/naver?redirect_uri=${redirectUri}`;
   };
 
   return (
-    <div style={{ maxWidth: 360, margin: '120px auto', textAlign: 'center', padding: '0 16px' }}>
-      <h1 style={{ marginBottom: 16 }}>네이버로 로그인</h1>
-      <p style={{ opacity: 0.8, marginBottom: 24 }}>로그인 후 처음이라면 온보딩으로 이동합니다.</p>
-      <button
-        onClick={naverLogin}
-        style={{
-          width: '100%',
-          height: 48,
-          background: 'var(--brand-red)',
-          color: '#ffffff',
-          border: 'none',
-          borderRadius: '12px',
-          fontSize: '16px',
-          fontWeight: 600,
-          cursor: 'pointer',
-          transition: 'all 0.2s ease',
-        }}
-      >
-        네이버 로그인
-      </button>
+    <div className="login-container">
+      {/* 로고 이미지 */}
+      <img src="/public/brand_logo.png" alt="Tunit Logo" className="login-logo" />
+
+      {/* 메인 타이틀 */}
+      <h1 className="login-title">
+        간편하게 로그인하고
+        <br />
+        <span className="brand-text">튜닛</span>을 시작하세요!
+      </h1>
+
+      {/* 서브타이틀 */}
+      <p className="login-subtitle">
+        처음 방문하셨다면, 간단한 프로필 설정 후<br />
+        바로 시작할 수 있어요!
+      </p>
+
+      {/* 소셜 로그인 버튼 */}
+      <div className="social-login-buttons">
+        <button onClick={naverLogin} className="social-login-button naver-login-button">
+          <img src="/images/naver-icon.png" alt="Naver Icon" />
+          네이버로 3초 만에 시작하기
+        </button>
+
+        <button
+          onClick={() => showToast('카카오 로그인은 곧 지원될 예정이에요!', 'info')}
+          className="social-login-button kakao-login-button"
+        >
+          <img src="/images/kakao-icon.png" alt="Kakao Icon" />
+          카카오로 시작하기
+        </button>
+
+        <button
+          onClick={() => showToast('구글 로그인은 곧 지원될 예정이에요!', 'info')}
+          className="social-login-button google-login-button"
+        >
+          <img src="/images/google-icon.png" alt="Google Icon" />
+          Google로 시작하기
+        </button>
+
+        <button
+          onClick={() => showToast('애플 로그인은 곧 지원될 예정이에요!', 'info')}
+          className="social-login-button apple-login-button"
+        >
+          <img src="/images/apple-icon.png" alt="Apple Icon" />
+          Apple로 시작하기
+        </button>
+      </div>
+
+      {/* 추가 안내문구 */}
+      <p className="login-notice">
+        로그인 시 튜닛의 서비스 이용약관과
+        <br />
+        개인정보 처리방침에 동의하게 됩니다
+      </p>
     </div>
   );
 }

@@ -35,8 +35,8 @@ export default function App() {
         <ToastProvider>
           <BrowserRouter>
             <Routes>
-              <Route path="/auth/login" element={<LoginPage />} />
               <Route element={<RootLayout />}>
+                <Route path="/auth/login" element={<LoginPage />} />
                 <Route path="/" element={<HomePage />} />
                 <Route path="/mypage" element={<MyPage />} />
                 <Route path="/find/lessons" element={<TutorSearchPage />} />
