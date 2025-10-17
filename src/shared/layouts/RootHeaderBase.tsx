@@ -4,7 +4,7 @@ import '@/shared/css/layouts/header.css';
 import { useAuth } from '@/shared/auth/AuthContext.tsx';
 
 export default function RootHeaderBase({ nav }: { nav: React.ReactNode }) {
-  const { user, loading, login, logout } = useAuth();
+  const { user, loading, logout } = useAuth();
   const [open, setOpen] = useState(false);
   return (
     <header className="app-header">
@@ -12,9 +12,9 @@ export default function RootHeaderBase({ nav }: { nav: React.ReactNode }) {
         <Link to="/" className="brand">
           튜닛
         </Link>
-        {nav}
+        {user?.userRole && nav}
         <div className="right">
-          {loading ? null : user ? (
+          {!loading && user?.userRole && (
             <div className="user">
               <button className="avatar" onClick={() => setOpen(!open)}>
                 {user.nickname ?? user.name}
@@ -27,10 +27,6 @@ export default function RootHeaderBase({ nav }: { nav: React.ReactNode }) {
                 </div>
               )}
             </div>
-          ) : (
-            <button className="login" onClick={login}>
-              로그인
-            </button>
           )}
         </div>
       </div>

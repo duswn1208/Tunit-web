@@ -3,6 +3,7 @@ import OnboardingNextButton from '@/domain/onboarding/components/OnboardingNextB
 import { RadioGroup, FormField } from '../../../shared/components';
 import OnboardingLayout from '@/domain/onboarding/components/OnboardingLayout';
 import { setUserRole } from '../lib/onboarding.ts';
+import { generateRandomNickname } from '@/shared/lib/generateNickname';
 
 type Role = 'TUTOR' | 'STUDENT';
 type FormData = {
@@ -11,12 +12,13 @@ type FormData = {
 };
 
 export default function OnboardingStart() {
+  const initialNickname = generateRandomNickname();
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>({ defaultValues: { role: 'TUTOR', nickname: '' } });
+  } = useForm<FormData>({ defaultValues: { role: 'TUTOR', nickname: initialNickname } });
 
   const onSubmit = (data: FormData) => {
     if (isSubmitting) return;
@@ -36,7 +38,7 @@ export default function OnboardingStart() {
   return (
     <OnboardingLayout
       title="온보딩"
-      subtitle="역할을 선택하고 닉네임을 설정해주세요."
+      subtitle="회원 유형을 선택하고 별명을 입력해주세요."
       footer={
         <OnboardingNextButton
           addClass="ui-btn--full"
@@ -45,17 +47,17 @@ export default function OnboardingStart() {
         />
       }
     >
-      <FormField className="mls-header" label="역할" childrenClsx="ui-radio-group">
+      <FormField className="mls-header" label="회원 유형" childrenClsx="ui-radio-group" required>
         <RadioGroup
           name="role"
           options={radioOption}
           defaultValue="TUTOR"
-          onChange={(value) => setValue('role', value)}
+          onChange={(value) => setValue('role', value as Role)}
         />
       </FormField>
       <FormField
         className="mls-header"
-        label="닉네임"
+        label="별명"
         htmlFor="nickname"
         required
         error={errors.nickname?.message}
@@ -63,12 +65,16 @@ export default function OnboardingStart() {
         <input
           className="ui-input"
           id="nickname"
-          placeholder="예) 튜닛"
+          value={initialNickname}
+          placeholder="예) 즐거운 펭귄"
           {...register('nickname', {
-            required: '닉네임은 필수입니다.',
+            required: '별명은 필수입니다.',
             minLength: { value: 2, message: '2자 이상 입력해주세요.' },
             maxLength: { value: 20, message: '20자 이내로 입력해주세요.' },
-            pattern: { value: /^[\w가-힣]+$/, message: '한글/영문/숫자/밑줄만 허용됩니다.' },
+            pattern: {
+              value: /^[A-Za-z0-9가-힣\s]+$/,
+              message: '한글, 영문, 숫자, 공백만 입력 가능합니다.',
+            },
           })}
         />
       </FormField>

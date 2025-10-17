@@ -1,0 +1,106 @@
+.lesson-history-section {
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tab-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.tab-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background: #f5f5f5;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-button.active {
+  background: var(--brand-mint);
+  color: white;
+}
+
+.lesson-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lesson-card {
+  padding: 16px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: white;
+}
+
+.lesson-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.lesson-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.status-badge.trial_requested {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.status-badge.trial_confirmed,
+.status-badge.regular_confirmed {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.status-badge.trial_completed,
+.status-badge.regular_completed {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.status-badge.canceled {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.lesson-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  font-size: 0.95rem;
+}
+
+.tutor-info,
+.schedule-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.no-lessons {
+  text-align: center;
+  color: #666;
+  padding: 40px 0;
+}

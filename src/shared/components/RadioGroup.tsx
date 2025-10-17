@@ -1,4 +1,5 @@
 import React from 'react';
+import '@/shared/css/ui/ui-radio.css';
 
 export type RadioOption = { label: React.ReactNode; value: string };
 

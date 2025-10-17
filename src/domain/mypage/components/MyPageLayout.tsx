@@ -2,32 +2,13 @@ import React from 'react';
 import { Card } from '../../../shared/components';
 
 type Props = {
-  subtitle?: React.ReactNode;
   children: React.ReactNode;
-  footer?: React.ReactNode;
-  as?: 'div' | 'form';
-  onSubmit?: React.FormEventHandler<HTMLFormElement>;
-  bodyClassName?: string;
 };
 
-export default function OnboardingLayout({
-  subtitle,
-  children,
-  footer,
-  as = 'div',
-  bodyClassName,
-  onSubmit,
-}: Props) {
+export default function MyPageLayout({ children }: Props) {
   return (
-    <Card
-      title={'마이페이지'}
-      subtitle={subtitle}
-      as={as}
-      onSubmit={onSubmit}
-      bodyClassName={bodyClassName}
-    >
+    <Card title="마이페이지" bodyClassName="space-y-8">
       {children}
-      {footer}
     </Card>
   );
 }

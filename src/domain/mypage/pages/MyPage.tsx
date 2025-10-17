@@ -1,12 +1,12 @@
-import ProfileInfo from '../../profile/components/ProfileInfo.tsx';
-import StudentRegister from '../components/StudentRegister.tsx';
 import MyPageLayout from '../components/MyPageLayout.tsx';
+import ProfileSection from '../components/ProfileSection';
+import MyLessonSection from '../components/MyLessonSection';
 
 export default function MyPage() {
   return (
-    <MyPageLayout subtitle="기본 소개">
-      <ProfileInfo />
-      <StudentRegister />
+    <MyPageLayout>
+      <ProfileSection />
+      <MyLessonSection />
     </MyPageLayout>
   );
 }

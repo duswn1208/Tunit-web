@@ -1,11 +1,47 @@
 .ui-btn {
-  border: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 24px;
+  border: none;
   border-radius: 12px;
-  background: var(--brand-red);
-  color: #fff;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  transition: filter 0.12s ease, transform 0.06s ease;
+  background: var(--gradient-brand);
+  color: var(--bg-modal);
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(var(--brand-red-rgb), 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.ui-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(var(--brand-red-rgb), 0.3);
+}
+
+.ui-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(var(--brand-red-rgb), 0.2);
+}
+
+.ui-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(rgba(var(--bg-modal-rgb), 0.1), transparent);
+  pointer-events: none;
+}
+
+.ui-btn--full {
+  width: 100%;
+  padding: 16px 24px;
+  font-size: 18px;
+  letter-spacing: 0.02em;
 }
 
 .ui-btn--full {
