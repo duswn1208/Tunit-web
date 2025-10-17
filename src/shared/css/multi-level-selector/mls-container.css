@@ -1,20 +1,18 @@
 .mls-card {
   max-width: 720px;
   margin: 24px auto;
-  background: #fff;
+  background: transparent;
   color: #111;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: none;
   overflow: hidden;
 }
 .mls-header {
   padding: 20px 20px 8px;
 }
 .mls-body {
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border: none;
 }
 .mls-footer {
   padding: 16px 20px 20px;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border: none;
 }

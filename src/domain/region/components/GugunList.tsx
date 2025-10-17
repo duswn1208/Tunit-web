@@ -32,6 +32,7 @@ export default function GugunList({
         </li>
       )}
       {subregions.map((g) => {
+        console.log('Rendering gugun:', g);
         const selected = isGugunSelected(g.code);
         return (
           <li

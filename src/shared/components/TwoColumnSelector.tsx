@@ -64,7 +64,7 @@ const TwoColumnSelector: React.FC<TwoColumnSelectorProps> = ({
             <div
               key={item.code}
               className={'sheet-option' + (selectedRight.includes(item.code) ? ' selected' : '')}
-              onClick={() => toggleRight(item.code)}
+              onClick={() => toggleRight(item.code, item.label)}
             >
               {item.label}
             </div>

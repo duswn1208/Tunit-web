@@ -108,17 +108,19 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background-color: transparent;
   color: currentColor;
   cursor: pointer;
-  opacity: 0.6;
+  opacity: 0.7;
   transition: all 0.2s ease;
+  font-size: 16px;
+  margin-right: -4px;
 }
 
 .chip-remove:hover {
   opacity: 1;
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.08);
 }

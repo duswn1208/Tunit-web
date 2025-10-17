@@ -29,6 +29,7 @@ export default function LessonMainCategory({
       isActive={(code) => mainCode === code}
       onClick={selectMain}
       style={{ padding: '16px 20px 8px' }}
+      isMainCategory={true}
     />
   );
 }

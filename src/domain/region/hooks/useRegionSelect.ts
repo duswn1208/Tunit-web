@@ -140,6 +140,10 @@ export function useRegionSelect(opts: UseRegionSelectOptions = {}) {
   // 구/군 토글
   const toggleGugun = (g: Region) => {
     if (!selectedSido) return;
+    // Region 타입 검증
+    if (!g.label && !g.code) {
+      return;
+    }
     setSelectedMap((prev) => {
       const next = new Map(prev);
       if (isSidoSelected(selectedSido.code)) next.delete(String(selectedSido.code));
@@ -148,7 +152,7 @@ export function useRegionSelect(opts: UseRegionSelectOptions = {}) {
       } else {
         next.set(String(g.code), {
           code: String(g.code),
-          label: `${selectedSido.label} ${stripParentPrefix(selectedSido.label, g.label)}`,
+          label: stripParentPrefix(selectedSido.label, g.label),
           type: 'gugun',
           parentCode: String(selectedSido.code),
           parentLabel: selectedSido.label,

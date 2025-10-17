@@ -1,0 +1,41 @@
+.lesson-main-category {
+  padding: 8px 32px !important;
+  margin: 0 -12px;
+  position: relative;
+}
+
+.lesson-main-category .mls-grid {
+  display: flex;
+  overflow-x: auto;
+  gap: 8px;
+  padding: 4px 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scroll-behavior: smooth;
+  position: relative;
+}
+
+.lesson-main-category .mls-grid::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.lesson-main-category .mls-card-item {
+  flex: 0 0 auto;
+  min-width: 100px;
+  max-width: 140px;
+  white-space: nowrap;
+}
+
+/* 서브 카테고리는 그리드 유지 */
+.lesson-sub-category .mls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+}
+
+/* 모바일에서도 동일한 스타일 유지 */
+@media (max-width: 768px) {
+  .lesson-main-category {
+    padding: 8px 32px !important;
+  }
+}

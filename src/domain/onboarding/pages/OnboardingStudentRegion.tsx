@@ -49,7 +49,7 @@ export default function OnboardingStudentRegion() {
     <OnboardingLayout
       step={4}
       total={4}
-      subtitle="시/도를 선택한 뒤, 구/군을 여러 개 선택하세요. (중복 선택 가능)"
+      subtitle="시/도를 선택한 뒤, 구/군을 여러 개 선택하세요."
       bodyClassName="mls-body"
       footer={
         <OnboardingNextButton

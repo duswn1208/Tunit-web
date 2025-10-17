@@ -37,8 +37,8 @@ export default function OnboardingStart() {
 
   return (
     <OnboardingLayout
-      title="온보딩"
-      subtitle="회원 유형을 선택하고 별명을 입력해주세요."
+      title="프로필 설정"
+      subtitle="안녕하세요👋 먼저 회원님의 유형을 선택하고 사용하실 별명을 입력해주세요. "
       footer={
         <OnboardingNextButton
           addClass="ui-btn--full"
@@ -47,7 +47,12 @@ export default function OnboardingStart() {
         />
       }
     >
-      <FormField className="mls-header" label="회원 유형" childrenClsx="ui-radio-group" required>
+      <FormField
+        className="ui-field-noborder"
+        label="회원 유형"
+        childrenClsx="ui-radio-group"
+        required
+      >
         <RadioGroup
           name="role"
           options={radioOption}
@@ -56,7 +61,7 @@ export default function OnboardingStart() {
         />
       </FormField>
       <FormField
-        className="mls-header"
+        className="ui-field-noborder"
         label="별명"
         htmlFor="nickname"
         required

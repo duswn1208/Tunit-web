@@ -18,7 +18,7 @@ export default function OnboardingLesson() {
     <OnboardingLayout
       step={3}
       total={4}
-      subtitle="레슨 유형을 고른 뒤, 상세 레슨을 여러 개 선택하세요."
+      subtitle="레슨 유형을 고른 뒤, 상세 레슨을 여러 개 선택할 수 있어요."
       bodyClassName="mls-body"
       footer={<OnboardingNextButton addClass="ui-btn--full" onClick={goNext} />}
     >

@@ -50,12 +50,16 @@
   font-size: 1.125rem;
   font-weight: 500;
   color: var(--text-secondary);
-  margin: 0;
-  line-height: 1.5;
+  margin: 0 auto;
+  line-height: 1.6;
+  max-width: 90%;
+  text-align: center;
+  word-break: keep-all;
+  letter-spacing: -0.01em;
 }
 
 .ui-card-body {
-  padding: 32px 40px 24px;
+  padding: 16px 40px 24px;
 }
 
 .ui-card-footer {

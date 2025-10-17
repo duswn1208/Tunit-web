@@ -4,15 +4,48 @@
 }
 
 .ui-field {
-  display: grid;
-  gap: 8px;
+  background: var(--bg-modal);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
 }
+
+/* 카드 스타일 제거 클래스 */
+.ui-field-noborder {
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+  /* margin-bottom: 8px; */
+}
+
+.ui-field,
+.ui-field-noborder {
+  display: grid;
+  gap: 12px;
+}
+
 .ui-label {
   font-weight: 700;
   font-size: 20px;
+  color: var(--text-primary);
 }
+
 .ui-input {
-  background-color: #fff;
+  background-color: var(--bg-modal);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 15px;
+  transition: border-color 0.2s ease;
+}
+
+.ui-input:focus {
+  border-color: var(--brand-red);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(var(--brand-red-rgb), 0.1);
 }
 .ui-hint {
   font-size: 12px;
@@ -21,6 +54,13 @@
 .ui-error {
   color: #ff6b6b;
   font-size: 12px;
+}
+
+.ui-field-noborder {
+  padding: 16px 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
 }
 
 /* 2열 레이아웃 */

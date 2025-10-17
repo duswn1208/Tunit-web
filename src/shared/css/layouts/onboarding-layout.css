@@ -1,0 +1,32 @@
+.onboarding-container {
+  max-width: 760px;
+  margin: 48px auto;
+  padding: 0 24px;
+}
+
+.onboarding-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.onboarding-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.onboarding-subtitle {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+.onboarding-body {
+  margin-bottom: 32px;
+}
+
+.onboarding-footer {
+  margin-top: 48px;
+}

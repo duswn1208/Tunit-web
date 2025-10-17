@@ -31,9 +31,7 @@ export default function ChipList<T = ChipItem>({
   return (
     <div className={['mls-chips', className].filter(Boolean).join(' ')}>
       {items.length === 0
-        ? emptyText ?? (
-            <span style={{ fontSize: 13, color: '#6b7280' }}>선택하면 이곳에 표시돼요</span>
-          )
+        ? emptyText
         : items.map((item) => {
             const code = getCode(item);
             const label = getLabel(item);

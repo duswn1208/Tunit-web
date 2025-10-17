@@ -54,7 +54,7 @@ export default function OnboardingTutor() {
       footer={<OnboardingNextButton addClass="ui-btn--full" type="submit" loading={isSubmitting} />}
     >
       <FormField
-        className="mls-header"
+        className="ui-field-noborder"
         label="소개글"
         htmlFor="introduce"
         required
@@ -76,7 +76,7 @@ export default function OnboardingTutor() {
       </FormField>
 
       <FormField
-        className="mls-header"
+        className="ui-field-noborder"
         label="경력 연수"
         htmlFor="careerYears"
         required
@@ -99,7 +99,7 @@ export default function OnboardingTutor() {
       </FormField>
 
       <FormField
-        className="mls-header"
+        className="ui-field-noborder"
         label="시간당 레슨 금액(원)"
         htmlFor="pricePerHour"
         required
@@ -122,7 +122,7 @@ export default function OnboardingTutor() {
       </FormField>
 
       <FormField
-        className="mls-header"
+        className="ui-field-noborder"
         label="기본 수업 단위(분)"
         htmlFor="durationMin"
         required

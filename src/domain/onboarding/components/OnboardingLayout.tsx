@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from '../../../shared/components';
+import Card from '@/shared/components/Card';
 
 type Props = {
   step?: number;
@@ -24,7 +24,7 @@ export default function OnboardingLayout({
   bodyClassName,
   onSubmit,
 }: Props) {
-  const fullTitle = title ?? (step && total ? `온보딩 (${step}/${total})` : undefined);
+  const fullTitle = title ?? (step && total ? `프로필 설정 (${step}/${total})` : undefined);
   return (
     <Card
       title={fullTitle}
