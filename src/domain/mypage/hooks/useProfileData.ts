@@ -12,7 +12,7 @@ export function useProfileData() {
       try {
         setIsLoading(true);
         // API 호출 로직
-        const response = await fetch('/api/profile');
+        const response = await fetch('/api/users/profile/me');
         if (!response.ok) {
           throw new Error('프로필 정보를 불러오는데 실패했습니다.');
         }

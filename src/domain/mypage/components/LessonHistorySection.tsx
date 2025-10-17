@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LessonStatus } from '@/domain/lesson/types/lesson';
+import { LessonStatus, LessonStatusLabel } from '@/domain/lesson/types/lesson';
 import useLessonHistory from '../hooks/useLessonHistory';
 import './LessonHistorySection.css';
 
@@ -18,7 +18,7 @@ export default function LessonHistorySection() {
   }
 
   const renderLessonList = (lessons: any[]) => {
-    if (lessons.length === 0) {
+    if (!lessons || lessons.length === 0) {
       return <div className="no-lessons">레슨 내역이 없습니다.</div>;
     }
 
@@ -49,24 +49,7 @@ export default function LessonHistorySection() {
   };
 
   const getStatusLabel = (status: LessonStatus) => {
-    switch (status) {
-      case LessonStatus.TRIAL_REQUESTED:
-        return '체험 레슨 요청';
-      case LessonStatus.TRIAL_CONFIRMED:
-        return '체험 레슨 확정';
-      case LessonStatus.TRIAL_COMPLETED:
-        return '체험 레슨 완료';
-      case LessonStatus.REGULAR_REQUESTED:
-        return '정규 레슨 요청';
-      case LessonStatus.REGULAR_CONFIRMED:
-        return '정규 레슨 확정';
-      case LessonStatus.REGULAR_COMPLETED:
-        return '정규 레슨 완료';
-      case LessonStatus.CANCELED:
-        return '취소됨';
-      default:
-        return '알 수 없음';
-    }
+    return LessonStatusLabel[status] ?? '알 수 없음';
   };
 
   const formatDateTime = (date: string, time: string) => {
