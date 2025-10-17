@@ -10,7 +10,7 @@ export default function HomeActions() {
     if (!user) {
       navigate('/auth/login', { state: { from: '/search' } });
     } else {
-      navigate('/search');
+      navigate('/find/lessons');
     }
   };
 
