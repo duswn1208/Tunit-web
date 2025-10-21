@@ -26,6 +26,7 @@ export default function TutorSearchPage() {
   // 필터 상태
   const [selectedRegionCodes, setSelectedRegionCodes] = useState<string[]>([]);
   const [selectedLessonCodes, setSelectedLessonCodes] = useState<string[]>([]);
+  const [sortType, setSortType] = useState<string>('REVIEW');
   // 튜터 리스트
   const [tutors, setTutors] = useState<TutorProfile[]>([]);
   useEffect(() => {
@@ -49,13 +50,13 @@ export default function TutorSearchPage() {
   // 필터 값이 바뀔 때마다 tutor 리스트 조회
   useEffect(() => {
     if (loading) return;
-    fetchTutors({ regionCodes: selectedRegionCodes, lessonCodes: selectedLessonCodes })
+    fetchTutors({ regionCodes: selectedRegionCodes, lessonCodes: selectedLessonCodes, sortType })
       .then(setTutors)
       .catch((e) => {
         console.error('튜터 리스트 조회 실패', e);
         setTutors([]);
       });
-  }, [selectedRegionCodes, selectedLessonCodes, loading]);
+  }, [selectedRegionCodes, selectedLessonCodes, sortType, loading]);
 
   if (loading) {
     return <div>로딩 중...</div>;
@@ -66,13 +67,14 @@ export default function TutorSearchPage() {
       <TutorFilterBar
         initialRegion={studentRegions}
         initialLessons={studentLessons}
-        // 필터 변경 시 region/lesson code 배열을 업데이트
+        initialSort={sortType}
         onRegionChange={(regionList: any[]) =>
           setSelectedRegionCodes(regionList.map((r) => r.code))
         }
         onLessonChange={(lessonList: any[]) =>
           setSelectedLessonCodes(lessonList.map((l) => l.code))
         }
+        onSortChange={setSortType}
       />
       <TutorProfileList tutors={tutors} />
     </div>

@@ -8,6 +8,28 @@
   color: #333;
   cursor: pointer;
   outline: none;
+  transition: background 0.2s, border 0.2s, color 0.2s;
+}
+
+/* filter-chip 스타일을 select-box에 적용 */
+.select-box.filter-chip {
+  border: 1px solid #ddd;
+  background: #f6f7fa;
+  border-radius: 16px;
+  padding: 6px 16px;
+  font-size: 15px;
+  color: #222;
+  font-weight: 500;
+  width: auto;
+  min-width: 120px;
+  height: 36px;
+}
+.select-box.filter-chip:focus,
+.select-box.filter-chip:active,
+.select-box.filter-chip.selected {
+  background: #e6f0ff;
+  border-color: var(--brand-red);
+  color: var(--brand-red);
 }
 
 .select-box:focus {
