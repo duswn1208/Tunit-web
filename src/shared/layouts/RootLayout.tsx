@@ -11,8 +11,8 @@ export default function RootLayout() {
   let HeaderComponent = RootHeaderBase;
 
   if (user) {
-    if (user.userRole === 'TUTOR') HeaderComponent = RootHeaderTutor;
-    else if (user.userRole === 'STUDENT') HeaderComponent = RootHeaderStudent;
+    if (user.userRole?.tutor) HeaderComponent = RootHeaderTutor;
+    else if (user.userRole?.student) HeaderComponent = RootHeaderStudent;
   }
 
   return (

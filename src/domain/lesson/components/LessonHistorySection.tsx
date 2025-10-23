@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { LessonStatus, LessonStatusLabel } from '@/domain/lesson/types/lesson';
-import useLessonHistory from '../hooks/useLessonHistory';
-import './LessonHistorySection.css';
+import useLessonHistory from '../../mypage/hooks/useLessonHistory';
+import './css/LessonHistorySection.css';
 
 type TabType = 'upcoming' | 'past' | 'pending';
 

@@ -6,8 +6,8 @@ export default function RootHeaderStudent() {
     <RootHeaderBase
       nav={
         <nav className="nav">
-          <Link to="/mypage">마이페이지</Link>
-          <Link to="/find/lessons">튜터찾기</Link>
+          <Link to="/search/tutors">튜터 찾기</Link>
+          <Link to="/student/my/lessons">내 레슨</Link>
         </nav>
       }
     />

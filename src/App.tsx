@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import HomePage from './domain/home/pages/HomePage.tsx';
-import LessonManage from './domain/lesson/pages/LessonManagePage.tsx';
 import LoginPage from './domain/home/pages/LoginPage.tsx';
 import MyPage from './domain/mypage/pages/MyPage.tsx';
 import OnboardingStart from './domain/onboarding/pages/OnboardingStart.tsx';
@@ -16,6 +15,8 @@ import OnboardingStudentLesson from './domain/onboarding/pages/OnboardingStudent
 import OnboardingStudentRegion from './domain/onboarding/pages/OnboardingStudentRegion.tsx';
 import TutorSearchPage from '@/domain/search/pages/TutorSearchPage.tsx';
 import TutorDetailPage from './domain/tutor/pages/TutorDetailPage.tsx';
+import LessonStudentPage from './domain/lesson/pages/LessonStudentPage.tsx';
+import LessonManageLayout from './domain/lesson/pages/LessonManagePage.tsx';
 
 // React Query 클라이언트 생성
 const queryClient = new QueryClient({
@@ -41,7 +42,8 @@ export default function App() {
                 <Route path="/mypage" element={<MyPage />} />
                 <Route path="/find/lessons" element={<TutorSearchPage />} />
                 <Route path="/tutors/:tutorId" element={<TutorDetailPage />} />
-                <Route path="/my/lessons" element={<LessonManage />} />
+                <Route path="/student/my/lessons" element={<LessonStudentPage />} />
+                <Route path="/tutor/my/lessons" element={<LessonManageLayout />} />
                 <Route path="/onboarding" element={<OnboardingStart />} />
                 <Route path="/onboarding/student" element={<OnboardingStudentLesson />} />
                 <Route path="/onboarding/student/region" element={<OnboardingStudentRegion />} />

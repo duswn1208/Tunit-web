@@ -1,4 +1,4 @@
-import LessonHistorySection from './LessonHistorySection';
+import LessonHistorySection from '../../lesson/components/LessonHistorySection';
 
 export default function MyLessonSection() {
   return (
