@@ -1,3 +1,7 @@
+/* margin right 8px 유틸 */
+.mr-8 {
+  margin-right: 8px;
+}
 .lesson-history-section {
   padding: 20px;
   background: white;
@@ -103,4 +107,39 @@
   text-align: center;
   color: #666;
   padding: 40px 0;
+}
+
+@media (max-width: 600px) {
+  .lesson-history-section {
+    padding: 6px 2px;
+  }
+  .lesson-card {
+    /* padding: 6px 4px; */
+    border-radius: 6px;
+  }
+  .tab-buttons {
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+  .tab-button {
+    padding: 4px 8px;
+    font-size: 0.95rem;
+    border-radius: 3px;
+  }
+  .lesson-list {
+    gap: 6px;
+  }
+  .status-badge {
+    padding: 1.5px 4px;
+    font-size: 0.85rem;
+    border-radius: 3px;
+  }
+  .lesson-card-actions .ui-btn,
+  .lesson-card-actions button {
+    font-size: 0.95em;
+    min-width: 60px;
+    padding: 3px 8px;
+    height: 26px;
+    border-radius: 5px;
+  }
 }
