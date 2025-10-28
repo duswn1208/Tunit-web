@@ -34,10 +34,6 @@ export default function LessonBookingForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [disabledSlots, setDisabledSlots] = useState<Array<{ date: string; time: string }>>([]);
 
-  // disabledSlots 변경 감지
-  useEffect(() => {
-    console.log('Updated disabledSlots:', disabledSlots);
-  }, [disabledSlots]);
   const { showToast } = useToast();
 
   const handleReservationSubmit = async () => {

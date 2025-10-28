@@ -42,7 +42,6 @@ export default function LessonCalendarPicker({
 
   // 날짜가 선택될 때 예약된 시간 추출
   useEffect(() => {
-    console.log('Current disabledSlots:', disabledSlots); // 디버깅용 로그
     if (calendarStatus && date) {
       let fixed: string[] = [];
       let reserved: string[] = [];

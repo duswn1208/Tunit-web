@@ -54,6 +54,15 @@
   background-color: #bfdbfe;
 }
 
+.mls-chip-red {
+  background-color: #fecaca;
+  color: #b91c1c;
+}
+
+.mls-chip-red:hover {
+  background-color: #fca5a1;
+}
+
 .mls-chip-green {
   background-color: #dcfce7;
   color: #15803d;

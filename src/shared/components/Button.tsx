@@ -9,6 +9,7 @@ type Props = {
   className?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   size?: 'sm';
+  title?: string;
 };
 
 export default function Button({
@@ -19,6 +20,7 @@ export default function Button({
   className,
   onClick,
   size,
+  title,
 }: Props) {
   return (
     <button
@@ -27,6 +29,7 @@ export default function Button({
       className={clsx('ui-btn', className, size === 'sm' && 'ui-btn--sm')}
       onClick={onClick}
       aria-busy={loading || undefined}
+      title={title}
     >
       {loading ? '처리 중…' : children}
     </button>

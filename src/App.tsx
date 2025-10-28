@@ -17,6 +17,7 @@ import TutorSearchPage from '@/domain/search/pages/TutorSearchPage.tsx';
 import TutorDetailPage from './domain/tutor/pages/TutorDetailPage.tsx';
 import LessonStudentPage from './domain/lesson/pages/LessonStudentPage.tsx';
 import LessonManageLayout from './domain/lesson/pages/LessonManagePage.tsx';
+import BottomTabBar from '@/shared/components/BottomTabBar';
 
 // React Query 클라이언트 생성
 const queryClient = new QueryClient({
@@ -41,6 +42,7 @@ export default function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/mypage" element={<MyPage />} />
                 <Route path="/find/lessons" element={<TutorSearchPage />} />
+                <Route path="/tutors/:tutorId/booking" element={<TutorDetailPage />} />
                 <Route path="/tutors/:tutorId" element={<TutorDetailPage />} />
                 <Route path="/student/my/lessons" element={<LessonStudentPage />} />
                 <Route path="/tutor/my/lessons" element={<LessonManageLayout />} />
@@ -54,6 +56,7 @@ export default function App() {
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Route>
             </Routes>
+            <BottomTabBar />
           </BrowserRouter>
         </ToastProvider>
       </AuthProvider>
