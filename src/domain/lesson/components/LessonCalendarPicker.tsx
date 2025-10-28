@@ -21,7 +21,7 @@ export default function LessonCalendarPicker({
   date,
   time,
   onChange,
-  size = 'medium',
+  size = 'large',
   disabledSlots = [],
 }: LessonCalendarPickerProps) {
   const [calendarStatus, setCalendarStatus] = useState<LessonCalendarStatusDto | null>(null);
@@ -82,7 +82,6 @@ export default function LessonCalendarPicker({
 
       // 모든 비활성화할 시간 슬롯을 하나의 배열로 합치고 중복 제거
       const allReserved = Array.from(new Set([...fixed, ...reserved, ...localDisabled]));
-      console.log('Date:', date, 'All reserved times:', allReserved); // 디버깅용 로그
       setReservedTimes(allReserved);
     } else {
       setReservedTimes([]);

@@ -1,5 +1,5 @@
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import ErrorState from '@/shared/components/ErrorState';
+import { useParams, useNavigate, useLocation, matchPath } from 'react-router-dom';
+import { useToast } from '@/shared/contexts/ToastContext';
 import TutorLessonInfo from '../components/TutorLessonInfo';
 import TutorScheduleInfo from '../components/TutorScheduleInfo';
 import TutorProfileCard from '../../profile/components/TutorProfileCard.tsx';
@@ -10,49 +10,40 @@ import '../css/tutor-detail.css';
 import '../css/tutor-calendar.css';
 
 export default function TutorDetailPage() {
+  const { showToast } = useToast();
   const { tutorId: tutorProfileNo } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const showBookingParam = new URLSearchParams(location.search).get('booking');
+  // /tutors/:tutorId/booking 경로 여부 확인
+  const bookingMatch = matchPath('/tutors/:tutorId/booking', location.pathname);
+  const showBookingCalendar = !!bookingMatch;
+  // lessonReservationNo 쿼리스트링 추출
+  const lessonReservationNo =
+    new URLSearchParams(location.search).get('lessonReservationNo') || undefined;
   const { data, isLoading, error } = useTutorDetail(tutorProfileNo!);
   const {
     state: { selectedDate, selectedTime, selectedLesson, requestMessage },
     setDateTime,
     setLesson,
     setMessage,
-  } = useReservationState();
-
-  const showBookingCalendar = showBookingParam === 'true';
+  } = useReservationState(lessonReservationNo);
 
   const toggleCalendar = (show: boolean) => {
-    navigate(`/tutors/${tutorProfileNo}${show ? '?booking=true' : ''}`, { replace: true });
+    if (show) {
+      navigate(`/tutors/${tutorProfileNo}/booking`, { replace: true });
+    } else {
+      navigate(`/tutors/${tutorProfileNo}`, { replace: true });
+    }
   };
 
   if (isLoading) {
-    return (
-      <div className="tutor-detail-page">
-        <div className="tutor-detail-container">
-          <div className="info-card">
-            <div className="loading-message">로딩 중...</div>
-          </div>
-        </div>
-      </div>
-    );
+    showToast('로딩 중입니다...', 'info');
+    return null;
   }
 
   if (error || !data) {
-    return (
-      <div className="tutor-detail-page">
-        <div className="tutor-detail-container">
-          <div className="info-card">
-            <ErrorState
-              message="죄송합니다. 튜터 정보를 찾을 수 없습니다."
-              details={`프로필 번호: ${tutorProfileNo}`}
-            />
-          </div>
-        </div>
-      </div>
-    );
+    showToast('죄송합니다. 튜터 정보를 찾을 수 없습니다.', 'error');
+    return null;
   }
 
   return (
@@ -85,6 +76,7 @@ export default function TutorDetailPage() {
             onDateTimeChange={setDateTime}
             onLessonChange={setLesson}
             onMessageChange={setMessage}
+            lessonReservationNo={lessonReservationNo}
           />
         )}
       </div>

@@ -1,6 +1,6 @@
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import './InlineDateTimePicker.css';
 
@@ -26,9 +26,16 @@ export default function InlineDateTimePicker({
   onChange,
   availableTimeRange,
   enabledDayOfWeeks,
-  size = 'medium',
+  size = 'large',
 }: Props) {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(date ? new Date(date) : null);
+  function parseDateStringToLocal(dateStr?: string): Date | null {
+    if (!dateStr) return null;
+    const [year, month, day] = dateStr.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  }
+  const [selectedDate, setSelectedDate] = useState<Date | null>(
+    date ? parseDateStringToLocal(date) : null
+  );
   const [selectedTime, setSelectedTime] = useState<string>(time || '');
 
   const handleDateChange = (value: any) => {
@@ -61,48 +68,60 @@ export default function InlineDateTimePicker({
         />
       </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 16 }}>
-        {times.map((t) => {
-          let disabled = false;
-          if (!selectedDate) disabled = true;
-          if (!availableTimeRange) disabled = true;
-          if (reservedTimes.includes(t)) disabled = true;
-          if (availableTimeRange) {
-            // HH:mm 또는 HH:mm:00 형식 지원
-            const baseDate = '2000-01-01';
-            const timeToDate = (hhmm: string) =>
-              new Date(baseDate + 'T' + (hhmm.length === 5 ? hhmm + ':00' : hhmm));
-            const tDate = timeToDate(t);
-            const startDate = timeToDate(availableTimeRange.start);
-            const endDate = timeToDate(availableTimeRange.end);
-            if (tDate < startDate || tDate > endDate) disabled = true;
-          }
-          return (
-            <button
-              key={t}
-              type="button"
-              onClick={() => handleTimeClick(t)}
-              style={{
-                padding: '8px 16px',
-                borderRadius: 4,
-                border: selectedTime === t ? '2px solid #1976d2' : '1px solid #ccc',
-                background: selectedTime === t ? '#1976d2' : '#fff',
-                color: selectedTime === t ? '#fff' : '#333',
-                fontWeight: 500,
-                cursor: disabled ? 'not-allowed' : 'pointer',
-                opacity: disabled ? 0.5 : 1,
-              }}
-              disabled={disabled}
-            >
-              {t}
-            </button>
-          );
-        })}
+        {availableTimeRange ? (
+          times.map((t) => {
+            let disabled = false;
+            if (!selectedDate) disabled = true;
+            if (!availableTimeRange) disabled = true;
+            if (reservedTimes.includes(t)) disabled = true;
+            if (availableTimeRange) {
+              // HH:mm 또는 HH:mm:00 형식 지원
+              const baseDate = '2000-01-01';
+              const timeToDate = (hhmm: string) =>
+                new Date(baseDate + 'T' + (hhmm.length === 5 ? hhmm + ':00' : hhmm));
+              const tDate = timeToDate(t);
+              const startDate = timeToDate(availableTimeRange.start);
+              const endDate = timeToDate(availableTimeRange.end);
+              if (tDate < startDate || tDate > endDate) disabled = true;
+            }
+            return (
+              <button
+                key={t}
+                type="button"
+                onClick={() => handleTimeClick(t)}
+                style={{
+                  padding: '4px 16px',
+                  borderRadius: 8,
+                  border: selectedTime === t ? '' : '1px solid #ccc',
+                  background: selectedTime === t ? 'var(--brand-mint)' : '#fff',
+                  color: selectedTime === t ? '#fff' : '#333',
+                  fontWeight: 500,
+                  cursor: disabled ? 'not-allowed' : 'pointer',
+                  opacity: disabled ? 0.5 : 1,
+                }}
+                disabled={disabled}
+              >
+                {t}
+              </button>
+            );
+          })
+        ) : (
+          <div style={{ width: '100%', textAlign: 'center', color: '#888', margin: '24px 0' }}>
+            선택할 수 있는 시간이 없습니다
+          </div>
+        )}
       </div>
-      {selectedDate && selectedTime && (
+      {/* {selectedDate && selectedTime && (
         <div style={{ marginTop: 12, fontWeight: 500 }}>
-          선택: {selectedDate.toISOString().slice(0, 10)} {selectedTime}
+          선택:{' '}
+          {[
+            selectedDate.getFullYear(),
+            String(selectedDate.getMonth() + 1).padStart(2, '0'),
+            String(selectedDate.getDate()).padStart(2, '0'),
+          ].join('-')}{' '}
+          {selectedTime}
         </div>
-      )}
+      )} */}
     </div>
   );
 }

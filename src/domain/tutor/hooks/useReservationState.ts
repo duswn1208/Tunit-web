@@ -1,4 +1,5 @@
-import { useReducer, useCallback } from 'react';
+import { useReducer, useCallback, useEffect } from 'react';
+import { fetchLessonReservationInfo } from '@/domain/lesson/api/lessonReservationApi';
 
 interface ReservationState {
   selectedDate: string;
@@ -45,8 +46,22 @@ function reservationReducer(state: ReservationState, action: ReservationAction):
   }
 }
 
-export function useReservationState() {
+export function useReservationState(lessonReservationNo?: string) {
   const [state, dispatch] = useReducer(reservationReducer, getInitialState());
+
+  // 예약번호 있으면 예약 정보 fetch해서 state 세팅
+  useEffect(() => {
+    if (!lessonReservationNo) return;
+    fetchLessonReservationInfo(lessonReservationNo).then((res: any) => {
+      console.log('Fetched reservation info:', res);
+      dispatch({
+        type: 'SET_DATE_TIME',
+        payload: { date: res.lessonDate || res.date || '', time: res.startTime || '' },
+      });
+      if (res.tutorLessonNo) dispatch({ type: 'SET_LESSON', payload: res.lessonCategory });
+      if (res.memo) dispatch({ type: 'SET_MESSAGE', payload: res.memo });
+    });
+  }, [lessonReservationNo]);
 
   const setDateTime = useCallback((date: string, time: string | undefined) => {
     dispatch({ type: 'SET_DATE_TIME', payload: { date, time } });

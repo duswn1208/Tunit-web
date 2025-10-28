@@ -1,3 +1,9 @@
+/* 값이 있을 때 해당 날짜 타일에 선택 효과 */
+.custom-selected-date {
+  background: #1976d2 !important;
+  color: #fff !important;
+  border-radius: 50% !important;
+}
 .inline-datepicker-container {
   width: 100%;
   color: #333;

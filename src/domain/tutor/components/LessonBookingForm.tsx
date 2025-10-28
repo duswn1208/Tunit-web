@@ -5,6 +5,8 @@ import LessonCalendarPicker from '@/domain/lesson/components/LessonCalendarPicke
 import { api } from '@/shared/lib/api';
 import { useToast } from '@/shared/contexts/ToastContext';
 import SelectBox from '@/shared/components/SelectBox';
+import { Button } from '@/shared/components';
+import Header from '@/shared/components/Header';
 
 interface LessonBookingFormProps {
   tutorProfileNo: string;
@@ -17,20 +19,35 @@ interface LessonBookingFormProps {
   onDateTimeChange: (date: string, time: string) => void;
   onLessonChange: (lessonNo: string) => void;
   onMessageChange: (message: string) => void;
+  lessonReservationNo?: string;
 }
 
-export default function LessonBookingForm({
-  tutorProfileNo,
-  lessonData,
-  selectedDate,
-  selectedTime,
-  selectedLesson,
-  requestMessage,
-  onBack,
-  onDateTimeChange,
-  onLessonChange,
-  onMessageChange,
-}: LessonBookingFormProps) {
+export default function LessonBookingForm(props: LessonBookingFormProps) {
+  const {
+    tutorProfileNo,
+    lessonData,
+    selectedDate,
+    selectedTime,
+    selectedLesson,
+    requestMessage,
+    onBack,
+    onDateTimeChange,
+    onLessonChange,
+    onMessageChange,
+    lessonReservationNo,
+  } = props;
+  // 예약번호 없고 날짜가 없으면 오늘로 자동 세팅
+  useEffect(() => {
+    if (!lessonReservationNo && !selectedDate) {
+      const today = new Date();
+      const yyyyMMdd = [
+        today.getFullYear(),
+        String(today.getMonth() + 1).padStart(2, '0'),
+        String(today.getDate()).padStart(2, '0'),
+      ].join('-');
+      onDateTimeChange(yyyyMMdd, '');
+    }
+  }, [lessonReservationNo, selectedDate, onDateTimeChange]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [disabledSlots, setDisabledSlots] = useState<Array<{ date: string; time: string }>>([]);
 
@@ -48,7 +65,8 @@ export default function LessonBookingForm({
 
     setIsSubmitting(true);
     try {
-      await api.post('/api/lessons/reserve', {
+      const url = lessonReservationNo ? '/api/lessons/reserve/change' : '/api/lessons/reserve';
+      await api.post(url, {
         tutorProfileNo: parseInt(tutorProfileNo, 10),
         startTime: selectedTime,
         tutorLessonNo: parseInt(selectedLesson, 10),
@@ -69,7 +87,6 @@ export default function LessonBookingForm({
           (slot) => slot.date === newDisabledSlot.date && slot.time === newDisabledSlot.time
         );
         const updatedSlots = exists ? prev : [...prev, newDisabledSlot];
-        console.log('Updated disabled slots:', updatedSlots); // 디버깅용 로그
         return updatedSlots;
       });
 
@@ -109,7 +126,7 @@ export default function LessonBookingForm({
       <div className="calendar-container">
         <LessonCalendarPicker
           teacherId={parseInt(tutorProfileNo, 10)}
-          startDate={today.toISOString().split('T')[0]}
+          startDate={today.toDateString().split('T')[0]}
           endDate={monthEnd.toISOString().split('T')[0]}
           date={selectedDate}
           time={selectedTime}
@@ -120,7 +137,7 @@ export default function LessonBookingForm({
 
         <div className="booking-form">
           <div className="lesson-select-container">
-            <label htmlFor="lessonSelect">레슨 과목 선택</label>
+            <Header title="레슨 선택" />
             <SelectBox
               id="lessonSelect"
               value={selectedLesson}
@@ -135,7 +152,7 @@ export default function LessonBookingForm({
             />
           </div>
           <div className="request-input-container">
-            <label htmlFor="requestMessage">요청사항</label>
+            <Header title="요청사항" />
             <textarea
               id="requestMessage"
               className="request-input"
@@ -146,13 +163,19 @@ export default function LessonBookingForm({
             />
           </div>
           <div className="booking-buttons">
-            <button
+            <Button
               className="booking-button"
               onClick={handleReservationSubmit}
               disabled={isSubmitting}
             >
-              {isSubmitting ? '예약 요청 중...' : '상담/체험 레슨 예약'}
-            </button>
+              {isSubmitting
+                ? lessonReservationNo
+                  ? '예약 변경 중...'
+                  : '예약 요청 중...'
+                : lessonReservationNo
+                ? '예약 변경'
+                : '상담/체험 레슨 예약'}
+            </Button>
           </div>
         </div>
       </div>
