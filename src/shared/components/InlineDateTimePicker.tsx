@@ -37,6 +37,10 @@ export default function InlineDateTimePicker({
     date ? parseDateStringToLocal(date) : null
   );
   const [selectedTime, setSelectedTime] = useState<string>(time || '');
+  // 외부에서 time prop이 바뀌면 내부 selectedTime도 동기화 (날짜 바뀌면 칩 컬러 초기화)
+  useEffect(() => {
+    setSelectedTime(time || '');
+  }, [time]);
 
   const handleDateChange = (value: any) => {
     setSelectedDate(value ?? null);

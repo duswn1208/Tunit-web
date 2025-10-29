@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import RegularLessonApplyPage from './domain/tutor/pages/RegularLessonApplyPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import HomePage from './domain/home/pages/HomePage.tsx';
 import LoginPage from './domain/home/pages/LoginPage.tsx';
@@ -43,6 +44,10 @@ export default function App() {
                 <Route path="/mypage" element={<MyPage />} />
                 <Route path="/find/lessons" element={<TutorSearchPage />} />
                 <Route path="/tutors/:tutorId/booking" element={<TutorDetailPage />} />
+                <Route
+                  path="/tutors/:tutorId/regular-lesson"
+                  element={<RegularLessonApplyPage />}
+                />
                 <Route path="/tutors/:tutorId" element={<TutorDetailPage />} />
                 <Route path="/student/my/lessons" element={<LessonStudentPage />} />
                 <Route path="/tutor/my/lessons" element={<LessonManageLayout />} />

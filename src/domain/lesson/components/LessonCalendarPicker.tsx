@@ -54,9 +54,14 @@ export default function LessonCalendarPicker({
       // 요일에 해당하는 가용 시간 찾기
       const available = calendarStatus.availableTimes?.find((v) => v.dayOfWeekNum === dayOfWeekNum);
       if (available) {
-        setAvailableTimeRange({ start: available.startTime, end: available.endTime });
+        setAvailableTimeRange((prev) => {
+          if (!prev || prev.start !== available.startTime || prev.end !== available.endTime) {
+            return { start: available.startTime, end: available.endTime };
+          }
+          return prev;
+        });
       } else {
-        setAvailableTimeRange(null);
+        setAvailableTimeRange((prev) => (prev !== null ? null : prev));
       }
 
       // 고정 예약 시간 필터링
@@ -82,10 +87,15 @@ export default function LessonCalendarPicker({
 
       // 모든 비활성화할 시간 슬롯을 하나의 배열로 합치고 중복 제거
       const allReserved = Array.from(new Set([...fixed, ...reserved, ...localDisabled]));
-      setReservedTimes(allReserved);
+      setReservedTimes((prev) => {
+        const prevStr = prev.join(',');
+        const nextStr = allReserved.join(',');
+        if (prevStr !== nextStr) return allReserved;
+        return prev;
+      });
     } else {
-      setReservedTimes([]);
-      setAvailableTimeRange(null);
+      setReservedTimes((prev) => (prev.length > 0 ? [] : prev));
+      setAvailableTimeRange((prev) => (prev !== null ? null : prev));
     }
   }, [calendarStatus, date, disabledSlots]);
 

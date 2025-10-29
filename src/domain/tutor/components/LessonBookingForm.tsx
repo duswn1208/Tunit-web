@@ -65,6 +65,7 @@ export default function LessonBookingForm(props: LessonBookingFormProps) {
 
     setIsSubmitting(true);
     try {
+      //예약변경일때는 lessonReservationNo 있으면 변경 api 호출  param에도 추가
       const url = lessonReservationNo ? '/api/lessons/reserve/change' : '/api/lessons/reserve';
       await api.post(url, {
         tutorProfileNo: parseInt(tutorProfileNo, 10),

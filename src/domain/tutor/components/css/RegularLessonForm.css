@@ -1,0 +1,80 @@
+/* 공통 스타일 */
+.regular-lesson-form-label {
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+.regular-lesson-form-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.regular-lesson-form-input {
+  width: 100%;
+  padding: 8px;
+  font-size: 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+.regular-lesson-form-summary {
+  background: #f8f8fa;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.regular-lesson-form-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  font-size: 15px;
+}
+.regular-lesson-form-price {
+  font-weight: 700;
+  font-size: 18px;
+  color: #e14a4a;
+  margin-bottom: 12px;
+}
+.regular-lesson-form-btn-row {
+  display: flex;
+  gap: 8px;
+}
+.regular-lesson-form-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-weight: 500;
+}
+.regular-lesson-form-btn-fill {
+  flex: 2;
+  padding: 12px;
+  border-radius: 8px;
+  background: #e14a4a;
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  font-size: 16px;
+  opacity: 1;
+  cursor: pointer;
+}
+.regular-lesson-form-btn-fill:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.regular-lesson-form-checkbox-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+.regular-lesson-form-checkbox {
+  margin-right: 8px;
+}
+.regular-lesson-form-subtext {
+  font-size: 15px;
+  color: #555;
+}
+.regular-lesson-form-subtext--mt {
+  margin-top: 4px;
+}

@@ -1,23 +1,15 @@
+import Header from '@/shared/components/Header';
 import type { TutorDetailResponse } from '../api/tutorApi';
 import WeeklyScheduleList from '@/shared/components/WeeklyScheduleList';
 
 interface TutorScheduleInfoProps {
   scheduleData: TutorDetailResponse['tutorAvailableTimeList'];
-  onBookingClick: () => void;
 }
 
-export default function TutorScheduleInfo({
-  scheduleData,
-  onBookingClick,
-}: TutorScheduleInfoProps) {
+export default function TutorScheduleInfo({ scheduleData }: TutorScheduleInfoProps) {
   return (
     <div className="info-card">
-      <div className="schedule-header">
-        <h2 className="info-title">레슨 가능 시간</h2>
-        <button className="booking-button" onClick={onBookingClick}>
-          레슨 예약하기
-        </button>
-      </div>
+      <Header title="레슨 가능 시간" />
       <WeeklyScheduleList scheduleData={scheduleData} />
     </div>
   );

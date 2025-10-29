@@ -2,15 +2,37 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import Chip from '@/shared/components/Chip.tsx';
 import type { TutorDetail } from '../../tutor/api/types.ts';
+import { Button } from '@/shared/components';
 
 interface TutorProfileCardProps {
   tutor: TutorDetail;
   variant?: 'full' | 'summary';
+  isMobile?: boolean;
 }
 
-export default function TutorProfileCard({ tutor, variant = 'full' }: TutorProfileCardProps) {
+export function TutorProfileCard({ tutor, variant = 'full', isMobile }: TutorProfileCardProps) {
   return (
-    <div className="tutor-profile info-card">
+    <div className="tutor-profile info-card" style={{ position: 'relative' }}>
+      {/* 데스크탑: 프로필 카드 우측 상단 버튼 */}
+      {!isMobile && (
+        <div
+          className="info-card-action-buttons"
+          style={{ position: 'absolute', top: 24, right: 24, zIndex: 2, display: 'flex', gap: 8 }}
+        >
+          <Button
+            className="booking-button"
+            onClick={() => window.dispatchEvent(new CustomEvent('tutor-booking-trial'))}
+          >
+            상담/체험 레슨 예약
+          </Button>
+          <Button
+            className="booking-button booking-button--outline"
+            onClick={() => window.dispatchEvent(new CustomEvent('tutor-booking-regular'))}
+          >
+            정기레슨 신청
+          </Button>
+        </div>
+      )}
       <div className="tutor-profile-header">
         {tutor.photoUrl ? (
           <img src={tutor.photoUrl} alt={tutor.nickname || '튜터'} className="tutor-avatar" />
