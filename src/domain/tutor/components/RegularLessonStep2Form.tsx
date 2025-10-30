@@ -5,7 +5,6 @@ import { getDayLabel } from '@/shared/constants/date';
 import OnboardingLayout from '../../onboarding/components/OnboardingLayout';
 import RegularLessonStepFooter from './RegularLessonStepFooter';
 import { useToast } from '@/shared/contexts/ToastContext';
-import { Button } from '@/shared/components';
 
 interface ScheduleSlot {
   day: string; // 요일 (예: '월')
@@ -14,14 +13,14 @@ interface ScheduleSlot {
 
 export interface RegularLessonStep2FormProps {
   totalCount: number; // 총 신청 횟수
-  lessonType: string;
+  contractType: string;
   onPrev: () => void;
   onNext: (data: { startDate: string; slots: ScheduleSlot[] }) => void;
 }
 
 export default function RegularLessonStep2Form({
   totalCount,
-  lessonType,
+  contractType: lessonType,
   onPrev,
   onNext,
 }: RegularLessonStep2FormProps) {
@@ -30,15 +29,13 @@ export default function RegularLessonStep2Form({
   const [slots, setSlots] = useState<{ date: string; time: string }[]>([]);
   const [tempDate, setTempDate] = useState<string>('');
   const [tempTime, setTempTime] = useState<string>('');
-  const isNextEnabled = slots.length === totalCount;
+  const isNextEnabled = slots.length === (lessonType === 'REGULAR' ? totalCount : 1);
 
   const { showToast } = useToast();
 
   return (
-    <OnboardingLayout title="언제 레슨을 받고 싶으신가요?">
-      {/* 희망 시작일/시간대 예약 캘린더+칩 UI (공통) */}
+    <OnboardingLayout title="레슨 일정" subtitle="희망하는 시작일과 시간대를 선택해 주세요.">
       <div style={{ marginBottom: 24 }}>
-        <div style={{ fontWeight: 500, marginBottom: 8 }}>희망 시작일/시간대</div>
         <LessonCalendarPicker
           teacherId={undefined} // TODO: 실제 튜터 id 전달 필요
           startDate={new Date().toISOString().split('T')[0]}
@@ -77,6 +74,7 @@ export default function RegularLessonStep2Form({
               setTempTime(time);
             }
           }}
+          size="small"
         />
       </div>
       {lessonType === 'REGULAR' ? (
@@ -165,7 +163,7 @@ export default function RegularLessonStep2Form({
             })),
           })
         }
-        nextLabel="다음 → (스케줄 확정)"
+        nextLabel="다음"
         nextDisabled={!isNextEnabled}
       />
     </OnboardingLayout>

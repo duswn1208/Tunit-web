@@ -49,6 +49,10 @@
 }
 .regular-lesson-form-row--lesson-count {
   gap: 6px;
+  width: 100%;
+  max-width: 400px;
+  min-width: 200px;
+  margin: 0 auto;
 }
 .lesson-count-selectbox {
   min-width: 90px;

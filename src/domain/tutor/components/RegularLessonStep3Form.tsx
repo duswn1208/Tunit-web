@@ -2,6 +2,7 @@ import { useState } from 'react';
 import OnboardingLayout from '../../onboarding/components/OnboardingLayout';
 import RegularLessonStepFooter from './RegularLessonStepFooter';
 import RadioGroup from '@/shared/components/RadioGroup';
+import Header from '@/shared/components/Header';
 
 export interface RegularLessonStep3FormProps {
   defaultPhone: string;
@@ -24,16 +25,16 @@ export default function RegularLessonStep3Form({
   const [goal, setGoal] = useState('');
   const [phone, setPhone] = useState(defaultPhone);
 
-  const isNextEnabled = level && goal && phone;
+  const isNextEnabled = level;
 
   return (
-    <OnboardingLayout title="[STEP 3/4] 레슨 목표 및 요청 사항 (튜터 전달)">
+    <OnboardingLayout
+      title="레슨 목표 및 요청 사항"
+      subtitle="튜터에게 본인의 실력과 목표를 알려주세요"
+    >
       <div style={{ marginBottom: 24 }}>
-        <div style={{ fontWeight: 500, marginBottom: 8 }}>
-          튜터에게 전달하고 싶은 내용이 있나요?
-        </div>
         <div style={{ marginBottom: 20 }}>
-          <div style={{ fontWeight: 500, marginBottom: 6 }}>레슨 경험 및 실력</div>
+          <Header title="레슨 경험 및 실력" />
           <RadioGroup
             name="lesson-level"
             options={LEVEL_OPTIONS}
@@ -43,7 +44,7 @@ export default function RegularLessonStep3Form({
           />
         </div>
         <div style={{ marginBottom: 20 }}>
-          <div style={{ fontWeight: 500, marginBottom: 6 }}>레슨 목표 및 요청 사항</div>
+          <Header title="레슨 목표 및 요청 사항" />
           <textarea
             value={goal}
             onChange={(e) => setGoal(e.target.value)}
@@ -60,7 +61,7 @@ export default function RegularLessonStep3Form({
           />
         </div>
         <div style={{ marginBottom: 20 }}>
-          <div style={{ fontWeight: 500, marginBottom: 6 }}>비상 연락처</div>
+          <Header title="비상 연락처" />
           <input
             type="tel"
             value={phone}

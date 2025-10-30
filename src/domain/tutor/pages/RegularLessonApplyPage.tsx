@@ -5,6 +5,7 @@ import RegularLessonStep2Form from '../components/RegularLessonStep2Form';
 import RegularLessonStep3Form from '../components/RegularLessonStep3Form';
 import RegularLessonStep4Form from '../components/RegularLessonStep4Form';
 import { useTutorDetail } from '../hooks/useTutorDetail';
+import { sendRegularLessonRequest } from '../api/sendRegularLessonRequest';
 
 const steps = [
   '계약 유형',
@@ -23,14 +24,13 @@ export default function RegularLessonApplyPage() {
   let contractType: 'REGULAR' | 'FIRSTCOME' = 'REGULAR';
   const searchParams = new URLSearchParams(location.search);
   if (searchParams.get('type') === 'firstcome') contractType = 'FIRSTCOME';
-  // const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [step1Data, setStep1Data] = useState<{
     lessonPackage: string;
     place: string;
     price: number;
     lessonCategory: string;
-    contractType: string;
+    contractType: 'REGULAR' | 'FIRSTCOME';
   } | null>(null);
   const [step2Data, setStep2Data] = useState<any>(null);
   const [step3Data, setStep3Data] = useState<any>(null);
@@ -89,7 +89,16 @@ export default function RegularLessonApplyPage() {
           totalPrice={Number(step1Data.lessonPackage) * (step1Data.price || 0)}
           onPrev={() => setStep((s) => s - 1)}
           onSubmit={() => {
-            // TODO: 결제 및 신청 처리
+            sendRegularLessonRequest({
+              tutorProfileNo: tutorId,
+              contractType: step1Data.contractType,
+              lessonCategory: step1Data.lessonCategory,
+              place: step1Data.place,
+              slots: step2Data.slots,
+              lessonLevel: step3Data.lessonLevel,
+              phoneNumber: step3Data.phoneNumber,
+              memo: step3Data.memo,
+            });
           }}
         />
       ) : (

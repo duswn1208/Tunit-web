@@ -23,7 +23,7 @@ export default function RegularLessonStep4Form({
   const [agreed, setAgreed] = useState(false);
 
   return (
-    <OnboardingLayout title="[STEP 4/4] 최종 확인 및 요청">
+    <OnboardingLayout title="최종 확인 및 요청">
       <div style={{ marginBottom: 24 }}>
         <div style={{ fontWeight: 500, marginBottom: 8 }}>모든 정보가 맞는지 확인해 주세요.</div>
         <div style={{ background: '#f8f8fa', borderRadius: 10, padding: 16, marginBottom: 16 }}>
@@ -31,9 +31,9 @@ export default function RegularLessonStep4Form({
           <ul style={{ padding: 0, margin: 0, listStyle: 'none', fontSize: 15 }}>
             <li>
               레슨 유형:{' '}
-              {step1?.lessonType === 'REGULAR'
+              {step1?.contractType === 'REGULAR'
                 ? '정기레슨'
-                : step1?.lessonType === 'FIRSTCOME'
+                : step1?.contractType === 'FIRSTCOME'
                 ? '선착순 신청'
                 : ''}
             </li>

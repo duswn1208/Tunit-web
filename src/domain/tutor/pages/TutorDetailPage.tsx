@@ -71,8 +71,7 @@ export default function TutorDetailPage() {
       navigate(`/tutors/${tutorProfileNo}/regular-lesson`);
     }
     function handleFast() {
-      // 처음(상세페이지)에서 클릭 시 상세로 이동
-      navigate(`/tutors/${tutorProfileNo}`);
+      navigate(`/tutors/${tutorProfileNo}/regular-lesson?type=firstcome`);
     }
     window.addEventListener('tutor-booking-trial', handleTrial);
     window.addEventListener('tutor-booking-regular', handleRegular);

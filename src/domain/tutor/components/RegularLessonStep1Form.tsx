@@ -44,6 +44,16 @@ export default function RegularLessonStep1Form(
   const totalCount = Number(lessonFreq) * LESSON_WEEKS;
   const price = totalCount * pricePerHour;
 
+  const handleNext = () => {
+    props.onNext({
+      lessonPackage: lessonFreq,
+      place,
+      price,
+      lessonCategory,
+      contractType,
+    });
+  };
+
   return (
     <OnboardingLayout
       title={getTitle()}
@@ -53,6 +63,7 @@ export default function RegularLessonStep1Form(
     >
       <div className="regular-lesson-form-field">
         <Header title="레슨 횟수 선택" addClass="mb-2" />
+
         <div className="regular-lesson-form-row regular-lesson-form-row--lesson-count">
           <SelectBox
             name="lessonFreq"
@@ -61,9 +72,10 @@ export default function RegularLessonStep1Form(
             onChange={setLessonFreq}
             className="lesson-count-selectbox"
           />
-          <span className="regular-lesson-form-subtext lesson-count-text">
-            (한 달 기준 <b>{totalCount}회</b>)
-          </span>
+
+          {/* <span className="regular-lesson-form-subtext lesson-count-text">
+          (한 달 기준 <b>{totalCount}회</b>)
+        </span> */}
         </div>
       </div>
       <div className="regular-lesson-form-field">
@@ -120,9 +132,10 @@ export default function RegularLessonStep1Form(
         <RegularLessonStepFooter
           onPrev={props.onFirst}
           prevLabel="처음으로"
-          nextType="submit"
+          nextType="button"
           nextLabel="다음"
           nextSize={undefined}
+          onNext={handleNext}
         />
       </div>
       <span

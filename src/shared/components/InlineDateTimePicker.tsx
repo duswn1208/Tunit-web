@@ -42,6 +42,11 @@ export default function InlineDateTimePicker({
     setSelectedTime(time || '');
   }, [time]);
 
+  // 날짜가 바뀌면 시간 선택도 초기화
+  useEffect(() => {
+    setSelectedTime('');
+  }, [date]);
+
   const handleDateChange = (value: any) => {
     setSelectedDate(value ?? null);
     onChange(value ? format(value, 'yyyy-MM-dd') : '', selectedTime);
