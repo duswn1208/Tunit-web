@@ -54,10 +54,10 @@ export default function TutorDetailPage() {
   }, [isLoading, showToast]);
 
   useEffect(() => {
-    if (error || !data) {
+    if (error) {
       showToast('죄송합니다. 튜터 정보를 찾을 수 없습니다.', 'error');
     }
-  }, [error, data, showToast]);
+  }, [error, showToast]);
 
   // 모든 hook은 조건문보다 위에!
   const isMobile = useMediaQuery('(max-width: 768px)');
@@ -70,11 +70,17 @@ export default function TutorDetailPage() {
     function handleRegular() {
       navigate(`/tutors/${tutorProfileNo}/regular-lesson`);
     }
+    function handleFast() {
+      // 처음(상세페이지)에서 클릭 시 상세로 이동
+      navigate(`/tutors/${tutorProfileNo}`);
+    }
     window.addEventListener('tutor-booking-trial', handleTrial);
     window.addEventListener('tutor-booking-regular', handleRegular);
+    window.addEventListener('tutor-booking-fast', handleFast);
     return () => {
       window.removeEventListener('tutor-booking-trial', handleTrial);
       window.removeEventListener('tutor-booking-regular', handleRegular);
+      window.removeEventListener('tutor-booking-fast', handleFast);
     };
   }, [navigate, toggleCalendar]);
 
@@ -134,6 +140,12 @@ export default function TutorDetailPage() {
               onClick={() => navigate(`/tutors/${tutorProfileNo}/regular-lesson`)}
             >
               정기레슨 신청
+            </Button>
+            <Button
+              className="booking-button booking-button--fast"
+              onClick={() => navigate(`/tutors/${tutorProfileNo}/regular-lesson?type=firstcome`)}
+            >
+              선착순 레슨 신청
             </Button>
           </div>
         )}

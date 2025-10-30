@@ -1,19 +1,16 @@
 import './css/RegularLessonForm.css';
 import { useState } from 'react';
 import Header from '@/shared/components/Header';
-import RadioGroup from '@/shared/components/RadioGroup';
+// import RadioGroup from '@/shared/components/RadioGroup';
 import SelectBox from '@/shared/components/SelectBox';
 import OnboardingLayout from '@/domain/onboarding/components/OnboardingLayout';
-import OnboardingNextButton from '@/domain/onboarding/components/OnboardingNextButton';
+import RegularLessonStepFooter from './RegularLessonStepFooter';
 
 const LESSON_FREQ_OPTIONS = Array.from({ length: 7 }, (_, i) => ({
   label: `주 ${i + 1}회`,
   value: String(i + 1),
 }));
-const LESSON_TYPE_OPTIONS = [
-  { label: '정기레슨', value: 'REGULAR' },
-  { label: '선착순 신청', value: 'FIRSTCOME' },
-];
+// 레슨유형 옵션 제거 (상위에서 결정)
 const LESSON_WEEKS = 4; // 한달 기준
 
 export interface RegularLessonStep1FormProps {
@@ -25,90 +22,120 @@ export interface RegularLessonStep1FormProps {
     place: string;
     price: number;
     lessonCategory: string;
-    lessonType: string;
+    contractType: string;
   }) => void;
+  onFirst?: () => void;
 }
 
-export default function RegularLessonStep1Form(props: RegularLessonStep1FormProps) {
-  const { defaultPlace = '', pricePerHour, lessonCategoryOptions, onNext } = props;
+export default function RegularLessonStep1Form(
+  props: RegularLessonStep1FormProps & { contractType: string }
+) {
+  const { defaultPlace = '', pricePerHour, lessonCategoryOptions, onNext, contractType } = props;
   const [lessonFreq, setLessonFreq] = useState('1');
   const [place, setPlace] = useState(defaultPlace);
   const [lessonCategory, setLessonCategory] = useState('');
-  const [lessonType, setLessonType] = useState('REGULAR');
+
+  const getTitle = () => {
+    if (contractType === 'FIRSTCOME') return '선착순 레슨 신청';
+    if (contractType === 'REGULAR') return '정기레슨 신청';
+    return '레슨 신청';
+  };
 
   const totalCount = Number(lessonFreq) * LESSON_WEEKS;
   const price = totalCount * pricePerHour;
 
   return (
     <OnboardingLayout
+      title={getTitle()}
       step={1}
-      total={4}
-      title="정기레슨 신청"
-      subtitle="기본 정보를 입력해 주세요."
-      as="form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        onNext({ lessonPackage: lessonFreq, place, price, lessonCategory, lessonType });
-      }}
-      bodyClassName="flex flex-col"
-      footer={<OnboardingNextButton type="submit" label={'다음 →'} />}
+      total={6}
+      bodyClassName="regular-lesson-form-layout"
     >
-      <div>
-        <Header
-          title="레슨 유형"
-          subtitle={
-            lessonType === 'REGULAR'
-              ? '정기레슨은 매주 같은 요일과 시간에 자동으로 예약됩니다. 추후에도 언제든 스케줄 변경이 가능합니다.'
-              : lessonType === 'FIRSTCOME'
-              ? '선착순 신청은 원하는 날짜와 시간에 직접 예약할 수 있어, 매번 유동적으로 스케줄을 정할 수 있습니다.'
-              : undefined
-          }
-          addClass="mb-2"
-        />
-        <RadioGroup
-          name="lessonType"
-          options={LESSON_TYPE_OPTIONS}
-          defaultValue={lessonType}
-          onChange={setLessonType}
-        />
-      </div>
-      <div>
-        <Header title="레슨 카테고리" addClass="mb-2" />
-        <SelectBox
-          name="lessonCategory"
-          value={lessonCategory}
-          options={lessonCategoryOptions}
-          onChange={setLessonCategory}
-          placeholder="카테고리 선택"
-        />
-      </div>
-      <div>
-        <Header title="레슨 횟수" addClass="mb-2" />
-        <div className="regular-lesson-form-row">
+      <div className="regular-lesson-form-field">
+        <Header title="레슨 횟수 선택" addClass="mb-2" />
+        <div className="regular-lesson-form-row regular-lesson-form-row--lesson-count">
           <SelectBox
             name="lessonFreq"
             value={lessonFreq}
             options={LESSON_FREQ_OPTIONS}
             onChange={setLessonFreq}
-            className="w-28"
+            className="lesson-count-selectbox"
           />
-          <span className="regular-lesson-form-subtext">
+          <span className="regular-lesson-form-subtext lesson-count-text">
             (한 달 기준 <b>{totalCount}회</b>)
           </span>
         </div>
       </div>
-      <div>
+      <div className="regular-lesson-form-field">
         <Header title="레슨 희망 장소" addClass="mb-2" />
         <input
           type="text"
           value={place}
           onChange={(e) => setPlace(e.target.value)}
           placeholder="예: 강남역 1번 출구 앞 카페"
-          className="regular-lesson-form-input"
+          className="regular-lesson-form-input place-input"
           required
         />
       </div>
-      <div>예상 금액은 {price.toLocaleString()}원입니다.</div>
+      <div
+        className="regular-lesson-form-pricebox"
+        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}
+      >
+        <span
+          style={{
+            fontSize: 13,
+            color: 'var(--brand-mint)',
+            fontWeight: 700,
+            marginBottom: 2,
+            letterSpacing: '-0.01em',
+          }}
+        >
+          예상 금액
+        </span>
+        <span
+          style={{
+            fontSize: 32,
+            color: '#FF4757',
+            fontWeight: 900,
+            letterSpacing: '-0.02em',
+            lineHeight: 1.1,
+            textShadow: '0 2px 8px #ffeaea',
+          }}
+        >
+          {price.toLocaleString()}원
+        </span>
+        <span
+          style={{
+            fontSize: 14,
+            color: 'var(--brand-mint)',
+            fontWeight: 600,
+            marginTop: 2,
+            letterSpacing: '-0.01em',
+          }}
+        >
+          (선택한 주 {lessonFreq}회, 총 {totalCount}회 기준입니다.)
+        </span>
+      </div>
+      <div className="regular-lesson-form-footer">
+        <RegularLessonStepFooter
+          onPrev={props.onFirst}
+          prevLabel="처음으로"
+          nextType="submit"
+          nextLabel="다음"
+          nextSize={undefined}
+        />
+      </div>
+      <span
+        style={{
+          fontSize: 11,
+          color: '#333',
+          marginTop: 2,
+          fontWeight: 400,
+          letterSpacing: '-0.01em',
+        }}
+      >
+        * 최종 금액은 튜터와 스케줄 조율 후 확정됩니다. (출장비, 장소 대여료 등 변동 요인 포함)
+      </span>
     </OnboardingLayout>
   );
 }

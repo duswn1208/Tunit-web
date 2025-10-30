@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { getDayLabel } from '@/shared/constants/date';
 import OnboardingLayout from '../../onboarding/components/OnboardingLayout';
+import RegularLessonStepFooter from './RegularLessonStepFooter';
 
 export interface RegularLessonStep4FormProps {
   step1: any;
@@ -28,11 +29,20 @@ export default function RegularLessonStep4Form({
         <div style={{ background: '#f8f8fa', borderRadius: 10, padding: 16, marginBottom: 16 }}>
           <div style={{ fontWeight: 600, marginBottom: 6 }}>신청 정보 요약</div>
           <ul style={{ padding: 0, margin: 0, listStyle: 'none', fontSize: 15 }}>
+            <li>
+              레슨 유형:{' '}
+              {step1?.lessonType === 'REGULAR'
+                ? '정기레슨'
+                : step1?.lessonType === 'FIRSTCOME'
+                ? '선착순 신청'
+                : ''}
+            </li>
             <li>레슨 패키지: {step1?.lessonPackage}회</li>
             <li>장소: {step1?.place}</li>
             <li>레슨 일정:</li>
-            {/* 첫 번째 slot 기준 안내 */}
-            {step2?.slots?.length > 0 &&
+            {/* 첫 번째 slot 기준 안내 - 정기레슨만 */}
+            {step1?.lessonType === 'REGULAR' &&
+              step2?.slots?.length > 0 &&
               (() => {
                 const first = step2.slots[0];
                 const dateObj = new Date(first.day);
@@ -53,6 +63,11 @@ export default function RegularLessonStep4Form({
                 </li>
               ))}
             </ul>
+            {step1?.lessonType === 'FIRSTCOME' && (
+              <div style={{ color: '#888', fontSize: 14, margin: '8px 0 0 16px' }}>
+                선착순 신청은 매달 마지막일부터 다음달 레슨을 신청할 수 있습니다.
+              </div>
+            )}
             <li>실력: {step3?.level}</li>
             <li>목표/요청: {step3?.goal}</li>
             <li>비상 연락처: {step3?.phone}</li>
@@ -90,41 +105,12 @@ export default function RegularLessonStep4Form({
           </span>
         </label>
       </div>
-      <div style={{ display: 'flex', gap: 8 }}>
-        <button
-          type="button"
-          onClick={onPrev}
-          style={{
-            flex: 1,
-            padding: 12,
-            borderRadius: 8,
-            border: '1px solid #ddd',
-            background: '#fff',
-            fontWeight: 500,
-          }}
-        >
-          이전
-        </button>
-        <button
-          type="button"
-          disabled={!agreed}
-          onClick={onSubmit}
-          style={{
-            flex: 2,
-            padding: 12,
-            borderRadius: 8,
-            background: '#e14a4a',
-            color: '#fff',
-            fontWeight: 700,
-            border: 'none',
-            fontSize: 16,
-            opacity: agreed ? 1 : 0.6,
-            cursor: agreed ? 'pointer' : 'not-allowed',
-          }}
-        >
-          레슨 요청 및 결제 진행
-        </button>
-      </div>
+      <RegularLessonStepFooter
+        onPrev={onPrev}
+        onNext={onSubmit}
+        nextLabel="레슨 요청 및 결제 진행"
+        nextDisabled={!agreed}
+      />
     </OnboardingLayout>
   );
 }

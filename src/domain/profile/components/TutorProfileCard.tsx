@@ -31,6 +31,12 @@ export function TutorProfileCard({ tutor, variant = 'full', isMobile }: TutorPro
           >
             정기레슨 신청
           </Button>
+          <Button
+            className="booking-button booking-button--fast"
+            onClick={() => window.dispatchEvent(new CustomEvent('tutor-booking-fast'))}
+          >
+            선착순 레슨 예약
+          </Button>
         </div>
       )}
       <div className="tutor-profile-header">

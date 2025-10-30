@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import OnboardingLayout from '../../onboarding/components/OnboardingLayout';
-import OnboardingNextButton from '../../onboarding/components/OnboardingNextButton';
+import RegularLessonStepFooter from './RegularLessonStepFooter';
 import RadioGroup from '@/shared/components/RadioGroup';
 
 export interface RegularLessonStep3FormProps {
@@ -76,27 +76,12 @@ export default function RegularLessonStep3Form({
           />
         </div>
       </div>
-      <div style={{ display: 'flex', gap: 8 }}>
-        <button
-          type="button"
-          onClick={onPrev}
-          style={{
-            flex: 1,
-            padding: 12,
-            borderRadius: 8,
-            border: '1px solid #ddd',
-            background: '#fff',
-            fontWeight: 500,
-          }}
-        >
-          이전
-        </button>
-        <OnboardingNextButton
-          disabled={!isNextEnabled}
-          label="다음 → (최종 확인)"
-          onClick={() => onNext({ level, goal, phone, request: goal })}
-        />
-      </div>
+      <RegularLessonStepFooter
+        onPrev={onPrev}
+        onNext={() => onNext({ level, goal, phone, request: goal })}
+        nextLabel="다음"
+        nextDisabled={!isNextEnabled}
+      />
     </OnboardingLayout>
   );
 }

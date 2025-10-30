@@ -3,7 +3,7 @@ import LessonCalendarPicker from '@/domain/lesson/components/LessonCalendarPicke
 import { getDayLabel } from '@/shared/constants/date';
 // import TuCalendar from '@/shared/components/TuCalendar';
 import OnboardingLayout from '../../onboarding/components/OnboardingLayout';
-import OnboardingNextButton from '../../onboarding/components/OnboardingNextButton';
+import RegularLessonStepFooter from './RegularLessonStepFooter';
 import { useToast } from '@/shared/contexts/ToastContext';
 import { Button } from '@/shared/components';
 
@@ -14,12 +14,14 @@ interface ScheduleSlot {
 
 export interface RegularLessonStep2FormProps {
   totalCount: number; // 총 신청 횟수
+  lessonType: string;
   onPrev: () => void;
   onNext: (data: { startDate: string; slots: ScheduleSlot[] }) => void;
 }
 
 export default function RegularLessonStep2Form({
   totalCount,
+  lessonType,
   onPrev,
   onNext,
 }: RegularLessonStep2FormProps) {
@@ -48,13 +50,22 @@ export default function RegularLessonStep2Form({
           date={tempDate}
           time={tempTime}
           onChange={(date, time) => {
-            // 날짜만 바뀌면 시간칩 초기화
             if (date && date !== tempDate) {
               setTempDate(date);
               setTempTime('');
               return;
             }
-            // 시간 칩 클릭 시에만 추가
+            if (lessonType === 'FIRSTCOME') {
+              // 선착순 신청은 한 번만 선택 가능
+              if (date && time) {
+                setSlots([{ date, time }]);
+                setTempTime(time);
+              } else if (time) {
+                setTempTime(time);
+              }
+              return;
+            }
+            // 정기레슨: 여러 개 선택 가능
             if (date && time && !slots.some((s) => s.date === date && s.time === time)) {
               if (slots.length >= totalCount) {
                 showToast(`최대 ${totalCount}회까지 선택할 수 있습니다.`, 'info');
@@ -68,18 +79,24 @@ export default function RegularLessonStep2Form({
           }}
         />
       </div>
-      <div style={{ color: '#888', fontSize: 14, marginBottom: 8, textAlign: 'right' }}>
-        <b>
-          {slots.length} / {totalCount}회
-        </b>
-        <br />
-        <span>
-          처음 예약이라면 모든 스케줄 예약이 필요합니다. <br />
-          스케줄을 선택해 주세요. <br />
-          (정기 레슨의 경우, 첫 레슨 날짜를 기준으로 두 번째 달부터 매주 동일한 요일/시간대로
-          예약됩니다.)
-        </span>
-      </div>
+      {lessonType === 'REGULAR' ? (
+        <div style={{ color: '#888', fontSize: 14, marginBottom: 8, textAlign: 'right' }}>
+          <b>
+            {slots.length} / {totalCount}회
+          </b>
+          <br />
+          <span>
+            처음 예약이라면 모든 스케줄 예약이 필요합니다. <br />
+            스케줄을 선택해 주세요. <br />
+            (정기 레슨의 경우, 첫 레슨 날짜를 기준으로 두 번째 달부터 매주 동일한 요일/시간대로
+            예약됩니다.)
+          </span>
+        </div>
+      ) : (
+        <div style={{ color: '#888', fontSize: 14, marginBottom: 8, textAlign: 'right' }}>
+          <span>원하는 날짜와 시간 1회만 선택해 주세요.</span>
+        </div>
+      )}
       {slots.length > 0 && (
         <div style={{ marginBottom: 16 }}>
           <div style={{ fontWeight: 500, marginBottom: 6 }}>신청 스케줄</div>
@@ -112,7 +129,9 @@ export default function RegularLessonStep2Form({
                   }}
                 >
                   <span style={{ fontWeight: 600, color: '#333' }}>
-                    ({s.date}) 매주 {dayLabel}요일
+                    {lessonType === 'REGULAR'
+                      ? `(${s.date}) 매주 ${dayLabel}요일`
+                      : `(${s.date}) ${dayLabel}요일`}
                   </span>
                   <span style={{ color: '#666', fontWeight: 500 }}>{s.time}</span>
                   <button
@@ -135,22 +154,20 @@ export default function RegularLessonStep2Form({
           </ul>
         </div>
       )}
-      <div style={{ display: 'flex', gap: 8 }}>
-        <Button onClick={onPrev}>이전</Button>
-        <OnboardingNextButton
-          disabled={!isNextEnabled}
-          label="다음 → (스케줄 확정)"
-          onClick={() =>
-            onNext({
-              startDate: slots[0]?.date ?? '',
-              slots: slots.map((s) => ({
-                day: s.date,
-                time: s.time,
-              })),
-            })
-          }
-        />
-      </div>
+      <RegularLessonStepFooter
+        onPrev={onPrev}
+        onNext={() =>
+          onNext({
+            startDate: slots[0]?.date ?? '',
+            slots: slots.map((s) => ({
+              day: s.date,
+              time: s.time,
+            })),
+          })
+        }
+        nextLabel="다음 → (스케줄 확정)"
+        nextDisabled={!isNextEnabled}
+      />
     </OnboardingLayout>
   );
 }

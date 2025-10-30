@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import RegularLessonStep1Form from '../components/RegularLessonStep1Form';
 import RegularLessonStep2Form from '../components/RegularLessonStep2Form';
 import RegularLessonStep3Form from '../components/RegularLessonStep3Form';
@@ -17,12 +17,20 @@ const steps = [
 
 export default function RegularLessonApplyPage() {
   const { tutorId } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  // 쿼리스트링(type)으로 contractType 결정
+  let contractType: 'REGULAR' | 'FIRSTCOME' = 'REGULAR';
+  const searchParams = new URLSearchParams(location.search);
+  if (searchParams.get('type') === 'firstcome') contractType = 'FIRSTCOME';
   // const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [step1Data, setStep1Data] = useState<{
     lessonPackage: string;
     place: string;
     price: number;
+    lessonCategory: string;
+    contractType: string;
   } | null>(null);
   const [step2Data, setStep2Data] = useState<any>(null);
   const [step3Data, setStep3Data] = useState<any>(null);
@@ -33,6 +41,7 @@ export default function RegularLessonApplyPage() {
     <div>
       {step === 0 ? (
         <RegularLessonStep1Form
+          contractType={contractType}
           defaultPlace={defaultPlace}
           pricePerHour={tutorData?.pricePerHour ?? 0}
           lessonCategoryOptions={
@@ -47,10 +56,16 @@ export default function RegularLessonApplyPage() {
             setStep1Data(step1Data);
             setStep((s) => s + 1);
           }}
+          onFirst={() => {
+            navigate(`/tutors/${tutorId}`);
+          }}
         />
       ) : step === 1 && step1Data ? (
         <RegularLessonStep2Form
-          totalCount={Number(step1Data.lessonPackage) * 4}
+          totalCount={
+            step1Data.contractType === 'FIRSTCOME' ? 1 : Number(step1Data.lessonPackage) * 4
+          }
+          contractType={step1Data.contractType}
           onPrev={() => setStep((s) => s - 1)}
           onNext={(data) => {
             setStep2Data(data);

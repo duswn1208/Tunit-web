@@ -1,3 +1,14 @@
+.ui-btn--outline {
+  background: var(--bg-modal, #fff) !important;
+  color: var(--brand-red, #e14a4a) !important;
+  border: 1.5px solid var(--brand-red, #e14a4a) !important;
+  box-shadow: none !important;
+}
+.ui-btn--outline:hover {
+  background: var(--bg-hover, #f8f8fa) !important;
+  color: var(--brand-red, #e14a4a) !important;
+  border-color: var(--brand-red, #e14a4a) !important;
+}
 .ui-btn {
   display: inline-flex;
   align-items: center;

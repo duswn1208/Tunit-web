@@ -1,6 +1,7 @@
+/* 온보딩/폼 카드: 상단 여백 축소 및 반응형 개선 */
 .ui-card {
   max-width: 760px;
-  margin: 48px auto;
+  margin: 16px auto 24px auto;
   background: var(--bg-modal);
   color: inherit;
   border: none;
@@ -10,6 +11,38 @@
   position: relative;
   backdrop-filter: blur(8px);
   animation: cardFloat 0.6s ease-out forwards;
+}
+
+@media (max-width: 767px) {
+  .ui-card {
+    margin: 4px auto 8px auto;
+    border-radius: 16px;
+  }
+  .ui-card-header {
+    padding: 24px 12px 0;
+  }
+  .ui-card-body {
+    /* padding: 12px 8px 16px; */
+  }
+  .ui-card-footer {
+    padding: 16px 8px 20px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .ui-card {
+    margin: 8px auto 16px auto;
+    border-radius: 24px;
+  }
+  .ui-card-header {
+    padding: 32px 24px 0;
+  }
+  .ui-card-body {
+    padding: 16px 16px 20px;
+  }
+  .ui-card-footer {
+    padding: 20px 16px 28px;
+  }
 }
 
 @keyframes cardFloat {
@@ -59,7 +92,7 @@
 }
 
 .ui-card-body {
-  padding: 16px 40px 24px;
+  padding: 4px 40px 24px;
 }
 
 .ui-card-footer {
@@ -72,10 +105,7 @@
   margin: 0;
   font-size: 36px;
   font-weight: 800;
-  background: var(--gradient-brand);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 2px 4px rgba(255, 71, 87, 0.1);
+  color: var(--text-primary);
   letter-spacing: -0.02em;
 }
 
