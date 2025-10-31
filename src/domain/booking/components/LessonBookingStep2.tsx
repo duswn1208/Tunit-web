@@ -1,43 +1,42 @@
 import { useState } from 'react';
 import LessonCalendarPicker from '@/domain/lesson/components/LessonCalendarPicker';
 import { getDayLabel } from '@/shared/constants/date';
-// import TuCalendar from '@/shared/components/TuCalendar';
-import OnboardingLayout from '../../onboarding/components/OnboardingLayout';
-import RegularLessonStepFooter from './RegularLessonStepFooter';
-import { useToast } from '@/shared/contexts/ToastContext';
+import LessonBookingStepFooter from './LessonBookingStepFooter';
 
-interface ScheduleSlot {
-  day: string; // 요일 (예: '월')
-  time: string; // 시간대 (예: '오후 7:00')
-}
-
-export interface RegularLessonStep2FormProps {
-  totalCount: number; // 총 신청 횟수
+interface LessonBookingStep2Props {
   contractType: string;
+  totalCount: number;
+  selectedDate: string;
+  setSelectedDate: (v: string) => void;
+  selectedTime: string;
+  setSelectedTime: (v: string) => void;
   onPrev: () => void;
-  onNext: (data: { startDate: string; slots: ScheduleSlot[] }) => void;
+  onNext: (slots: string[]) => void;
 }
 
-export default function RegularLessonStep2Form({
+export default function LessonBookingStep2({
+  contractType,
   totalCount,
-  contractType: lessonType,
+  selectedDate,
+  setSelectedDate,
+  selectedTime,
+  setSelectedTime,
   onPrev,
   onNext,
-}: RegularLessonStep2FormProps) {
-  // 예약 캘린더+시간 칩 UI에서 선택한 값만 전달
-  // 여러 날짜/시간을 lessonCount만큼 선택
-  const [slots, setSlots] = useState<{ date: string; time: string }[]>([]);
-  const [tempDate, setTempDate] = useState<string>('');
-  const [tempTime, setTempTime] = useState<string>('');
-  const isNextEnabled = slots.length === (lessonType === 'REGULAR' ? totalCount : 1);
-
-  const { showToast } = useToast();
+}: LessonBookingStep2Props) {
+  const [slots, setSlots] = useState<{ date: string; time: string }[]>(
+    selectedDate && selectedTime ? [{ date: selectedDate, time: selectedTime }] : []
+  );
+  const [tempDate, setTempDate] = useState<string>(selectedDate || '');
+  const [tempTime, setTempTime] = useState<string>(selectedTime || '');
+  const isNextEnabled =
+    contractType === 'REGULAR' ? slots.length === totalCount : slots.length === 1;
 
   return (
-    <OnboardingLayout title="레슨 일정" subtitle="희망하는 시작일과 시간대를 선택해 주세요.">
+    <div>
       <div style={{ marginBottom: 24 }}>
         <LessonCalendarPicker
-          teacherId={undefined} // TODO: 실제 튜터 id 전달 필요
+          teacherId={undefined}
           startDate={new Date().toISOString().split('T')[0]}
           endDate={(() => {
             const today = new Date();
@@ -52,11 +51,12 @@ export default function RegularLessonStep2Form({
               setTempTime('');
               return;
             }
-            if (lessonType === 'FIRSTCOME') {
-              // 선착순 신청은 한 번만 선택 가능
+            if (contractType === 'FIRSTCOME' || contractType === 'TRIAL') {
               if (date && time) {
                 setSlots([{ date, time }]);
                 setTempTime(time);
+                setSelectedDate(date);
+                setSelectedTime(time);
               } else if (time) {
                 setTempTime(time);
               }
@@ -65,7 +65,7 @@ export default function RegularLessonStep2Form({
             // 정기레슨: 여러 개 선택 가능
             if (date && time && !slots.some((s) => s.date === date && s.time === time)) {
               if (slots.length >= totalCount) {
-                showToast(`최대 ${totalCount}회까지 선택할 수 있습니다.`, 'info');
+                // showToast(`최대 ${totalCount}회까지 선택할 수 있습니다.`, 'info');
                 return;
               }
               setSlots([...slots, { date, time }]);
@@ -77,24 +77,24 @@ export default function RegularLessonStep2Form({
           size="small"
         />
       </div>
-      {lessonType === 'REGULAR' ? (
+      {contractType === 'REGULAR' ? (
         <div style={{ color: '#888', fontSize: 14, marginBottom: 8, textAlign: 'right' }}>
           <b>
             {slots.length} / {totalCount}회
           </b>
           <br />
           <span>
-            처음 예약이라면 모든 스케줄 예약이 필요합니다. <br />
+            처음 예약이라면 첫달 모든 스케줄 예약이 필요합니다. <br />
             스케줄을 선택해 주세요. <br />
             (정기 레슨의 경우, 첫 레슨 날짜를 기준으로 두 번째 달부터 매주 동일한 요일/시간대로
             예약됩니다.)
           </span>
         </div>
-      ) : (
+      ) : contractType === 'FIRSTCOME' || contractType === 'TRIAL' ? (
         <div style={{ color: '#888', fontSize: 14, marginBottom: 8, textAlign: 'right' }}>
           <span>원하는 날짜와 시간 1회만 선택해 주세요.</span>
         </div>
-      )}
+      ) : null}
       {slots.length > 0 && (
         <div style={{ marginBottom: 16 }}>
           <div style={{ fontWeight: 500, marginBottom: 6 }}>신청 스케줄</div>
@@ -127,7 +127,7 @@ export default function RegularLessonStep2Form({
                   }}
                 >
                   <span style={{ fontWeight: 600, color: '#333' }}>
-                    {lessonType === 'REGULAR'
+                    {contractType === 'REGULAR'
                       ? `(${s.date}) 매주 ${dayLabel}요일`
                       : `(${s.date}) ${dayLabel}요일`}
                   </span>
@@ -152,20 +152,12 @@ export default function RegularLessonStep2Form({
           </ul>
         </div>
       )}
-      <RegularLessonStepFooter
+      <LessonBookingStepFooter
         onPrev={onPrev}
-        onNext={() =>
-          onNext({
-            startDate: slots[0]?.date ?? '',
-            slots: slots.map((s) => ({
-              day: s.date,
-              time: s.time,
-            })),
-          })
-        }
+        onNext={() => onNext(slots.map((s) => `${s.date} ${s.time}`))}
         nextLabel="다음"
         nextDisabled={!isNextEnabled}
       />
-    </OnboardingLayout>
+    </div>
   );
 }

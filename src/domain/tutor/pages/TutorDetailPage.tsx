@@ -1,4 +1,4 @@
-import { useParams, useNavigate, useLocation, matchPath } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '@/shared/contexts/ToastContext';
 import TutorLessonInfo from '../components/TutorLessonInfo';
 import TutorScheduleInfo from '../components/TutorScheduleInfo';
@@ -7,7 +7,6 @@ import TutorQnaSection from '../components/TutorQnaSection';
 import Tab from '@/shared/components/Tab';
 import { TutorProfileCard } from '../../profile/components/TutorProfileCard.tsx';
 import { Button } from '@/shared/components';
-import LessonBookingForm from '../components/LessonBookingForm';
 import { useTutorDetail } from '../hooks/useTutorDetail';
 import { useReservationState } from '../hooks/useReservationState';
 import '../css/tutor-detail.css';
@@ -24,9 +23,6 @@ export default function TutorDetailPage() {
   const location = useLocation();
   const [selectedTab, setSelectedTab] = useState('레슨정보');
   const tabList = ['레슨정보', '레슨시간', '레슨후기', 'Q&A'];
-  // /tutors/:tutorId/booking 경로 여부 확인
-  const bookingMatch = matchPath('/tutors/:tutorId/booking', location.pathname);
-  const showBookingCalendar = !!bookingMatch;
   // lessonReservationNo 쿼리스트링 추출
   const lessonReservationNo =
     new URLSearchParams(location.search).get('lessonReservationNo') || undefined;
@@ -37,14 +33,6 @@ export default function TutorDetailPage() {
     setLesson,
     setMessage,
   } = useReservationState(lessonReservationNo);
-
-  const toggleCalendar = (show: boolean) => {
-    if (show) {
-      navigate(`/tutors/${tutorProfileNo}/booking`, { replace: true });
-    } else {
-      navigate(`/tutors/${tutorProfileNo}`, { replace: true });
-    }
-  };
 
   // 로딩/에러 토스트는 useEffect에서 처리
   useEffect(() => {
@@ -62,16 +50,28 @@ export default function TutorDetailPage() {
   // 모든 hook은 조건문보다 위에!
   const isMobile = useMediaQuery('(max-width: 768px)');
 
+  // lessonCategoryOptions 생성
+  const lessonCategoryOptions = (data?.lessonSubcategoryList ?? []).map((cat) => ({
+    label: cat.lessonCategory.label,
+    value: cat.lessonCategory.code,
+  }));
+
   // 프로필 카드 버튼 클릭 이벤트 리스너 등록 (예약/신청)
   useEffect(() => {
     function handleTrial() {
-      toggleCalendar(true);
+      navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=trial`, {
+        state: { lessonCategoryOptions },
+      });
     }
     function handleRegular() {
-      navigate(`/tutors/${tutorProfileNo}/regular-lesson`);
+      navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=regular`, {
+        state: { lessonCategoryOptions },
+      });
     }
     function handleFast() {
-      navigate(`/tutors/${tutorProfileNo}/regular-lesson?type=firstcome`);
+      navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=firstcome`, {
+        state: { lessonCategoryOptions },
+      });
     }
     window.addEventListener('tutor-booking-trial', handleTrial);
     window.addEventListener('tutor-booking-regular', handleRegular);
@@ -81,7 +81,7 @@ export default function TutorDetailPage() {
       window.removeEventListener('tutor-booking-regular', handleRegular);
       window.removeEventListener('tutor-booking-fast', handleFast);
     };
-  }, [navigate, toggleCalendar]);
+  }, [navigate, tutorProfileNo, lessonCategoryOptions]);
 
   if (isLoading || error || !data) {
     return null;
@@ -103,46 +103,43 @@ export default function TutorDetailPage() {
       <div style={{ position: 'relative' }}>
         {/* 데스크탑: info-card-action-buttons는 TutorProfileCard로 이동됨 */}
         <div className="info-grid">
-          {!showBookingCalendar ? (
-            <>
-              {selectedTab === '레슨정보' && <TutorLessonInfo lessonData={data} />}
-              {selectedTab === '레슨시간' && (
-                <TutorScheduleInfo scheduleData={data.tutorAvailableTimeList} />
-              )}
-              {selectedTab === '레슨후기' && <TutorReviewSection />}
-              {selectedTab === 'Q&A' && <TutorQnaSection />}
-            </>
-          ) : (
-            <LessonBookingForm
-              tutorProfileNo={tutorProfileNo!}
-              lessonData={data}
-              selectedDate={selectedDate || ''}
-              selectedTime={selectedTime || ''}
-              selectedLesson={selectedLesson || ''}
-              requestMessage={requestMessage || ''}
-              onBack={() => toggleCalendar(false)}
-              onDateTimeChange={setDateTime}
-              onLessonChange={setLesson}
-              onMessageChange={setMessage}
-              lessonReservationNo={lessonReservationNo}
-            />
+          {selectedTab === '레슨정보' && <TutorLessonInfo lessonData={data} />}
+          {selectedTab === '레슨시간' && (
+            <TutorScheduleInfo scheduleData={data.tutorAvailableTimeList} />
           )}
+          {selectedTab === '레슨후기' && <TutorReviewSection />}
+          {selectedTab === 'Q&A' && <TutorQnaSection />}
         </div>
         {/* 모바일: 하단 플로팅 버튼 */}
         {isMobile && (
           <div className="floating-booking-buttons">
-            <Button className="booking-button" onClick={() => toggleCalendar(true)}>
+            <Button
+              className="booking-button"
+              onClick={() =>
+                navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=trial`, {
+                  state: { lessonCategoryOptions },
+                })
+              }
+            >
               상담/체험 레슨 예약
             </Button>
             <Button
               className="booking-button booking-button--outline"
-              onClick={() => navigate(`/tutors/${tutorProfileNo}/regular-lesson`)}
+              onClick={() =>
+                navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=regular`, {
+                  state: { lessonCategoryOptions },
+                })
+              }
             >
               정기레슨 신청
             </Button>
             <Button
               className="booking-button booking-button--fast"
-              onClick={() => navigate(`/tutors/${tutorProfileNo}/regular-lesson?type=firstcome`)}
+              onClick={() =>
+                navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=firstcome`, {
+                  state: { lessonCategoryOptions },
+                })
+              }
             >
               선착순 레슨 신청
             </Button>
