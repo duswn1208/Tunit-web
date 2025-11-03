@@ -4,7 +4,7 @@ import TutorLessonInfo from '../components/TutorLessonInfo';
 import TutorScheduleInfo from '../components/TutorScheduleInfo';
 import TutorReviewSection from '../components/TutorReviewSection';
 import TutorQnaSection from '../components/TutorQnaSection';
-import Tab from '@/shared/components/Tab';
+import Tab from '@/shared/components/Tab.tsx';
 import { TutorProfileCard } from '../../profile/components/TutorProfileCard.tsx';
 import { Button } from '@/shared/components';
 import { useTutorDetail } from '../hooks/useTutorDetail';

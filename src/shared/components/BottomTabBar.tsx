@@ -1,4 +1,3 @@
-import React from 'react';
 import './css/BottomTabBar.css';
 
 // 아이콘은 예시로 SVG 인라인 사용, 실제로는 별도 파일/라이브러리 사용 권장
@@ -71,11 +70,12 @@ const icons = {
 };
 
 const tabs = [
-  { key: 'home', label: '홈', icon: icons.home },
-  { key: 'search', label: '찾기', icon: icons.search },
-  { key: 'lesson', label: '내레슨', icon: icons.lesson },
-  { key: 'lounge', label: '라운지', icon: icons.lounge },
-  { key: 'my', label: '마이', icon: icons.my },
+  { key: 'home', label: '홈', icon: icons.home, link: '/' },
+  { key: 'search', label: '찾기', icon: icons.search, link: '/find/lessons' },
+  { key: 'lesson', label: '내 레슨', icon: icons.lesson, link: '/students/my/lessons' },
+  { key: 'tutors', label: '내 튜터', icon: icons.lesson, link: '/student/my/tutors' },
+  // { key: 'lounge', label: '라운지', icon: icons.lounge },
+  { key: 'my', label: '마이', icon: icons.my, link: '/mypage' },
 ];
 
 export default function BottomTabBar() {
@@ -83,7 +83,16 @@ export default function BottomTabBar() {
   return (
     <nav className="bottom-tab-bar">
       {tabs.map((tab) => (
-        <button key={tab.key} className="tab-btn" type="button">
+        <button
+          key={tab.key}
+          className="tab-btn"
+          type="button"
+          onClick={() => {
+            if (tab.link) {
+              window.location.href = tab.link;
+            }
+          }}
+        >
           <span className="tab-icon">{tab.icon}</span>
           <span className="tab-label">{tab.label}</span>
         </button>

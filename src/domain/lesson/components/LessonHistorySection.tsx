@@ -1,5 +1,6 @@
 import { useLessonHistorySection } from '../hooks/useLessonHistorySection';
 import Button from '@/shared/components/Button';
+import Tab from '@/shared/components/Tab';
 import LessonCalendarSection from './LessonCalendarSection';
 import { LessonCard } from './LessonCard';
 import './css/LessonHistorySection.css';
@@ -95,7 +96,7 @@ export default function LessonHistorySection() {
 
   return (
     <section className="lesson-history-section">
-      {/* 상태 필터 + 뷰 전환 버튼 한 줄 배치 */}
+      {/* 탭 + 뷰 전환 버튼 한 줄 배치 */}
       <div
         className="lesson-header-row"
         style={{
@@ -106,30 +107,21 @@ export default function LessonHistorySection() {
         }}
         aria-label="레슨 내역 필터 및 뷰 전환"
       >
-        <div
-          className="tab-buttons"
-          style={{ display: 'flex', gap: 12 }}
-          aria-label="레슨 상태 필터"
-        >
-          <Button
-            className={`tab-button ${activeTab === 'upcoming' ? 'active' : ''}`}
-            onClick={() => setActiveTab('upcoming')}
-          >
-            예정된 레슨
-          </Button>
-          <Button
-            className={`tab-button ${activeTab === 'past' ? 'active' : ''}`}
-            onClick={() => setActiveTab('past')}
-          >
-            지난 레슨
-          </Button>
-          <Button
-            className={`tab-button ${activeTab === 'pending' ? 'active' : ''}`}
-            onClick={() => setActiveTab('pending')}
-          >
-            예약 요청
-          </Button>
-        </div>
+        <Tab
+          tabs={['예정된 레슨', '지난 레슨', '예약 요청']}
+          selected={
+            activeTab === 'upcoming'
+              ? '예정된 레슨'
+              : activeTab === 'past'
+              ? '지난 레슨'
+              : '예약 요청'
+          }
+          onSelect={(selected) => {
+            if (selected === '예정된 레슨') setActiveTab('upcoming');
+            else if (selected === '지난 레슨') setActiveTab('past');
+            else if (selected === '예약 요청') setActiveTab('pending');
+          }}
+        />
         <div
           className="view-toggle-text"
           style={{ display: 'flex', alignItems: 'center', gap: 0, fontWeight: 600, fontSize: 16 }}

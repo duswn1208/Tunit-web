@@ -1,0 +1,37 @@
+.my-tutors-page {
+  min-height: 100vh;
+  background-color: #fff;
+}
+
+.my-tutors-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.my-tutors-container h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.tutors-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .my-tutors-container {
+    padding: 16px;
+  }
+
+  .my-tutors-container h1 {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .tutors-list {
+    grid-template-columns: 1fr;
+  }
+}

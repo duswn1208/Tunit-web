@@ -8,6 +8,7 @@ export default function RootHeaderStudent() {
         <nav className="nav">
           <Link to="/find/lessons">튜터 찾기</Link>
           <Link to="/student/my/lessons">내 레슨</Link>
+          <Link to="/student/my/tutors">내 튜터</Link>
         </nav>
       }
     />
