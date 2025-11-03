@@ -1,6 +1,16 @@
 // 요일 관련 타입과 상수
 export type DayOfWeekNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
+// 요일
+export type DayOfWeek =
+  | 'MONDAY'
+  | 'TUESDAY'
+  | 'WEDNESDAY'
+  | 'THURSDAY'
+  | 'FRIDAY'
+  | 'SATURDAY'
+  | 'SUNDAY';
+
 // 기본이 되는 요일 레이블 정의
 export const DAY_LABELS: Record<DayOfWeekNumber, string> = {
   1: '월',
