@@ -60,17 +60,17 @@ export default function TutorDetailPage() {
   useEffect(() => {
     function handleTrial() {
       navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=trial`, {
-        state: { lessonCategoryOptions },
+        state: { tutor: data },
       });
     }
     function handleRegular() {
       navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=regular`, {
-        state: { lessonCategoryOptions },
+        state: { tutor: data },
       });
     }
     function handleFast() {
       navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=firstcome`, {
-        state: { lessonCategoryOptions },
+        state: { tutor: data },
       });
     }
     window.addEventListener('tutor-booking-trial', handleTrial);
@@ -81,7 +81,7 @@ export default function TutorDetailPage() {
       window.removeEventListener('tutor-booking-regular', handleRegular);
       window.removeEventListener('tutor-booking-fast', handleFast);
     };
-  }, [navigate, tutorProfileNo, lessonCategoryOptions]);
+  }, [navigate, tutorProfileNo, data]);
 
   if (isLoading || error || !data) {
     return null;
@@ -117,7 +117,7 @@ export default function TutorDetailPage() {
               className="booking-button"
               onClick={() =>
                 navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=trial`, {
-                  state: { lessonCategoryOptions },
+                  state: { tutor: data },
                 })
               }
             >
@@ -127,7 +127,7 @@ export default function TutorDetailPage() {
               className="booking-button booking-button--outline"
               onClick={() =>
                 navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=regular`, {
-                  state: { lessonCategoryOptions },
+                  state: { tutor: data },
                 })
               }
             >
@@ -137,7 +137,7 @@ export default function TutorDetailPage() {
               className="booking-button booking-button--fast"
               onClick={() =>
                 navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=firstcome`, {
-                  state: { lessonCategoryOptions },
+                  state: { tutor: data },
                 })
               }
             >

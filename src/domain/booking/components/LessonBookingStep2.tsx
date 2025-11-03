@@ -2,9 +2,12 @@ import { useState } from 'react';
 import LessonCalendarPicker from '@/domain/lesson/components/LessonCalendarPicker';
 import { getDayLabel } from '@/shared/constants/date';
 import LessonBookingStepFooter from './LessonBookingStepFooter';
+import { isRegular, type ContractType } from '../types/types';
+import { useToast } from '@/shared/contexts/ToastContext';
 
 interface LessonBookingStep2Props {
-  contractType: string;
+  tutorProfileNo: string;
+  contractType: ContractType;
   totalCount: number;
   selectedDate: string;
   setSelectedDate: (v: string) => void;
@@ -15,6 +18,7 @@ interface LessonBookingStep2Props {
 }
 
 export default function LessonBookingStep2({
+  tutorProfileNo,
   contractType,
   totalCount,
   selectedDate,
@@ -24,19 +28,19 @@ export default function LessonBookingStep2({
   onPrev,
   onNext,
 }: LessonBookingStep2Props) {
+  const { showToast } = useToast();
   const [slots, setSlots] = useState<{ date: string; time: string }[]>(
     selectedDate && selectedTime ? [{ date: selectedDate, time: selectedTime }] : []
   );
   const [tempDate, setTempDate] = useState<string>(selectedDate || '');
   const [tempTime, setTempTime] = useState<string>(selectedTime || '');
-  const isNextEnabled =
-    contractType === 'REGULAR' ? slots.length === totalCount : slots.length === 1;
+  const isNextEnabled = isRegular(contractType) ? slots.length === totalCount : slots.length === 1;
 
   return (
     <div>
       <div style={{ marginBottom: 24 }}>
         <LessonCalendarPicker
-          teacherId={undefined}
+          tutorProfileNo={Number(tutorProfileNo)}
           startDate={new Date().toISOString().split('T')[0]}
           endDate={(() => {
             const today = new Date();
@@ -51,7 +55,7 @@ export default function LessonBookingStep2({
               setTempTime('');
               return;
             }
-            if (contractType === 'FIRSTCOME' || contractType === 'TRIAL') {
+            if (!isRegular(contractType)) {
               if (date && time) {
                 setSlots([{ date, time }]);
                 setTempTime(time);
@@ -63,9 +67,14 @@ export default function LessonBookingStep2({
               return;
             }
             // 정기레슨: 여러 개 선택 가능
+            if (date && time && slots.some((s) => s.date === date && s.time === time)) {
+              showToast('이미 선택한 스케줄입니다.', 'info');
+              return;
+            }
+
             if (date && time && !slots.some((s) => s.date === date && s.time === time)) {
               if (slots.length >= totalCount) {
-                // showToast(`최대 ${totalCount}회까지 선택할 수 있습니다.`, 'info');
+                showToast(`최대 ${totalCount}회까지 선택할 수 있습니다.`, 'info');
                 return;
               }
               setSlots([...slots, { date, time }]);
@@ -77,7 +86,7 @@ export default function LessonBookingStep2({
           size="small"
         />
       </div>
-      {contractType === 'REGULAR' ? (
+      {isRegular(contractType) ? (
         <div style={{ color: '#888', fontSize: 14, marginBottom: 8, textAlign: 'right' }}>
           <b>
             {slots.length} / {totalCount}회
@@ -127,7 +136,7 @@ export default function LessonBookingStep2({
                   }}
                 >
                   <span style={{ fontWeight: 600, color: '#333' }}>
-                    {contractType === 'REGULAR'
+                    {isRegular(contractType)
                       ? `(${s.date}) 매주 ${dayLabel}요일`
                       : `(${s.date}) ${dayLabel}요일`}
                   </span>

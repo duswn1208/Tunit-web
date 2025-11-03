@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { getDayLabel } from '@/shared/constants/date';
 import LessonBookingStepFooter from './LessonBookingStepFooter';
+import { getContractTypeLabel, isFirstcome, isRegular } from '../types/types';
 
 export interface LessonBookingStep4Props {
   step1: any;
@@ -21,24 +22,17 @@ export default function LessonBookingStep4({
 }: LessonBookingStep4Props) {
   const [agreed, setAgreed] = useState(false);
 
-  const constractTypeLabel =
-    step1?.contractType === 'REGULAR'
-      ? '정기레슨'
-      : step1?.contractType === 'FIRSTCOME'
-      ? '선착순 신청'
-      : '상담 / 체험 레슨';
-
   return (
     <div>
       <div style={{ fontWeight: 500, marginBottom: 8 }}>모든 정보가 맞는지 확인해 주세요.</div>
       <div style={{ background: '#f8f8fa', borderRadius: 10, padding: 16, marginBottom: 16 }}>
         <ul style={{ padding: 0, margin: 0, listStyle: 'none', fontSize: 15 }}>
           <li>
-            <b>레슨 유형:</b> {constractTypeLabel}
+            <b>레슨 유형:</b> {getContractTypeLabel(step1?.contractType)}
           </li>
           <li>
-            <b>레슨 패키지:</b> {step1?.lessonCount ? `주 ${step1.lessonCount}회` : '-'} / 총{' '}
-            {step1?.totalLessons || '-'}회
+            <b>레슨 패키지:</b> {step1?.weekCount ? `주 ${step1.weekCount}회` : '-'} / 총{' '}
+            {step1?.lessonCount || '-'}회
           </li>
           <li>
             <b>레슨 과목:</b> {step1?.lessonCategory ? step1.lessonCategory.label : '-'}
@@ -46,14 +40,13 @@ export default function LessonBookingStep4({
           <li>
             <b>희망 장소:</b> {step1?.place || '-'}
           </li>
-          <li>장소: {step1?.place}</li>
           <li>레슨 일정:</li>
           {/* 첫 번째 slot 기준 안내 - 정기레슨만 */}
-          {step1?.lessonType === 'REGULAR' &&
-            step2?.slots?.length > 0 &&
+          {isRegular(step1?.contractType) &&
+            step2?.lessonDtList?.length > 0 &&
             (() => {
-              const first = step2.slots[0];
-              const dateObj = new Date(first.day);
+              const first = step2.lessonDtList[0];
+              const dateObj = new Date(first);
               const dayNum = (
                 dateObj.getDay() === 0 ? 7 : dateObj.getDay()
               ) as import('@/shared/constants/date').DayOfWeekNumber;
@@ -71,14 +64,14 @@ export default function LessonBookingStep4({
               </li>
             ))}
           </ul>
-          {step1?.lessonType === 'FIRSTCOME' && (
+          {isFirstcome(step1?.contractType) && (
             <div style={{ color: '#888', fontSize: 14, margin: '8px 0 0 16px' }}>
               선착순 신청은 매달 마지막일부터 다음달 레슨을 신청할 수 있습니다.
             </div>
           )}
           <li>실력: {step3?.level}</li>
-          <li>목표/요청: {step3?.goal}</li>
-          <li>비상 연락처: {step3?.phone}</li>
+          <li>목표/요청: {step3?.memo}</li>
+          <li>비상 연락처: {step3?.emergencyContact}</li>
         </ul>
       </div>
       <div style={{ fontWeight: 700, fontSize: 18, color: '#e14a4a', marginBottom: 12 }}>

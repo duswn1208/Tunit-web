@@ -4,7 +4,7 @@ import { fetchTutorSchedule } from '../api/scheduleApi';
 import type { LessonCalendarStatusDto } from '../types/lessonCalendar.types';
 
 interface LessonCalendarPickerProps {
-  teacherId?: number;
+  tutorProfileNo?: number;
   startDate: string;
   endDate: string;
   date?: string;
@@ -15,7 +15,7 @@ interface LessonCalendarPickerProps {
 }
 
 export default function LessonCalendarPicker({
-  teacherId,
+  tutorProfileNo,
   startDate,
   endDate,
   date,
@@ -32,13 +32,12 @@ export default function LessonCalendarPicker({
   } | null>(null);
 
   useEffect(() => {
-    fetchTutorSchedule({ startDate, endDate }, teacherId)
+    fetchTutorSchedule({ startDate, endDate }, tutorProfileNo)
       .then((data: LessonCalendarStatusDto) => {
         setCalendarStatus(data);
-        console.log(data);
       })
       .catch(() => setCalendarStatus(null));
-  }, [teacherId, startDate, endDate]);
+  }, [tutorProfileNo, startDate, endDate]);
 
   // 날짜가 선택될 때 예약된 시간 추출
   useEffect(() => {
@@ -52,6 +51,7 @@ export default function LessonCalendarPicker({
       const dayOfWeekNum = jsDay === 0 ? 7 : jsDay;
 
       // 요일에 해당하는 가용 시간 찾기
+      console.log('calendarStatus.availableTimes', calendarStatus);
       const available = calendarStatus.availableTimes?.find((v) => v.dayOfWeekNum === dayOfWeekNum);
       if (available) {
         setAvailableTimeRange((prev) => {

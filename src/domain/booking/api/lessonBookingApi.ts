@@ -1,21 +1,21 @@
 // 레슨 예약 요청 API
 import { api } from '@/shared/lib/api';
+import type { ContractType } from '../types/types';
 
-export interface LessonBookingRequest {
+export interface ContractRequestDto {
   tutorProfileNo: string;
-  contractType: string;
+  contractType: ContractType;
   lessonCategory: string;
-  place: string;
+  place?: string;
+  weekCount: number;
   lessonCount: number;
-  totalLessons: number;
-  slots: string[];
-  level: string;
-  request: string;
-  phone: string;
-  pricePerLesson: number;
+  lessonDtList: string[];
+  level?: string;
+  memo?: string;
+  emergencyContact?: string;
+  totalPrice: number;
 }
 
-export async function requestLessonBooking(data: LessonBookingRequest) {
-  // 실제 API 엔드포인트에 맞게 URL 수정 필요
-  return await api.post('/api/lesson-booking', data);
+export async function requestContract(data: ContractRequestDto) {
+  return await api.post('/api/contracts', data);
 }

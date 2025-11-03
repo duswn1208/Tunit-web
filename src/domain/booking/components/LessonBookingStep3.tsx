@@ -5,10 +5,10 @@ import LessonBookingStepFooter from './LessonBookingStepFooter';
 interface LessonBookingStep3Props {
   level: string;
   setLevel: (v: string) => void;
-  request: string;
-  setRequest: (v: string) => void;
-  phone: string;
-  setPhone: (v: string) => void;
+  memo: string;
+  setMemo: (v: string) => void;
+  emergencyContact: string;
+  setEmergencyContact: (v: string) => void;
   onPrev: () => void;
   onSubmit: () => void;
 }
@@ -16,10 +16,10 @@ interface LessonBookingStep3Props {
 export default function LessonBookingStep3({
   level,
   setLevel,
-  request,
-  setRequest,
-  phone,
-  setPhone,
+  memo,
+  setMemo: setMemo,
+  emergencyContact,
+  setEmergencyContact,
   onPrev,
   onSubmit,
 }: LessonBookingStep3Props) {
@@ -39,8 +39,8 @@ export default function LessonBookingStep3({
       />
       <Header title="요청사항" />
       <textarea
-        value={request}
-        onChange={(e) => setRequest(e.target.value)}
+        value={memo}
+        onChange={(e) => setMemo(e.target.value)}
         placeholder="튜터에게 전달할 요청사항을 입력해주세요. (선택사항)"
         style={{
           width: '100%',
@@ -55,8 +55,8 @@ export default function LessonBookingStep3({
       <Header title="비상 연락처" />
       <input
         type="tel"
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
+        value={emergencyContact}
+        onChange={(e) => setEmergencyContact(e.target.value)}
         style={{
           width: '100%',
           borderRadius: 8,

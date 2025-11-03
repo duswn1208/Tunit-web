@@ -4,13 +4,21 @@ import LessonBookingStep1 from '@/domain/booking/components/LessonBookingStep1';
 import LessonBookingStep2 from '@/domain/booking/components/LessonBookingStep2';
 import LLessonBookingStep3 from '@/domain/booking/components/LessonBookingStep3';
 import LessonBookingStep4 from '@/domain/booking/components/LessonBookingStep4';
-import { requestLessonBooking } from '../api/lessonBookingApi';
+import { requestContract } from '../api/lessonBookingApi';
+import {
+  CONTRACT_TYPES,
+  getContractTypeLessonCount,
+  isRegular,
+  type ContractType,
+} from '../types/types';
+import { useToast } from '@/shared/contexts/ToastContext';
+import { useNavigate } from 'react-router-dom';
 
 interface LessonBookingFormProps {
   tutorProfileNo: string;
   step: number;
   total: number;
-  contractType?: string;
+  contractType?: ContractType;
   totalCount?: number;
   title: string;
   subtitle?: string;
@@ -24,16 +32,18 @@ interface LessonBookingFormProps {
 export default function LessonBookingForm({
   tutorProfileNo,
   total,
-  contractType = '',
-  totalCount = 1,
+  contractType = CONTRACT_TYPES.REGULAR,
+  totalCount,
   title,
   subtitle,
   lessonCategoryOptions,
-  defaultPhone = '',
-  pricePerLesson = 30000,
+  defaultPhone,
+  pricePerLesson = 0,
   onSubmit,
   onFirst,
 }: LessonBookingFormProps) {
+  const { showToast } = useToast();
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [lessonCategory, setLessonCategory] = useState<{ label: string; value: string } | null>(
     null
@@ -41,11 +51,11 @@ export default function LessonBookingForm({
   const [place, setPlace] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
-  const [slots, setSlots] = useState<string[]>([]); // slot string[] 상태 추가
+  const [lessonDtList, setLessonDtList] = useState<string[]>([]);
   const [level, setLevel] = useState('');
-  const [request, setRequest] = useState('');
-  const [phone, setPhone] = useState(defaultPhone);
-  const [lessonCount, setLessonCount] = useState(1);
+  const [memo, setMemo] = useState('');
+  const [emergencyContact, setEmergencyContact] = useState(defaultPhone || '');
+  const [weekCount, setLessonCount] = useState(1);
 
   const handleNext = () => {
     setCurrentStep((prev) => prev + 1);
@@ -54,25 +64,28 @@ export default function LessonBookingForm({
     setCurrentStep((prev) => prev - 1);
   };
   const handleSubmit = async () => {
-    // step1, step2, step3, price 등 모든 정보 하나의 객체로 합침
     const bookingData = {
       tutorProfileNo,
-      lessonCategory,
-      place,
       contractType,
-      lessonCount,
-      totalLessons: contractType === 'REGULAR' ? lessonCount * 4 : 1,
-      slots,
+      lessonCategory: lessonCategory ? lessonCategory.value : '',
+      place,
+      weekCount,
+      lessonCount: getContractTypeLessonCount(contractType!, weekCount),
+      lessonDtList,
       level,
-      request,
-      phone,
+      memo,
+      emergencyContact,
+      totalPrice: lessonDtList.length * pricePerLesson,
     };
     try {
-      await requestLessonBooking(bookingData);
+      await requestContract(bookingData);
       // 성공 시 후처리(예: 알림, 이동 등)
       onSubmit(bookingData);
+      showToast('예약 요청이 완료되었습니다.');
+      // 추가 성공 처리 로직 작성 가능
+      navigate('/student/my/lessons');
     } catch (e) {
-      alert('예약 요청에 실패했습니다.');
+      showToast('예약 요청에 실패했습니다.');
     }
   };
 
@@ -90,7 +103,7 @@ export default function LessonBookingForm({
           lessonCategoryOptions={lessonCategoryOptions}
           place={place}
           setPlace={setPlace}
-          lessonCount={lessonCount}
+          lessonCount={weekCount}
           setLessonCount={setLessonCount}
           pricePerLesson={pricePerLesson}
           onPrev={onFirst}
@@ -99,18 +112,19 @@ export default function LessonBookingForm({
       )}
       {currentStep === 2 && (
         <LessonBookingStep2
+          tutorProfileNo={tutorProfileNo}
           contractType={contractType}
-          totalCount={contractType === 'REGULAR' ? lessonCount * 4 : 1}
+          totalCount={isRegular(contractType) ? weekCount * 4 : 1}
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
           selectedTime={selectedTime}
           setSelectedTime={setSelectedTime}
           onPrev={handlePrev}
-          onNext={(nextSlots: string[]) => {
-            setSlots(nextSlots); // slot string[] 저장
+          onNext={(nextLessonDt: string[]) => {
+            setLessonDtList(nextLessonDt); // slot string[] 저장
             // 첫 번째 slot에서 날짜/시간 추출해 기존 selectedDate/selectedTime도 세팅(호환성)
-            if (nextSlots.length > 0) {
-              const [date, time] = nextSlots[0].split(' ');
+            if (nextLessonDt.length > 0) {
+              const [date, time] = nextLessonDt[0].split(' ');
               setSelectedDate(date);
               setSelectedTime(time);
             }
@@ -122,10 +136,10 @@ export default function LessonBookingForm({
         <LLessonBookingStep3
           level={level}
           setLevel={setLevel}
-          request={request}
-          setRequest={setRequest}
-          phone={phone}
-          setPhone={setPhone}
+          memo={memo}
+          setMemo={setMemo}
+          emergencyContact={emergencyContact}
+          setEmergencyContact={setEmergencyContact}
           onPrev={handlePrev}
           onSubmit={handleNext}
         />
@@ -136,14 +150,14 @@ export default function LessonBookingForm({
             lessonCategory: lessonCategory,
             place,
             contractType,
-            lessonCount,
-            totalLessons: contractType === 'REGULAR' ? lessonCount * 4 : 1,
+            weekCount,
+            lessonCount: getContractTypeLessonCount(contractType!, weekCount),
           }}
-          step2={{ slots }}
-          step3={{ level, request, phone }}
+          step2={{ lessonDtList }}
+          step3={{ level, memo, emergencyContact }}
           onPrev={handlePrev}
           onSubmit={handleSubmit}
-          totalPrice={0}
+          totalPrice={pricePerLesson * 4 * weekCount}
         />
       )}
     </OnboardingLayout>
