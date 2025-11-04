@@ -83,7 +83,7 @@ export default function LessonBookingForm({
       onSubmit(bookingData);
       showToast('예약 요청이 완료되었습니다.');
       // 추가 성공 처리 로직 작성 가능
-      navigate('/student/my/lessons');
+      navigate('/student/my/tutors');
     } catch (e) {
       showToast('예약 요청에 실패했습니다.');
     }

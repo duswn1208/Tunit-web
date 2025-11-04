@@ -65,7 +65,6 @@ export default function OnboardingTutor() {
           id="introduce"
           className="ui-textarea"
           placeholder="예) 튜닛입니다."
-          value="튜닛입니다 저는 매니저에요"
           rows={5}
           {...register('introduce', {
             required: '소개글은 필수입니다.',
@@ -86,7 +85,6 @@ export default function OnboardingTutor() {
           id="careerYears"
           className="ui-input"
           type="number"
-          value="10"
           min={0}
           step={1}
           {...register('careerYears', {
@@ -109,7 +107,6 @@ export default function OnboardingTutor() {
           id="pricePerHour"
           className="ui-input"
           type="number"
-          value="10000"
           min={0}
           step={1000}
           {...register('pricePerHour', {

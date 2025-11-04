@@ -70,7 +70,6 @@ export default function OnboardingStart() {
         <input
           className="ui-input"
           id="nickname"
-          value={initialNickname}
           placeholder="예) 즐거운 펭귄"
           {...register('nickname', {
             required: '별명은 필수입니다.',

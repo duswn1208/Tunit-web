@@ -20,6 +20,7 @@ import LessonManageLayout from './domain/lesson/pages/LessonManagePage.tsx';
 import BottomTabBar from '@/shared/components/BottomTabBar';
 import LessonBookingFormPage from './domain/booking/pages/LessonBookingFormPage.tsx';
 import MyTutorsPage from './domain/contract/pages/MyTutorsPage.tsx';
+import MyStudentsPage from './domain/contract/pages/MyStudentsPage.tsx';
 
 // React Query 클라이언트 생성
 const queryClient = new QueryClient({
@@ -50,6 +51,7 @@ export default function App() {
                 <Route path="/student/my/lessons" element={<LessonStudentPage />} />
                 <Route path="/student/my/tutors" element={<MyTutorsPage />} />
                 <Route path="/tutor/my/lessons" element={<LessonManageLayout />} />
+                <Route path="/tutor/my/students" element={<MyStudentsPage />} />
                 <Route path="/onboarding" element={<OnboardingStart />} />
                 <Route path="/onboarding/student" element={<OnboardingStudentLesson />} />
                 <Route path="/onboarding/student/region" element={<OnboardingStudentRegion />} />

@@ -6,8 +6,8 @@ export default function RootHeaderTutor() {
     <RootHeaderBase
       nav={
         <nav className="nav">
-          <Link to="/mypage">마이페이지</Link>
-          <Link to="/tutor/my/lessons">레슨관리</Link>
+          <Link to="/tutor/my/lessons">내 레슨</Link>
+          <Link to="/tutor/my/students">내 학생</Link>
         </nav>
       }
     />

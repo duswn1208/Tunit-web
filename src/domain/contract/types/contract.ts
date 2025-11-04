@@ -1,26 +1,54 @@
 import type { DayOfWeek } from '@/shared/constants/date';
 
+// 계약 상태 코드
+export type ContractStatusCode =
+  | 'REQUESTED'
+  | 'APPROVED'
+  | 'ACTIVE'
+  | 'CANCELLED'
+  | 'TERMINATED'
+  | 'END';
+
+// 계약 상태별 전환 가능한 상태 맵
+export const CONTRACT_STATUS_TRANSITIONS: Record<ContractStatusCode, ContractStatusCode[]> = {
+  REQUESTED: ['APPROVED', 'ACTIVE', 'CANCELLED'],
+  APPROVED: ['ACTIVE', 'TERMINATED', 'END', 'CANCELLED'],
+  ACTIVE: ['TERMINATED', 'END'],
+  CANCELLED: [],
+  TERMINATED: ['ACTIVE', 'END'],
+  END: [],
+};
+
 // 계약 상태
 export type ContractStatus = {
-  code: 'REQUESTED' | 'APPROVED' | 'ACTIVE' | 'TERMINATED' | 'END';
+  code: ContractStatusCode;
   label: string;
 };
+
+// 계약 타입 코드
+export type ContractTypeCode = 'REGULAR' | 'FIRSTCOME' | 'TRIAL';
 
 // 계약 타입
 export type ContractType = {
-  code: 'REGULAR' | 'FIRSTCOME' | 'TRIAL';
+  code: ContractTypeCode;
   label: string;
 };
+
+// 결제 상태 코드
+export type PaymentStatusCode = 'PENDING' | 'PAID' | 'PARTIAL' | 'REFUNDED';
 
 // 결제 상태
 export type PaymentStatus = {
-  code: 'PENDING' | 'PAID' | 'PARTIAL' | 'REFUNDED';
+  code: PaymentStatusCode;
   label: string;
 };
 
+// 계약 소스 코드
+export type ContractSourceCode = 'STUDENT_REQUEST' | 'TUTOR_OFFER' | 'ADMIN_MATCH';
+
 // 계약 소스
 export type ContractSource = {
-  code: 'STUDENT_REQUEST' | 'TUTOR_OFFER' | 'ADMIN_MATCH';
+  code: ContractSourceCode;
   label: string;
 };
 
