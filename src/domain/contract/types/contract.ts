@@ -1,16 +1,28 @@
 import type { DayOfWeek } from '@/shared/constants/date';
 
 // 계약 상태
-export type ContractStatus = 'ACTIVE' | 'COMPLETED' | 'CANCELED';
+export type ContractStatus = {
+  code: 'REQUESTED' | 'APPROVED' | 'ACTIVE' | 'TERMINATED' | 'END';
+  label: string;
+};
 
 // 계약 타입
-export type ContractType = 'REGULAR' | 'FIRSTCOME' | 'TRIAL';
+export type ContractType = {
+  code: 'REGULAR' | 'FIRSTCOME' | 'TRIAL';
+  label: string;
+};
 
 // 결제 상태
-export type PaymentStatus = 'PENDING' | 'PAID' | 'PARTIAL' | 'REFUNDED';
+export type PaymentStatus = {
+  code: 'PENDING' | 'PAID' | 'PARTIAL' | 'REFUNDED';
+  label: string;
+};
 
 // 계약 소스
-export type ContractSource = 'BOOKING' | 'DIRECT' | 'ADMIN';
+export type ContractSource = {
+  code: 'STUDENT_REQUEST' | 'TUTOR_OFFER' | 'ADMIN_MATCH';
+  label: string;
+};
 
 // 계약 정보 (실제 서버 DTO)
 export interface Contract {
@@ -49,10 +61,4 @@ export interface Contract {
   cancelReason?: string;
   refundAmount: number;
   fixedLessonNo?: number;
-}
-
-// 계약 목록 응답
-export interface ContractListResponse {
-  activeContracts: Contract[];
-  endedContracts: Contract[];
 }

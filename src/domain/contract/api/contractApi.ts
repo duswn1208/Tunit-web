@@ -1,9 +1,9 @@
 import { api } from '@/shared/lib/api';
-import type { ContractListResponse } from '../types/contract';
+import type { Contract } from '../types/contract';
 
 // 학생의 계약 목록 조회
-export async function fetchContractList(): Promise<ContractListResponse> {
-  return api.get<ContractListResponse>('/api/contracts/student');
+export async function fetchContractList(): Promise<Contract[]> {
+  return api.get<Contract[]>('/api/contracts/student');
 }
 
 // 계약 상세 조회

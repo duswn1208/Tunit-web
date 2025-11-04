@@ -21,6 +21,60 @@
   gap: 16px;
 }
 
+.tutor-card {
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.tutor-card-header {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.tutor-card-content {
+  flex: 1;
+}
+
+.tutor-card-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.tutor-card-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.tutor-card-location {
+  margin: 0;
+  font-size: 13px;
+  color: #718096;
+}
+
+.tutor-card-date {
+  font-size: 14px;
+  color: #4a5568;
+  margin-bottom: 8px;
+}
+
+.tutor-card-lessons {
+  font-size: 14px;
+  color: #4a5568;
+  margin-bottom: 8px;
+}
+
+.tutor-card-price {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ff4757;
+}
+
 @media (max-width: 768px) {
   .my-tutors-container {
     padding: 16px;
