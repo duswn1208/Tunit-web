@@ -2,6 +2,7 @@ import Chip from '@/shared/components/Chip';
 import type { Contract, ContractStatusCode } from '../types/contract';
 import { CONTRACT_STATUS_TRANSITIONS } from '../types/contract';
 import '../css/my-tutors.css';
+import { useNavigate } from 'react-router-dom';
 
 interface TutorContractCardProps {
   contract: Contract;
@@ -23,8 +24,17 @@ const getStatusLabel = (statusCode: ContractStatusCode): string => {
 
 export default function TutorContractCard({ contract, onStatusChange }: TutorContractCardProps) {
   console.log('TutorContractCard contract:', contract);
+  const navigate = useNavigate();
 
   const availableTransitions = CONTRACT_STATUS_TRANSITIONS[contract.contractStatus.code];
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    // 버튼 클릭 시에는 이동하지 않음
+    if ((e.target as HTMLElement).closest('button')) {
+      return;
+    }
+    navigate(`/tutor/my/lessons?contractNo=${contract.contractNo}`);
+  };
 
   const handleStatusChange = (newStatus: ContractStatusCode) => {
     if (onStatusChange) {
@@ -33,7 +43,7 @@ export default function TutorContractCard({ contract, onStatusChange }: TutorCon
   };
 
   return (
-    <div className="tutor-card">
+    <div className="tutor-card" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
       <div className="tutor-card-header">
         <div className="tutor-card-content">
           <div className="tutor-card-title-row">

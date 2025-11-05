@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import useLessonHistory from '../../mypage/hooks/useLessonHistory';
 import { api } from '@/shared/lib/api';
 import { useToast } from '@/shared/contexts/ToastContext';
+import { useSearchParams } from 'react-router-dom';
 
 type TabType = 'upcoming' | 'past' | 'pending';
 
@@ -18,6 +19,8 @@ const lessonFilterMap: Record<TabType, string> = {
 };
 
 export function useLessonHistorySection() {
+  const [searchParams] = useSearchParams();
+  const contractNo = searchParams.get('contractNo');
   const [refreshKey, setRefreshKey] = useState(0);
   const [activeTab, setActiveTab] = useState<TabType>('upcoming');
   const [viewType, setViewType] = useState<'list' | 'calendar'>('list');
@@ -26,7 +29,8 @@ export function useLessonHistorySection() {
   const { lessons, isLoading, error } = useLessonHistory(
     tabStatusMap[activeTab] as unknown as string[],
     refreshKey,
-    lessonFilterMap[activeTab]
+    lessonFilterMap[activeTab],
+    contractNo ? Number(contractNo) : undefined
   );
 
   useEffect(() => {

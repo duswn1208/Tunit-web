@@ -3,6 +3,7 @@ import type { Contract } from '../types/contract';
 import '../css/my-tutors.css';
 import { Button } from '@/shared/components';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface StudentContractCardProps {
   contract: Contract;
@@ -15,6 +16,15 @@ export default function StudentContractCard({
 }: StudentContractCardProps) {
   console.log('StudentContractCard contract:', contract);
   const [paymentAmount, setPaymentAmount] = useState<number>(contract.totalPrice);
+  const navigate = useNavigate();
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    // 버튼이나 입력 필드 클릭 시에는 이동하지 않음
+    if ((e.target as HTMLElement).closest('button') || (e.target as HTMLElement).closest('input')) {
+      return;
+    }
+    navigate(`/student/my/lessons?contractNo=${contract.contractNo}`);
+  };
 
   const handlePaymentRequest = () => {
     if (onPaymentRequest) {
@@ -28,7 +38,7 @@ export default function StudentContractCard({
   };
 
   return (
-    <div className="tutor-card">
+    <div className="tutor-card" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
       <div className="tutor-card-header">
         <div className="tutor-card-content">
           <div className="tutor-card-title-row">
