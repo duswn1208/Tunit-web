@@ -58,7 +58,7 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
     dayOfWeekSet: new Set<DayOfWeekNumber>(),
     lessonDate: getToday(),
     lessonType: LessonType.SINGLE,
-    reservationStatus: LessonStatus.TRIAL_REQUESTED,
+    reservationStatus: LessonStatus.REQUESTED,
     memo: '',
   });
 
@@ -101,7 +101,7 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
           firstLessonDate: '',
           startTime: '',
           dayOfWeekSet: new Set<DayOfWeekNumber>(),
-          reservationStatus: 'TRIAL_REQUESTED',
+          reservationStatus: 'REQUESTED',
           lessonDate: '',
           lessonType: 'single',
         });
@@ -138,7 +138,7 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
             }
             options={[
               { label: '레슨 신청', value: 'REQUESTED' },
-              { label: '상담/체험레슨 신청', value: 'TRIAL_REQUESTED' },
+              { label: '상담/체험레슨 신청', value: 'REQUESTED' },
             ]}
           />
         </FormField>

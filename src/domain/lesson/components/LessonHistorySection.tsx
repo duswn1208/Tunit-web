@@ -38,7 +38,7 @@ export default function LessonHistorySection() {
       );
     }
     if (activeTab === 'past') {
-      const hideReview = ['CANCELED', 'EXPIRED', 'TRIAL_CANCELED'].includes(lesson.status.name);
+      const hideReview = ['CANCELED', 'EXPIRED'].includes(lesson.status.name);
       return (
         <div>
           {!hideReview && (

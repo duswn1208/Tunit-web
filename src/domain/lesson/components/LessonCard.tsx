@@ -68,10 +68,6 @@ export function LessonCard({ lesson, actionButton, onClickTutor, onClickChat }: 
     COMPLETED: 'blue',
     CANCELED: 'red',
     EXPIRED: 'gray',
-    TRIAL_REQUESTED: 'yellow',
-    TRIAL_CANCELED: 'red',
-    TRIAL_ACTIVE: 'green',
-    TRIAL_COMPLETED: 'blue',
   };
 
   // D-day 계산

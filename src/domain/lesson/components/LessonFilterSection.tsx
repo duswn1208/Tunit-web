@@ -11,7 +11,6 @@ interface LessonFilterSectionProps {
 const statusOptions = [
   { value: '', label: '레슨 상태 전체' },
   { value: 'REQUESTED', label: '레슨 신청' },
-  { value: 'TRIAL_REQUESTED', label: '상담/체험 신청' },
   { value: 'CONFIRMED', label: '확정' },
   { value: 'CANCELLED', label: '취소' },
 ];

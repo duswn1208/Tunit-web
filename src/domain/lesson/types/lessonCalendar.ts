@@ -1,12 +1,4 @@
-export type LessonStatus =
-  | 'REQUESTED'
-  | 'ACTIVE'
-  | 'COMPLETED'
-  | 'CANCELED'
-  | 'EXPIRED'
-  | 'TRIAL_REQUESTED'
-  | 'TRIAL_ACTIVE'
-  | 'TRIAL_COMPLETED';
+export type LessonStatus = 'REQUESTED' | 'ACTIVE' | 'COMPLETED' | 'CANCELED' | 'EXPIRED';
 
 export type LessonEvent = {
   studentName: string;
@@ -72,26 +64,5 @@ export const statusStyle: Record<
     text: '#374151', // gray-700
     border: '#E5E7EB', // gray-200
     label: '만료/노쇼',
-  },
-  TRIAL_REQUESTED: {
-    bg: '#EEF2FF', // indigo-50
-    dot: '#6366F1', // indigo-500
-    text: '#3730A3', // indigo-800
-    border: '#C7D2FE', // indigo-200
-    label: '상담/체험 요청',
-  },
-  TRIAL_ACTIVE: {
-    bg: '#FDF2F8', // pink-50
-    dot: '#F472B6', // pink-400
-    text: '#831843', // pink-900
-    border: '#FBCFE8', // pink-200
-    label: '상담/체험 확정',
-  },
-  TRIAL_COMPLETED: {
-    bg: '#F3E8FF', // violet-50
-    dot: '#A78BFA', // violet-400
-    text: '#5B21B6', // violet-900
-    border: '#DDD6FE', // violet-200
-    label: '상담/체험 완료',
   },
 };

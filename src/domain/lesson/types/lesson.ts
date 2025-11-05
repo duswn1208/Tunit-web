@@ -11,10 +11,6 @@ export const LessonStatus = {
   COMPLETED: 'COMPLETED',
   CANCELED: 'CANCELED',
   EXPIRED: 'EXPIRED',
-  TRIAL_REQUESTED: 'TRIAL_REQUESTED',
-  TRIAL_CANCELED: 'TRIAL_CANCELED',
-  TRIAL_ACTIVE: 'TRIAL_ACTIVE',
-  TRIAL_COMPLETED: 'TRIAL_COMPLETED',
 } as const;
 
 export type LessonStatus = (typeof LessonStatus)[keyof typeof LessonStatus];
@@ -25,8 +21,4 @@ export const LessonStatusLabel: Record<LessonStatus, string> = {
   COMPLETED: '완료',
   CANCELED: '취소',
   EXPIRED: '자동 만료',
-  TRIAL_REQUESTED: '체험/상담 신청',
-  TRIAL_CANCELED: '체험/상담 취소',
-  TRIAL_ACTIVE: '체험/상담 확정',
-  TRIAL_COMPLETED: '체험/상담 완료',
 };

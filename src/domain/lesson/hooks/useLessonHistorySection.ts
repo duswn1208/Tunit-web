@@ -7,9 +7,9 @@ import { useSearchParams } from 'react-router-dom';
 type TabType = 'upcoming' | 'past' | 'pending';
 
 const tabStatusMap = {
-  upcoming: ['ACTIVE', 'TRIAL_ACTIVE'],
-  past: ['COMPLETED', 'CANCELED', 'EXPIRED', 'TRIAL_CANCELED', 'TRIAL_COMPLETED'],
-  pending: ['REQUESTED', 'TRIAL_REQUESTED'],
+  upcoming: ['ACTIVE'],
+  past: ['COMPLETED', 'CANCELED', 'EXPIRED'],
+  pending: ['REQUESTED'],
 } as const;
 
 const lessonFilterMap: Record<TabType, string> = {
