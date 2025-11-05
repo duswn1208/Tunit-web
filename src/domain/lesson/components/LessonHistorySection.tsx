@@ -4,6 +4,7 @@ import Tab from '@/shared/components/Tab';
 import LessonCalendarSection from './LessonCalendarSection';
 import { LessonCard } from './LessonCard';
 import './css/LessonHistorySection.css';
+import LessonManageViewToggle from './LessonManageViewToggle';
 
 // 임시 상수
 export default function LessonHistorySection() {
@@ -89,7 +90,19 @@ export default function LessonHistorySection() {
 
   function renderLessonList(lessons: any[]) {
     if (!lessons || lessons.length === 0) {
-      return <div className="no-lessons">레슨 내역이 없습니다.</div>;
+      return (
+        <div className="no-lessons">
+          <p style={{ marginBottom: '20%' }}>레슨 내역이 없습니다.</p>
+          <Button
+            className="ui-btn ui-btn--accent"
+            onClick={() => {
+              window.location.href = '/search';
+            }}
+          >
+            레슨 예약하러 가볼까요?
+          </Button>
+        </div>
+      );
     }
     return <div className="lesson-list">{lessons.map(renderLessonCard)}</div>;
   }
@@ -122,34 +135,7 @@ export default function LessonHistorySection() {
             else if (selected === '예약 요청') setActiveTab('pending');
           }}
         />
-        <div
-          className="view-toggle-text"
-          style={{ display: 'flex', alignItems: 'center', gap: 0, fontWeight: 600, fontSize: 16 }}
-        >
-          <span
-            style={{
-              color: viewType === 'list' ? 'var(--brand-mint, #1ec9bb)' : '#bbb',
-              cursor: viewType === 'list' ? 'default' : 'pointer',
-              textDecoration: viewType === 'list' ? 'underline' : 'none',
-              marginRight: 8,
-            }}
-            onClick={() => setViewType('list')}
-          >
-            리스트
-          </span>
-          <span style={{ color: '#ddd', margin: '0 4px' }}>|</span>
-          <span
-            style={{
-              color: viewType === 'calendar' ? 'var(--brand-mint, #1ec9bb)' : '#bbb',
-              cursor: viewType === 'calendar' ? 'default' : 'pointer',
-              textDecoration: viewType === 'calendar' ? 'underline' : 'none',
-              marginLeft: 8,
-            }}
-            onClick={() => setViewType('calendar')}
-          >
-            달력
-          </span>
-        </div>
+        <LessonManageViewToggle viewType={viewType} setViewType={setViewType} />
       </div>
       <div className="tab-content">
         {viewType === 'list' ? (
@@ -158,7 +144,7 @@ export default function LessonHistorySection() {
           <LessonCalendarSection
             lessonEvents={lessons.map((lesson) => ({
               id: lesson.lessonReservationNo,
-              title: lesson.lessonCategory?.label || '레슨',
+              title: lesson.lessonCategory?.label || '레슨' + lesson.startTime,
               start: new Date(lesson.lessonDate + 'T' + lesson.startTime),
               end: new Date(lesson.lessonDate + 'T' + lesson.startTime),
               date: new Date(lesson.lessonDate + 'T' + lesson.startTime),
@@ -174,7 +160,7 @@ export default function LessonHistorySection() {
               },
             }))}
             onSelectEvent={() => {}}
-            size="large"
+            size="medium"
           />
         )}
       </div>

@@ -9,7 +9,7 @@ export type ContractStatusCode =
   | 'TERMINATED'
   | 'END';
 
-// 계약 상태별 전환 가능한 상태 맵
+// 계약 상태별 전환 가능한 상태 맵 (튜터용)
 export const CONTRACT_STATUS_TRANSITIONS: Record<ContractStatusCode, ContractStatusCode[]> = {
   REQUESTED: ['APPROVED', 'ACTIVE', 'CANCELLED'],
   APPROVED: ['ACTIVE', 'TERMINATED', 'END', 'CANCELLED'],
@@ -18,6 +18,17 @@ export const CONTRACT_STATUS_TRANSITIONS: Record<ContractStatusCode, ContractSta
   TERMINATED: ['ACTIVE', 'END'],
   END: [],
 };
+
+// 계약 상태별 전환 가능한 상태 맵 (학생용)
+export const CONTRACT_STATUS_TRANSITIONS_STUDENT: Record<ContractStatusCode, ContractStatusCode[]> =
+  {
+    REQUESTED: ['CANCELLED'],
+    APPROVED: ['CANCELLED'],
+    ACTIVE: ['TERMINATED', 'END'],
+    CANCELLED: [],
+    TERMINATED: ['ACTIVE', 'END'],
+    END: [],
+  };
 
 // 계약 상태
 export type ContractStatus = {

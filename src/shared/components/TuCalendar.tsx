@@ -41,8 +41,6 @@ export default function TuCalendar({
     [key: string]: any;
   };
 
-  console.log('TuCalendar events:', events);
-
   return (
     <div className="common-calendar-card">
       <div className={`common-calendar-content tunit-calendar ${size}`}>

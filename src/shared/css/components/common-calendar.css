@@ -49,6 +49,26 @@
   gap: 24px;
 }
 
+.common-calendar-content {
+  height: 600px;
+  min-height: 500px;
+}
+
+.common-calendar-content.small {
+  height: 400px;
+  min-height: 350px;
+}
+
+.common-calendar-content.medium {
+  height: 600px;
+  min-height: 500px;
+}
+
+.common-calendar-content.large {
+  height: 800px;
+  min-height: 700px;
+}
+
 .common-calendar-title {
   font-size: 24px;
   font-weight: 700;

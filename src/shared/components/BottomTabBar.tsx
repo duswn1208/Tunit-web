@@ -72,7 +72,7 @@ const icons = {
 const tabs = [
   { key: 'home', label: '홈', icon: icons.home, link: '/' },
   { key: 'search', label: '찾기', icon: icons.search, link: '/find/lessons' },
-  { key: 'lesson', label: '내 레슨', icon: icons.lesson, link: '/students/my/lessons' },
+  { key: 'lesson', label: '내 레슨', icon: icons.lesson, link: '/student/my/lessons' },
   { key: 'tutors', label: '내 튜터', icon: icons.lesson, link: '/student/my/tutors' },
   // { key: 'lounge', label: '라운지', icon: icons.lounge },
   { key: 'my', label: '마이', icon: icons.my, link: '/mypage' },
