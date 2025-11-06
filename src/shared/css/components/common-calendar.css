@@ -19,6 +19,15 @@
   background-color: #f5f5f5 !important;
 }
 
+.rbc-day-bg {
+  text-align: center;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 .rbc-day-bg.rbc-selected-cell {
   background-color: var(--brand-mint-light) !important;
 }
@@ -35,6 +44,83 @@
   box-shadow: none !important;
   padding: 0 !important;
 }
+
+/* 날짜 셀 숫자 스타일 */
+.rbc-date-cell {
+  text-align: center !important;
+  padding: 8px !important;
+}
+
+.rbc-date-cell a {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+/* 날짜 셀의 border 제거 */
+.rbc-month-view .rbc-day-bg,
+.rbc-month-view .rbc-date-cell {
+  border: none !important;
+}
+
+/* 요일 헤더의 border 제거 */
+.rbc-header {
+  border: none !important;
+}
+
+/* 행(row)의 border 제거 */
+.rbc-month-row {
+  border: none !important;
+}
+
+/* 모든 캘린더 테두리 제거 */
+.rbc-time-view,
+.rbc-time-header-content,
+.rbc-time-content {
+  border: none !important;
+}
+
+/* 커스텀 툴바 스타일 */
+.custom-calendar-toolbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 24px;
+  padding: 16px 0;
+}
+
+.calendar-toolbar-label {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  min-width: 180px;
+  text-align: center;
+}
+
+.calendar-nav-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  cursor: pointer;
+  padding: 8px 16px;
+  transition: all 0.2s;
+  border-radius: 8px;
+}
+
+.calendar-nav-button:hover {
+  background-color: var(--brand-mint-light);
+  color: var(--brand-mint);
+}
+
+/* 기본 툴바 숨기기 */
+.rbc-toolbar {
+  display: none !important;
+}
+
 .common-calendar-card {
   width: 100%;
   max-width: 1200px; /* 더 큰 최대 너비로 조정 */

@@ -159,10 +159,79 @@
   padding: 40px 0;
 }
 
+/* 좌우 분할 레이아웃 */
+.lesson-split-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  min-height: 600px;
+}
+
+.lesson-calendar-container {
+  overflow: hidden;
+}
+
+.lesson-list-container {
+  overflow-y: auto;
+  max-height: 800px;
+  padding-right: 8px;
+}
+
+/* 스크롤바 스타일 */
+.lesson-list-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.lesson-list-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.lesson-list-container::-webkit-scrollbar-thumb {
+  background: var(--brand-mint);
+  border-radius: 4px;
+}
+
+.lesson-list-container::-webkit-scrollbar-thumb:hover {
+  background: #17a89a;
+}
+
+/* 선택된 레슨 카드 하이라이트 애니메이션 */
+.lesson-card-highlighted {
+  animation: highlight-pulse 1s ease-in-out;
+  border: 2px solid var(--brand-mint) !important;
+  box-shadow: 0 0 20px rgba(30, 201, 187, 0.4) !important;
+}
+
+@keyframes highlight-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(30, 201, 187, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(30, 201, 187, 0.8);
+  }
+}
+
 @media (max-width: 600px) {
   .lesson-history-section {
     padding: 6px 2px;
   }
+
+  /* 모바일에서는 세로 배치 */
+  .lesson-split-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .lesson-calendar-container {
+    min-height: 400px;
+  }
+
+  .lesson-list-container {
+    max-height: 500px;
+  }
+
   .lesson-card {
     /* padding: 6px 4px; */
     border-radius: 6px;

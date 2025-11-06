@@ -21,9 +21,12 @@ const lessonFilterMap: Record<TabType, string> = {
 export function useLessonHistorySection() {
   const [searchParams] = useSearchParams();
   const contractNo = searchParams.get('contractNo');
+  const tabParam = searchParams.get('tab') as TabType | null;
+  const viewParam = searchParams.get('view') as 'list' | 'calendar' | null;
+
   const [refreshKey, setRefreshKey] = useState(0);
-  const [activeTab, setActiveTab] = useState<TabType>('upcoming');
-  const [viewType, setViewType] = useState<'list' | 'calendar'>('list');
+  const [activeTab, setActiveTab] = useState<TabType>(tabParam || 'upcoming');
+  const [viewType, setViewType] = useState<'list' | 'calendar'>(viewParam || 'list');
   const { showToast } = useToast();
 
   const { lessons, isLoading, error } = useLessonHistory(
@@ -75,6 +78,14 @@ export function useLessonHistorySection() {
     showToast('채팅 기능은 준비 중입니다.', 'info');
   }, [showToast]);
 
+  const handleBookNewLesson = useCallback(() => {
+    if (contractNo) {
+      window.location.href = `/student/booking/lesson?contractNo=${contractNo}&mode=new`;
+    } else {
+      showToast('계약 정보를 찾을 수 없습니다.', 'error');
+    }
+  }, [contractNo, showToast]);
+
   return {
     lessons,
     isLoading,
@@ -87,5 +98,6 @@ export function useLessonHistorySection() {
     handleWriteReview,
     handleReserveLesson,
     handleChatWithTutor,
+    handleBookNewLesson,
   };
 }

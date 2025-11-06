@@ -17,7 +17,6 @@ const LessonCalendarSection: React.FC<LessonCalendarSectionProps> = ({
   statusStyleMap = statusStyle,
   size = 'medium',
 }) => {
-  console.log('LessonCalendarSection lessonEvents:', lessonEvents);
   return (
     <div className="lesson-calendar-section">
       <TuCalendar

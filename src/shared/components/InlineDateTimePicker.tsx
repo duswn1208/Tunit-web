@@ -60,8 +60,26 @@ export default function InlineDateTimePicker({
   };
 
   return (
-    <div className="inline-datepicker-container">
-      <div className={`calendar-wrapper ${size}`}>
+    <div
+      className="inline-datepicker-container"
+      style={{
+        width: '100%',
+        maxWidth: '100%',
+        margin: 0,
+        padding: 0,
+        boxSizing: 'border-box',
+        overflow: 'hidden',
+      }}
+    >
+      <div
+        className={`calendar-wrapper ${size}`}
+        style={{
+          width: '100%',
+          maxWidth: '100%',
+          boxSizing: 'border-box',
+          overflow: 'hidden',
+        }}
+      >
         <Calendar
           value={selectedDate}
           onChange={handleDateChange}

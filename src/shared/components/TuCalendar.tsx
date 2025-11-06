@@ -13,6 +13,34 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
+// 커스텀 툴바 컴포넌트
+const CustomToolbar = ({ date, onNavigate }: any) => {
+  const goToPrevMonth = () => {
+    onNavigate('PREV');
+  };
+
+  const goToNextMonth = () => {
+    onNavigate('NEXT');
+  };
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+
+  return (
+    <div className="custom-calendar-toolbar">
+      <button onClick={goToPrevMonth} className="calendar-nav-button">
+        &lt;
+      </button>
+      <span className="calendar-toolbar-label">
+        {year}년 {month}월
+      </span>
+      <button onClick={goToNextMonth} className="calendar-nav-button">
+        &gt;
+      </button>
+    </div>
+  );
+};
+
 interface TuCalendarProps {
   events: any[];
   onSelectEvent?: (event: any) => void;
@@ -72,6 +100,7 @@ export default function TuCalendar({
           onSelectSlot={onSelectSlot}
           selectable={!!onSelectSlot}
           components={{
+            toolbar: CustomToolbar,
             event: ({ event }: { event: any }) => {
               const status = event.status?.name || event.status;
               const style = statusStyleMap?.[status] || { dot: '#636e72', text: '#636e72' };

@@ -197,3 +197,57 @@
     font-size: 18px;
   }
 }
+
+/* ContractInfoCard 스타일 */
+.contract-info-card {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.contract-info-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #212529;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.contract-info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contract-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.contract-info-label {
+  color: #6c757d;
+  font-weight: 500;
+  min-width: 120px;
+}
+
+.contract-info-value {
+  color: #212529;
+  font-weight: 600;
+  text-align: right;
+  flex: 1;
+}
+
+@media (min-width: 768px) {
+  .contract-info-card {
+    padding: 24px;
+  }
+
+  .contract-info-row {
+    font-size: 15px;
+  }
+}

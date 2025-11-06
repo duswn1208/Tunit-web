@@ -4,8 +4,8 @@ import Tab from '@/shared/components/Tab';
 import LessonCalendarSection from './LessonCalendarSection';
 import { LessonCard } from './LessonCard';
 import './css/LessonHistorySection.css';
-import LessonManageViewToggle from './LessonManageViewToggle';
 import { toAmPmFormat } from '@/domain/dayTime/lib/timeUtils';
+import { useState } from 'react';
 
 // 임시 상수
 export default function LessonHistorySection() {
@@ -13,14 +13,15 @@ export default function LessonHistorySection() {
     lessons,
     activeTab,
     setActiveTab,
-    viewType,
-    setViewType,
     handleCancelLesson,
     handleChangeLesson,
     handleWriteReview,
     handleReserveLesson,
     handleChatWithTutor,
+    handleBookNewLesson,
   } = useLessonHistorySection();
+
+  const [selectedLessonId, setSelectedLessonId] = useState<number | null>(null);
 
   function renderActionButton(lesson: any) {
     if (activeTab === 'upcoming') {
@@ -74,6 +75,7 @@ export default function LessonHistorySection() {
   }
 
   function renderLessonCard(lesson: any) {
+    const isSelected = selectedLessonId === lesson.lessonReservationNo;
     return (
       <LessonCard
         key={lesson.lessonReservationNo}
@@ -85,6 +87,8 @@ export default function LessonHistorySection() {
           }
         }}
         onClickChat={handleChatWithTutor}
+        className={isSelected ? 'lesson-card-highlighted' : ''}
+        onClick={() => setSelectedLessonId(lesson.lessonReservationNo)}
       />
     );
   }
@@ -110,7 +114,7 @@ export default function LessonHistorySection() {
 
   return (
     <section className="lesson-history-section">
-      {/* 탭 + 뷰 전환 버튼 한 줄 배치 */}
+      {/* 탭 + 레슨 예약 버튼 */}
       <div
         className="lesson-header-row"
         style={{
@@ -119,7 +123,7 @@ export default function LessonHistorySection() {
           justifyContent: 'space-between',
           marginBottom: 16,
         }}
-        aria-label="레슨 내역 필터 및 뷰 전환"
+        aria-label="레슨 내역 필터"
       >
         <Tab
           tabs={['예정된 레슨', '지난 레슨', '예약 요청']}
@@ -136,31 +140,43 @@ export default function LessonHistorySection() {
             else if (selected === '예약 요청') setActiveTab('pending');
           }}
         />
-        <LessonManageViewToggle viewType={viewType} setViewType={setViewType} />
+        <Button className="ui-btn ui-btn--accent" size="sm" onClick={handleBookNewLesson}>
+          + 레슨 예약
+        </Button>
       </div>
-      <div className="tab-content">
-        {viewType === 'list'
-          ? renderLessonList(lessons)
-          : (console.log('Rendering LessonCalendarSection with lessons:', lessons),
-            (
-              <LessonCalendarSection
-                lessonEvents={lessons.map((lesson) => ({
-                  id: lesson.lessonReservationNo,
-                  title: `${lesson.lessonCategory?.label} (${toAmPmFormat(lesson.startTime)})`,
-                  start: new Date(lesson.lessonDate + 'T' + lesson.startTime),
-                  end: new Date(lesson.lessonDate + 'T' + lesson.startTime),
-                  date: new Date(lesson.lessonDate + 'T' + lesson.startTime),
-                  status: lesson.status,
-                  studentName: '',
-                  category: {
-                    label: lesson.lessonCategory?.label || '',
-                    name: lesson.lessonCategory?.code || '',
-                  },
-                }))}
-                onSelectEvent={() => {}}
-                size="medium"
-              />
-            ))}
+
+      {/* 좌우 분할 레이아웃 */}
+      <div className="lesson-split-layout">
+        {/* 왼쪽: 캘린더 */}
+        <div className="lesson-calendar-container">
+          <LessonCalendarSection
+            lessonEvents={lessons.map((lesson) => ({
+              id: lesson.lessonReservationNo,
+              title: `${lesson.lessonCategory?.label} (${toAmPmFormat(lesson.startTime)})`,
+              start: new Date(lesson.lessonDate + 'T' + lesson.startTime),
+              end: new Date(lesson.lessonDate + 'T' + lesson.startTime),
+              date: new Date(lesson.lessonDate + 'T' + lesson.startTime),
+              status: lesson.status,
+              studentName: '',
+              category: {
+                label: lesson.lessonCategory?.label || '',
+                name: lesson.lessonCategory?.code || '',
+              },
+            }))}
+            onSelectEvent={(event: any) => {
+              setSelectedLessonId(event.id);
+              // 리스트로 스크롤
+              const element = document.querySelector(`[data-lesson-id="${event.id}"]`);
+              if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+            }}
+            size="medium"
+          />
+        </div>
+
+        {/* 오른쪽: 리스트 */}
+        <div className="lesson-list-container">{renderLessonList(lessons)}</div>
       </div>
     </section>
   );

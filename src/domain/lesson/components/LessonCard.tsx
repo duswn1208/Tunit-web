@@ -57,10 +57,19 @@ export interface LessonCardProps {
   actionButton: React.ReactNode;
   onClickTutor: () => void;
   onClickChat: () => void;
+  className?: string;
+  onClick?: () => void;
 }
 
 // LessonCard 컴포넌트
-export function LessonCard({ lesson, actionButton, onClickTutor, onClickChat }: LessonCardProps) {
+export function LessonCard({
+  lesson,
+  actionButton,
+  onClickTutor,
+  onClickChat,
+  className = '',
+  onClick,
+}: LessonCardProps) {
   // 상태별 칩 컬러 매핑
   const statusVariantMap: Record<string, import('@/shared/components/Chip').ChipVariant> = {
     REQUESTED: 'yellow',
@@ -76,8 +85,10 @@ export function LessonCard({ lesson, actionButton, onClickTutor, onClickChat }: 
   return (
     <div
       key={lesson.lessonReservationNo}
-      className="lesson-card responsive-lesson-card"
-      style={{ position: 'relative', borderRadius: 12 }}
+      data-lesson-id={lesson.lessonReservationNo}
+      className={`lesson-card responsive-lesson-card ${className}`}
+      style={{ position: 'relative', borderRadius: 12, cursor: onClick ? 'pointer' : 'default' }}
+      onClick={onClick}
     >
       {/* 상태 칩 */}
       <div

@@ -46,3 +46,11 @@
   color: rgba(255, 255, 255, 0.8);
   font-size: 0.85rem;
 }
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .main {
+    padding: 16px 0;
+    max-width: 100%;
+  }
+}

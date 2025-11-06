@@ -1,6 +1,6 @@
 import Chip from '@/shared/components/Chip';
-import type { Contract, ContractStatusCode } from '../types/contract';
-import { CONTRACT_STATUS_TRANSITIONS_STUDENT } from '../types/contract';
+import type { Contract } from '../types/contract';
+import { CONTRACT_STATUS_TRANSITIONS_STUDENT, type ContractStatusCode } from '../types/contract';
 import '../css/my-tutors.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -44,8 +44,14 @@ export default function StudentContractCard({
     }
   };
 
-  const handleLessonBooking = () => {
-    navigate(`/student/my/lessons?contractNo=${contract.contractNo}`);
+  const handleLessonManage = () => {
+    console.log('handleLessonManage called', contract);
+    if (contract.contractStatus.code == 'REQUESTED') {
+      navigate(`/student/my/lessons?contractNo=${contract.contractNo}&tab=pending&view=calendar`);
+      return;
+    }
+    // 레슨 관리 페이지로 이동 (캘린더 뷰, 예정된 레슨 탭)
+    navigate(`/student/my/lessons?contractNo=${contract.contractNo}&tab=upcoming&view=calendar`);
   };
 
   // 현재 상태에서 변경 가능한 상태들
@@ -123,12 +129,9 @@ export default function StudentContractCard({
               {statusLabels[status]}
             </button>
           ))}
-          {/* 진행중일 때 레슨예약 버튼 추가 */}
-          {contract.contractStatus.code === 'ACTIVE' && (
-            <button className="status-change-btn" onClick={handleLessonBooking}>
-              레슨 예약
-            </button>
-          )}
+          <button className="tutor-card-top-button" onClick={handleLessonManage}>
+            레슨 관리
+          </button>
         </div>
       )}
     </div>

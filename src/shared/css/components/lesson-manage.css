@@ -73,7 +73,7 @@
   color: #6e6c6c;
 }
 .lesson-view-toggle-tab.active {
-  color: #fff;
+  color: var(--brand-red, #e14a4a);
 }
 .lesson-view-toggle-divider {
   align-self: center;
@@ -113,7 +113,7 @@
   min-height: 80vh;
 }
 .lesson-calendar-section {
-  min-width: 900px;
+  /* min-width: 900px; */
   transition: width 0.2s;
 }
 .lesson-card-section {

@@ -19,3 +19,34 @@ export interface ContractRequestDto {
 export async function requestContract(data: ContractRequestDto) {
   return await api.post('/api/contracts', data);
 }
+
+// 단일 레슨 예약 (FIRSTCOME 계약용)
+export interface LessonBookingDto {
+  contractNo: number;
+  lessonDate: string; // YYYY-MM-DD
+  startTime: string; // HH:mm
+  endTime: string; // HH:mm
+  memo?: string;
+}
+
+export async function bookLesson(data: LessonBookingDto) {
+  return await api.post('/api/lessons/reservation', data);
+}
+
+// 레슨 날짜/시간 변경
+export interface LessonRescheduleDto {
+  lessonReservationNo: number;
+  lessonDate: string; // YYYY-MM-DD
+  startTime: string; // HH:mm
+  endTime: string; // HH:mm
+  memo?: string;
+}
+
+export async function rescheduleLesson(data: LessonRescheduleDto) {
+  return await api.put(`/api/lessons/${data.lessonReservationNo}/reschedule`, {
+    lessonDate: data.lessonDate,
+    startTime: data.startTime,
+    endTime: data.endTime,
+    memo: data.memo,
+  });
+}
