@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { LessonStatus, LessonStatusLabel } from '../types/lesson';
 import Chip from '@/shared/components/Chip';
 import Button from '@/shared/components/Button';
@@ -70,6 +70,8 @@ export function LessonCard({
   className = '',
   onClick,
 }: LessonCardProps) {
+  // 펼침/접힘 상태
+  const [expanded, setExpanded] = useState(false);
   // 상태별 칩 컬러 매핑
   const statusVariantMap: Record<string, import('@/shared/components/Chip').ChipVariant> = {
     REQUESTED: 'yellow',
@@ -87,69 +89,89 @@ export function LessonCard({
       key={lesson.lessonReservationNo}
       data-lesson-id={lesson.lessonReservationNo}
       className={`lesson-card responsive-lesson-card ${className}`}
-      style={{ position: 'relative', borderRadius: 12, cursor: onClick ? 'pointer' : 'default' }}
-      onClick={onClick}
+      style={{ position: 'relative', borderRadius: 12 }}
     >
-      {/* 상태 칩 */}
+      {/* 요약 정보 */}
       <div
-        className="lesson-card-status responsive-lesson-card-status"
-        style={{ position: 'absolute', top: 12, right: 12, zIndex: 1 }}
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}
       >
-        <Chip
-          label={LessonStatusLabel[lesson.status.name as LessonStatus]}
-          variant={statusVariantMap[lesson.status.name] || 'default'}
-          size="sm"
-        />
-      </div>
-      {/* 레슨명, 튜터 */}
-      <div className="lesson-card-top" style={{ marginBottom: 8 }}>
-        <div
-          className="lesson-title"
-          style={{ fontSize: '1.1em', fontWeight: 700, wordBreak: 'keep-all' }}
-        >
-          레슨: {lesson.lessonCategory?.label || '베이스'}
-        </div>
-        <TutorInfo
-          tutorInfo={lesson.tutorInfo}
-          onClickTutor={onClickTutor}
-          onClickChat={onClickChat}
-        />
-      </div>
-      {/* 날짜/시간 및 D-day */}
-      <div
-        className="lesson-card-center"
-        style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}
-      >
-        <span className="lesson-date-time" style={{ fontSize: '1em', fontWeight: 600 }}>
-          {formatLessonDateTime(lesson.lessonDate, lesson.startTime)}
-        </span>
-        {dday && (
-          <span
-            className="lesson-dday"
-            style={{ fontSize: '0.95em', color: '#1ec9bb', fontWeight: 600, marginLeft: 4 }}
+        <div style={{ flex: 1 }}>
+          <div
+            className="lesson-title"
+            style={{ fontSize: '1.1em', fontWeight: 700, wordBreak: 'keep-all' }}
           >
-            {dday}
-          </span>
-        )}
-      </div>
-      {/* 하단: 버튼 */}
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 8,
-          marginTop: 40,
-        }}
-      >
-        <div
-          className="lesson-card-actions responsive-lesson-card-actions"
-          style={{ flex: '1 1 160px', minWidth: 0 }}
-        >
-          {actionButton}
+            {lesson.lessonCategory?.label}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 2 }}>
+            <span className="lesson-date-time" style={{ fontSize: '1em', fontWeight: 600 }}>
+              {formatLessonDateTime(lesson.lessonDate, lesson.startTime)}
+            </span>
+            {dday && (
+              <span
+                className="lesson-dday"
+                style={{ fontSize: '0.95em', color: '#1ec9bb', fontWeight: 600, marginLeft: 4 }}
+              >
+                {dday}
+              </span>
+            )}
+            <span style={{ marginLeft: 8 }}>
+              <Chip
+                label={LessonStatusLabel[lesson.status.name as LessonStatus]}
+                variant={statusVariantMap[lesson.status.name] || 'default'}
+                size="sm"
+              />
+            </span>
+          </div>
         </div>
+        {/* 펼침/접힘 아이콘 */}
+        <button
+          aria-label={expanded ? '상세 닫기' : '상세 보기'}
+          onClick={() => setExpanded((prev) => !prev)}
+          style={{
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: 22,
+            padding: 4,
+            marginLeft: 8,
+            color: '#888',
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          {expanded ? '▲' : '▼'}
+        </button>
       </div>
+
+      {/* 상세 정보: 펼침 상태일 때만 노출 */}
+      {expanded && (
+        <>
+          <div className="lesson-card-top" style={{ margin: '12px 0 8px 0' }}>
+            <TutorInfo
+              tutorInfo={lesson.tutorInfo}
+              onClickTutor={onClickTutor}
+              onClickChat={onClickChat}
+            />
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 8,
+              marginTop: 16,
+            }}
+          >
+            <div
+              className="lesson-card-actions responsive-lesson-card-actions"
+              style={{ flex: '1 1 160px', minWidth: 0 }}
+            >
+              {actionButton}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

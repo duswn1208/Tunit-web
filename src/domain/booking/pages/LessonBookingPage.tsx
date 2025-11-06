@@ -98,7 +98,7 @@ export default function LessonBookingPage() {
     return (
       <div style={{ padding: 20, textAlign: 'center', maxWidth: '100%', overflow: 'hidden' }}>
         <div style={{ color: '#d32f2f', marginBottom: 16 }}>
-          {error || '계약 정보를 찾을 수 없습니다.'}
+          {error || '계약 정보를 찾을 수 없습니다.!'}
         </div>
         <button onClick={() => navigate(-1)} className="ui-btn">
           돌아가기

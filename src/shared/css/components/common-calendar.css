@@ -5,8 +5,8 @@
 
 /* 활성화된 날짜 스타일 */
 .rbc-active {
-  color: #000 !important;
-  background-color: var(--brand-mint-light) !important;
+  color: #fff !important;
+  background-color: var(--brand-mint) !important;
 }
 
 .rbc-today {
@@ -29,7 +29,8 @@
 }
 
 .rbc-day-bg.rbc-selected-cell {
-  background-color: var(--brand-mint-light) !important;
+  background-color: var(--brand-mint) !important;
+  color: #fff !important;
 }
 
 /* 현재 날짜 강조 스타일 */
@@ -87,8 +88,6 @@
   justify-content: center;
   align-items: center;
   gap: 24px;
-  margin-bottom: 24px;
-  padding: 16px 0;
 }
 
 .calendar-toolbar-label {
@@ -129,7 +128,7 @@
   border-radius: 16px;
   box-shadow: 0 4px 24px 0 rgba(30, 201, 187, 0.1);
   border: 2px solid var(--brand-red);
-  padding: 32px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 24px;
