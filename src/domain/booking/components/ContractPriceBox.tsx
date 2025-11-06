@@ -5,7 +5,7 @@ interface LessonPriceBoxProps {
   isTrial?: boolean;
 }
 
-export default function LessonPriceBox({
+export default function ContractPriceBox({
   totalPrice,
   lessonCount,
   totalLessons,

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { getDayLabel } from '@/shared/constants/date';
-import LessonBookingStepFooter from './LessonBookingStepFooter';
+import ContractRequestStepFooter from './ContractRequestStepFooter';
 import { getContractTypeLabel, isFirstcome, isRegular, isTrial } from '../types/types';
 import { toKoreanDateTime } from '@/domain/dayTime/lib/timeUtils';
 
-export interface LessonBookingStep4Props {
+export interface ContractRequestStep4Props {
   step1: any;
   step2: any;
   step3: any;
@@ -13,14 +13,14 @@ export interface LessonBookingStep4Props {
   totalPrice: number;
 }
 
-export default function LessonBookingStep4({
+export default function ContractRequestStep4({
   step1,
   step2,
   step3,
   onPrev,
   onSubmit,
   totalPrice,
-}: LessonBookingStep4Props) {
+}: ContractRequestStep4Props) {
   const [agreed, setAgreed] = useState(false);
 
   return (
@@ -121,7 +121,7 @@ export default function LessonBookingStep4({
           에 동의합니다.
         </span>
       </label>
-      <LessonBookingStepFooter
+      <ContractRequestStepFooter
         onPrev={onPrev}
         onNext={onSubmit}
         nextLabel="신청 완료"

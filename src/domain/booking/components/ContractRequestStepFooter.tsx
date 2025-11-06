@@ -1,4 +1,4 @@
-interface LessonBookingStepFooterProps {
+interface ContractRequestStepFooterProps {
   onPrev?: () => void;
   onNext: () => void;
   nextLabel: string;
@@ -7,14 +7,14 @@ interface LessonBookingStepFooterProps {
   nextType?: 'button' | 'submit';
 }
 
-export default function LessonBookingStepFooter({
+export default function ContractRequestStepFooter({
   onPrev,
   onNext,
   nextLabel,
   nextDisabled = false,
   prevLabel = '이전',
   nextType = 'button',
-}: LessonBookingStepFooterProps) {
+}: ContractRequestStepFooterProps) {
   return (
     <div style={{ display: 'flex', gap: 8, marginTop: 32 }}>
       {onPrev && (

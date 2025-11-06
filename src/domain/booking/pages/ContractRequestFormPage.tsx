@@ -1,8 +1,8 @@
 import { useSearchParams, useLocation, useNavigate } from 'react-router-dom';
-import LessonBookingForm from '../pages/LessonBookingForm';
+import ContractRequestForm from './ContractRequestForm';
 import { getContractTypeLabel, toContractType } from '../types/types';
 
-export default function LessonBookingFormPage() {
+export default function ContractRequestFormPage() {
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ export default function LessonBookingFormPage() {
   console.log('tutorInfo:', tutorInfo);
   const contractType = toContractType(type);
   return (
-    <LessonBookingForm
+    <ContractRequestForm
       tutorProfileNo={tutorProfileNo}
       step={1}
       total={4}

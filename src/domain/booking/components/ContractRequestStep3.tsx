@@ -1,8 +1,8 @@
 import Header from '@/shared/components/Header';
 import RadioGroup from '@/shared/components/RadioGroup';
-import LessonBookingStepFooter from './LessonBookingStepFooter';
+import ContractRequestStepFooter from './ContractRequestStepFooter';
 
-interface LessonBookingStep3Props {
+interface ContractRequestStep3Props {
   level: string;
   setLevel: (v: string) => void;
   memo: string;
@@ -13,7 +13,7 @@ interface LessonBookingStep3Props {
   onSubmit: () => void;
 }
 
-export default function LessonBookingStep3({
+export default function ContractRequestStep3Props({
   level,
   setLevel,
   memo,
@@ -22,7 +22,7 @@ export default function LessonBookingStep3({
   setEmergencyContact,
   onPrev,
   onSubmit,
-}: LessonBookingStep3Props) {
+}: ContractRequestStep3Props) {
   return (
     <div>
       <Header title="레슨 경험 및 실력" />
@@ -67,7 +67,7 @@ export default function LessonBookingStep3({
         }}
         required
       />
-      <LessonBookingStepFooter
+      <ContractRequestStepFooter
         onPrev={onPrev}
         onNext={onSubmit}
         nextLabel="신청하기"

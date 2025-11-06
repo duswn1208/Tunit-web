@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import OnboardingLayout from '@/domain/onboarding/components/OnboardingLayout';
-import LessonBookingStep1 from '@/domain/booking/components/LessonBookingStep1';
-import LessonBookingStep2 from '@/domain/booking/components/LessonBookingStep2';
-import LLessonBookingStep3 from '@/domain/booking/components/LessonBookingStep3';
-import LessonBookingStep4 from '@/domain/booking/components/LessonBookingStep4';
+import ContractRequestStep1 from '@/domain/booking/components/ContractRequestStep1';
+import ContractRequestStep2 from '@/domain/booking/components/ContractRequestStep2';
+import LLessonBookingStep3 from '@/domain/booking/components/ContractRequestStep3';
+import ContractRequestStep4 from '@/domain/booking/components/ContractRequestStep4';
 import { requestContract } from '../api/lessonBookingApi';
 import {
   CONTRACT_TYPES,
@@ -29,7 +29,7 @@ interface LessonBookingFormProps {
   onFirst?: () => void;
 }
 
-export default function LessonBookingForm({
+export default function ContractRequestForm({
   tutorProfileNo,
   total,
   contractType = CONTRACT_TYPES.REGULAR,
@@ -97,7 +97,7 @@ export default function LessonBookingForm({
   return (
     <OnboardingLayout title={title} subtitle={subtitle} step={currentStep} total={total}>
       {currentStep === 1 && (
-        <LessonBookingStep1
+        <ContractRequestStep1
           lessonCategory={lessonCategory ? lessonCategory.value : ''}
           setLessonCategory={handleLessonCategoryChange}
           lessonCategoryOptions={lessonCategoryOptions}
@@ -112,7 +112,7 @@ export default function LessonBookingForm({
         />
       )}
       {currentStep === 2 && (
-        <LessonBookingStep2
+        <ContractRequestStep2
           tutorProfileNo={tutorProfileNo}
           contractType={contractType}
           totalCount={isRegular(contractType) ? weekCount * 4 : 1}
@@ -146,7 +146,7 @@ export default function LessonBookingForm({
         />
       )}
       {currentStep === 4 && (
-        <LessonBookingStep4
+        <ContractRequestStep4
           step1={{
             lessonCategory: lessonCategory,
             place,

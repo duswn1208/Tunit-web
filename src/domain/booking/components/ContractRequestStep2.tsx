@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import LessonCalendarPicker from '@/domain/lesson/components/LessonCalendarPicker';
 import { getDayLabel } from '@/shared/constants/date';
-import LessonBookingStepFooter from './LessonBookingStepFooter';
+import ContractRequestStepFooter from './ContractRequestStepFooter';
 import { isRegular, type ContractType } from '../types/types';
 import { useToast } from '@/shared/contexts/ToastContext';
 
-interface LessonBookingStep2Props {
+interface ContractRequestStep2Props {
   tutorProfileNo: string;
   contractType: ContractType;
   totalCount: number;
@@ -17,7 +17,7 @@ interface LessonBookingStep2Props {
   onNext: (slots: string[]) => void;
 }
 
-export default function LessonBookingStep2({
+export default function ContractRequestStep2({
   tutorProfileNo,
   contractType,
   totalCount,
@@ -27,7 +27,7 @@ export default function LessonBookingStep2({
   setSelectedTime,
   onPrev,
   onNext,
-}: LessonBookingStep2Props) {
+}: ContractRequestStep2Props) {
   const { showToast } = useToast();
   const [slots, setSlots] = useState<{ date: string; time: string }[]>(
     selectedDate && selectedTime ? [{ date: selectedDate, time: selectedTime }] : []
@@ -161,7 +161,7 @@ export default function LessonBookingStep2({
           </ul>
         </div>
       )}
-      <LessonBookingStepFooter
+      <ContractRequestStepFooter
         onPrev={onPrev}
         onNext={() => onNext(slots.map((s) => `${s.date} ${s.time}`))}
         nextLabel="다음"

@@ -1,11 +1,11 @@
 import Header from '@/shared/components/Header';
 import SelectBox from '@/shared/components/SelectBox';
-import LessonBookingStepFooter from './LessonBookingStepFooter';
-import LessonPriceBox from './LessonPriceBox';
+import ContractRequestStepFooter from './ContractRequestStepFooter';
+import ContractPriceBox from './ContractPriceBox';
 import { getContractTypeLessonCount, isTrial, type ContractType } from '../types/types';
 import './css/lesson-booking.css';
 
-interface LessonBookingStep1Props {
+interface ContractRequestStep1Props {
   lessonCategory: string;
   setLessonCategory: (v: string) => void;
   lessonCategoryOptions: { label: string; value: string }[];
@@ -19,7 +19,7 @@ interface LessonBookingStep1Props {
   onNext: () => void;
 }
 
-export default function LessonBookingStep1({
+export default function ContractRequestStep1({
   lessonCategory,
   setLessonCategory,
   lessonCategoryOptions,
@@ -31,7 +31,7 @@ export default function LessonBookingStep1({
   contractType = 'REGULAR',
   onPrev,
   onNext,
-}: LessonBookingStep1Props) {
+}: ContractRequestStep1Props) {
   // 총 횟수 및 금액 계산 (계약 유형에 따라)
   const totalLessons = getContractTypeLessonCount(contractType, lessonCount);
   const totalPrice = totalLessons * pricePerLesson;
@@ -79,13 +79,13 @@ export default function LessonBookingStep1({
         }}
         required
       />
-      <LessonPriceBox
+      <ContractPriceBox
         totalPrice={totalPrice}
         lessonCount={lessonCount}
         totalLessons={totalLessons}
         isTrial={isTrial(contractType)}
       />
-      <LessonBookingStepFooter
+      <ContractRequestStepFooter
         onPrev={onPrev}
         onNext={onNext}
         nextLabel="다음"
