@@ -106,6 +106,7 @@ export default function LessonBookingForm({
           lessonCount={weekCount}
           setLessonCount={setLessonCount}
           pricePerLesson={pricePerLesson}
+          contractType={contractType}
           onPrev={onFirst}
           onNext={handleNext}
         />
@@ -157,7 +158,7 @@ export default function LessonBookingForm({
           step3={{ level, memo, emergencyContact }}
           onPrev={handlePrev}
           onSubmit={handleSubmit}
-          totalPrice={pricePerLesson * 4 * weekCount}
+          totalPrice={pricePerLesson * getContractTypeLessonCount(contractType!, weekCount)}
         />
       )}
     </OnboardingLayout>

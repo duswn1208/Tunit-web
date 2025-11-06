@@ -1,5 +1,5 @@
 import { useReducer, useCallback, useEffect } from 'react';
-import { fetchLessonReservationInfo } from '@/domain/lesson/api/lessonReservationApi';
+import { fetchLessonReservationInfo } from '@/domain/lesson/api/scheduleApi.ts';
 
 interface ReservationState {
   selectedDate: string;

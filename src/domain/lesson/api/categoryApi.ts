@@ -12,3 +12,20 @@ export function getMainLessonCategory<T extends Category = Category>() {
 export function getSubLessonCategory<T extends SubCategory = SubCategory>(mainCode: string) {
   return api.get<T[]>(SUB_CATEGORIES_URL(mainCode));
 }
+
+export type LessonCategoryCode = {
+  code: string;
+  label: string;
+};
+
+export interface TutorLessonsCategory {
+  tutorLessonNo: number;
+  lessonCategory: LessonCategoryCode;
+  isMain: boolean;
+}
+
+export async function fetchLessonCategories(): Promise<TutorLessonsCategory[]> {
+  const categories = await api.get<TutorLessonsCategory[]>('/api/lessons/tutor/categories');
+  if (!categories) return [];
+  return categories;
+}

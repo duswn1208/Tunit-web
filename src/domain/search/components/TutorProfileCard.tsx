@@ -28,6 +28,8 @@ export function TutorProfileCard({ tutor }: { tutor: TutorProfile }) {
     navigate(`/tutors/${tutor.tutorProfileNo}`);
   };
 
+  console.log('TutorProfileCard tutor:', tutor);
+
   return (
     <div
       className="tutor-profile-card"

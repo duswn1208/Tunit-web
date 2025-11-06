@@ -5,6 +5,7 @@ import LessonCalendarSection from './LessonCalendarSection';
 import { LessonCard } from './LessonCard';
 import './css/LessonHistorySection.css';
 import LessonManageViewToggle from './LessonManageViewToggle';
+import { toAmPmFormat } from '@/domain/dayTime/lib/timeUtils';
 
 // 임시 상수
 export default function LessonHistorySection() {
@@ -138,31 +139,28 @@ export default function LessonHistorySection() {
         <LessonManageViewToggle viewType={viewType} setViewType={setViewType} />
       </div>
       <div className="tab-content">
-        {viewType === 'list' ? (
-          renderLessonList(lessons)
-        ) : (
-          <LessonCalendarSection
-            lessonEvents={lessons.map((lesson) => ({
-              id: lesson.lessonReservationNo,
-              title: lesson.lessonCategory?.label || '레슨' + lesson.startTime,
-              start: new Date(lesson.lessonDate + 'T' + lesson.startTime),
-              end: new Date(lesson.lessonDate + 'T' + lesson.startTime),
-              date: new Date(lesson.lessonDate + 'T' + lesson.startTime),
-              status: {
-                name: lesson.status.name as import('../types/lessonCalendar').LessonStatus,
-                label: lesson.status.label,
-                allowedNextStatuses: [], // 실제 값 필요시 추가
-              },
-              studentName: '',
-              category: {
-                label: lesson.lessonCategory?.label || '',
-                name: lesson.lessonCategory?.code || '',
-              },
-            }))}
-            onSelectEvent={() => {}}
-            size="medium"
-          />
-        )}
+        {viewType === 'list'
+          ? renderLessonList(lessons)
+          : (console.log('Rendering LessonCalendarSection with lessons:', lessons),
+            (
+              <LessonCalendarSection
+                lessonEvents={lessons.map((lesson) => ({
+                  id: lesson.lessonReservationNo,
+                  title: `${lesson.lessonCategory?.label} (${toAmPmFormat(lesson.startTime)})`,
+                  start: new Date(lesson.lessonDate + 'T' + lesson.startTime),
+                  end: new Date(lesson.lessonDate + 'T' + lesson.startTime),
+                  date: new Date(lesson.lessonDate + 'T' + lesson.startTime),
+                  status: lesson.status,
+                  studentName: '',
+                  category: {
+                    label: lesson.lessonCategory?.label || '',
+                    name: lesson.lessonCategory?.code || '',
+                  },
+                }))}
+                onSelectEvent={() => {}}
+                size="medium"
+              />
+            ))}
       </div>
     </section>
   );

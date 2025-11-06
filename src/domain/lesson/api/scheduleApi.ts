@@ -16,3 +16,8 @@ export async function fetchTutorSchedule(
     },
   });
 }
+
+export async function fetchLessonReservationInfo(lessonReservationNo: string) {
+  if (!lessonReservationNo) throw new Error('lessonReservationNo is required');
+  return await api.get(`/api/lessons/info/${lessonReservationNo}`);
+}

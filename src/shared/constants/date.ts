@@ -42,3 +42,11 @@ export const getCalendarRange = () => {
     end: new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59),
   };
 };
+
+// JavaScript Date.getDay() 결과(0=일요일)를 요일 레이블로 변환
+// 예: 0 → '일', 1 → '월', 6 → '토'
+export const DAY_LABELS_FROM_GETDAY = ['일', '월', '화', '수', '목', '금', '토'] as const;
+
+export const getDayLabelFromDate = (date: Date): string => {
+  return DAY_LABELS_FROM_GETDAY[date.getDay()];
+};

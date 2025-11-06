@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { getDayLabel } from '@/shared/constants/date';
 import LessonBookingStepFooter from './LessonBookingStepFooter';
-import { getContractTypeLabel, isFirstcome, isRegular } from '../types/types';
+import { getContractTypeLabel, isFirstcome, isRegular, isTrial } from '../types/types';
+import { toKoreanDateTime } from '@/domain/dayTime/lib/timeUtils';
 
 export interface LessonBookingStep4Props {
   step1: any;
@@ -30,15 +31,18 @@ export default function LessonBookingStep4({
           <li>
             <b>레슨 유형:</b> {getContractTypeLabel(step1?.contractType)}
           </li>
-          <li>
-            <b>레슨 패키지:</b> {step1?.weekCount ? `주 ${step1.weekCount}회` : '-'} / 총{' '}
-            {step1?.lessonCount || '-'}회
-          </li>
+          {/* 체험 레슨이 아닐 때만 레슨 패키지 표시 */}
+          {!isTrial(step1?.contractType) && (
+            <li>
+              <b>레슨 패키지:</b> {step1?.weekCount ? `주 ${step1.weekCount}회` : '-'} / 총{' '}
+              {step1?.lessonCount || '-'}회
+            </li>
+          )}
           <li>
             <b>레슨 과목:</b> {step1?.lessonCategory ? step1.lessonCategory.label : '-'}
           </li>
           <li>
-            <b>희망 장소:</b> {step1?.place || '-'}
+            <b>희망 장소:</b> {(step1?.place || '-') + '(튜터에 의해 변경될 수 있어요)'}
           </li>
           <li>레슨 일정:</li>
           {/* 첫 번째 slot 기준 안내 - 정기레슨만 */}
@@ -54,6 +58,18 @@ export default function LessonBookingStep4({
               return (
                 <div style={{ color: '#e14a4a', fontWeight: 600, margin: '4px 0 8px 16px' }}>
                   ※ 매주 {dayLabel}요일 {first.time}에 진행됩니다
+                </div>
+              );
+            })()}
+          {isTrial(step1?.contractType) &&
+            step2?.lessonDtList?.length > 0 &&
+            (() => {
+              const first = step2.lessonDtList[0];
+              const formattedDate = toKoreanDateTime(first);
+
+              return (
+                <div style={{ color: '#e14a4a', fontWeight: 600, margin: '4px 0 8px 16px' }}>
+                  ※ {formattedDate}에 진행됩니다
                 </div>
               );
             })()}

@@ -7,7 +7,7 @@ import { api } from '../../../shared/lib/api.ts';
 import {
   fetchLessonCategories,
   type TutorLessonsCategory,
-} from '@/domain/lesson/api/lessonCategoryApi';
+} from '@/domain/lesson/api/categoryApi.ts';
 import { RadioGroup } from '../../../shared/components';
 import { LessonStatus, LessonType } from '@/domain/lesson/types/lesson';
 import type { DayOfWeekNumber } from '@/shared/constants/date.ts';

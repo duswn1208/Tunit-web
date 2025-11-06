@@ -1,6 +1,8 @@
 import Header from '@/shared/components/Header';
 import SelectBox from '@/shared/components/SelectBox';
 import LessonBookingStepFooter from './LessonBookingStepFooter';
+import LessonPriceBox from './LessonPriceBox';
+import { getContractTypeLessonCount, isTrial, type ContractType } from '../types/types';
 import './css/lesson-booking.css';
 
 interface LessonBookingStep1Props {
@@ -12,6 +14,7 @@ interface LessonBookingStep1Props {
   lessonCount: number;
   setLessonCount: (v: number) => void;
   pricePerLesson?: number;
+  contractType?: ContractType;
   onPrev?: () => void;
   onNext: () => void;
 }
@@ -25,11 +28,12 @@ export default function LessonBookingStep1({
   lessonCount,
   setLessonCount,
   pricePerLesson = 30000,
+  contractType = 'REGULAR',
   onPrev,
   onNext,
 }: LessonBookingStep1Props) {
-  // 총 횟수 및 금액 계산
-  const totalLessons = lessonCount * 4;
+  // 총 횟수 및 금액 계산 (계약 유형에 따라)
+  const totalLessons = getContractTypeLessonCount(contractType, lessonCount);
   const totalPrice = totalLessons * pricePerLesson;
 
   // 회차 옵션 (value를 string으로)
@@ -47,19 +51,24 @@ export default function LessonBookingStep1({
         options={lessonCategoryOptions}
         placeholder="레슨 과목을 선택해주세요"
       />
-      <Header title="레슨 주 횟수" />
-      <SelectBox
-        value={String(lessonCount)}
-        onChange={(v) => setLessonCount(Number(v))}
-        options={lessonCountOptions}
-        placeholder="주 횟수 선택"
-      />
+      {/* 체험 레슨이 아닐 때만 레슨 주 횟수 선택 표시 */}
+      {!isTrial(contractType) && (
+        <>
+          <Header title="레슨 주 횟수" />
+          <SelectBox
+            value={String(lessonCount)}
+            onChange={(v) => setLessonCount(Number(v))}
+            options={lessonCountOptions}
+            placeholder="주 횟수 선택"
+          />
+        </>
+      )}
       <Header title="레슨 희망 장소" />
       <input
         type="text"
         value={place}
         onChange={(e) => setPlace(e.target.value)}
-        placeholder="예: 강남역 1번 출구 앞 카페"
+        placeholder="예: 튜터에 의해 변경될 수 있어요"
         style={{
           width: '100%',
           borderRadius: 8,
@@ -70,45 +79,12 @@ export default function LessonBookingStep1({
         }}
         required
       />
-      <div
-        className="regular-lesson-form-pricebox"
-        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}
-      >
-        <span
-          style={{
-            fontSize: 13,
-            color: 'var(--brand-mint)',
-            fontWeight: 700,
-            marginBottom: 2,
-            letterSpacing: '-0.01em',
-          }}
-        >
-          예상 금액
-        </span>
-        <span
-          style={{
-            fontSize: 32,
-            color: '#FF4757',
-            fontWeight: 900,
-            letterSpacing: '-0.02em',
-            lineHeight: 1.1,
-            textShadow: '0 2px 8px #ffeaea',
-          }}
-        >
-          {totalPrice.toLocaleString()}원
-        </span>
-        <span
-          style={{
-            fontSize: 14,
-            color: 'var(--brand-mint)',
-            fontWeight: 600,
-            marginTop: 2,
-            letterSpacing: '-0.01em',
-          }}
-        >
-          (선택한 주 {lessonCount}회, 총 {totalLessons}회 기준입니다.)
-        </span>
-      </div>
+      <LessonPriceBox
+        totalPrice={totalPrice}
+        lessonCount={lessonCount}
+        totalLessons={totalLessons}
+        isTrial={isTrial(contractType)}
+      />
       <LessonBookingStepFooter
         onPrev={onPrev}
         onNext={onNext}
