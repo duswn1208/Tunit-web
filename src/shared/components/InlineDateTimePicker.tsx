@@ -70,19 +70,31 @@ export default function InlineDateTimePicker({
           className={size}
           tileDisabled={({ date }) => {
             // enabledDayOfWeeks에 없는 요일의 모든 날짜 비활성화
-            if (!enabledDayOfWeeks || enabledDayOfWeeks.length === 0) return false;
-            const dayOfWeekNum = date.getDay(); // 0(일)~6(토)
+            if (!enabledDayOfWeeks || enabledDayOfWeeks.length === 0) return true; // 빈 배열이면 모두 비활성화
+            // JavaScript getDay(): 0(일)~6(토) → 백엔드 기준 1(월)~7(일)로 변환
+            const jsDay = date.getDay(); // 0(일)~6(토)
+            const dayOfWeekNum = jsDay === 0 ? 7 : jsDay; // 1(월)~7(일)
             return !enabledDayOfWeeks.includes(dayOfWeekNum);
           }}
         />
       </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 16 }}>
-        {availableTimeRange ? (
+        {availableTimeRange && enabledDayOfWeeks && enabledDayOfWeeks.length > 0 ? (
           times.map((t) => {
             let disabled = false;
             if (!selectedDate) disabled = true;
             if (!availableTimeRange) disabled = true;
             if (reservedTimes.includes(t)) disabled = true;
+
+            // 선택된 날짜가 활성화된 요일인지 확인
+            if (selectedDate && enabledDayOfWeeks && enabledDayOfWeeks.length > 0) {
+              const jsDay = selectedDate.getDay(); // 0(일)~6(토)
+              const dayOfWeekNum = jsDay === 0 ? 7 : jsDay; // 1(월)~7(일)
+              if (!enabledDayOfWeeks.includes(dayOfWeekNum)) {
+                disabled = true;
+              }
+            }
+
             if (availableTimeRange) {
               // HH:mm 또는 HH:mm:00 형식 지원
               const baseDate = '2000-01-01';

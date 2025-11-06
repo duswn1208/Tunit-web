@@ -34,6 +34,7 @@ export default function LessonCalendarPicker({
   useEffect(() => {
     fetchTutorSchedule({ startDate, endDate }, tutorProfileNo)
       .then((data: LessonCalendarStatusDto) => {
+        console.log('Fetched calendar status:', data);
         setCalendarStatus(data);
       })
       .catch(() => setCalendarStatus(null));
