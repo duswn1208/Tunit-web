@@ -34,7 +34,6 @@ export default function LessonCalendarPicker({
   useEffect(() => {
     fetchTutorSchedule({ startDate, endDate }, tutorProfileNo)
       .then((data: LessonCalendarStatusDto) => {
-        console.log('Fetched calendar status:', data);
         setCalendarStatus(data);
       })
       .catch(() => setCalendarStatus(null));
@@ -52,7 +51,6 @@ export default function LessonCalendarPicker({
       const dayOfWeekNum = jsDay === 0 ? 7 : jsDay;
 
       // 요일에 해당하는 가용 시간 찾기
-      console.log('calendarStatus.availableTimes', calendarStatus);
       const available = calendarStatus.availableTimes?.find((v) => v.dayOfWeekNum === dayOfWeekNum);
       if (available) {
         setAvailableTimeRange((prev) => {

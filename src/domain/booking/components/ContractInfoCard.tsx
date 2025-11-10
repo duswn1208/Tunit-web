@@ -4,7 +4,6 @@ import { getDayLabel } from '@/shared/constants/date';
 import { toAmPmFormat } from '@/domain/dayTime/lib/timeUtils';
 import { isRegular } from '../types/types';
 import { useState } from 'react';
-import Header from '@/shared/components/Header';
 
 interface ContractInfoCardProps {
   contract: Contract;
@@ -53,7 +52,7 @@ export default function ContractInfoCard({ contract }: ContractInfoCardProps) {
 
       {isExpanded && (
         <div className="contract-info-content">
-          {isRegular(contract.contractType.code) && (
+          {isRegular(contract.contractType) && (
             <div className="contract-info-row">
               <span className="contract-info-label">정규 스케줄</span>
               <span className="contract-info-value">

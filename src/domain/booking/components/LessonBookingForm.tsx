@@ -4,7 +4,7 @@ import LessonCalendarPicker from '@/domain/lesson/components/LessonCalendarPicke
 import Header from '@/shared/components/Header';
 import Button from '@/shared/components/Button';
 import ContractInfoCard from './ContractInfoCard';
-import { isFirstcome } from '../types/types';
+import { getContractTypeLabel, isFirstcome, isRegular } from '../types/types';
 
 interface LessonBookingFormProps {
   contract: Contract;
@@ -38,7 +38,6 @@ export default function LessonBookingForm({
   const [memo, setMemo] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // REGULAR 계약의 경우 신규 예약 불가
   const canBookNew = (mode === 'new' && contract.reservable) || mode === 'reschedule';
 
   if (!canBookNew) {
@@ -54,20 +53,17 @@ export default function LessonBookingForm({
             color: '#856404',
           }}
         >
-          <h3 style={{ marginBottom: 12 }}>신규 레슨 예약 불가</h3>
-          <p>
-            정기 레슨(REGULAR) 계약은 시스템에서 자동으로 레슨을 생성합니다.
-            <br />
-            선착순 신청(FIRSTCOME) 계약만 직접 레슨을 예약할 수 있습니다.
-          </p>
+          <Header title="신규 레슨 예약 불가" />
+          {isRegular(contract.contractType) && (
+            <p>정기 레슨은 자동으로 예약되어, 예약 변경만 가능합니다.</p>
+          )}
+          {isFirstcome(contract.contractType) && (
+            <p>아직 이전 레슨이 완료되지 않아 신규 레슨 예약이 불가합니다.</p>
+          )}
         </div>
-        <button
-          onClick={onCancel}
-          className="ui-btn"
-          style={{ marginTop: 24, width: '100%', maxWidth: 300 }}
-        >
+        <Button onClick={onCancel} className="pre-btn">
           돌아가기
-        </button>
+        </Button>
       </div>
     );
   }
@@ -168,14 +164,8 @@ export default function LessonBookingForm({
         </div>
 
         <div style={{ display: 'flex', gap: 12, marginTop: 32 }}>
-          <button onClick={onCancel} className="ui-btn" style={{ flex: 1 }}>
-            취소
-          </button>
-          <Button
-            onClick={handleSubmit}
-            disabled={!selectedDate || !selectedTime || isSubmitting}
-            className="ui-btn"
-          >
+          <Button onClick={onCancel}>취소</Button>
+          <Button onClick={handleSubmit} disabled={!selectedDate || !selectedTime || isSubmitting}>
             {isSubmitting ? '처리 중...' : mode === 'new' ? '예약하기' : '변경하기'}
           </Button>
         </div>

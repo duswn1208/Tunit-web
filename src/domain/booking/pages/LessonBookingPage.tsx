@@ -37,7 +37,6 @@ export default function LessonBookingPage() {
       .catch((err) => {
         setError('계약 정보를 불러오는데 실패했습니다.');
         setLoading(false);
-        console.error(err);
       });
   }, [contractNo]);
 
@@ -69,11 +68,10 @@ export default function LessonBookingPage() {
       // 성공 시 레슨 목록 페이지로 이동
       navigate(`/student/my/lessons?contractNo=${contract.contractNo}`);
     } catch (error) {
-      console.error(error);
-      showToast(
-        mode === 'new' ? '레슨 예약에 실패했습니다.' : '레슨 일정 변경에 실패했습니다.',
-        'error'
-      );
+      const errorMsg =
+        error.message ||
+        (mode === 'new' ? '레슨 예약에 실패했습니다.' : '레슨 일정 변경에 실패했습니다.');
+      showToast(errorMsg, 'error');
       throw error; // LessonBookingForm에서 처리
     }
   };
