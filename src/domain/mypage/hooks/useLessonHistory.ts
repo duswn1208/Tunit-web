@@ -31,6 +31,8 @@ export default function useLessonHistory(
         }
 
         const response = await api.get<any[]>(url);
+
+        console.log('Fetched lessons:', response);
         setLessons(response);
       } catch (err) {
         setError(err instanceof Error ? err : new Error('Failed to fetch lessons'));

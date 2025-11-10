@@ -6,6 +6,8 @@ import { LessonCard } from './LessonCard';
 import './css/LessonHistorySection.css';
 import { toAmPmFormat } from '@/domain/dayTime/lib/timeUtils';
 import { useState } from 'react';
+import useMediaQuery from '@/shared/hooks/useMediaQuery';
+import LessonManageViewToggle from './LessonManageViewToggle';
 
 // 임시 상수
 export default function LessonHistorySection() {
@@ -22,6 +24,10 @@ export default function LessonHistorySection() {
   } = useLessonHistorySection();
 
   const [selectedLessonId, setSelectedLessonId] = useState<number | null>(null);
+  // 모바일 환경 감지
+  const isMobile = useMediaQuery('(max-width: 600px)');
+  // 모바일 토글 상태: 'calendar' | 'list'
+  const [mobileView, setMobileView] = useState<'calendar' | 'list'>('calendar');
 
   function renderActionButton(lesson: any) {
     if (activeTab === 'upcoming') {
@@ -145,39 +151,78 @@ export default function LessonHistorySection() {
         </Button>
       </div>
 
-      {/* 좌우 분할 레이아웃 */}
-      <div className="lesson-split-layout">
-        {/* 왼쪽: 캘린더 */}
-        <div className="lesson-calendar-container">
-          <LessonCalendarSection
-            lessonEvents={lessons.map((lesson) => ({
-              id: lesson.lessonReservationNo,
-              title: `${lesson.lessonCategory?.label} (${toAmPmFormat(lesson.startTime)})`,
-              start: new Date(lesson.lessonDate + 'T' + lesson.startTime),
-              end: new Date(lesson.lessonDate + 'T' + lesson.startTime),
-              date: new Date(lesson.lessonDate + 'T' + lesson.startTime),
-              status: lesson.status,
-              studentName: '',
-              category: {
-                label: lesson.lessonCategory?.label || '',
-                name: lesson.lessonCategory?.code || '',
-              },
-            }))}
-            onSelectEvent={(event: any) => {
-              setSelectedLessonId(event.id);
-              // 리스트로 스크롤
-              const element = document.querySelector(`[data-lesson-id="${event.id}"]`);
-              if (element) {
-                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              }
-            }}
-            size="medium"
-          />
+      {/* 모바일: 캘린더/리스트 토글 */}
+      {isMobile && (
+        <div style={{ display: 'flex', justifyContent: 'center', margin: '12px 0 8px 0' }}>
+          <LessonManageViewToggle viewType={mobileView} setViewType={setMobileView} />
         </div>
+      )}
 
-        {/* 오른쪽: 리스트 */}
-        <div className="lesson-list-container">{renderLessonList(lessons)}</div>
-      </div>
+      {/* 본문: PC는 분할, 모바일은 토글 */}
+      {isMobile ? (
+        mobileView === 'calendar' ? (
+          <div className="lesson-calendar-container">
+            <LessonCalendarSection
+              lessonEvents={lessons.map((lesson) => ({
+                id: lesson.lessonReservationNo,
+                title: `${lesson.lessonCategory?.label} (${toAmPmFormat(lesson.startTime)})`,
+                start: new Date(lesson.lessonDate + 'T' + lesson.startTime),
+                end: new Date(lesson.lessonDate + 'T' + lesson.startTime),
+                date: new Date(lesson.lessonDate + 'T' + lesson.startTime),
+                status: lesson.status,
+                studentName: '',
+                category: {
+                  label: lesson.lessonCategory?.label || '',
+                  name: lesson.lessonCategory?.code || '',
+                },
+              }))}
+              onSelectEvent={(event: any) => {
+                setSelectedLessonId(event.id);
+                const element = document.querySelector(`[data-lesson-id="${event.id}"]`);
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+              }}
+              size="medium"
+            />
+          </div>
+        ) : (
+          <div className="lesson-list-container">{renderLessonList(lessons)}</div>
+        )
+      ) : (
+        <div className="lesson-split-layout">
+          {/* 왼쪽: 캘린더 */}
+          <div className="lesson-calendar-container">
+            <LessonCalendarSection
+              lessonEvents={lessons.map((lesson) => ({
+                id: lesson.lessonReservationNo,
+                title: `${lesson.lessonCategory?.label} (${toAmPmFormat(lesson.startTime)})`,
+                start: new Date(lesson.lessonDate + 'T' + lesson.startTime),
+                end: new Date(lesson.lessonDate + 'T' + lesson.startTime),
+                date: new Date(lesson.lessonDate + 'T' + lesson.startTime),
+                status: lesson.status,
+                studentName: '',
+                category: {
+                  label: lesson.lessonCategory?.label || '',
+                  name: lesson.lessonCategory?.code || '',
+                },
+              }))}
+              onSelectEvent={(event: any) => {
+                setSelectedLessonId(event.id);
+                // 리스트로 스크롤
+                const element = document.querySelector(`[data-lesson-id="${event.id}"]`);
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+              }}
+              size="medium"
+            />
+          </div>
+
+          {/* 오른쪽: 리스트 */}
+          <div className="lesson-list-container">{renderLessonList(lessons)}</div>
+        </div>
+      )}
     </section>
   );
 }

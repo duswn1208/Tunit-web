@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import useLessonHistory from '../../mypage/hooks/useLessonHistory';
 import { api } from '@/shared/lib/api';
 import { useToast } from '@/shared/contexts/ToastContext';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 type TabType = 'upcoming' | 'past' | 'pending';
 
@@ -19,6 +19,7 @@ const lessonFilterMap: Record<TabType, string> = {
 };
 
 export function useLessonHistorySection() {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const contractNo = searchParams.get('contractNo');
   const tabParam = searchParams.get('tab') as TabType | null;
@@ -58,12 +59,18 @@ export function useLessonHistorySection() {
 
   const handleChangeLesson = useCallback(
     (lesson: any) => {
-      if (lesson && lesson.tutorProfileNo) {
-        window.location.href = `/tutors/${lesson.tutorProfileNo}/booking?lessonReservationNo=${lesson.lessonReservationNo}`;
-        return;
+      // contractNo는 lesson에서 추출 (없으면 경고)
+      const contractNo = lesson?.contractNo;
+      console.log('handleChangeLesson', lesson, contractNo);
+      if (contractNo && lesson?.lessonReservationNo) {
+        navigate(
+          `/student/booking/lesson?contractNo=${contractNo}&mode=reschedule&lessonReservationNo=${lesson.lessonReservationNo}`
+        );
+      } else {
+        showToast('레슨 변경에 필요한 정보가 없습니다.', 'error');
       }
     },
-    [showToast]
+    [showToast, navigate]
   );
 
   const handleWriteReview = useCallback(() => {
@@ -80,9 +87,9 @@ export function useLessonHistorySection() {
 
   const handleBookNewLesson = useCallback(() => {
     if (contractNo) {
-      window.location.href = `/student/booking/lesson?contractNo=${contractNo}&mode=new`;
+      navigate(`/student/booking/lesson?contractNo=${contractNo}&mode=new`);
     } else {
-      showToast('계약 정보를 찾을 수 없습니다.', 'error');
+      navigate(`/student/my/tutors`);
     }
   }, [contractNo, showToast]);
 
