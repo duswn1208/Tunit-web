@@ -9,7 +9,6 @@ import { useState } from 'react';
 import useMediaQuery from '@/shared/hooks/useMediaQuery';
 import LessonManageViewToggle from './LessonManageViewToggle';
 
-// 임시 상수
 export default function LessonHistorySection() {
   const {
     lessons,
@@ -24,9 +23,7 @@ export default function LessonHistorySection() {
   } = useLessonHistorySection();
 
   const [selectedLessonId, setSelectedLessonId] = useState<number | null>(null);
-  // 모바일 환경 감지
   const isMobile = useMediaQuery('(max-width: 600px)');
-  // 모바일 토글 상태: 'calendar' | 'list'
   const [mobileView, setMobileView] = useState<'calendar' | 'list'>('calendar');
 
   function renderActionButton(lesson: any) {
@@ -107,7 +104,7 @@ export default function LessonHistorySection() {
           <Button
             className="ui-btn ui-btn--accent"
             onClick={() => {
-              window.location.href = '/search';
+              handleBookNewLesson();
             }}
           >
             레슨 예약하러 가볼까요?

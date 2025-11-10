@@ -47,7 +47,7 @@ export function useLessonHistorySection() {
   const handleCancelLesson = useCallback(
     async (lessonReservationNo: number) => {
       try {
-        await api.post(`/api/lessons/reservation/cancel/${lessonReservationNo}`);
+        await api.post(`/api/lessons/cancel/${lessonReservationNo}`);
         showToast('레슨이 취소되었습니다.', 'success');
         setRefreshKey((k) => k + 1);
       } catch (e) {
@@ -59,9 +59,7 @@ export function useLessonHistorySection() {
 
   const handleChangeLesson = useCallback(
     (lesson: any) => {
-      // contractNo는 lesson에서 추출 (없으면 경고)
       const contractNo = lesson?.contractNo;
-      console.log('handleChangeLesson', lesson, contractNo);
       if (contractNo && lesson?.lessonReservationNo) {
         navigate(
           `/student/booking/lesson?contractNo=${contractNo}&mode=reschedule&lessonReservationNo=${lesson.lessonReservationNo}`

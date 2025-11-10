@@ -87,7 +87,7 @@ export interface Contract {
   level: string;
   place: string;
   emergencyContact: string;
-  dayOfWeek: DayOfWeek;
+  dayOfWeekNum: DayOfWeek;
   startTime: string;
   endTime: string;
   memo?: string;
@@ -96,8 +96,7 @@ export interface Contract {
   paymentStatus: PaymentStatus;
   paidAmount: number;
   paymentDt?: string;
-  canceledAt?: string;
-  cancelReason?: string;
-  refundAmount: number;
   fixedLessonNo?: number;
+  currentLessonCount: number;
+  reservable: boolean;
 }

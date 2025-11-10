@@ -30,7 +30,7 @@ export interface LessonBookingDto {
 }
 
 export async function bookLesson(data: LessonBookingDto) {
-  return await api.post('/api/lessons/reservation', data);
+  return await api.post('/api/lessons/reserve', data);
 }
 
 // 레슨 날짜/시간 변경
@@ -43,7 +43,7 @@ export interface LessonRescheduleDto {
 }
 
 export async function rescheduleLesson(data: LessonRescheduleDto) {
-  return await api.put(`/api/lessons/${data.lessonReservationNo}/reschedule`, {
+  return await api.post(`/api/lessons/reschedule/${data.lessonReservationNo}`, {
     lessonDate: data.lessonDate,
     startTime: data.startTime,
     endTime: data.endTime,

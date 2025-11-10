@@ -39,9 +39,9 @@ export default function LessonBookingForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // REGULAR 계약의 경우 신규 예약 불가
-  const canBookNew = mode === 'new' && isFirstcome(contract.contractType.code);
+  const canBookNew = (mode === 'new' && contract.reservable) || mode === 'reschedule';
 
-  if (mode === 'new' && !canBookNew) {
+  if (!canBookNew) {
     return (
       <div style={{ padding: 20, textAlign: 'center' }}>
         <ContractInfoCard contract={contract} />
