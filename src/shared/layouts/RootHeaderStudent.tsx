@@ -1,14 +1,24 @@
 import RootHeaderBase from './RootHeaderBase.tsx';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 export default function RootHeaderStudent() {
+  const activeStyle = {
+    fontWeight: 'bold',
+    color: 'var(--default-white)',
+  };
   return (
     <RootHeaderBase
       nav={
         <nav className="nav">
-          <Link to="/find/lessons">튜터 찾기</Link>
-          <Link to="/student/my/lessons">내 레슨</Link>
-          <Link to="/student/my/tutors">내 튜터</Link>
+          <NavLink style={({ isActive }) => (isActive ? activeStyle : {})} to="/find/lessons">
+            튜터 찾기
+          </NavLink>
+          <NavLink style={({ isActive }) => (isActive ? activeStyle : {})} to="/student/my/lessons">
+            내 레슨
+          </NavLink>
+          <NavLink style={({ isActive }) => (isActive ? activeStyle : {})} to="/student/my/tutors">
+            내 튜터
+          </NavLink>
         </nav>
       }
     />
