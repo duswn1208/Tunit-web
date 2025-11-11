@@ -14,10 +14,11 @@ interface Props {
   size?: 'small' | 'medium' | 'large';
 }
 
-const times = Array.from({ length: 19 }, (_, i) => {
-  const hour = i + 6;
-  return `${hour.toString().padStart(2, '0')}:00`;
-}); // 06:00 ~ 24:00
+const times = Array.from({ length: 38 }, (_, i) => {
+  const hour = Math.floor(i / 2) + 6;
+  const minute = (i % 2) * 30;
+  return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+}); // 06:00, 06:30, 07:00, ..., 24:30까지 30분 단위
 
 export default function InlineDateTimePicker({
   date,

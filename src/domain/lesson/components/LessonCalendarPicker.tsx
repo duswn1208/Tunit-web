@@ -35,6 +35,7 @@ export default function LessonCalendarPicker({
     fetchTutorSchedule({ startDate, endDate }, tutorProfileNo)
       .then((data: LessonCalendarStatusDto) => {
         setCalendarStatus(data);
+        console.log('Fetched tutor schedule:', data);
       })
       .catch(() => setCalendarStatus(null));
   }, [tutorProfileNo, startDate, endDate]);
@@ -45,6 +46,29 @@ export default function LessonCalendarPicker({
       let fixed: string[] = [];
       let reserved: string[] = [];
       let localDisabled: string[] = [];
+
+      // startTime부터 endTime까지 30분 단위로 모든 슬롯 생성
+      const generateTimeSlots = (startTime: string, endTime: string): string[] => {
+        const slots: string[] = [];
+        const [startHour, startMin] = startTime.slice(0, 5).split(':').map(Number);
+        const [endHour, endMin] = endTime.slice(0, 5).split(':').map(Number);
+
+        let currentHour = startHour;
+        let currentMin = startMin;
+
+        while (currentHour < endHour || (currentHour === endHour && currentMin < endMin)) {
+          slots.push(
+            `${currentHour.toString().padStart(2, '0')}:${currentMin.toString().padStart(2, '0')}`
+          );
+          currentMin += 30;
+          if (currentMin >= 60) {
+            currentMin = 0;
+            currentHour += 1;
+          }
+        }
+
+        return slots;
+      };
 
       // 0(일) ~ 6(토)를 1(월) ~ 7(일)로 변환
       const jsDay = new Date(date).getDay();
@@ -63,18 +87,20 @@ export default function LessonCalendarPicker({
         setAvailableTimeRange((prev) => (prev !== null ? null : prev));
       }
 
-      // 고정 예약 시간 필터링
+      // 고정 예약 시간 필터링 (startTime ~ endTime 범위)
       if (calendarStatus?.fixedLessonReservations) {
-        fixed = calendarStatus.fixedLessonReservations
+        const fixedSlots = calendarStatus.fixedLessonReservations
           .filter((reservation) => reservation.dayOfWeekNum === dayOfWeekNum)
-          .map((reservation) => reservation.startTime.slice(0, 5));
+          .flatMap((reservation) => generateTimeSlots(reservation.startTime, reservation.endTime));
+        fixed = fixedSlots;
       }
 
-      // 일반 예약 시간 필터링
+      // 일반 예약 시간 필터링 (startTime ~ endTime 범위)
       if (calendarStatus?.lessonReservations) {
-        reserved = calendarStatus.lessonReservations
+        const reservedSlots = calendarStatus.lessonReservations
           .filter((reservation) => reservation.date === date)
-          .map((reservation) => reservation.startTime.slice(0, 5));
+          .flatMap((reservation) => generateTimeSlots(reservation.startTime, reservation.endTime));
+        reserved = reservedSlots;
       }
 
       // 방금 예약된 시간 필터링
