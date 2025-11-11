@@ -24,10 +24,11 @@ export default function MyTutorsPage() {
       contractNo: number;
       paymentAmount: number;
     }) => {
-      return api.post(`/api/contracts/payment-requests`, {
+      return api.post(`/api/contracts/pay/${contractNo}/status`, {
         contractNo: contractNo,
         paymentAmount: paymentAmount,
         paymentMethod: 'BANK_TRANSFER',
+        paymentStatus: 'CONFIRMING',
         proofUrl: '',
       });
     },

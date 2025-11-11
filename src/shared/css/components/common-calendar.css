@@ -122,36 +122,35 @@
 
 .common-calendar-card {
   width: 100%;
-  max-width: 1200px; /* 더 큰 최대 너비로 조정 */
-  /* margin: 32px auto; */
+  max-width: 100%; /* 전체 너비 사용 */
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 4px 24px 0 rgba(30, 201, 187, 0.1);
   border: 2px solid var(--brand-red);
-  padding: 16px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
 .common-calendar-content {
-  height: 600px;
-  min-height: 500px;
+  height: 700px;
+  min-height: 600px;
 }
 
 .common-calendar-content.small {
-  height: 400px;
-  min-height: 350px;
+  height: 500px;
+  min-height: 450px;
 }
 
 .common-calendar-content.medium {
-  height: 600px;
-  min-height: 500px;
+  height: 700px;
+  min-height: 600px;
 }
 
 .common-calendar-content.large {
-  height: 800px;
-  min-height: 700px;
+  height: 900px;
+  min-height: 800px;
 }
 
 .common-calendar-title {
@@ -214,4 +213,123 @@
   background: var(--brand-red);
   margin: 0 auto;
   color: var(--brand-red);
+}
+
+/* 모바일 반응형 */
+@media (max-width: 1024px) {
+  .common-calendar-card {
+    padding: 16px;
+  }
+
+  .common-calendar-content.large {
+    height: 700px;
+    min-height: 600px;
+  }
+
+  .custom-calendar-toolbar {
+    gap: 16px;
+  }
+
+  .calendar-toolbar-label {
+    font-size: 20px;
+    min-width: 150px;
+  }
+
+  .calendar-nav-button {
+    font-size: 20px;
+    padding: 6px 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .common-calendar-card {
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  .common-calendar-content {
+    height: 500px;
+    min-height: 450px;
+  }
+
+  .common-calendar-content.small {
+    height: 400px;
+    min-height: 350px;
+  }
+
+  .common-calendar-content.medium {
+    height: 500px;
+    min-height: 450px;
+  }
+
+  .common-calendar-content.large {
+    height: 600px;
+    min-height: 550px;
+  }
+
+  .custom-calendar-toolbar {
+    gap: 12px;
+    padding: 12px 0;
+  }
+
+  .calendar-toolbar-label {
+    font-size: 18px;
+    min-width: 130px;
+  }
+
+  .calendar-nav-button {
+    font-size: 18px;
+    padding: 4px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .common-calendar-card {
+    padding: 8px;
+    border-width: 1px;
+  }
+
+  .common-calendar-content {
+    height: 450px;
+    min-height: 400px;
+  }
+
+  .common-calendar-content.small {
+    height: 350px;
+    min-height: 300px;
+  }
+
+  .common-calendar-content.medium {
+    height: 450px;
+    min-height: 400px;
+  }
+
+  .common-calendar-content.large {
+    height: 500px;
+    min-height: 450px;
+  }
+
+  .custom-calendar-toolbar {
+    gap: 8px;
+    padding: 8px 0;
+  }
+
+  .calendar-toolbar-label {
+    font-size: 16px;
+    min-width: 110px;
+  }
+
+  .calendar-nav-button {
+    font-size: 16px;
+    padding: 4px 8px;
+  }
+
+  .rbc-date-cell {
+    padding: 4px !important;
+    font-size: 0.9em;
+  }
+
+  .react-calendar {
+    padding: 0.5rem;
+  }
 }

@@ -1,12 +1,15 @@
 import Chip from '@/shared/components/Chip';
-import type { Contract, ContractStatusCode } from '../types/contract';
+import type { Contract, ContractStatusCode, PaymentStatusCode } from '../types/contract';
 import { CONTRACT_STATUS_TRANSITIONS } from '../types/contract';
 import '../css/my-tutors.css';
 import { useNavigate } from 'react-router-dom';
+import PaymentStatusAlert from './PaymentStatusAlert';
+import { useState } from 'react';
 
 interface TutorContractCardProps {
   contract: Contract;
   onStatusChange?: (contractNo: number, newStatus: ContractStatusCode) => void;
+  onPaymentConfirm?: (contractNo: number, newPaymentStatus: PaymentStatusCode) => void;
 }
 
 // 상태 코드에 따른 한글 라벨
@@ -22,9 +25,17 @@ const getStatusLabel = (statusCode: ContractStatusCode): string => {
   return labels[statusCode];
 };
 
-export default function TutorContractCard({ contract, onStatusChange }: TutorContractCardProps) {
+export default function TutorContractCard({
+  contract,
+  onStatusChange,
+  onPaymentConfirm,
+}: TutorContractCardProps) {
   console.log('TutorContractCard contract:', contract);
   const navigate = useNavigate();
+
+  // 개발 환경에서만 사용 - 결제 상태 테스트용
+  const [devPaymentStatus, setDevPaymentStatus] = useState<PaymentStatusCode | null>(null);
+  const isDev = import.meta.env.DEV;
 
   const availableTransitions = CONTRACT_STATUS_TRANSITIONS[contract.contractStatus.code];
 
@@ -41,6 +52,15 @@ export default function TutorContractCard({ contract, onStatusChange }: TutorCon
       onStatusChange(contract.contractNo, newStatus);
     }
   };
+
+  const handlePaymentConfirm = () => {
+    if (onPaymentConfirm) {
+      onPaymentConfirm(contract.contractNo, 'PAID');
+    }
+  };
+
+  // 개발 환경에서 표시할 실제 결제 상태
+  const displayPaymentStatus = devPaymentStatus || contract.paymentStatus?.code;
 
   return (
     <div className="tutor-card" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
@@ -71,6 +91,76 @@ export default function TutorContractCard({ contract, onStatusChange }: TutorCon
         </div>
       )}
       <div className="tutor-card-price">총 금액: {contract.totalPrice.toLocaleString()}원</div>
+
+      {/* 결제 상태 알림 */}
+      {displayPaymentStatus && (
+        <PaymentStatusAlert paymentStatus={displayPaymentStatus} onConfirm={handlePaymentConfirm} />
+      )}
+      {/* 개발 환경 전용 - 결제 상태 테스트 버튼
+      {isDev && (
+        <div
+          style={{
+            padding: '8px',
+            background: '#f0f0f0',
+            borderRadius: '4px',
+            marginTop: '12px',
+            marginBottom: '12px',
+            display: 'flex',
+            gap: '4px',
+            flexWrap: 'wrap',
+          }}
+        >
+          <small style={{ width: '100%', marginBottom: '4px', fontWeight: 'bold' }}>
+            [DEV] 결제 상태 테스트:
+          </small>
+          {(
+            [
+              'REQUESTED',
+              'CONFIRMING',
+              'PAID',
+              'PARTIAL',
+              'REJECTED',
+              'REFUNDED',
+            ] as PaymentStatusCode[]
+          ).map((status) => (
+            <button
+              key={status}
+              onClick={(e) => {
+                e.stopPropagation();
+                setDevPaymentStatus(status);
+              }}
+              style={{
+                padding: '4px 8px',
+                fontSize: '11px',
+                border: '1px solid #ccc',
+                background: devPaymentStatus === status ? '#4CAF50' : 'white',
+                color: devPaymentStatus === status ? 'white' : 'black',
+                borderRadius: '4px',
+                cursor: 'pointer',
+              }}
+            >
+              {status}
+            </button>
+          ))}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setDevPaymentStatus(null);
+            }}
+            style={{
+              padding: '4px 8px',
+              fontSize: '11px',
+              border: '1px solid #f44336',
+              background: 'white',
+              color: '#f44336',
+              borderRadius: '4px',
+              cursor: 'pointer',
+            }}
+          >
+            초기화
+          </button>
+        </div>
+      )} */}
 
       {availableTransitions.length > 0 && (
         <div className="tutor-card-actions">

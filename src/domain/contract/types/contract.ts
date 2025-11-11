@@ -46,7 +46,13 @@ export type ContractType = {
 };
 
 // 결제 상태 코드
-export type PaymentStatusCode = 'PENDING' | 'PAID' | 'PARTIAL' | 'REFUNDED';
+export type PaymentStatusCode =
+  | 'PENDING'
+  | 'CONFIRMING'
+  | 'PAID'
+  | 'FAILED'
+  | 'PARTIAL_REFUNDED'
+  | 'REFUNDED';
 
 // 결제 상태
 export type PaymentStatus = {

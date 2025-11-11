@@ -111,9 +111,32 @@
   flex-direction: column;
   align-items: center;
   min-height: 80vh;
+  padding: 0 20px;
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
 }
+
+.lesson-manage-content {
+  display: flex;
+  gap: 24px;
+  margin-top: 16px;
+  width: 100%;
+  max-width: 1600px;
+}
+
+.lesson-manage-main {
+  flex: 1;
+  min-width: 0; /* flexbox 오버플로우 방지 */
+}
+
+.lesson-manage-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+}
+
 .lesson-calendar-section {
-  /* min-width: 900px; */
+  width: 100%;
   transition: width 0.2s;
 }
 .lesson-card-section {
@@ -122,16 +145,63 @@
   align-items: flex-start;
   gap: 16px;
 }
+
+.lesson-count-cards-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
 .lesson-count-card {
-  background: var(--brand-red);
-  color: #fff;
   border-radius: 12px;
-  padding: 16px 24px;
+  padding: 10px 15px;
   font-weight: 600;
-  font-size: 18px;
-  box-shadow: 0 2px 8px 0 rgba(30, 201, 187, 0.1);
+  font-size: 30px;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08);
   min-width: 220px;
-  margin-bottom: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.lesson-count-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* 긍정적 지표 - 민트/청록색 */
+.lesson-count-card--positive {
+  background: var(--default-white);
+  color: var(--brand-red);
+}
+
+/* 액션 필요 지표 - 코랄-레드 */
+.lesson-count-card--action {
+  background: var(--brand-red);
+  color: var(--default-white);
+}
+
+.lesson-count-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.lesson-count-item:last-child {
+  border-bottom: none;
+}
+
+.lesson-count-label {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.95;
+}
+
+.lesson-count-value {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 .lesson-status-color-desc {
   /* margin-left: 32px; */
@@ -146,10 +216,10 @@
   min-width: 280px;
   max-width: 560px;
   background: #fff;
-  border-radius: 16px;
+  border-radius: 10px;
   box-shadow: 0 4px 24px 0 rgba(30, 201, 187, 0.1);
-  border: 2px solid var(--brand-mint);
-  padding: 24px;
+  border: 2px solid var(--brand-red);
+  padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -159,7 +229,7 @@
 .lesson-modal-card-title {
   font-size: 20px;
   font-weight: 700;
-  color: var(--brand-mint);
+  color: var(--brand-red);
   padding: 0 6px;
 }
 
@@ -259,4 +329,117 @@
   border-radius: 6px;
   border: 1px solid #ccc;
   min-width: 120px;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 1024px) {
+  .lesson-manage-content {
+    flex-direction: column;
+  }
+
+  .lesson-manage-sidebar {
+    width: 100%;
+  }
+
+  .lesson-manage-layout {
+    padding: 0 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .lesson-manage-layout {
+    padding: 0 8px;
+  }
+
+  .lesson-manage-sub-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .lesson-manage-filter {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .lesson-manage-filter input,
+  .lesson-manage-filter select {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .lesson-manage-content {
+    gap: 16px;
+  }
+
+  .lesson-view-toggle {
+    justify-content: center;
+  }
+
+  .lesson-card-section {
+    width: 100%;
+  }
+
+  .lesson-count-cards-wrapper {
+    width: 100%;
+  }
+
+  .lesson-count-card {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .lesson-count-item {
+    padding: 6px 0;
+  }
+
+  .lesson-count-label {
+    font-size: 13px;
+  }
+
+  .lesson-count-value {
+    font-size: 16px;
+  }
+
+  .lesson-status-color-desc {
+    justify-content: center;
+  }
+
+  .lesson-modal-card {
+    max-width: 90vw;
+    min-width: unset;
+    padding: 16px;
+  }
+
+  .lesson-modal-card-title {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .lesson-manage-layout {
+    padding: 0 4px;
+  }
+
+  .lesson-view-toggle {
+    gap: 8px;
+  }
+
+  .lesson-view-toggle-tab {
+    font-size: 14px;
+  }
+
+  .lesson-modal-content {
+    padding: 20px;
+    min-width: 280px;
+  }
+
+  .lesson-list-table {
+    font-size: 12px;
+  }
+
+  .lesson-list-th,
+  .lesson-list-td {
+    padding: 6px 4px;
+  }
 }

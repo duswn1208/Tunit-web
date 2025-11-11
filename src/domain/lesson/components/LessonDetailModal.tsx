@@ -19,6 +19,7 @@ const LessonDetailModal: React.FC<LessonDetailModalProps> = ({
   onChangeStatus,
 }) => {
   if (!event) return null;
+  console.log('LessonDetailModal event:', event);
   return (
     <Modal open={open} onClose={onClose}>
       <LessonDetailCard

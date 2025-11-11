@@ -18,7 +18,7 @@ export type LessonEvent = {
 
 export type LessonSummary = {
   todayLessonCount: number;
-  thisWeekAfterTodayLessonCount: number;
+  thisWeekLessonCount: number;
   nextWeekLessonCount: number;
   thisMonthLessonCount: number;
   totalLessonCount: number;
@@ -30,39 +30,39 @@ export const statusStyle: Record<
   { bg: string; dot: string; text: string; border: string; label: string }
 > = {
   REQUESTED: {
-    bg: '#FFFBEB', // amber-50
-    dot: '#F59E0B', // amber-500
-    text: '#78350F', // amber-900
-    border: '#FBBF24', // amber-400
+    bg: '#FFF9DB', // 연한 개나리색
+    dot: '#FFD60A', // 선명한 개나리색
+    text: '#2C2400', // 진한 텍스트
+    border: '#FFD60A', // dot과 동일
     label: '레슨 신청',
   },
   ACTIVE: {
-    bg: '#ECFEFF', // cyan-50
-    dot: '#06B6D4', // cyan-500
-    text: '#0E7490', // cyan-700
-    border: '#67E8F9', // cyan-300
+    bg: '#E3F2FD', // 연한 파랑
+    dot: '#2196F3', // 선명한 파랑
+    text: '#0D47A1', // 진한 텍스트
+    border: '#2196F3', // dot과 동일
     label: '레슨 확정',
   },
   COMPLETED: {
-    bg: '#F0FDF4', // green-50
-    dot: '#10B981', // emerald-500
-    text: '#065F46', // emerald-900
-    border: '#86EFAC', // green-300
+    bg: '#E8F5E9', // 연한 초록
+    dot: '#4CAF50', // 선명한 초록
+    text: '#1B5E20', // 진한 텍스트
+    border: '#4CAF50', // dot과 동일
     label: '완료',
   },
   CANCELED: {
-    bg: '#FEF2F2', // red-50
-    dot: '#EF4444', // red-500
-    text: '#7F1D1D', // red-900
-    border: '#FECACA', // red-200
+    bg: '#FFEBEE', // 연한 빨강
+    dot: '#F44336', // 선명한 빨강
+    text: '#B71C1C', // 진한 텍스트
+    border: '#F44336', // dot과 동일
     label: '취소',
   },
   EXPIRED: {
     // 만료
-    bg: '#F9FAFB', // gray-50
-    dot: '#9CA3AF', // gray-400
-    text: '#374151', // gray-700
-    border: '#E5E7EB', // gray-200
+    bg: '#F5F5F5', // 연한 회색
+    dot: '#9E9E9E', // 회색
+    text: '#424242', // 진한 텍스트
+    border: '#9E9E9E', // dot과 동일
     label: '만료/노쇼',
   },
 };

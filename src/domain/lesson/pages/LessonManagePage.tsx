@@ -10,6 +10,8 @@ import LessonListSection from '@/domain/lesson/components/LessonListSection.tsx'
 import LessonFilterSection from '@/domain/lesson/components/LessonFilterSection.tsx';
 import LessonManageViewToggle from '@/domain/lesson/components/LessonManageViewToggle.tsx';
 import LessonRegisterModal from '@/domain/lesson/components/LessonRegisterModal.tsx';
+import Button from '@/shared/components/Button.tsx';
+import { toAmPmFormat } from '@/domain/dayTime/lib/timeUtils.ts';
 
 export default function LessonManageLayout() {
   const [filterStudent, setFilterStudent] = useState('');
@@ -32,9 +34,9 @@ export default function LessonManageLayout() {
         },
       })
       .then((data: any) => {
-        const formatTime = (time: string) => time.slice(0, 5);
+        console.log('Fetched lesson data:', data);
         let mappedLessonList = (data.lessonList ?? []).map((item: any) => ({
-          title: `${item.studentName}(${formatTime(item.startTime)})`,
+          title: `${item.studentName}(${toAmPmFormat(item.startTime)})`,
           status: item.status,
           studentName: item.studentName,
           date: new Date(item.date),
@@ -52,7 +54,6 @@ export default function LessonManageLayout() {
         }
         if (filterStatus) {
           console.log(mappedLessonList);
-
           mappedLessonList = mappedLessonList.filter(
             (l: { status: { name: string } }) => l.status.name === filterStatus
           );
@@ -66,7 +67,6 @@ export default function LessonManageLayout() {
 
   useEffect(() => {
     fetchLessons();
-    // 필터 변경 시에도 리패치
   }, [filterStudent, filterStatus]);
 
   const deleteLesson = async (lessonId?: number) => {
@@ -102,30 +102,29 @@ export default function LessonManageLayout() {
           filterStatus={filterStatus}
           setFilterStatus={setFilterStatus}
         />
-        <LessonManageViewToggle viewType={viewType} setViewType={setViewType} />
+        <Button onClick={() => setShowRegisterModal(true)}>레슨 등록</Button>
       </div>
-      <button
-        type="button"
-        className="ui-button"
-        style={{ height: 36 }}
-        onClick={() => setShowRegisterModal(true)}
-      >
-        레슨 등록
-      </button>
-      <div style={{ display: 'flex', gap: 16, marginTop: 16 }}>
-        {viewType === 'calendar' ? (
-          <LessonCalendarSection
-            lessonEvents={lessonSummary?.lessonList ?? []}
-            onSelectEvent={setSelectedEvent}
-            onSelectSlot={() => setShowRegisterModal(true)}
-          />
-        ) : (
-          <LessonListSection
-            lessonEvents={lessonSummary?.lessonList ?? []}
-            onSelectEvent={setSelectedEvent}
-          />
-        )}
-        <LessonCardSection lessonSummary={lessonSummary} />
+
+      <LessonManageViewToggle viewType={viewType} setViewType={setViewType} />
+      <div className="lesson-manage-content">
+        <div className="lesson-manage-main">
+          {viewType === 'calendar' ? (
+            <LessonCalendarSection
+              lessonEvents={lessonSummary?.lessonList ?? []}
+              onSelectEvent={setSelectedEvent}
+              onSelectSlot={() => setShowRegisterModal(true)}
+              size="medium"
+            />
+          ) : (
+            <LessonListSection
+              lessonEvents={lessonSummary?.lessonList ?? []}
+              onSelectEvent={setSelectedEvent}
+            />
+          )}
+        </div>
+        <div className="lesson-manage-sidebar">
+          <LessonCardSection lessonSummary={lessonSummary} />
+        </div>
       </div>
       <LessonRegisterModal open={showRegisterModal} onClose={() => setShowRegisterModal(false)} />
       <LessonDetailModal

@@ -5,7 +5,7 @@ import Header from '@/shared/components/Header';
 import TutorContractCard from '../components/TutorContractCard';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/shared/lib/api';
-import type { Contract, ContractStatusCode } from '../types/contract';
+import type { Contract, ContractStatusCode, PaymentStatusCode } from '../types/contract';
 import '../css/my-tutors.css';
 
 export default function MyStudentsPage() {
@@ -21,8 +21,6 @@ export default function MyStudentsPage() {
       return api.get<Contract[]>('/api/contracts/tutor');
     },
   });
-
-  //진행중 버튼 클릭했을 때 결제완료가 아니라 상태만 변경되는 중 TODO
 
   // 계약 상태 변경 mutation
   const updateContractStatus = useMutation({
@@ -44,15 +42,35 @@ export default function MyStudentsPage() {
     },
   });
 
+  // 결제 상태 변경 mutation
+  const updatePaymentStatus = useMutation({
+    mutationFn: async ({
+      contractNo,
+      newPaymentStatus,
+    }: {
+      contractNo: number;
+      newPaymentStatus: PaymentStatusCode;
+    }) => {
+      return api.post(`/api/contracts/pay/${contractNo}/status`, {
+        paymentStatus: newPaymentStatus,
+      });
+    },
+    onSuccess: () => {
+      showToast('결제 확인이 완료되었습니다.', 'success');
+      queryClient.invalidateQueries({ queryKey: ['contracts', 'tutor'] });
+    },
+    onError: () => {
+      showToast('결제 확인에 실패했습니다.', 'error');
+    },
+  });
+
   const handleStatusChange = (contractNo: number, newStatus: ContractStatusCode) => {
     updateContractStatus.mutate({ contractNo, newStatus });
   };
 
-  useEffect(() => {
-    if (isLoading) {
-      showToast('계약 정보를 불러오는 중입니다...', 'info');
-    }
-  }, [isLoading, showToast]);
+  const handlePaymentConfirm = (contractNo: number, newPaymentStatus: PaymentStatusCode) => {
+    updatePaymentStatus.mutate({ contractNo, newPaymentStatus });
+  };
 
   useEffect(() => {
     if (error) {
@@ -61,10 +79,10 @@ export default function MyStudentsPage() {
   }, [error, showToast]);
 
   useEffect(() => {
-    if (!data || data.length === 0) {
+    if (!isLoading && data && data.length === 0) {
       showToast('관리중인 학생이 없습니다.', 'info');
     }
-  }, [data, showToast]);
+  }, [data, isLoading, showToast]);
 
   console.log('Tutor Contract Data:', data);
 
@@ -83,6 +101,7 @@ export default function MyStudentsPage() {
                   key={contract.contractNo}
                   contract={contract}
                   onStatusChange={handleStatusChange}
+                  onPaymentConfirm={handlePaymentConfirm}
                 />
               ))}
           </div>
