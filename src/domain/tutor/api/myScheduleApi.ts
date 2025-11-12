@@ -42,7 +42,7 @@ export interface TutorScheduleResponse {
 export async function fetchTutorMySchedule(
   params: MyScheduleRequest
 ): Promise<TutorScheduleResponse> {
-  return api.get<TutorScheduleResponse>('/api/lesson/schedule/me', {
+  return api.get<TutorScheduleResponse>('/api/lessons/schedule/me', {
     params: {
       startDate: params.startDate,
       endDate: params.endDate,

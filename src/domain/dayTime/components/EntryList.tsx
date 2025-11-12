@@ -1,5 +1,5 @@
 import type { Entry } from '../hooks/useWeeklyForm.ts';
-import OnboardingNextButton from '@/domain/onboarding/components/OnboardingNextButton.tsx';
+import Button from '@/shared/components/Button.tsx';
 import { DAY_LABELS } from '@/shared/constants/date.ts';
 
 interface Props {
@@ -17,11 +17,7 @@ export default function EntryList({ entries, onRemove }: Props) {
             <span className="font-medium">{e.days.map((d) => DAY_LABELS[d]).join(', ')}</span>{' '}
             {e.startTime} ~ {e.endTime}
           </div>
-          <OnboardingNextButton
-            onClick={() => onRemove(idx)}
-            addClass="ui-btn--accent"
-            label="삭제"
-          ></OnboardingNextButton>
+          <Button onClick={() => onRemove(idx)}>삭제</Button>
         </li>
       ))}
     </ul>

@@ -6,17 +6,24 @@
 /* 활성화된 날짜 스타일 */
 .rbc-active {
   color: #fff !important;
-  background-color: var(--brand-mint) !important;
+  background: var(--brand-mint) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(79, 209, 197, 0.3) !important;
+  transform: scale(1.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .rbc-today {
   color: #fff !important;
-  background-color: var(--brand-mint) !important;
+  background: var(--brand-mint) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(79, 209, 197, 0.3) !important;
 }
 
 /* 선택 가능한 날짜 스타일 */
 .rbc-off-range-bg {
-  background-color: #f5f5f5 !important;
+  background-color: #fafafa !important;
+  border-radius: 8px !important;
 }
 
 .rbc-day-bg {
@@ -26,11 +33,20 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  border-radius: 8px !important;
+  transition: all 0.2s ease;
+}
+
+.rbc-day-bg:hover {
+  background-color: #f0fffe !important;
+  transform: translateY(-2px);
 }
 
 .rbc-day-bg.rbc-selected-cell {
-  background-color: var(--brand-mint) !important;
+  background: var(--brand-mint) !important;
   color: #fff !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(79, 209, 197, 0.3) !important;
 }
 
 /* 현재 날짜 강조 스타일 */
@@ -50,6 +66,8 @@
 .rbc-date-cell {
   text-align: center !important;
   padding: 8px !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease;
 }
 
 .rbc-date-cell a {
@@ -57,6 +75,16 @@
   justify-content: center !important;
   align-items: center !important;
   width: 100% !important;
+  font-weight: 500;
+  border-radius: 50%;
+  width: 36px !important;
+  height: 36px !important;
+  transition: all 0.2s ease;
+}
+
+.rbc-date-cell:hover a {
+  background-color: rgba(79, 209, 197, 0.1);
+  transform: scale(1.1);
 }
 
 /* 날짜 셀의 border 제거 */
@@ -68,6 +96,12 @@
 /* 요일 헤더의 border 제거 */
 .rbc-header {
   border: none !important;
+  padding: 12px 8px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  color: #64748b !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* 행(row)의 border 제거 */

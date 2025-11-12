@@ -17,6 +17,7 @@ import TutorSearchPage from '@/domain/search/pages/TutorSearchPage.tsx';
 import TutorDetailPage from './domain/tutor/pages/TutorDetailPage.tsx';
 import LessonStudentPage from './domain/lesson/pages/LessonStudentPage.tsx';
 import LessonManageLayout from './domain/lesson/pages/LessonManagePage.tsx';
+import ScheduleManagePage from './domain/lesson/pages/ScheduleManagePage.tsx';
 import BottomTabBar from '@/shared/components/BottomTabBar';
 import ContractRequestFormPage from './domain/booking/pages/ContractRequestFormPage.tsx';
 import LessonBookingPage from './domain/booking/pages/LessonBookingPage.tsx';
@@ -56,6 +57,7 @@ export default function App() {
                 <Route path="/student/my/tutors" element={<MyTutorsPage />} />
                 <Route path="/student/booking/lesson" element={<LessonBookingPage />} />
                 <Route path="/tutor/my/lessons" element={<LessonManageLayout />} />
+                <Route path="/tutor/schedule" element={<ScheduleManagePage />} />
                 <Route path="/tutor/my/students" element={<MyStudentsPage />} />
                 <Route path="/onboarding" element={<OnboardingStart />} />
                 <Route path="/onboarding/student" element={<OnboardingStudentLesson />} />

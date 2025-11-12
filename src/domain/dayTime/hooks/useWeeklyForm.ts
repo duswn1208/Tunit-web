@@ -35,6 +35,7 @@ export function useWeeklyForm() {
       if (hasOverlap(nextRanges)) return { ok: false, msg: '겹치는 시간대가 있습니다.' };
     }
     setEntries((prev) => [...prev, { days, startTime, endTime }]);
+    setSelectedDays(new Set()); // 요일 선택 리셋
     return { ok: true as const };
   }
 
@@ -59,6 +60,7 @@ export function useWeeklyForm() {
     // setters
     setStartTime,
     setEndTime,
+    setEntries,
     toggleDay,
     // actions
     addEntry,
@@ -69,16 +71,15 @@ export function useWeeklyForm() {
 
 // 유틸 (폼 내부 전개용) — 필요 시 lib로 분리 가능
 import type { Entry as _Entry } from './useWeeklyForm.ts';
-import type { DayOfWeek as _DayOfWeek } from '../types/availability.ts';
 import { setAvailability } from '../../onboarding/lib/onboarding.ts';
-function flattenToDayRanges(entries: _Entry[], day: _DayOfWeek) {
+function flattenToDayRanges(entries: _Entry[], day: DayOfWeekNumber) {
   return entries
     .filter((e) => e.days.includes(day))
     .map((e) => ({ startTime: e.startTime, endTime: e.endTime }))
     .sort((a, b) => toMinutes(a.startTime) - toMinutes(b.startTime));
 }
 function flattenAll(entries: _Entry[]) {
-  const items: { dayOfWeek: _DayOfWeek; startTime: string; endTime: string }[] = [];
+  const items: { dayOfWeek: DayOfWeekNumber; startTime: string; endTime: string }[] = [];
   for (const e of entries)
     for (const d of e.days)
       items.push({ dayOfWeek: d, startTime: e.startTime, endTime: e.endTime });

@@ -1,0 +1,52 @@
+.time-input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-input-label {
+  font-size: 16px;
+  font-weight: 500;
+  color: #666;
+  min-width: 40px;
+}
+
+.time-input-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px 10px 10px 20px;
+  min-width: 140px;
+  background: white;
+  transition: border-color 0.2s ease;
+}
+
+.time-input-wrapper:hover {
+  border-color: #cbd5e0;
+}
+
+.time-input-field {
+  border: none;
+  outline: none;
+  padding: 0;
+  font-size: 15px;
+  cursor: pointer;
+  width: 100%;
+  background: transparent;
+}
+
+.time-input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 16px;
+}
+
+.time-separator {
+  font-size: 14px;
+  color: #999;
+}

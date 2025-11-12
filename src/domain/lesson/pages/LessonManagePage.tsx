@@ -12,8 +12,10 @@ import LessonManageViewToggle from '@/domain/lesson/components/LessonManageViewT
 import LessonRegisterModal from '@/domain/lesson/components/LessonRegisterModal.tsx';
 import Button from '@/shared/components/Button.tsx';
 import { toAmPmFormat } from '@/domain/dayTime/lib/timeUtils.ts';
+import { useNavigate } from 'react-router-dom';
 
 export default function LessonManageLayout() {
+  const navigate = useNavigate();
   const [filterStudent, setFilterStudent] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [lessonSummary, setLessonSummary] = useState<LessonSummary | null>(null);
@@ -102,7 +104,13 @@ export default function LessonManageLayout() {
           filterStatus={filterStatus}
           setFilterStatus={setFilterStatus}
         />
-        <Button onClick={() => setShowRegisterModal(true)}>레슨 등록</Button>
+
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <Button onClick={() => setShowRegisterModal(true)}>레슨 등록</Button>
+          <Button onClick={() => navigate('/tutor/schedule')} className="ui-btn--accent">
+            스케줄 설정
+          </Button>
+        </div>
       </div>
 
       <LessonManageViewToggle viewType={viewType} setViewType={setViewType} />
