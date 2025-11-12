@@ -34,7 +34,7 @@ export default function LoginPage() {
       {/* 소셜 로그인 버튼 */}
       <div className="social-login-buttons">
         <button onClick={naverLogin} className="social-login-button naver-login-button">
-          <img src="/images/naver-icon.png" alt="Naver Icon" />
+          <img src="/images/naver_login_icon.png" alt="Naver Icon" />
           네이버로 3초 만에 시작하기
         </button>
 
