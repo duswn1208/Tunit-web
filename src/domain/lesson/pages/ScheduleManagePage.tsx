@@ -42,8 +42,6 @@ export default function ScheduleManagePage() {
           endDate: monthEnd.toISOString().slice(0, 10),
         });
 
-        console.log('Loaded schedule:', response);
-
         // availableTimes를 Entry 형식으로 변환
         if (response.availableTimes && response.availableTimes.length > 0) {
           const timeMap = new Map<string, DayOfWeekNumber[]>();
@@ -85,7 +83,6 @@ export default function ScheduleManagePage() {
     }
 
     try {
-      // entries를 API 요청 형식으로 변환
       const tutorAvailableTimeSaveDtoList = entries.flatMap((entry) =>
         entry.days.map((dayOfWeek) => ({
           dayOfWeekNum: dayOfWeek,
@@ -94,7 +91,7 @@ export default function ScheduleManagePage() {
         }))
       );
 
-      await api.post('/api/tutor/profile/modify/lesson-time', {
+      await api.post('/api/tutor/schedule/modify/lesson-time', {
         tutorAvailableTimeSaveDtoList,
       });
 

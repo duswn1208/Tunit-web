@@ -66,6 +66,7 @@ function to12HourFormat(hour: number, minute: number) {
  *     "13:00" → "오후 1시"
  */
 export function toAmPmFormat(time: string): string {
+  if (!time) return '';
   const parts = time.split(':');
   const hour = parseInt(parts[0], 10);
   const minute = parts[1] ? parseInt(parts[1], 10) : 0;

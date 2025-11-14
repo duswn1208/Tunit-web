@@ -36,7 +36,6 @@ export default function LessonManageLayout() {
         },
       })
       .then((data: any) => {
-        console.log('Fetched lesson data:', data);
         let mappedLessonList = (data.lessonList ?? []).map((item: any) => ({
           title: `${item.studentName}(${toAmPmFormat(item.startTime)})`,
           status: item.status,

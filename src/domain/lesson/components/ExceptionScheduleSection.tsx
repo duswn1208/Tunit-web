@@ -1,10 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import '../css/exception-schedule.css';
 import Button from '@/shared/components/Button';
 import { api } from '@/shared/lib/api';
 import { useToast } from '@/shared/contexts/ToastContext';
+import { toAmPmFormat } from '@/domain/dayTime/lib/timeUtils';
+
+interface ExceptionSchedule {
+  tutorHolidayNo: string;
+  type: {
+    code: 'BLOCK';
+    label: string;
+  };
+  date: string;
+  endDate?: string;
+  isAllDay: boolean;
+  startTime?: string;
+  endTime?: string;
+  reason?: string;
+}
 
 export default function ExceptionScheduleSection() {
   const { showToast } = useToast();
@@ -12,17 +27,24 @@ export default function ExceptionScheduleSection() {
   const [isAllDay, setIsAllDay] = useState(true);
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('18:00');
-  const [holidays, setHolidays] = useState<
-    Array<{
-      date: string;
-      endDate?: string;
-      isAllDay: boolean;
-      startTime?: string;
-      endTime?: string;
-      reason?: string;
-    }>
-  >([]);
+  const [holidays, setHolidays] = useState<ExceptionSchedule[]>([]);
   const [reason, setReason] = useState('');
+
+  // 기존 휴무 불러오기
+  useEffect(() => {
+    loadHolidays();
+  }, []);
+
+  const loadHolidays = async () => {
+    try {
+      const response = await api.get<ExceptionSchedule[]>('/api/tutor/schedule/holiday');
+      setHolidays(response || []);
+      console.log('Fetched holidays:', response);
+    } catch (error) {
+      console.error('휴무 목록 조회 실패:', error);
+      // 에러 시 빈 배열 유지
+    }
+  };
 
   const handleDateClick = (date: Date) => {
     if (selectedDates.length === 0) {
@@ -60,7 +82,7 @@ export default function ExceptionScheduleSection() {
       if (selectedDates.length === 1) {
         // 단일 날짜 휴무
         const dateStr = formatDateLocal(selectedDates[0]);
-        const newHoliday = {
+        const newHoliday: ExceptionSchedule = {
           date: dateStr,
           isAllDay,
           startTime: isAllDay ? undefined : startTime,
@@ -71,24 +93,29 @@ export default function ExceptionScheduleSection() {
         console.log('Adding holiday:', newHoliday);
 
         // API 호출
-        await api.post('/api/tutor/schedule/save/holiday', newHoliday);
-        setHolidays((prev) => [...prev, newHoliday]);
+        const response = await api.post<ExceptionSchedule>(
+          '/api/tutor/schedule/save/holiday',
+          newHoliday
+        );
+        setHolidays((prev) => [...prev, response]);
         showToast('휴무가 등록되었습니다.', 'success');
       } else {
         // 기간 휴무 (2개 날짜 선택)
         const startDateStr = formatDateLocal(selectedDates[0]);
         const endDateStr = formatDateLocal(selectedDates[1]);
-        const newHoliday = {
+        const newHoliday: ExceptionSchedule = {
           date: startDateStr,
           endDate: endDateStr,
           isAllDay: true,
           reason: reason || undefined,
         };
 
-        console.log('Adding holiday:', newHoliday);
         // API 호출
-        await api.post('/api/tutor/schedule/save/holiday', newHoliday);
-        setHolidays((prev) => [...prev, newHoliday]);
+        const response = await api.post<ExceptionSchedule>(
+          '/api/tutor/schedule/save/holiday',
+          newHoliday
+        );
+        setHolidays((prev) => [...prev, response]);
         showToast('기간 휴무가 등록되었습니다.', 'success');
       }
 
@@ -96,8 +123,7 @@ export default function ExceptionScheduleSection() {
       setReason('');
       setIsAllDay(true);
     } catch (error) {
-      console.error('휴무 등록 실패:', error);
-      showToast('휴무 등록에 실패했습니다.', 'error');
+      showToast(error.message || '휴무 등록에 실패했습니다.', 'error');
     }
   };
 
@@ -105,15 +131,16 @@ export default function ExceptionScheduleSection() {
     const holiday = holidays[index];
 
     try {
-      // API 호출 - 삭제 엔드포인트
-      await api.delete(`/api/tutor/profile/modify/holiday`, {
-        body: JSON.stringify({ date: holiday.date, endDate: holiday.endDate }),
-      });
+      if (!holiday.tutorHolidayNo) {
+        showToast('삭제할 휴무 정보가 없습니다.', 'error');
+        return;
+      }
+
+      await api.delete(`/api/tutor/schedule/holiday/${holiday.tutorHolidayNo}`);
 
       setHolidays((prev) => prev.filter((_, i) => i !== index));
       showToast('휴무가 삭제되었습니다.', 'success');
     } catch (error) {
-      console.error('휴무 삭제 실패:', error);
       showToast('휴무 삭제에 실패했습니다.', 'error');
     }
   };
@@ -133,6 +160,20 @@ export default function ExceptionScheduleSection() {
     return `${date.getMonth() + 1}월 ${date.getDate()}일`;
   };
 
+  // 특정 날짜가 휴무 기간에 포함되는지 체크
+  const isDateInHoliday = (date: Date): boolean => {
+    const dateStr = formatDateLocal(date);
+    return holidays.some((h) => {
+      if (h.endDate) {
+        // 기간 휴무인 경우 범위 체크
+        return dateStr >= h.date && dateStr <= h.endDate;
+      } else {
+        // 단일 날짜 휴무
+        return h.date === dateStr;
+      }
+    });
+  };
+
   return (
     <div className="exception-schedule-section">
       <p className="exception-schedule-section__description">
@@ -149,7 +190,7 @@ export default function ExceptionScheduleSection() {
             minDate={new Date()}
             tileClassName={({ date }) => {
               const dateStr = formatDateLocal(date);
-              const isHoliday = holidays.some((h) => h.date === dateStr);
+              const isHoliday = isDateInHoliday(date);
               const isSelected = selectedDates.some((d) => formatDateLocal(d) === dateStr);
 
               let className = '';
@@ -243,15 +284,34 @@ export default function ExceptionScheduleSection() {
               </h4>
               <div className="exception-schedule-section__holidays-list">
                 {holidays.map((holiday, index) => (
-                  <div key={index} className="exception-schedule-section__holiday-item">
+                  <div
+                    key={holiday.tutorHolidayNo || index}
+                    className="exception-schedule-section__holiday-item"
+                  >
                     <div>
                       <div className="exception-schedule-section__holiday-date">
                         {holiday.endDate
                           ? `${formatDate(holiday.date)} ~ ${formatDate(holiday.endDate)}`
                           : formatDate(holiday.date)}
+                        {holiday.type && (
+                          <span
+                            style={{
+                              marginLeft: '8px',
+                              fontSize: '12px',
+                              color: '#666',
+                              backgroundColor: '#fee2e2',
+                              padding: '2px 8px',
+                              borderRadius: '4px',
+                            }}
+                          >
+                            {holiday.type.label}
+                          </span>
+                        )}
                       </div>
                       <div className="exception-schedule-section__holiday-details">
-                        {holiday.isAllDay ? '종일' : `${holiday.startTime} ~ ${holiday.endTime}`}
+                        {holiday.isAllDay
+                          ? '종일'
+                          : `${toAmPmFormat(holiday.startTime)} ~ ${toAmPmFormat(holiday.endTime)}`}
                         {holiday.reason && ` • ${holiday.reason}`}
                       </div>
                     </div>

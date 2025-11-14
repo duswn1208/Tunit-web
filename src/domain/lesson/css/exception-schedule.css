@@ -152,10 +152,37 @@
 }
 
 /* Calendar tile styles */
+/* 일요일 빨간색 */
+.react-calendar__month-view__days__day--weekend:nth-of-type(7n + 1) abbr,
+.react-calendar__month-view__days__day--weekend:nth-of-type(7n + 1) {
+  color: #dc2626 !important;
+}
+
+/* 토요일 파란색 */
+.react-calendar__month-view__days__day--weekend:nth-of-type(7n) abbr,
+.react-calendar__month-view__days__day--weekend:nth-of-type(7n) {
+  color: #2563eb !important;
+}
+
+/* 또는 더 간단하게 - 일요일만 */
+.react-calendar__tile--now:not(.react-calendar__month-view__days__day--weekend) abbr {
+  color: inherit;
+}
+
+.react-calendar abbr[aria-label*='일요일'],
+.react-calendar abbr[aria-label$='Sunday'] {
+  color: #dc2626 !important;
+}
+
+/* 등록된 휴무 날짜 */
 .holiday-date {
   background: #fee2e2 !important;
   color: #dc2626 !important;
   font-weight: 600 !important;
+}
+
+.holiday-date abbr {
+  color: #dc2626 !important;
 }
 
 .holiday-date:hover {
