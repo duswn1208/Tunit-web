@@ -110,8 +110,30 @@ export default function LessonCalendarPicker({
           .map((slot) => slot.time.slice(0, 5)); // HH:mm 형식으로 통일
       }
 
+      // 휴무 날짜 필터링
+      let holidaySlots: string[] = [];
+      if (calendarStatus?.holidayDates) {
+        calendarStatus.holidayDates
+          .filter((holiday) => holiday.date === date)
+          .forEach((holiday) => {
+            if (holiday.isAllDay) {
+              // 종일 휴무인 경우 해당 날짜의 모든 시간 비활성화
+              if (available) {
+                const allSlots = generateTimeSlots(available.startTime, available.endTime);
+                holidaySlots.push(...allSlots);
+              }
+            } else if (holiday.startTime && holiday.endTime) {
+              // 시간 구간 휴무인 경우 해당 시간만 비활성화
+              const slots = generateTimeSlots(holiday.startTime, holiday.endTime);
+              holidaySlots.push(...slots);
+            }
+          });
+      }
+
       // 모든 비활성화할 시간 슬롯을 하나의 배열로 합치고 중복 제거
-      const allReserved = Array.from(new Set([...fixed, ...reserved, ...localDisabled]));
+      const allReserved = Array.from(
+        new Set([...fixed, ...reserved, ...localDisabled, ...holidaySlots])
+      );
       setReservedTimes((prev) => {
         const prevStr = prev.join(',');
         const nextStr = allReserved.join(',');
@@ -139,6 +161,12 @@ export default function LessonCalendarPicker({
       )
     : [];
 
+  // 종일 휴무 날짜 추출
+  const disabledDates =
+    calendarStatus?.holidayDates
+      ?.filter((holiday) => holiday.isAllDay)
+      .map((holiday) => holiday.date) || [];
+
   return (
     <InlineDateTimePicker
       date={date}
@@ -147,6 +175,7 @@ export default function LessonCalendarPicker({
       onChange={onChange}
       availableTimeRange={timeRange}
       enabledDayOfWeeks={enabledDayOfWeeks}
+      disabledDates={disabledDates}
       size={size}
     />
   );

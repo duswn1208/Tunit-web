@@ -22,4 +22,12 @@ export interface LessonCalendarStatusDto {
     endTime: string;
     lessonReservationNo?: number;
   }[];
+  holidayDates: {
+    date: string;
+    type: { code: 'BLOCK' | 'OPEN'; label: string };
+    reason?: string;
+    startTime?: string;
+    endTime?: string;
+    isAllDay: boolean;
+  }[];
 }

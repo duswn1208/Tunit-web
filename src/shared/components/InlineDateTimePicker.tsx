@@ -11,6 +11,7 @@ interface Props {
   onChange: (date: string, time: string) => void;
   availableTimeRange?: { start: string; end: string };
   enabledDayOfWeeks?: number[];
+  disabledDates?: string[]; // 비활성화할 날짜 배열 (YYYY-MM-DD 형식)
   size?: 'small' | 'medium' | 'large';
 }
 
@@ -27,6 +28,7 @@ export default function InlineDateTimePicker({
   onChange,
   availableTimeRange,
   enabledDayOfWeeks,
+  disabledDates = [],
   size = 'large',
 }: Props) {
   function parseDateStringToLocal(dateStr?: string): Date | null {
@@ -88,6 +90,10 @@ export default function InlineDateTimePicker({
           locale="ko-KR"
           className={size}
           tileDisabled={({ date }) => {
+            // disabledDates에 포함된 날짜 비활성화
+            const dateStr = format(date, 'yyyy-MM-dd');
+            if (disabledDates.includes(dateStr)) return true;
+
             // enabledDayOfWeeks에 없는 요일의 모든 날짜 비활성화
             if (!enabledDayOfWeeks || enabledDayOfWeeks.length === 0) return true; // 빈 배열이면 모두 비활성화
             // JavaScript getDay(): 0(일)~6(토) → 백엔드 기준 1(월)~7(일)로 변환
