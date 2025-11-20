@@ -4,7 +4,7 @@ import ContractRequestStep1 from '@/domain/booking/components/ContractRequestSte
 import ContractRequestStep2 from '@/domain/booking/components/ContractRequestStep2';
 import LLessonBookingStep3 from '@/domain/booking/components/ContractRequestStep3';
 import ContractRequestStep4 from '@/domain/booking/components/ContractRequestStep4';
-import { requestContract } from '../api/lessonBookingApi';
+import { requestContract, updateContract } from '../api/lessonBookingApi';
 import {
   CONTRACT_TYPES,
   getContractTypeLessonCount,
@@ -27,6 +27,18 @@ interface LessonBookingFormProps {
   pricePerLesson?: number;
   onSubmit: (data: any) => void;
   onFirst?: () => void;
+  // Edit 모드 props
+  mode?: 'create' | 'edit';
+  contractNo?: number;
+  initialData?: {
+    lessonCategory?: { label: string; value: string };
+    place?: string;
+    weekCount?: number;
+    lessonDtList?: string[];
+    level?: string;
+    memo?: string;
+    emergencyContact?: string;
+  };
 }
 
 export default function ContractRequestForm({
@@ -41,21 +53,26 @@ export default function ContractRequestForm({
   pricePerLesson = 0,
   onSubmit,
   onFirst,
+  mode = 'create',
+  contractNo,
+  initialData,
 }: LessonBookingFormProps) {
   const { showToast } = useToast();
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [lessonCategory, setLessonCategory] = useState<{ label: string; value: string } | null>(
-    null
+    initialData?.lessonCategory || null
   );
-  const [place, setPlace] = useState('');
+  const [place, setPlace] = useState(initialData?.place || '');
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
-  const [lessonDtList, setLessonDtList] = useState<string[]>([]);
-  const [level, setLevel] = useState('');
-  const [memo, setMemo] = useState('');
-  const [emergencyContact, setEmergencyContact] = useState(defaultPhone || '');
-  const [weekCount, setLessonCount] = useState(1);
+  const [lessonDtList, setLessonDtList] = useState<string[]>(initialData?.lessonDtList || []);
+  const [level, setLevel] = useState(initialData?.level || '');
+  const [memo, setMemo] = useState(initialData?.memo || '');
+  const [emergencyContact, setEmergencyContact] = useState(
+    initialData?.emergencyContact || defaultPhone || ''
+  );
+  const [weekCount, setLessonCount] = useState(initialData?.weekCount || 1);
 
   const handleNext = () => {
     setCurrentStep((prev) => prev + 1);
@@ -78,14 +95,18 @@ export default function ContractRequestForm({
       totalPrice: lessonDtList.length * pricePerLesson,
     };
     try {
-      await requestContract(bookingData);
-      // 성공 시 후처리(예: 알림, 이동 등)
-      onSubmit(bookingData);
-      showToast('예약 요청이 완료되었습니다.');
-      // 추가 성공 처리 로직 작성 가능
-      navigate('/student/my/tutors');
+      if (mode === 'edit' && contractNo) {
+        await updateContract(contractNo, bookingData);
+        showToast('계약이 수정되었습니다.');
+        navigate('/student/my/tutors');
+      } else {
+        await requestContract(bookingData);
+        onSubmit(bookingData);
+        showToast('예약 요청이 완료되었습니다.');
+        navigate('/student/my/tutors');
+      }
     } catch (e: any) {
-      showToast(e.message ?? '예약 요청에 실패했습니다.', 'error');
+      showToast(e.message ?? `${mode === 'edit' ? '수정' : '예약 요청'}에 실패했습니다.`, 'error');
     }
   };
 

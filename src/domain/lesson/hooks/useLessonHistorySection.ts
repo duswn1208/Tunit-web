@@ -3,6 +3,7 @@ import useLessonHistory from '../../mypage/hooks/useLessonHistory';
 import { api } from '@/shared/lib/api';
 import { useToast } from '@/shared/contexts/ToastContext';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { submitReview } from '@/domain/contract/api/contractApi';
 
 type TabType = 'upcoming' | 'past' | 'pending';
 
@@ -71,9 +72,22 @@ export function useLessonHistorySection() {
     [showToast, navigate]
   );
 
-  const handleWriteReview = useCallback(() => {
-    showToast('후기 작성 기능은 준비 중입니다.', 'info');
-  }, [showToast]);
+  const handleWriteReview = useCallback(
+    async (lessonReservationNo: number, tutorName: string, lessonDate: string) => {
+      return {
+        lessonReservationNo,
+        tutorName,
+        lessonDate,
+        submit: async (data: { lessonReservationNo: number; rating: number; content: string }) => {
+          console.log('Review data to submit:', data);
+          await submitReview(data);
+          showToast('후기가 등록되었습니다.', 'success');
+          setRefreshKey((k) => k + 1);
+        },
+      };
+    },
+    [showToast]
+  );
 
   const handleReserveLesson = useCallback(() => {
     showToast('레슨 예약 기능은 준비 중입니다.', 'info');

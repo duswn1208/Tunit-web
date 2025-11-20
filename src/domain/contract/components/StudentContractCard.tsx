@@ -4,6 +4,7 @@ import { CONTRACT_STATUS_TRANSITIONS_STUDENT, type ContractStatusCode } from '..
 import '../css/my-tutors.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAlert } from '@/shared/contexts/AlertContext';
 
 interface StudentContractCardProps {
   contract: Contract;
@@ -18,6 +19,7 @@ export default function StudentContractCard({
 }: StudentContractCardProps) {
   const [paymentAmount, setPaymentAmount] = useState<number>(contract.totalPrice);
   const navigate = useNavigate();
+  const { showAlert } = useAlert();
 
   const handleCardClick = (e: React.MouseEvent) => {
     // 버튼이나 입력 필드 클릭 시에는 이동하지 않음
@@ -45,13 +47,35 @@ export default function StudentContractCard({
   };
 
   const handleLessonManage = () => {
-    console.log('handleLessonManage called', contract);
     if (contract.contractStatus.code == 'REQUESTED') {
       navigate(`/student/my/lessons?contractNo=${contract.contractNo}&tab=pending&view=calendar`);
       return;
     }
     // 레슨 관리 페이지로 이동 (캘린더 뷰, 예정된 레슨 탭)
     navigate(`/student/my/lessons?contractNo=${contract.contractNo}&tab=upcoming&view=calendar`);
+  };
+
+  const handleChangeContractType = () => {
+    // 정규/선착순 레슨 등록 페이지로 이동
+    showAlert({
+      message: '정규/선착순 레슨 등록 페이지로 이동하시겠습니까?',
+      customButtons: [
+        {
+          text: '정규레슨',
+          onClick: () => {
+            navigate(`/student/contracts/${contract.contractNo}/edit?type=regular`);
+          },
+          className: 'ui-btn--primary',
+        },
+        {
+          text: '선착순레슨',
+          onClick: () => {
+            navigate(`/student/contracts/${contract.contractNo}/edit?type=first-come`);
+          },
+          className: 'ui-btn--outline',
+        },
+      ],
+    });
   };
 
   // 현재 상태에서 변경 가능한 상태들
@@ -131,6 +155,9 @@ export default function StudentContractCard({
           ))}
           <button className="tutor-card-top-button" onClick={handleLessonManage}>
             레슨 관리
+          </button>
+          <button className="tutor-card-top-button" onClick={handleChangeContractType}>
+            정규/선착순 레슨 등록
           </button>
         </div>
       )}

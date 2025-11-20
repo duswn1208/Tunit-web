@@ -8,6 +8,7 @@ import { toAmPmFormat } from '@/domain/dayTime/lib/timeUtils';
 import { useState } from 'react';
 import useMediaQuery from '@/shared/hooks/useMediaQuery';
 import LessonManageViewToggle from './LessonManageViewToggle';
+import { ReviewModal } from '@/shared/components/ReviewModal';
 
 export default function LessonHistorySection() {
   const {
@@ -25,6 +26,12 @@ export default function LessonHistorySection() {
   const [selectedLessonId, setSelectedLessonId] = useState<number | null>(null);
   const isMobile = useMediaQuery('(max-width: 600px)');
   const [mobileView, setMobileView] = useState<'calendar' | 'list'>('calendar');
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [reviewModalData, setReviewModalData] = useState<{
+    lessonReservationNo: number;
+    tutorName: string;
+    lessonDate: string;
+  } | null>(null);
 
   function renderActionButton(lesson: any) {
     if (activeTab === 'upcoming') {
@@ -48,7 +55,18 @@ export default function LessonHistorySection() {
       return (
         <div>
           {!hideReview && (
-            <Button className="ui-btn ui-btn--accent mr-8" size="sm" onClick={handleWriteReview}>
+            <Button
+              className="ui-btn ui-btn--accent mr-8"
+              size="sm"
+              onClick={() => {
+                setReviewModalData({
+                  lessonReservationNo: lesson.lessonReservationNo,
+                  tutorName: lesson.tutorName || '튜터',
+                  lessonDate: lesson.lessonDate || '',
+                });
+                setReviewModalOpen(true);
+              }}
+            >
               후기 작성
             </Button>
           )}
@@ -219,6 +237,27 @@ export default function LessonHistorySection() {
           {/* 오른쪽: 리스트 */}
           <div className="lesson-list-container">{renderLessonList(lessons)}</div>
         </div>
+      )}
+
+      {/* 후기 작성 모달 */}
+      {reviewModalData && (
+        <ReviewModal
+          isOpen={reviewModalOpen}
+          onClose={() => {
+            setReviewModalOpen(false);
+            setReviewModalData(null);
+          }}
+          onSubmit={async (data) => {
+            await handleWriteReview(
+              reviewModalData.lessonReservationNo,
+              reviewModalData.tutorName,
+              reviewModalData.lessonDate
+            ).then((handler) => handler.submit(data));
+          }}
+          lessonReservationNo={reviewModalData.lessonReservationNo}
+          tutorName={reviewModalData.tutorName}
+          lessonDate={reviewModalData.lessonDate}
+        />
       )}
     </section>
   );

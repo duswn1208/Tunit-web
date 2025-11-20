@@ -81,11 +81,8 @@ export interface Contract {
   updatedAt: string;
   contractType: ContractType;
   lessonSubCategory: {
-    lessonSubCategoryNo: number;
-    lessonCategory: {
-      label: string;
-      code: string;
-    };
+    label: string;
+    code: string;
   };
   lessonCount: number;
   weekCount: number;

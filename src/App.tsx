@@ -10,6 +10,7 @@ import OnboardingRegion from './domain/onboarding/pages/OnboardingRegion.tsx';
 import OnboardingAvailability from './domain/onboarding/pages/OnboardingAvailability.tsx';
 import { AuthProvider } from '@/shared/auth/AuthContext.tsx';
 import { ToastProvider } from '@/shared/contexts/ToastContext';
+import { AlertProvider } from '@/shared/contexts/AlertContext';
 import RootLayout from './shared/layouts/RootLayout.tsx';
 import OnboardingStudentLesson from './domain/onboarding/pages/OnboardingStudentLesson.tsx';
 import OnboardingStudentRegion from './domain/onboarding/pages/OnboardingStudentRegion.tsx';
@@ -23,6 +24,7 @@ import ContractRequestFormPage from './domain/booking/pages/ContractRequestFormP
 import LessonBookingPage from './domain/booking/pages/LessonBookingPage.tsx';
 import MyTutorsPage from './domain/contract/pages/MyTutorsPage.tsx';
 import MyStudentsPage from './domain/contract/pages/MyStudentsPage.tsx';
+import ContractEditPage from './domain/contract/pages/ContractEditPage.tsx';
 
 // React Query 클라이언트 생성
 const queryClient = new QueryClient({
@@ -40,37 +42,46 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <ToastProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route element={<RootLayout />}>
-                <Route path="/auth/login" element={<LoginPage />} />
-                <Route path="/" element={<HomePage />} />
-                <Route path="/mypage" element={<MyPage />} />
-                <Route path="/find/lessons" element={<TutorSearchPage />} />
-                <Route path="/tutors/:tutorId/booking" element={<TutorDetailPage />} />
-                <Route
-                  path="/tutors/:tutorId/lesson-booking"
-                  element={<ContractRequestFormPage />}
-                />
-                <Route path="/tutors/:tutorId" element={<TutorDetailPage />} />
-                <Route path="/student/my/lessons" element={<LessonStudentPage />} />
-                <Route path="/student/my/tutors" element={<MyTutorsPage />} />
-                <Route path="/student/booking/lesson" element={<LessonBookingPage />} />
-                <Route path="/tutor/my/lessons" element={<LessonManageLayout />} />
-                <Route path="/tutor/schedule" element={<ScheduleManagePage />} />
-                <Route path="/tutor/my/students" element={<MyStudentsPage />} />
-                <Route path="/onboarding" element={<OnboardingStart />} />
-                <Route path="/onboarding/student" element={<OnboardingStudentLesson />} />
-                <Route path="/onboarding/student/region" element={<OnboardingStudentRegion />} />
-                <Route path="/onboarding/tutor" element={<OnboardingTutor />} />
-                <Route path="/onboarding/tutor/lesson" element={<OnboardingLesson />} />
-                <Route path="/onboarding/tutor/region" element={<OnboardingRegion />} />
-                <Route path="/onboarding/tutor/availability" element={<OnboardingAvailability />} />
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Route>
-            </Routes>
-            <BottomTabBar />
-          </BrowserRouter>
+          <AlertProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route element={<RootLayout />}>
+                  <Route path="/auth/login" element={<LoginPage />} />
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/mypage" element={<MyPage />} />
+                  <Route path="/find/lessons" element={<TutorSearchPage />} />
+                  <Route path="/tutors/:tutorId/booking" element={<TutorDetailPage />} />
+                  <Route
+                    path="/tutors/:tutorId/lesson-booking"
+                    element={<ContractRequestFormPage />}
+                  />
+                  <Route path="/tutors/:tutorId" element={<TutorDetailPage />} />
+                  <Route path="/student/my/lessons" element={<LessonStudentPage />} />
+                  <Route path="/student/my/tutors" element={<MyTutorsPage />} />
+                  <Route
+                    path="/student/contracts/:contractNo/edit"
+                    element={<ContractEditPage />}
+                  />
+                  <Route path="/student/booking/lesson" element={<LessonBookingPage />} />
+                  <Route path="/tutor/my/lessons" element={<LessonManageLayout />} />
+                  <Route path="/tutor/schedule" element={<ScheduleManagePage />} />
+                  <Route path="/tutor/my/students" element={<MyStudentsPage />} />
+                  <Route path="/onboarding" element={<OnboardingStart />} />
+                  <Route path="/onboarding/student" element={<OnboardingStudentLesson />} />
+                  <Route path="/onboarding/student/region" element={<OnboardingStudentRegion />} />
+                  <Route path="/onboarding/tutor" element={<OnboardingTutor />} />
+                  <Route path="/onboarding/tutor/lesson" element={<OnboardingLesson />} />
+                  <Route path="/onboarding/tutor/region" element={<OnboardingRegion />} />
+                  <Route
+                    path="/onboarding/tutor/availability"
+                    element={<OnboardingAvailability />}
+                  />
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Route>
+              </Routes>
+              <BottomTabBar />
+            </BrowserRouter>
+          </AlertProvider>
         </ToastProvider>
       </AuthProvider>
     </QueryClientProvider>

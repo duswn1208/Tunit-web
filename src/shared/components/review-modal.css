@@ -1,0 +1,128 @@
+.review-modal {
+  padding: 24px;
+  width: 100%;
+  max-width: 500px;
+  background: white;
+  border-radius: 12px;
+}
+
+.review-modal__title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  color: #333;
+}
+
+.review-modal__info {
+  margin-bottom: 24px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.review-modal__tutor {
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+  margin: 0 0 4px 0;
+}
+
+.review-modal__date {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.review-modal__rating-section {
+  margin-bottom: 24px;
+}
+
+.review-modal__label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.review-modal__stars {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.review-modal__rating-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffd700;
+}
+
+.review-modal__content-section {
+  margin-bottom: 24px;
+}
+
+.review-modal__textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.2s;
+}
+
+.review-modal__textarea:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.review-modal__textarea::placeholder {
+  color: #999;
+}
+
+.review-modal__char-count {
+  text-align: right;
+  font-size: 12px;
+  color: #999;
+  margin-top: 4px;
+}
+
+.review-modal__buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.review-modal__button {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.review-modal__button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.review-modal__button--cancel {
+  background: #f1f3f5;
+  color: #495057;
+}
+
+.review-modal__button--cancel:hover:not(:disabled) {
+  background: #e9ecef;
+}
+
+.review-modal__button--submit {
+  background: #007bff;
+  color: white;
+}
+
+.review-modal__button--submit:hover:not(:disabled) {
+  background: #0056b3;
+}

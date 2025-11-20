@@ -20,6 +20,13 @@ export async function requestContract(data: ContractRequestDto) {
   return await api.post('/api/contracts', data);
 }
 
+export async function updateContract(
+  contractNo: number,
+  data: Omit<ContractRequestDto, 'tutorProfileNo' | 'contractType' | 'lessonCount'>
+) {
+  return await api.put(`/api/contracts/${contractNo}`, data);
+}
+
 // 단일 레슨 예약 (FIRSTCOME 계약용)
 export interface LessonBookingDto {
   contractNo: number;

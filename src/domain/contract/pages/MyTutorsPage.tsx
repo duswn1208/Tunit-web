@@ -58,10 +58,10 @@ export default function MyTutorsPage() {
   }, [error, showToast]);
 
   useEffect(() => {
-    if (!data) {
+    if (!isLoading && !data) {
       showToast('연결된 튜터가 없습니다.', 'info');
     }
-  }, [data, showToast]);
+  }, [isLoading, data, showToast]);
 
   return (
     <div className="my-tutors-page">

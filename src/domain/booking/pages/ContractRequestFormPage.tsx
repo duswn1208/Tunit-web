@@ -11,7 +11,6 @@ export default function ContractRequestFormPage() {
   const tutorInfo = location.state?.tutor || null;
   const tutorProfileNo = tutorInfo.tutorProfileNo;
 
-  console.log('tutorInfo:', tutorInfo);
   const contractType = toContractType(type);
   return (
     <ContractRequestForm
