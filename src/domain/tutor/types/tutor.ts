@@ -29,3 +29,32 @@ export interface TutorDetailResponse {
 export interface TutorDetailRequest {
   tutorId: string;
 }
+
+// 후기 관련 타입
+export interface Review {
+  reviewNo: number;
+  studentName: string;
+  rating: number;
+  content: string;
+  createdAt: string;
+}
+
+export interface PageInfo {
+  currentPage: number;
+  pageSize: number;
+  totalElements: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrevious: boolean;
+}
+
+export interface ReviewsResponse {
+  summary: {
+    totalCount: number;
+    averageRating: number;
+  };
+  reviews: {
+    content: Review[];
+    pageInfo: PageInfo;
+  };
+}

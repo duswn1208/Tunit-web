@@ -107,7 +107,9 @@ export default function TutorDetailPage() {
           {selectedTab === '레슨시간' && (
             <TutorScheduleInfo scheduleData={data.tutorAvailableTimeList} />
           )}
-          {selectedTab === '레슨후기' && <TutorReviewSection />}
+          {selectedTab === '레슨후기' && (
+            <TutorReviewSection tutorId={parseInt(tutorProfileNo, 10)} />
+          )}
           {selectedTab === 'Q&A' && <TutorQnaSection />}
         </div>
         {/* 모바일: 하단 플로팅 버튼 */}
