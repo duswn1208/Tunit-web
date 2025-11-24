@@ -1,5 +1,6 @@
 import { api } from '@/shared/lib/api.ts';
 import type { ReviewsResponse } from '../types/tutor';
+import type { TutorDetail } from './types';
 
 export type TutorDetailResponse = {
   tutorProfileNo: number;
@@ -34,8 +35,8 @@ export type TutorDetailResponse = {
   }[];
 };
 
-export async function fetchTutorDetail(tutorId: number): Promise<TutorDetailResponse> {
-  return api.get<TutorDetailResponse>(`/api/tutors/${tutorId}`);
+export async function fetchTutorDetail(tutorId: number): Promise<TutorDetail> {
+  return api.get<TutorDetail>(`/api/tutors/${tutorId}`);
 }
 
 export async function fetchTutorReviews(

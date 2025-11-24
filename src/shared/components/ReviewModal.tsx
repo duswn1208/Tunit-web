@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Modal from './Modal';
 import { StarRating } from './StarRating';
 import './review-modal.css';
+import { useToast } from '../contexts/ToastContext';
 
 interface ReviewModalProps {
   isOpen: boolean;
@@ -24,6 +25,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
   tutorName,
   lessonDate,
 }) => {
+  const { showToast } = useToast();
   const [rating, setRating] = useState(5);
   const [content, setContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -41,7 +43,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
       setContent('');
       onClose();
     } catch (error) {
-      console.error('후기 작성 실패:', error);
+      showToast(error?.message || '후기 작성에 실패했습니다.', 'error');
     } finally {
       setIsSubmitting(false);
     }

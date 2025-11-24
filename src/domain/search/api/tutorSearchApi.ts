@@ -1,5 +1,5 @@
+import type { TutorProfile } from '@/domain/tutor/api/types.ts';
 import { api } from '../../../shared/lib/api.ts';
-import type { TutorProfile } from '../components/TutorProfileCard';
 
 export interface TutorSearchParams {
   regionCodes?: string[];

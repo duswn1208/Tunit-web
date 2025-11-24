@@ -2,7 +2,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import Chip from '@/shared/components/Chip.tsx';
 import type { TutorDetail } from '../../tutor/api/types.ts';
-import { Button } from '@/shared/components';
+import { useNavigate } from 'react-router-dom';
+import Button from '@/shared/components/Button.tsx';
 
 interface TutorProfileCardProps {
   tutor: TutorDetail;
@@ -11,7 +12,12 @@ interface TutorProfileCardProps {
 }
 
 export function TutorProfileCard({ tutor, variant = 'full', isMobile }: TutorProfileCardProps) {
-  console.log('TutorProfileCard render', { tutor });
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/tutors/${tutor.tutorProfileNo}`);
+  };
+  console.log('TutorProfileCard render', { tutor, variant, isMobile });
   return (
     <div className="tutor-profile info-card" style={{ position: 'relative' }}>
       {/* 데스크탑: 프로필 카드 우측 상단 버튼 */}
@@ -40,16 +46,20 @@ export function TutorProfileCard({ tutor, variant = 'full', isMobile }: TutorPro
           </Button>
         </div>
       )}
-      <div className="tutor-profile-header">
+      <div className="tutor-profile-header" onClick={handleClick}>
         {tutor.photoUrl ? (
-          <img src={tutor.photoUrl} alt={tutor.nickname || '튜터'} className="tutor-avatar" />
+          <img
+            src={tutor.photoUrl}
+            alt={tutor.userInfo?.nickname || '튜터'}
+            className="tutor-avatar"
+          />
         ) : (
           <div className="tutor-avatar-placeholder">
             <FontAwesomeIcon icon={faUser} className="text-4xl text-gray-500" />
           </div>
         )}
         <div className="tutor-info">
-          <h1 className="tutor-name">{tutor.nickname || '튜터'}</h1>
+          <h1 className="tutor-name">{tutor.userInfo?.nickname || '튜터'}</h1>
           {variant === 'full' && tutor.introduce && (
             <div className="tutor-intro">{tutor.introduce}</div>
           )}

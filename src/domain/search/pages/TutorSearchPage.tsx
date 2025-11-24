@@ -1,12 +1,12 @@
 import '../css/tutor-search.css';
 import TutorProfileList from '../../profile/components/TutorProfileList.tsx';
-import type { TutorProfile } from '../components/TutorProfileCard';
 import { fetchTutors } from '../api/tutorSearchApi';
 import Header from '@/shared/components/Header';
 import { TutorFilterBar } from '../components/TutorFilterBar';
 import { useEffect, useState } from 'react';
 import { api } from '../../../shared/lib/api.ts';
 import type { StudentRegion } from '../../region/types/student.ts';
+import type { TutorProfile } from '@/domain/tutor/api/types.ts';
 
 // 학생 프로필 응답 타입 정의
 export interface StudentProfileResponse {
@@ -61,6 +61,7 @@ export default function TutorSearchPage() {
   if (loading) {
     return <div>로딩 중...</div>;
   }
+
   return (
     <div>
       <Header title="튜터 찾기" />

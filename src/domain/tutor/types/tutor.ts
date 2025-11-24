@@ -1,4 +1,4 @@
-import type { TutorProfile } from '@/domain/search/components/TutorProfileCard';
+import type { TutorProfile } from '../api/types';
 
 interface LessonCategory {
   code: string;

@@ -1,4 +1,5 @@
-import { TutorProfileCard, type TutorProfile } from '../../search/components/TutorProfileCard.tsx';
+import type { TutorProfile } from '@/domain/tutor/api/types';
+import { TutorProfileCard } from './TutorProfileCard';
 
 export default function TutorProfileList({ tutors }: { tutors: TutorProfile[] }) {
   return (

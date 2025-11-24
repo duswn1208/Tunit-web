@@ -90,11 +90,7 @@ export default function TutorDetailPage() {
   return (
     <div className="tutor-detail-page">
       <div className="tutor-detail-container">
-        <TutorProfileCard
-          tutor={{ ...data, tutorId: parseInt(tutorProfileNo!, 10) }}
-          variant="full"
-          isMobile={isMobile}
-        />
+        <TutorProfileCard tutor={data} variant="full" isMobile={isMobile} />
       </div>
 
       <Tab tabs={tabList} selected={selectedTab} onSelect={setSelectedTab} />
