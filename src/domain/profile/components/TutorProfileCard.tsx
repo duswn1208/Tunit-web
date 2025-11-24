@@ -11,6 +11,7 @@ interface TutorProfileCardProps {
 }
 
 export function TutorProfileCard({ tutor, variant = 'full', isMobile }: TutorProfileCardProps) {
+  console.log('TutorProfileCard render', { tutor });
   return (
     <div className="tutor-profile info-card" style={{ position: 'relative' }}>
       {/* 데스크탑: 프로필 카드 우측 상단 버튼 */}
