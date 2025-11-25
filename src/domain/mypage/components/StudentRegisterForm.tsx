@@ -1,16 +1,16 @@
 import SelectBox from '@/shared/components/SelectBox';
 import { useState, useEffect, useRef } from 'react';
-import FormField from '@/shared/components/FormField';
 import Button from '@/shared/components/Button';
-import DayChips from '@/domain/dayTime/components/DayChips';
 import { api } from '../../../shared/lib/api.ts';
 import {
   fetchLessonCategories,
   type TutorLessonsCategory,
 } from '@/domain/lesson/api/categoryApi.ts';
 import { RadioGroup } from '../../../shared/components';
-import { LessonStatus, LessonType } from '@/domain/lesson/types/lesson';
 import type { DayOfWeekNumber } from '@/shared/constants/date.ts';
+import { CONTRACT_TYPES } from '@/domain/booking/types/types.ts';
+import type { ContractTypeCode } from '@/domain/contract/types/contract.ts';
+import './StudentRegister.css';
 
 interface StudentForm {
   studentName: string;
@@ -19,9 +19,9 @@ interface StudentForm {
   firstLessonDate: string;
   startTime: string;
   dayOfWeekSet: Set<DayOfWeekNumber>;
-  reservationStatus: LessonStatus;
+  reservationStatus: string;
   lessonDate: string;
-  lessonType: LessonType;
+  contractType: ContractTypeCode;
   memo?: string;
 }
 
@@ -57,8 +57,8 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
     startTime: '',
     dayOfWeekSet: new Set<DayOfWeekNumber>(),
     lessonDate: getToday(),
-    lessonType: LessonType.SINGLE,
-    reservationStatus: LessonStatus.REQUESTED,
+    contractType: CONTRACT_TYPES.TRIAL,
+    reservationStatus: 'REQUESTED',
     memo: '',
   });
 
@@ -67,24 +67,17 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleDayToggle = (d: DayOfWeekNumber) => {
-    setForm((prev) => {
-      const next = new Set(prev.dayOfWeekSet);
-      if (next.has(d)) next.delete(d);
-      else next.add(d);
-      return { ...prev, dayOfWeekSet: next };
-    });
-  };
-
   const handleRegister = async () => {
     try {
       //memo 추가
       setForm((prev) => ({ ...prev, memo: memoRef.current?.value || '' }));
 
       const uri =
-        form.lessonType === LessonType.SINGLE ? '/api/lessons/reserve' : '/api/fixed-lessons/save';
+        form.contractType === CONTRACT_TYPES.TRIAL
+          ? '/api/lessons/reserve'
+          : '/api/fixed-lessons/save';
       const payload =
-        form.lessonType === LessonType.SINGLE
+        form.contractType === CONTRACT_TYPES.TRIAL
           ? { ...form }
           : {
               ...form,
@@ -103,7 +96,7 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
           dayOfWeekSet: new Set<DayOfWeekNumber>(),
           reservationStatus: 'REQUESTED',
           lessonDate: '',
-          lessonType: 'single',
+          contractType: CONTRACT_TYPES.TRIAL,
         });
       });
 
@@ -115,39 +108,33 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
 
   return (
     <div className="student-register-form">
-      <div className="student-register-fields">
-        <FormField label="레슨 유형" htmlFor="lessonType" required>
+      <div className="student-register-form-fields">
+        <div className="form-field">
+          <label htmlFor="ContractType">
+            레슨 유형<span className="required-mark">*</span>
+          </label>
           <RadioGroup
-            name="lessonType"
+            name="ContractType"
             defaultValue="single"
             onChange={(value: string) =>
-              setForm((prev) => ({ ...prev, lessonType: value as LessonType }))
+              setForm((prev) => ({ ...prev, contractType: value as ContractTypeCode }))
             }
             options={[
-              { label: '일회성 레슨', value: LessonType.SINGLE },
-              { label: '고정 레슨', value: LessonType.FIXED },
+              { label: '상담/체험 레슨', value: CONTRACT_TYPES.TRIAL },
+              { label: '정규 레슨', value: CONTRACT_TYPES.REGULAR },
+              { label: '선착순 레슨', value: CONTRACT_TYPES.FIRSTCOME },
             ]}
           />
-        </FormField>
-        <FormField label="레슨 유형" htmlFor="reservationStatus" required>
-          <RadioGroup
-            name="reservationStatus"
-            defaultValue={form.reservationStatus}
-            onChange={(value: string) =>
-              setForm((prev) => ({ ...prev, reservationStatus: value as LessonStatus }))
-            }
-            options={[
-              { label: '레슨 신청', value: 'REQUESTED' },
-              { label: '상담/체험레슨 신청', value: 'REQUESTED' },
-            ]}
-          />
-        </FormField>
-        <FormField label="레슨명" htmlFor="lesson" required>
+        </div>
+        <div className="form-field">
+          <label htmlFor="lesson">
+            레슨<span className="required-mark">*</span>
+          </label>
           {loadingCategories ? (
             <div style={{ padding: '8px 0' }}>레슨명 불러오는 중...</div>
           ) : categoryError ? (
             <div style={{ color: 'red', padding: '8px 0' }}>
-              레슨명 불러오기 실패: {categoryError}
+              레슨 불러오기 실패: {categoryError}
             </div>
           ) : (
             <SelectBox
@@ -159,32 +146,33 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
                 label: cat.lessonCategory.label,
               }))}
               onChange={(value) => setForm((prev) => ({ ...prev, lesson: value }))}
-              placeholder="레슨명 선택"
+              placeholder="레슨 선택"
               className="ui-input"
             />
           )}
-        </FormField>
-        <FormField label="학생 이름" htmlFor="studentName" required>
+        </div>
+        <div className="student-register-inline-fields">
           <input
             id="studentName"
             name="studentName"
             value={form.studentName}
             onChange={handleChange}
             placeholder="학생 이름"
-            className="ui-input"
+            className="student-name-input ui-input"
           />
-        </FormField>
-        <FormField label="전화번호" htmlFor="phone" required>
           <input
             id="phone"
             name="phone"
             value={form.phone}
             onChange={handleChange}
             placeholder="전화번호"
-            className="ui-input"
+            className="student-phone-input ui-input"
           />
-        </FormField>
-        <FormField label="레슨일" htmlFor="lessonDate" required>
+        </div>
+        <div className="form-field">
+          <label htmlFor="lessonDate">
+            레슨일<span className="required-mark">*</span>
+          </label>
           <input
             id="lessonDate"
             name="lessonDate"
@@ -192,15 +180,17 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
             readOnly
             className="ui-input"
           />
-        </FormField>
-
-        {form.lessonType === 'fixed' && (
-          <FormField label="요일" required>
+        </div>
+        {/*
+        {form.contractType === CONTRACT_TYPES.REGULAR && (
+          <div className="form-field">
+            <label>요일<span className="required-mark">*</span></label>
             <DayChips multi={true} selected={form.dayOfWeekSet} onToggle={handleDayToggle} />
-          </FormField>
+          </div>
         )}
-
-        <FormField label="메모" htmlFor="memo">
+        */}
+        <div className="form-field">
+          <label htmlFor="memo">메모</label>
           <textarea
             id="memo"
             name="memo"
@@ -209,8 +199,7 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
             placeholder="해당 레슨에 대해 기억해야 할 내용이 있으면 적어주세요"
             className="ui-textarea"
           />
-        </FormField>
-
+        </div>
         <Button onClick={handleRegister}>등록</Button>
       </div>
     </div>

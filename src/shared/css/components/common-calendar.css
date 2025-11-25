@@ -28,7 +28,7 @@
 
 .rbc-day-bg {
   text-align: center;
-  height: 60px;
+  /* height: 60px; */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

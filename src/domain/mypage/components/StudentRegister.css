@@ -48,3 +48,68 @@
   flex-direction: column;
   gap: 12px;
 }
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-field label {
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.form-field .required-mark {
+  color: #e53935;
+}
+
+.student-register-inline-wrapper {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.student-register-inline-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.student-register-inline-label:first-child {
+  flex: 2;
+}
+
+.student-register-inline-label:last-child {
+  flex: 3;
+}
+
+.student-register-inline-label .required-mark {
+  color: #e53935;
+}
+
+.student-register-inline-fields {
+  display: flex;
+  gap: 12px;
+}
+.student-register-inline-fields .student-name-input {
+  flex: 2;
+  min-width: 0;
+}
+.student-register-inline-fields .student-phone-input {
+  flex: 3;
+  min-width: 0;
+}
+@media (max-width: 600px) {
+  .student-register-inline-wrapper {
+    gap: 8px;
+  }
+  .student-register-inline-fields {
+    gap: 8px;
+  }
+}
