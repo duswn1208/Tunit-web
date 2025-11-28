@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../../../shared/lib/api.ts';
+import { HiUser, HiIdentification, HiCalendar, HiChatAlt2 } from 'react-icons/hi';
 
 export default function ProfileInfo() {
   const [profile, setProfile] = useState<any>(null);
@@ -11,23 +12,36 @@ export default function ProfileInfo() {
   if (!profile) return null;
 
   return (
-    <div style={{ marginBottom: 24, padding: 12, background: '#f8f8f8', borderRadius: 8 }}>
-      <div>
-        <b>역할</b> {profile.userRole.label}
+    <div className="bg-white rounded-xl shadow p-6 mb-4 max-w-lg mx-auto">
+      <div className="flex items-center gap-2 mb-4">
+        <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-600">
+          {profile.userRole.label}
+        </span>
+        <HiUser className="text-gray-400 text-lg" />
       </div>
-      <div>
-        <b>이름:</b> {profile.name}
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="flex items-center gap-2">
+          <HiIdentification className="text-gray-400 text-base" />
+          <span className="font-medium text-gray-700">{profile.name}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <HiChatAlt2 className="text-gray-400 text-base" />
+          <span className="text-gray-700">{profile.nickname}</span>
+        </div>
+        <div className="flex items-center gap-2 col-span-2">
+          <HiCalendar className="text-gray-400 text-base" />
+          <span className="text-gray-700">
+            가입일: {profile.createdAt ? profile.createdAt.split('T')[0] : '-'}
+          </span>
+        </div>
       </div>
+      <hr className="my-4" />
       <div>
-        <b>닉네임:</b> {profile.nickname}
+        <span className="block text-sm font-semibold text-gray-600 mb-2">소개</span>
+        <p className="text-gray-700 text-sm">
+          {profile?.tutorProfile?.introduce || '소개가 없습니다.'}
+        </p>
       </div>
-      <div>
-        <b>가입일:</b> {profile.createdAt ? profile.createdAt.split('T')[0] : '-'}
-      </div>
-      <div>
-        <b>소개:</b> {profile?.tutorProfile?.introduce || '소개가 없습니다.'}
-      </div>
-      {/* 필요한 프로필 정보 추가 */}
     </div>
   );
 }
