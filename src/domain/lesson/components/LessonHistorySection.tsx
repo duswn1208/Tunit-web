@@ -50,18 +50,20 @@ export default function LessonHistorySection() {
         </div>
       );
     }
+
     if (activeTab === 'past') {
-      const hideReview = ['CANCELED', 'EXPIRED'].includes(lesson.status.name);
+      const hideReviewBtn =
+        ['CANCELED', 'EXPIRED'].includes(lesson.status.name) || lesson.isReviewed;
       return (
         <div>
-          {!hideReview && (
+          {!hideReviewBtn && (
             <Button
               className="ui-btn ui-btn--accent mr-8"
               size="sm"
               onClick={() => {
                 setReviewModalData({
                   lessonReservationNo: lesson.lessonReservationNo,
-                  tutorName: lesson.tutorName || '튜터',
+                  tutorName: lesson.tutorInfo?.nickname || '',
                   lessonDate: lesson.lessonDate || '',
                 });
                 setReviewModalOpen(true);

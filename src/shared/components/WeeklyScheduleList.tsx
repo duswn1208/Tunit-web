@@ -1,3 +1,4 @@
+import { toAmPmFormat } from '@/domain/dayTime/lib/timeUtils';
 import { DAYS_OF_WEEK } from '@/shared/constants/date';
 import '@/shared/css/components/weekly-schedule-list.css';
 
@@ -18,7 +19,7 @@ export default function WeeklyScheduleList({
   scheduleData = [],
   renderTime = (schedule) => (
     <span className="schedule-time">
-      {schedule.startTime} - {schedule.endTime}
+      {toAmPmFormat(schedule.startTime)} - {toAmPmFormat(schedule.endTime)}
     </span>
   ),
   emptyText = '휴무',

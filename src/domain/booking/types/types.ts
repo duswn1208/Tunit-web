@@ -38,8 +38,8 @@ export function getContractTypeLabel(type: ContractType): string {
 export function getContractTypeLessonCount(type: ContractType, weekCount: number): number {
   switch (type) {
     case 'REGULAR':
-      return weekCount * 4; // 한 달 기준
     case 'FIRSTCOME':
+      return weekCount * 4; // 한 달 기준
     case 'TRIAL':
       return 1;
     default:

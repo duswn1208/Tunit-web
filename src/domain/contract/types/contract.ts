@@ -29,7 +29,18 @@ export const CONTRACT_STATUS_TRANSITIONS_STUDENT: Record<ContractStatusCode, Con
     TERMINATED: ['ACTIVE', 'END'],
     END: [],
   };
-
+// 상태 코드에 따른 한글 라벨
+export const getStatusLabel = (statusCode: ContractStatusCode): string => {
+  const labels: Record<ContractStatusCode, string> = {
+    REQUESTED: '요청',
+    APPROVED: '승인 및  결제요청',
+    ACTIVE: '확정',
+    CANCELLED: '취소',
+    TERMINATED: '중단',
+    END: '종료',
+  };
+  return labels[statusCode];
+};
 // 계약 상태
 export type ContractStatus = {
   code: ContractStatusCode;

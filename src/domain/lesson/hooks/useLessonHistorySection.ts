@@ -79,7 +79,6 @@ export function useLessonHistorySection() {
         tutorName,
         lessonDate,
         submit: async (data: { lessonReservationNo: number; rating: number; content: string }) => {
-          console.log('Review data to submit:', data);
           await submitReview(data);
           showToast('후기가 등록되었습니다.', 'success');
           setRefreshKey((k) => k + 1);

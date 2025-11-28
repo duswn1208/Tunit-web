@@ -34,6 +34,8 @@ export default function ContractRequestStep1({
 }: ContractRequestStep1Props) {
   // 총 횟수 및 금액 계산 (계약 유형에 따라)
   const totalLessons = getContractTypeLessonCount(contractType, lessonCount);
+  console.log(contractType, lessonCount);
+  console.log('totalLessons', totalLessons);
   const totalPrice = totalLessons * pricePerLesson;
 
   // 회차 옵션 (value를 string으로)

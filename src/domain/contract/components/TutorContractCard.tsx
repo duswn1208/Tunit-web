@@ -1,6 +1,6 @@
 import Chip from '@/shared/components/Chip';
 import type { Contract, ContractStatusCode, PaymentStatusCode } from '../types/contract';
-import { CONTRACT_STATUS_TRANSITIONS } from '../types/contract';
+import { CONTRACT_STATUS_TRANSITIONS, getStatusLabel } from '../types/contract';
 import '../css/my-tutors.css';
 import { useNavigate } from 'react-router-dom';
 import PaymentStatusAlert from './PaymentStatusAlert';
@@ -11,19 +11,6 @@ interface TutorContractCardProps {
   onStatusChange?: (contractNo: number, newStatus: ContractStatusCode) => void;
   onPaymentConfirm?: (contractNo: number, newPaymentStatus: PaymentStatusCode) => void;
 }
-
-// 상태 코드에 따른 한글 라벨
-const getStatusLabel = (statusCode: ContractStatusCode): string => {
-  const labels: Record<ContractStatusCode, string> = {
-    REQUESTED: '요청',
-    APPROVED: '승인 및  결제요청',
-    ACTIVE: '진행중',
-    CANCELLED: '취소',
-    TERMINATED: '중단',
-    END: '종료',
-  };
-  return labels[statusCode];
-};
 
 export default function TutorContractCard({
   contract,

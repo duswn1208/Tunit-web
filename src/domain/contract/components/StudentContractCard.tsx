@@ -1,6 +1,10 @@
 import Chip from '@/shared/components/Chip';
 import type { Contract } from '../types/contract';
-import { CONTRACT_STATUS_TRANSITIONS_STUDENT, type ContractStatusCode } from '../types/contract';
+import {
+  CONTRACT_STATUS_TRANSITIONS_STUDENT,
+  getStatusLabel,
+  type ContractStatusCode,
+} from '../types/contract';
 import '../css/my-tutors.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -81,16 +85,6 @@ export default function StudentContractCard({
   // 현재 상태에서 변경 가능한 상태들
   const availableStatuses = CONTRACT_STATUS_TRANSITIONS_STUDENT[contract.contractStatus.code] || [];
 
-  // 상태 레이블 매핑
-  const statusLabels: Record<ContractStatusCode, string> = {
-    REQUESTED: '요청',
-    APPROVED: '승인',
-    ACTIVE: '진행중',
-    CANCELLED: '취소',
-    TERMINATED: '중단',
-    END: '종료',
-  };
-
   return (
     <div className="tutor-card" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
       <div className="tutor-card-header">
@@ -150,15 +144,17 @@ export default function StudentContractCard({
               className="status-change-btn"
               onClick={() => handleStatusChange(status)}
             >
-              {statusLabels[status]}
+              {getStatusLabel(status)}
             </button>
           ))}
           <button className="tutor-card-top-button" onClick={handleLessonManage}>
             레슨 관리
           </button>
-          <button className="tutor-card-top-button" onClick={handleChangeContractType}>
-            정규/선착순 레슨 등록
-          </button>
+          {contract.contractType.code === 'TRIAL' && (
+            <button className="tutor-card-top-button" onClick={handleChangeContractType}>
+              정규/선착순 레슨 등록
+            </button>
+          )}
         </div>
       )}
     </div>

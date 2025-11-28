@@ -24,28 +24,60 @@ export default function ContractRequestStep4({
   const [agreed, setAgreed] = useState(false);
 
   return (
-    <div>
-      <div style={{ fontWeight: 500, marginBottom: 8 }}>모든 정보가 맞는지 확인해 주세요.</div>
-      <div style={{ background: '#f8f8fa', borderRadius: 10, padding: 16, marginBottom: 16 }}>
-        <ul style={{ padding: 0, margin: 0, listStyle: 'none', fontSize: 15 }}>
+    <div className="max-w-lg mx-auto p-4">
+      <div
+        className="font-semibold text-lg mb-3 flex items-center gap-2"
+        style={{ color: 'var(--text-primary)' }}
+      >
+        <span role="img" aria-label="bear">
+          🐻
+        </span>
+        모든 정보가 맞는지 확인해 주세요.
+      </div>
+      <div className="bg-white rounded-2xl shadow-md p-5 mb-5">
+        <ul className="list-none text-base space-y-2">
           <li>
-            <b>레슨 유형:</b> {getContractTypeLabel(step1?.contractType)}
+            <span className="font-bold" style={{ color: 'var(--brand-red)' }}>
+              🎀 레슨 유형:
+            </span>
+            <span style={{ color: 'var(--text-secondary)' }}>
+              {' '}
+              {getContractTypeLabel(step1?.contractType)}
+            </span>
           </li>
-          {/* 체험 레슨이 아닐 때만 레슨 패키지 표시 */}
           {!isTrial(step1?.contractType) && (
             <li>
-              <b>레슨 패키지:</b> {step1?.weekCount ? `주 ${step1.weekCount}회` : '-'} / 총{' '}
-              {step1?.lessonCount || '-'}회
+              <span className="font-bold" style={{ color: 'var(--brand-red)' }}>
+                📦 레슨 패키지:
+              </span>
+              <span style={{ color: 'var(--text-secondary)' }}>
+                {' '}
+                {step1?.weekCount ? `주 ${step1.weekCount}회` : '-'} / 총{' '}
+                {step1?.lessonCount || '-'}회
+              </span>
             </li>
           )}
           <li>
-            <b>레슨 과목:</b> {step1?.lessonCategory ? step1.lessonCategory.label : '-'}
+            <span className="font-bold" style={{ color: 'var(--brand-red)' }}>
+              📚 레슨 과목:
+            </span>
+            <span style={{ color: 'var(--text-secondary)' }}>
+              {' '}
+              {step1?.lessonCategory ? step1.lessonCategory.label : '-'}
+            </span>
           </li>
           <li>
-            <b>희망 장소:</b> {(step1?.place || '-') + '(튜터에 의해 변경될 수 있어요)'}
+            <span className="font-bold" style={{ color: 'var(--brand-red)' }}>
+              🏠 희망 장소:
+            </span>
+            <span style={{ color: 'var(--text-secondary)' }}>
+              {' '}
+              {(step1?.place || '-') + ' (튜터에 의해 변경될 수 있어요)'}
+            </span>
           </li>
-          <li>레슨 일정:</li>
-          {/* 첫 번째 slot 기준 안내 - 정기레슨만 */}
+          <li className="font-bold" style={{ color: 'var(--brand-red)' }}>
+            🗓️ 레슨 일정:
+          </li>
           {isRegular(step1?.contractType) &&
             step2?.lessonDtList?.length > 0 &&
             (() => {
@@ -56,7 +88,7 @@ export default function ContractRequestStep4({
               ) as import('@/shared/constants/date').DayOfWeekNumber;
               const dayLabel = getDayLabel(dayNum);
               return (
-                <div style={{ color: '#e14a4a', fontWeight: 600, margin: '4px 0 8px 16px' }}>
+                <div className="font-semibold ml-4 my-2" style={{ color: 'var(--brand-red)' }}>
                   ※ 매주 {dayLabel}요일 {first.time}에 진행됩니다
                 </div>
               );
@@ -66,46 +98,69 @@ export default function ContractRequestStep4({
             (() => {
               const first = step2.lessonDtList[0];
               const formattedDate = toKoreanDateTime(first);
-
               return (
-                <div style={{ color: '#e14a4a', fontWeight: 600, margin: '4px 0 8px 16px' }}>
+                <div className="font-semibold ml-4 my-2" style={{ color: 'var(--brand-red)' }}>
                   ※ {formattedDate}에 진행됩니다
                 </div>
               );
             })()}
-          <ul style={{ marginLeft: 16 }}>
+          <ul className="ml-4 space-y-1">
             {step2?.slots?.map((s: any, i: number) => (
-              <li key={i}>
+              <li
+                key={i}
+                className="flex items-center gap-1"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                <span role="img" aria-label="clock">
+                  ⏰
+                </span>{' '}
                 {s.day} {s.time}
               </li>
             ))}
           </ul>
           {isFirstcome(step1?.contractType) && (
-            <div style={{ color: '#888', fontSize: 14, margin: '8px 0 0 16px' }}>
-              선착순 신청은 매달 마지막일부터 다음달 레슨을 신청할 수 있습니다.
+            <div className="text-sm ml-4 mt-2" style={{ color: 'var(--text-muted)' }}>
+              선착순 신청은 매주 일요일부터 다음주 레슨을 신청할 수 있습니다.
             </div>
           )}
-          <li>실력: {step3?.level}</li>
-          <li>목표/요청: {step3?.memo}</li>
-          <li>비상 연락처: {step3?.emergencyContact}</li>
+          <li>
+            <span className="font-bold" style={{ color: 'var(--brand-red)' }}>
+              💪 실력:
+            </span>
+            <span style={{ color: 'var(--text-secondary)' }}> {step3?.level}</span>
+          </li>
+          <li>
+            <span className="font-bold" style={{ color: 'var(--brand-red)' }}>
+              🎯 목표/요청:
+            </span>
+            <span style={{ color: 'var(--text-secondary)' }}> {step3?.memo}</span>
+          </li>
+          <li>
+            <span className="font-bold" style={{ color: 'var(--brand-red)' }}>
+              📞 비상 연락처:
+            </span>
+            <span style={{ color: 'var(--text-secondary)' }}> {step3?.emergencyContact}</span>
+          </li>
         </ul>
       </div>
-      <div style={{ fontWeight: 700, fontSize: 18, color: '#e14a4a', marginBottom: 12 }}>
+      <div className="font-bold text-xl mb-4 text-center" style={{ color: 'var(--brand-red)' }}>
         총 견적 금액: {totalPrice.toLocaleString()}원
       </div>
-      <label style={{ display: 'flex', alignItems: 'center', marginBottom: 20, fontSize: 15 }}>
+      <label className="flex items-center mb-6 text-base gap-2">
         <input
           type="checkbox"
           checked={agreed}
           onChange={(e) => setAgreed(e.target.checked)}
-          style={{ marginRight: 8 }}
+          className="w-5 h-5 rounded-full border-2 mr-2"
+          style={{ accentColor: 'var(--brand-red)', borderColor: 'var(--brand-red)' }}
         />
         <span>
           <a
             href="/terms"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: '#e14a4a', textDecoration: 'underline' }}
+            className="underline font-semibold"
+            style={{ color: 'var(--brand-red)' }}
           >
             이용 약관
           </a>{' '}
@@ -114,7 +169,8 @@ export default function ContractRequestStep4({
             href="/privacy"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: '#e14a4a', textDecoration: 'underline' }}
+            className="underline font-semibold"
+            style={{ color: 'var(--brand-red)' }}
           >
             개인정보 처리방침
           </a>
