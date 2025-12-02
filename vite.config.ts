@@ -15,13 +15,13 @@ export default defineConfig({
     proxy: {
       // API 호출을 백엔드로 프록시
       '/api': {
-        // target: 'http://localhost:8080',
-        target: 'http://172.21.25.92:8080',
+        target: 'http://localhost:8080',
+        // target: 'http://172.21.25.92:8080',
         changeOrigin: true,
       },
       '/login': {
-        // target: 'http://localhost:8080',
-        target: 'http://172.21.25.92:8080',
+        target: 'http://localhost:8080',
+        // target: 'http://172.21.25.92:8080',
         changeOrigin: true,
       },
     },

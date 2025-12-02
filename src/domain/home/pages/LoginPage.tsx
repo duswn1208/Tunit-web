@@ -1,16 +1,13 @@
 import { useLocation } from 'react-router-dom';
-import { useToast } from '@/shared/contexts/ToastContext';
 import '../css/login.css';
 
 export default function LoginPage() {
   const location = useLocation();
   const from = location.state?.from || '/';
-  const { showToast } = useToast();
 
-  const naverLogin = async () => {
-    // 로그인 후 리다이렉트 경로를 state로 전달
+  const handleSocialLogin = (provider: 'naver' | 'kakao' | 'google' | 'apple') => {
     const redirectUri = encodeURIComponent(from);
-    window.location.href = `http://localhost:8080/oauth2/authorization/naver?redirect_uri=${redirectUri}`;
+    window.location.href = `http://localhost:8080/oauth2/authorization/${provider}?redirect_uri=${redirectUri}`;
   };
 
   return (
@@ -33,21 +30,24 @@ export default function LoginPage() {
 
       {/* 소셜 로그인 버튼 */}
       <div className="social-login-buttons">
-        <button onClick={naverLogin} className="social-login-button naver-login-button">
+        <button
+          onClick={() => handleSocialLogin('naver')}
+          className="social-login-button naver-login-button"
+        >
           <img src="/images/naver_login_icon.png" alt="Naver Icon" />
           네이버로 3초 만에 시작하기
         </button>
 
         <button
-          onClick={() => showToast('카카오 로그인은 곧 지원될 예정이에요!', 'info')}
+          onClick={() => handleSocialLogin('kakao')}
           className="social-login-button kakao-login-button"
         >
-          <img src="/images/kakao-icon.png" alt="Kakao Icon" />
+          <img src="/images/kakao_login_icon.png" alt="Kakao Icon" />
           카카오로 시작하기
         </button>
 
         <button
-          onClick={() => showToast('구글 로그인은 곧 지원될 예정이에요!', 'info')}
+          onClick={() => handleSocialLogin('google')}
           className="social-login-button google-login-button"
         >
           <img src="/images/google-icon.png" alt="Google Icon" />
@@ -55,7 +55,7 @@ export default function LoginPage() {
         </button>
 
         <button
-          onClick={() => showToast('애플 로그인은 곧 지원될 예정이에요!', 'info')}
+          onClick={() => handleSocialLogin('apple')}
           className="social-login-button apple-login-button"
         >
           <img src="/images/apple-icon.png" alt="Apple Icon" />
