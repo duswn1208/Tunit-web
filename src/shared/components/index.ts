@@ -4,3 +4,5 @@ export { default as FormField } from './FormField.tsx';
 export { default as RadioGroup } from './RadioGroup.tsx';
 export { default as ChipList } from './ChipList.tsx';
 export { default as Alert } from './Alert.tsx';
+
+export { default as NotificationBell } from './NotificationBell.tsx';

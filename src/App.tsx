@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import HomePage from './domain/home/pages/HomePage.tsx';
+import './shared/lib/firebase'; // Firebase 연동 테스트용 import
 import LoginPage from './domain/home/pages/LoginPage.tsx';
 import MyPage from './domain/mypage/pages/MyPage.tsx';
 import OnboardingStart from './domain/onboarding/pages/OnboardingStart.tsx';

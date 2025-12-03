@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '@/shared/css/layouts/header.css';
 import { useAuth } from '@/shared/auth/AuthContext.tsx';
+import { NotificationBell } from '@/shared/components';
 
 export default function RootHeaderBase({ nav }: { nav: React.ReactNode }) {
   const { user, loading, logout } = useAuth();
@@ -20,6 +21,7 @@ export default function RootHeaderBase({ nav }: { nav: React.ReactNode }) {
       setOpen(false);
     }, 300);
   };
+
   return (
     <header className="app-header">
       <div className="app-header__inner">
@@ -32,6 +34,7 @@ export default function RootHeaderBase({ nav }: { nav: React.ReactNode }) {
             <>
               {user?.userRole ? (
                 <div className="user">
+                  <NotificationBell />
                   <button className="avatar" onClick={() => setOpen(!open)}>
                     {user.nickname ?? user.name}
                   </button>

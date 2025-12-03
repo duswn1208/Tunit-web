@@ -1,3 +1,22 @@
+.notification-bell {
+  position: relative;
+  display: inline-block;
+  margin-right: 16px;
+  font-size: 22px;
+  cursor: pointer;
+}
+.notification-count {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background: #ff5252;
+  color: #fff;
+  border-radius: 50%;
+  padding: 2px 7px;
+  font-size: 12px;
+  font-weight: bold;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
 /* src/components/header.css */
 .app-header {
   position: sticky;
