@@ -34,8 +34,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       .finally(() => setLoading(false));
   }, []);
 
-  console.log('Current User:', user);
-
   // 로그인 후, 알림 권한이 허용된 경우에만 FCM 토큰 요청
   useEffect(() => {
     if (!user) return;

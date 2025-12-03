@@ -27,8 +27,6 @@ if (typeof window !== 'undefined') {
   isSupported().then((supported) => {
     if (supported) {
       analytics = getAnalytics(app);
-      // 연동 테스트용: 앱 이름 출력
-      console.log('Firebase App Name:', app);
     }
   });
 }
