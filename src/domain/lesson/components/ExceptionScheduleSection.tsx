@@ -290,7 +290,7 @@ export default function ExceptionScheduleSection() {
                   >
                     <div>
                       <div className="exception-schedule-section__holiday-date">
-                        {holiday.endDate
+                        {holiday?.endDate
                           ? `${formatDate(holiday.date)} ~ ${formatDate(holiday.endDate)}`
                           : formatDate(holiday.date)}
                         {holiday.type && (

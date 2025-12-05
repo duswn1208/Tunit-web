@@ -5,6 +5,9 @@ import '../css/my-tutors.css';
 import { useNavigate } from 'react-router-dom';
 import PaymentStatusAlert from './PaymentStatusAlert';
 import { useState } from 'react';
+import { toAmPmFormat } from '@/domain/dayTime/lib/timeUtils';
+import { getDayLabel } from '@/shared/constants/date';
+import { isFirstcome } from '@/domain/booking/types/types';
 
 interface TutorContractCardProps {
   contract: Contract;
@@ -54,16 +57,19 @@ export default function TutorContractCard({
       <div className="tutor-card-header">
         <div className="tutor-card-content">
           <div className="tutor-card-title-row">
-            <h3 className="tutor-card-title">{contract.lessonName}</h3>
+            <h3 className="tutor-card-title">
+              {contract.studentName} 학생, {contract.lessonName}
+            </h3>
             <Chip label={contract.contractStatus.label} />
           </div>
-          <p className="tutor-card-location">
-            {contract.place ?? '지정 장소'} | {contract.dayOfWeek} {contract.startTime}
-          </p>
+          <p className="tutor-card-location">{contract.place ?? '지정 장소'}</p>
         </div>
       </div>
       <div className="tutor-card-date">
-        {contract.startDt} ~ {contract.endDt ?? '진행 중'}
+        {contract.startDt} ~ {contract.endDt ?? '진행 중'} |{' '}
+        {!isFirstcome(contract.contractStatus.code) &&
+          `매주 ${getDayLabel(contract.dayOfWeekNum)}요일 `}
+        {toAmPmFormat(contract.startTime)}
       </div>
       <div className="tutor-card-lessons">
         레슨: 주 {contract.weekCount}회 | 총 {contract.lessonCount}회

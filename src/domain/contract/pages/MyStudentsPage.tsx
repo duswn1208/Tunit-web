@@ -6,11 +6,23 @@ import TutorContractCard from '../components/TutorContractCard';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/shared/lib/api';
 import type { Contract, ContractStatusCode, PaymentStatusCode } from '../types/contract';
+import { CONTRACT_STATUS_TRANSITIONS, getStatusLabel } from '../types/contract';
 import '../css/my-tutors.css';
 
 export default function MyStudentsPage() {
   const [activeTab, setActiveTab] = useState('진행중인 학생');
-  const tabList = ['요청온 학생', '진행중인 학생', '종료된 학생'];
+  const tabList = [
+    getStatusLabel('REQUESTED') + ' 학생',
+    getStatusLabel('ACTIVE') + ' 학생',
+    '종료된 학생',
+  ];
+
+  // 상태별 필터링 기준을 contract.ts 상수로 관리
+  const statusMap: Record<string, ContractStatusCode[]> = {
+    [getStatusLabel('REQUESTED') + ' 학생']: ['REQUESTED', 'APPROVED'],
+    [getStatusLabel('ACTIVE') + ' 학생']: ['ACTIVE'],
+    '종료된 학생': ['CANCELLED', 'TERMINATED', 'END'],
+  };
   const { showToast } = useToast();
   const queryClient = useQueryClient();
 
@@ -96,14 +108,18 @@ export default function MyStudentsPage() {
         <div className="tutors-list">
           <div>
             {data &&
-              (data as any).map((contract: any) => (
-                <TutorContractCard
-                  key={contract.contractNo}
-                  contract={contract}
-                  onStatusChange={handleStatusChange}
-                  onPaymentConfirm={handlePaymentConfirm}
-                />
-              ))}
+              data
+                .filter((contract: Contract) =>
+                  statusMap[activeTab]?.includes(contract.contractStatus.code)
+                )
+                .map((contract: Contract) => (
+                  <TutorContractCard
+                    key={contract.contractNo}
+                    contract={contract}
+                    onStatusChange={handleStatusChange}
+                    onPaymentConfirm={handlePaymentConfirm}
+                  />
+                ))}
           </div>
         </div>
       </div>

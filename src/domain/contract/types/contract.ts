@@ -34,7 +34,7 @@ export const getStatusLabel = (statusCode: ContractStatusCode): string => {
   const labels: Record<ContractStatusCode, string> = {
     REQUESTED: '요청',
     APPROVED: '승인 및  결제요청',
-    ACTIVE: '확정',
+    ACTIVE: '진행중',
     CANCELLED: '취소',
     TERMINATED: '중단',
     END: '종료',
@@ -85,6 +85,7 @@ export interface Contract {
   contractNo: number;
   tutorProfileNo: number;
   studentNo: number;
+  studentName: string;
   startDt: string;
   endDt?: string;
   contractStatus: ContractStatus;
