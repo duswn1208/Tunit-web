@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import './notification-bell.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-regular-svg-icons';
-import { fetchUnreadNotificationCount } from '@/domain/home/api/notifications/notificationApi';
+import { fetchUnreadNotificationCount } from '@/domain/notification/api/notificationApi';
 import { api } from '@/shared/lib/api';
 import { useNavigate } from 'react-router-dom';
 
@@ -69,11 +69,13 @@ export default function NotificationBell() {
   };
 
   // 개별 읽음 처리
-  const handleReadOne = async (id: number) => {
+  const handleReadOne = async (notification: any) => {
     try {
-      await api.post(`/api/notifications/${id}/read`);
-      setNotifications((prev) => prev.filter((n) => n.id !== id));
+      await api.put(`/api/notifications/${notification.notifyNo}/read`);
+      setNotifications((prev) => prev.filter((n) => n.notifyNo !== notification.notifyNo));
       setCount((prev) => Math.max(prev - 1, 0));
+      console.log('Navigating to:', notification.deepLink || '/notifications');
+      navigate(notification.deepLink || '/notifications');
     } catch (e) {}
   };
 
@@ -93,7 +95,7 @@ export default function NotificationBell() {
         <div className="notification-list-popup" ref={popupRef}>
           <ul>
             {notifications.map((n) => (
-              <li onClick={() => navigate(n.deepLink)} key={n.notifyNo}>
+              <li onClick={() => handleReadOne(n)} key={n.notifyNo}>
                 {n.title}
               </li>
             ))}

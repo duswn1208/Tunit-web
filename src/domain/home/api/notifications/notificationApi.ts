@@ -26,11 +26,3 @@ export const sendDeviceInfo = async (payload: DeviceTokenPayload) => {
     console.error('디바이스 토큰 전송 실패:', e);
   }
 };
-
-export async function fetchNotifications(): Promise<Notification[]> {
-  return await api.get<Notification[]>('/api/notifications');
-}
-
-export async function fetchUnreadNotificationCount(): Promise<number> {
-  return await api.get<number>('/api/notifications/unread-count');
-}
