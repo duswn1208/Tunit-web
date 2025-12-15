@@ -11,6 +11,7 @@ import {
 import { RadioGroup } from '../../../shared/components';
 import { LessonStatus, LessonType } from '@/domain/lesson/types/lesson';
 import type { DayOfWeekNumber } from '@/shared/constants/date.ts';
+import { CONTRACT_TYPES, getContractTypeLabel } from '@/domain/booking/types/types.ts';
 
 interface StudentForm {
   studentName: string;
@@ -116,33 +117,20 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
   return (
     <div className="student-register-form">
       <div className="student-register-fields">
-        <FormField label="레슨 유형" htmlFor="lessonType" required>
+        <FormField label="계약 형태" htmlFor="lessonType" required>
           <RadioGroup
             name="lessonType"
             defaultValue="single"
             onChange={(value: string) =>
               setForm((prev) => ({ ...prev, lessonType: value as LessonType }))
             }
-            options={[
-              { label: '일회성 레슨', value: LessonType.SINGLE },
-              { label: '고정 레슨', value: LessonType.FIXED },
-            ]}
+            options={Object.values(CONTRACT_TYPES).map((type) => ({
+              label: getContractTypeLabel(type),
+              value: type,
+            }))}
           />
         </FormField>
-        <FormField label="레슨 유형" htmlFor="reservationStatus" required>
-          <RadioGroup
-            name="reservationStatus"
-            defaultValue={form.reservationStatus}
-            onChange={(value: string) =>
-              setForm((prev) => ({ ...prev, reservationStatus: value as LessonStatus }))
-            }
-            options={[
-              { label: '레슨 신청', value: 'REQUESTED' },
-              { label: '상담/체험레슨 신청', value: 'REQUESTED' },
-            ]}
-          />
-        </FormField>
-        <FormField label="레슨명" htmlFor="lesson" required>
+        <FormField label="레슨 유형" htmlFor="lesson" required>
           {loadingCategories ? (
             <div style={{ padding: '8px 0' }}>레슨명 불러오는 중...</div>
           ) : categoryError ? (

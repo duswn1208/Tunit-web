@@ -9,7 +9,7 @@ type Props = {
   loading?: boolean;
   className?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  size?: 'sm';
+  size?: 'sm' | 'xs' | 'md' | 'lg';
   title?: string;
   tooltip?: string;
 };

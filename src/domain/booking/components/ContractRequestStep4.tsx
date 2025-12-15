@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { getDayLabel } from '@/shared/constants/date';
 import ContractRequestStepFooter from './ContractRequestStepFooter';
-import { getContractTypeLabel, isFirstcome, isRegular, isTrial } from '../types/types';
+import { getContractTypeLabel, isFirstcome, isTrial } from '../types/types';
 import { toKoreanDateTime } from '@/domain/dayTime/lib/timeUtils';
 
 export interface ContractRequestStep4Props {
@@ -76,34 +75,21 @@ export default function ContractRequestStep4({
             </span>
           </li>
           <li className="font-bold" style={{ color: 'var(--brand-red)' }}>
-            🗓️ 레슨 일정:
+            🗓️ 첫 레슨일:
           </li>
-          {isRegular(step1?.contractType) &&
-            step2?.lessonDtList?.length > 0 &&
-            (() => {
-              const first = step2.lessonDtList[0];
-              const dateObj = new Date(first);
-              const dayNum = (
-                dateObj.getDay() === 0 ? 7 : dateObj.getDay()
-              ) as import('@/shared/constants/date').DayOfWeekNumber;
-              const dayLabel = getDayLabel(dayNum);
-              return (
-                <div className="font-semibold ml-4 my-2" style={{ color: 'var(--brand-red)' }}>
-                  ※ 매주 {dayLabel}요일 {first.time}에 진행됩니다
-                </div>
-              );
-            })()}
-          {isTrial(step1?.contractType) &&
-            step2?.lessonDtList?.length > 0 &&
-            (() => {
-              const first = step2.lessonDtList[0];
-              const formattedDate = toKoreanDateTime(first);
-              return (
-                <div className="font-semibold ml-4 my-2" style={{ color: 'var(--brand-red)' }}>
-                  ※ {formattedDate}에 진행됩니다
-                </div>
-              );
-            })()}
+          {step2?.lessonDtList?.length > 0 && (
+            <div
+              className="font-semibold ml-4 my-2 flex flex-wrap gap-2"
+              style={{ color: 'var(--brand-red)' }}
+            >
+              {step2.lessonDtList.map((dt: string, idx: number) => (
+                <span key={dt}>
+                  {toKoreanDateTime(dt)}
+                  {idx < step2.lessonDtList.length - 1 ? ',' : ''}
+                </span>
+              ))}
+            </div>
+          )}
           <ul className="ml-4 space-y-1">
             {step2?.slots?.map((s: any, i: number) => (
               <li

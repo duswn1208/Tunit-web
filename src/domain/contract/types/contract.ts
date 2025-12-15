@@ -102,16 +102,20 @@ export interface Contract {
   level: string;
   place: string;
   emergencyContact: string;
-  dayOfWeekNum: DayOfWeek;
-  startTime: string;
-  endTime: string;
   memo?: string;
   source: ContractSource;
   totalPrice: number;
   paymentStatus: PaymentStatus;
   paidAmount: number;
   paymentDt?: string;
-  fixedLessonNo?: number;
   currentLessonCount: number;
   reservable: boolean;
+  scheduleList: Schedule[];
+}
+
+export interface Schedule {
+  dayOfWeekNum: DayOfWeek;
+  dayOfWeek: string;
+  startTime: string;
+  endTime: string;
 }

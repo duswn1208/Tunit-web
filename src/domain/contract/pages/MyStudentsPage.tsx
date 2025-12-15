@@ -6,11 +6,11 @@ import TutorContractCard from '../components/TutorContractCard';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/shared/lib/api';
 import type { Contract, ContractStatusCode, PaymentStatusCode } from '../types/contract';
-import { CONTRACT_STATUS_TRANSITIONS, getStatusLabel } from '../types/contract';
+import { getStatusLabel } from '../types/contract';
 import '../css/my-tutors.css';
 
 export default function MyStudentsPage() {
-  const [activeTab, setActiveTab] = useState('진행중인 학생');
+  const [activeTab, setActiveTab] = useState('전체 학생');
   const tabList = [
     getStatusLabel('REQUESTED') + ' 학생',
     getStatusLabel('ACTIVE') + ' 학생',

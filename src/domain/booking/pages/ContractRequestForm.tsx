@@ -9,6 +9,7 @@ import {
   CONTRACT_TYPES,
   getContractTypeLessonCount,
   isRegular,
+  isTrial,
   type ContractType,
 } from '../types/types';
 import { useToast } from '@/shared/contexts/ToastContext';
@@ -72,7 +73,7 @@ export default function ContractRequestForm({
   const [emergencyContact, setEmergencyContact] = useState(
     initialData?.emergencyContact || defaultPhone || ''
   );
-  const [weekCount, setLessonCount] = useState(initialData?.weekCount || 1);
+  const [weekCount, setWeekCount] = useState(initialData?.weekCount || 1);
 
   const handleNext = () => {
     setCurrentStep((prev) => prev + 1);
@@ -124,8 +125,8 @@ export default function ContractRequestForm({
           lessonCategoryOptions={lessonCategoryOptions}
           place={place}
           setPlace={setPlace}
-          lessonCount={weekCount}
-          setLessonCount={setLessonCount}
+          weekCount={weekCount}
+          setWeekCount={setWeekCount}
           pricePerLesson={pricePerLesson}
           contractType={contractType}
           onPrev={onFirst}
@@ -136,7 +137,7 @@ export default function ContractRequestForm({
         <ContractRequestStep2
           tutorProfileNo={tutorProfileNo}
           contractType={contractType}
-          totalCount={isRegular(contractType) ? weekCount * 4 : 1}
+          weekCount={weekCount}
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
           selectedTime={selectedTime}

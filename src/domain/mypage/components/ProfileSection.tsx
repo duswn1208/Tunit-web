@@ -1,14 +1,18 @@
 import ProfileInfo from '../../profile/components/ProfileInfo';
+import { useState } from 'react';
+import ProfileEditModal from './ProfileEditModal';
+import QnARegisterModal from './QnARegisterModal';
 import StudentRegister from './StudentRegister';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { useProfileData } from '../hooks/useProfileData';
 import { HiUserCircle } from 'react-icons/hi';
+import Button from '@/shared/components/Button';
 
 export default function ProfileSection() {
   const { user } = useAuth();
   const { profileData, isLoading, error } = useProfileData();
-
-  console.log(user);
+  const [editOpen, setEditOpen] = useState(false);
+  const [qnaOpen, setQnaOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -55,14 +59,52 @@ export default function ProfileSection() {
     );
   }
 
+  // 임시 저장/등록 핸들러 (API 연동 필요)
+  const handleProfileSave = (data: any) => {
+    // TODO: 프로필 수정 API 연동
+    alert('프로필 정보가 저장되었습니다. (실제 저장은 API 연동 필요)');
+    setEditOpen(false);
+  };
+  const handleQnASave = (data: { title: string; content: string }) => {
+    // TODO: QnA 등록 API 연동
+    alert('QnA가 등록되었습니다. (실제 등록은 API 연동 필요)');
+    setQnaOpen(false);
+  };
+
   return (
     <div className="mb-4">
-      <div className="flex items-center mb-2">
-        <HiUserCircle className="text-blue-500 text-xl mr-2" />
-        <h2 className="text-base font-bold text-gray-800">기본 소개</h2>
+      <div className="flex items-center mb-2 justify-between">
+        <div className="flex items-center">
+          <HiUserCircle className="text-blue-500 text-xl mr-2" />
+          <h2 className="text-base font-bold text-gray-800">기본 소개</h2>
+        </div>
+        <div className="flex gap-1">
+          <Button
+            size="xs"
+            className="min-w-0 px-2 py-0.5 text-xs h-6"
+            onClick={() => setEditOpen(true)}
+          >
+            정보 수정
+          </Button>
+          <Button
+            size="xs"
+            className="min-w-0 px-2 py-0.5 text-xs h-6"
+            onClick={() => setQnaOpen(true)}
+          >
+            QnA 등록
+          </Button>
+        </div>
       </div>
       <ProfileInfo />
       {user?.userRole?.tutor && <StudentRegister />}
+      {editOpen && (
+        <ProfileEditModal
+          profile={profileData}
+          onSave={handleProfileSave}
+          onClose={() => setEditOpen(false)}
+        />
+      )}
+      {qnaOpen && <QnARegisterModal onSave={handleQnASave} onClose={() => setQnaOpen(false)} />}
     </div>
   );
 }

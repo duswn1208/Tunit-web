@@ -5,9 +5,10 @@ import '../css/my-tutors.css';
 import { useNavigate } from 'react-router-dom';
 import PaymentStatusAlert from './PaymentStatusAlert';
 import { useState } from 'react';
+import { updateContractAmount } from '../api/updateContractAmount';
 import { toAmPmFormat } from '@/domain/dayTime/lib/timeUtils';
-import { getDayLabel } from '@/shared/constants/date';
 import { isFirstcome } from '@/domain/booking/types/types';
+import { useToast } from '@/shared/contexts/ToastContext';
 
 interface TutorContractCardProps {
   contract: Contract;
@@ -26,7 +27,22 @@ export default function TutorContractCard({
   // 개발 환경에서만 사용 - 결제 상태 테스트용
   const [devPaymentStatus, setDevPaymentStatus] = useState<PaymentStatusCode | null>(null);
   const isDev = import.meta.env.DEV;
+  const { showToast } = useToast();
 
+  // 총 금액 수정 상태
+  const [editPrice, setEditPrice] = useState(false);
+  const [priceInput, setPriceInput] = useState(contract.totalPrice);
+  const [displayPrice, setDisplayPrice] = useState(contract.totalPrice);
+  const handlePriceSave = async () => {
+    try {
+      await updateContractAmount(contract.contractNo, priceInput);
+      setDisplayPrice(priceInput);
+      setEditPrice(false);
+      showToast('총 금액이 성공적으로 변경되었습니다.');
+    } catch (e: any) {
+      showToast(e?.message || '총 금액 변경에 실패했습니다.', 'error');
+    }
+  };
   const availableTransitions = CONTRACT_STATUS_TRANSITIONS[contract.contractStatus.code];
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -68,8 +84,9 @@ export default function TutorContractCard({
       <div className="tutor-card-date">
         {contract.startDt} ~ {contract.endDt ?? '진행 중'} |{' '}
         {!isFirstcome(contract.contractStatus.code) &&
-          `매주 ${getDayLabel(contract.dayOfWeekNum)}요일 `}
-        {toAmPmFormat(contract.startTime)}
+          `매주 ${contract.scheduleList
+            .map((schedule) => `${schedule.dayOfWeek}요일 ${toAmPmFormat(schedule.startTime)}`)
+            .join(', ')} `}{' '}
       </div>
       <div className="tutor-card-lessons">
         레슨: 주 {contract.weekCount}회 | 총 {contract.lessonCount}회
@@ -83,7 +100,55 @@ export default function TutorContractCard({
           <strong>메모:</strong> {contract.memo}
         </div>
       )}
-      <div className="tutor-card-price">총 금액: {contract.totalPrice.toLocaleString()}원</div>
+      <div className="tutor-card-price flex items-center gap-2">
+        <span>총 금액:</span>
+        {displayPaymentStatus === 'PENDING' && editPrice ? (
+          <>
+            <input
+              type="number"
+              className="border rounded px-2 py-1 w-24 text-right text-sm"
+              value={priceInput}
+              min={0}
+              onChange={(e) => setPriceInput(Number(e.target.value))}
+              onClick={(e) => e.stopPropagation()}
+            />
+            <button
+              className="ml-1 px-2 py-1 text-xs bg-blue-500 text-white rounded"
+              onClick={(e) => {
+                e.stopPropagation();
+                handlePriceSave();
+              }}
+            >
+              저장
+            </button>
+            <button
+              className="ml-1 px-2 py-1 text-xs bg-gray-200 rounded"
+              onClick={(e) => {
+                e.stopPropagation();
+                setEditPrice(false);
+                setPriceInput(displayPrice);
+              }}
+            >
+              취소
+            </button>
+          </>
+        ) : (
+          <>
+            <span>{displayPrice.toLocaleString()}원</span>
+            {displayPaymentStatus === 'PENDING' && (
+              <button
+                className="ml-2 px-2 py-1 text-xs bg-gray-100 border border-gray-300 rounded"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setEditPrice(true);
+                }}
+              >
+                수정
+              </button>
+            )}
+          </>
+        )}
+      </div>
 
       {/* 결제 상태 알림 */}
       {displayPaymentStatus && (

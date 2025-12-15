@@ -11,8 +11,8 @@ interface ContractRequestStep1Props {
   lessonCategoryOptions: { label: string; value: string }[];
   place: string;
   setPlace: (v: string) => void;
-  lessonCount: number;
-  setLessonCount: (v: number) => void;
+  weekCount: number;
+  setWeekCount: (v: number) => void;
   pricePerLesson?: number;
   contractType?: ContractType;
   onPrev?: () => void;
@@ -25,15 +25,15 @@ export default function ContractRequestStep1({
   lessonCategoryOptions,
   place,
   setPlace,
-  lessonCount,
-  setLessonCount,
+  weekCount,
+  setWeekCount,
   pricePerLesson = 30000,
   contractType = 'REGULAR',
   onPrev,
   onNext,
 }: ContractRequestStep1Props) {
   // 총 횟수 및 금액 계산 (계약 유형에 따라)
-  const totalLessons = getContractTypeLessonCount(contractType, lessonCount);
+  const totalLessons = getContractTypeLessonCount(contractType, weekCount);
   const totalPrice = totalLessons * pricePerLesson;
 
   // 회차 옵션 (value를 string으로)
@@ -56,8 +56,8 @@ export default function ContractRequestStep1({
         <>
           <Header title="레슨 주 횟수" />
           <SelectBox
-            value={String(lessonCount)}
-            onChange={(v) => setLessonCount(Number(v))}
+            value={String(weekCount)}
+            onChange={(v) => setWeekCount(Number(v))}
             options={lessonCountOptions}
             placeholder="주 횟수 선택"
           />
@@ -81,7 +81,7 @@ export default function ContractRequestStep1({
       />
       <ContractPriceBox
         totalPrice={totalPrice}
-        lessonCount={lessonCount}
+        lessonCount={weekCount}
         totalLessons={totalLessons}
         isTrial={isTrial(contractType)}
       />

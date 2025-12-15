@@ -8,7 +8,7 @@ import { useToast } from '@/shared/contexts/ToastContext';
 interface ContractRequestStep2Props {
   tutorProfileNo: string;
   contractType: ContractType;
-  totalCount: number;
+  weekCount: number;
   selectedDate: string;
   setSelectedDate: (v: string) => void;
   selectedTime: string;
@@ -20,7 +20,7 @@ interface ContractRequestStep2Props {
 export default function ContractRequestStep2({
   tutorProfileNo,
   contractType,
-  totalCount,
+  weekCount,
   selectedDate,
   setSelectedDate,
   selectedTime,
@@ -34,7 +34,7 @@ export default function ContractRequestStep2({
   );
   const [tempDate, setTempDate] = useState<string>(selectedDate || '');
   const [tempTime, setTempTime] = useState<string>(selectedTime || '');
-  const isNextEnabled = isRegular(contractType) ? slots.length === totalCount : slots.length === 1;
+  const isNextEnabled = slots.length === weekCount;
 
   return (
     <div>
@@ -73,8 +73,8 @@ export default function ContractRequestStep2({
             }
 
             if (date && time && !slots.some((s) => s.date === date && s.time === time)) {
-              if (slots.length >= totalCount) {
-                showToast(`최대 ${totalCount}회까지 선택할 수 있습니다.`, 'info');
+              if (slots.length >= weekCount) {
+                showToast(`최대 ${weekCount}회까지 선택할 수 있습니다.`, 'info');
                 return;
               }
               setSlots([...slots, { date, time }]);
@@ -89,14 +89,12 @@ export default function ContractRequestStep2({
       {isRegular(contractType) ? (
         <div style={{ color: '#888', fontSize: 14, marginBottom: 8, textAlign: 'right' }}>
           <b>
-            {slots.length} / {totalCount}회
+            {slots.length} / {weekCount}회
           </b>
           <br />
           <span>
-            처음 예약이라면 첫달 모든 스케줄 예약이 필요합니다. <br />
-            스케줄을 선택해 주세요. <br />
-            (정기 레슨의 경우, 첫 레슨 날짜를 기준으로 두 번째 달부터 매주 동일한 요일/시간대로
-            예약됩니다.)
+            레슨을 시작하는 날짜와 시간을 선택해주세요. <br />
+            (정기 레슨의 경우, 선택한 날짜대로 매주 레슨이 예약됩니다.) <br />
           </span>
         </div>
       ) : contractType === 'FIRSTCOME' || contractType === 'TRIAL' ? (
