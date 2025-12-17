@@ -13,15 +13,17 @@ export default function NotificationList({ notifications }: NotificationListProp
 
   const handleRead = async (notifyNo: number) => {
     await markNotificationRead(notifyNo);
-    setLocalList((list) => list.map((n) => (n.notifyNo === notifyNo ? { ...n, read: true } : n)));
+    setLocalList((list) =>
+      list.map((n) => (n.notifyNo === notifyNo ? { ...n, status: 'READ' } : n))
+    );
   };
   const handleGo = async (notifyNo: number, deepLink?: string) => {
     await markNotificationRead(notifyNo);
-    setLocalList((list) => list.map((n) => (n.notifyNo === notifyNo ? { ...n, read: true } : n)));
+    setLocalList((list) =>
+      list.map((n) => (n.notifyNo === notifyNo ? { ...n, status: 'READ' } : n))
+    );
     if (deepLink) navigate(deepLink);
   };
-
-  console.log('Rendering NotificationList with:', localList);
 
   return (
     <div>

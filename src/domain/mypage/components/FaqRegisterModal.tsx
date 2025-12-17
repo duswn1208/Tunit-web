@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function QnARegisterModal({
+export default function FaqRegisterModal({
   onSave,
   onClose,
 }: {
@@ -21,7 +21,7 @@ export default function QnARegisterModal({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
       <form className="bg-white rounded-lg p-6 w-full max-w-md" onSubmit={handleSubmit}>
-        <h2 className="text-lg font-bold mb-4">QnA 등록</h2>
+        <h2 className="text-lg font-bold mb-4">자주묻는질문 등록</h2>
         <div className="mb-2">
           <label className="block text-sm mb-1">제목</label>
           <input

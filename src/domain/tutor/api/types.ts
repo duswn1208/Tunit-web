@@ -25,6 +25,15 @@ export interface TutorDetail {
     startTime: string;
     endTime: string;
   }>;
+  tutorFaqList?: Array<TutorFaq>;
+}
+
+export interface TutorFaq {
+  tutorFaqNo: number;
+  title: string;
+  content: string;
+  exposed: boolean;
+  displayOrder: number;
 }
 
 export interface LessonSubcategory {

@@ -3,12 +3,11 @@ import { useToast } from '@/shared/contexts/ToastContext';
 import TutorLessonInfo from '../components/TutorLessonInfo';
 import TutorScheduleInfo from '../components/TutorScheduleInfo';
 import TutorReviewSection from '../components/TutorReviewSection';
-import TutorQnaSection from '../components/TutorQnaSection';
+import TutorFaqSection from '../components/TutorFaqSection.tsx';
 import Tab from '@/shared/components/Tab.tsx';
 import { TutorProfileCard } from '../../profile/components/TutorProfileCard.tsx';
 import { Button } from '@/shared/components';
 import { useTutorDetail } from '../hooks/useTutorDetail';
-import { useReservationState } from '../hooks/useReservationState';
 import '../css/tutor-detail.css';
 import '../css/tutor-calendar.css';
 import { useEffect, useState } from 'react';
@@ -20,19 +19,9 @@ export default function TutorDetailPage() {
 
   const { showToast } = useToast();
   const navigate = useNavigate();
-  const location = useLocation();
   const [selectedTab, setSelectedTab] = useState('레슨정보');
-  const tabList = ['레슨정보', '레슨시간', '레슨후기', 'Q&A'];
-  // lessonReservationNo 쿼리스트링 추출
-  const lessonReservationNo =
-    new URLSearchParams(location.search).get('lessonReservationNo') || undefined;
+  const tabList = ['레슨정보', '레슨시간', '레슨후기', 'FAQ'];
   const { data, isLoading, error } = useTutorDetail(tutorProfileNo);
-  const {
-    state: { selectedDate, selectedTime, selectedLesson, requestMessage },
-    setDateTime,
-    setLesson,
-    setMessage,
-  } = useReservationState(lessonReservationNo);
 
   // 로딩/에러 토스트는 useEffect에서 처리
   useEffect(() => {
@@ -49,12 +38,6 @@ export default function TutorDetailPage() {
 
   // 모든 hook은 조건문보다 위에!
   const isMobile = useMediaQuery('(max-width: 768px)');
-
-  // lessonCategoryOptions 생성
-  const lessonCategoryOptions = (data?.lessonSubcategoryList ?? []).map((cat) => ({
-    label: cat.lessonCategory.label,
-    value: cat.lessonCategory.code,
-  }));
 
   // 프로필 카드 버튼 클릭 이벤트 리스너 등록 (예약/신청)
   useEffect(() => {
@@ -106,7 +89,7 @@ export default function TutorDetailPage() {
           {selectedTab === '레슨후기' && (
             <TutorReviewSection tutorId={parseInt(tutorProfileNo, 10)} />
           )}
-          {selectedTab === 'Q&A' && <TutorQnaSection />}
+          {selectedTab === 'FAQ' && <TutorFaqSection faqData={data.tutorFaqList} />}
         </div>
         {/* 모바일: 하단 플로팅 버튼 */}
         {isMobile && (

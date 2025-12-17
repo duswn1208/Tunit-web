@@ -15,7 +15,7 @@ export default function NotificationsPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  const unreadCount = notifications.filter((n) => n.status !== 'READ').length;
   return (
     <div className="max-w-xl mx-auto p-4">
       <h1 className="text-xl font-bold mb-4 flex items-center gap-2">

@@ -1,18 +1,21 @@
 import ProfileInfo from '../../profile/components/ProfileInfo';
 import { useState } from 'react';
 import ProfileEditModal from './ProfileEditModal';
-import QnARegisterModal from './QnARegisterModal';
+import FaqRegisterModal from './FaqRegisterModal';
 import StudentRegister from './StudentRegister';
 import { useAuth } from '@/shared/auth/AuthContext';
 import { useProfileData } from '../hooks/useProfileData';
 import { HiUserCircle } from 'react-icons/hi';
 import Button from '@/shared/components/Button';
+import { api } from '@/shared/lib/api';
+import { useToast } from '@/shared/contexts/ToastContext';
 
 export default function ProfileSection() {
+  const { showToast } = useToast();
   const { user } = useAuth();
   const { profileData, isLoading, error } = useProfileData();
   const [editOpen, setEditOpen] = useState(false);
-  const [qnaOpen, setQnaOpen] = useState(false);
+  const [faqOpen, setFaqOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -65,10 +68,13 @@ export default function ProfileSection() {
     alert('프로필 정보가 저장되었습니다. (실제 저장은 API 연동 필요)');
     setEditOpen(false);
   };
-  const handleQnASave = (data: { title: string; content: string }) => {
-    // TODO: QnA 등록 API 연동
-    alert('QnA가 등록되었습니다. (실제 등록은 API 연동 필요)');
-    setQnaOpen(false);
+  const handleQnASave = async (data: { title: string; content: string }) => {
+    try {
+      await api.post('/api/tutors/me/faqs', data);
+      showToast('QnA가 성공적으로 등록되었습니다.', 'success');
+    } catch (error) {
+      showToast(error?.message || 'QnA 등록에 실패했습니다.', 'error');
+    }
   };
 
   return (
@@ -89,9 +95,9 @@ export default function ProfileSection() {
           <Button
             size="xs"
             className="min-w-0 px-2 py-0.5 text-xs h-6"
-            onClick={() => setQnaOpen(true)}
+            onClick={() => setFaqOpen(true)}
           >
-            QnA 등록
+            FAQ 등록
           </Button>
         </div>
       </div>
@@ -104,7 +110,7 @@ export default function ProfileSection() {
           onClose={() => setEditOpen(false)}
         />
       )}
-      {qnaOpen && <QnARegisterModal onSave={handleQnASave} onClose={() => setQnaOpen(false)} />}
+      {faqOpen && <FaqRegisterModal onSave={handleQnASave} onClose={() => setFaqOpen(false)} />}
     </div>
   );
 }
