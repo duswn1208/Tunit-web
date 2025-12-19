@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function ProfileEditModal({
+export default function TutorProfileEditModal({
   profile,
   onSave,
   onClose,

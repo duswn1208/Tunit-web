@@ -3,13 +3,14 @@
 }
 
 .faq-container .faq-item + .faq-item {
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 
 .faq-item {
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
   background-color: white;
+  margin-top: 1rem;
 }
 
 .faq-button {
@@ -43,7 +44,32 @@
 }
 
 .faq-content {
-  padding: 0 1rem 1rem;
+  padding: 1rem 1rem 1rem;
   color: #374151;
   background-color: white;
+}
+
+.faq-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faq-actions {
+  display: flex;
+  gap: 8px;
+  margin: 8px 8px 8px 0;
+}
+
+.faq-edit-btn,
+.faq-delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #007bff;
+}
+
+.faq-edit-btn:hover,
+.faq-delete-btn:hover {
+  color: #0056b3;
 }

@@ -27,6 +27,7 @@ import MyTutorsPage from './domain/contract/pages/MyTutorsPage.tsx';
 import MyStudentsPage from './domain/contract/pages/MyStudentsPage.tsx';
 import ContractEditPage from './domain/contract/pages/ContractEditPage.tsx';
 import NotificationsPage from './domain/notification/pages/NotificationsPage.tsx';
+import TutorFaqManagementPage from './domain/mypage/pages/TutorFaqManagementPage.tsx';
 
 // React Query 클라이언트 생성
 const queryClient = new QueryClient({
@@ -79,6 +80,7 @@ export default function App() {
                     element={<OnboardingAvailability />}
                   />
                   <Route path="/notifications" element={<NotificationsPage />} />
+                  <Route path="/mypage/tutor/faq" element={<TutorFaqManagementPage />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Route>
               </Routes>

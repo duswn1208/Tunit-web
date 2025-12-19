@@ -1,10 +1,14 @@
+import { useAuth } from '@/shared/auth/AuthContext.tsx';
 import MyPageLayout from '../components/MyPageLayout.tsx';
-import ProfileSection from '../components/ProfileSection';
+import TutorProfileSection from '../components/TutorProfileSection.tsx';
+import StudentProfileSection from '../components/StudentProfileSection.tsx';
 
 export default function MyPage() {
+  const { user } = useAuth();
   return (
     <MyPageLayout>
-      <ProfileSection />
+      {user?.userRole?.tutor && <TutorProfileSection />}
+      {user?.userRole?.student && <StudentProfileSection />}
     </MyPageLayout>
   );
 }

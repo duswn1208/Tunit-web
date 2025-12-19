@@ -1,0 +1,26 @@
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.button-group {
+  display: flex;
+  gap: 8px;
+}
+
+.add-faq-button,
+.refresh-faq-button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-faq-button:hover,
+.refresh-faq-button:hover {
+  background-color: #0056b3;
+}

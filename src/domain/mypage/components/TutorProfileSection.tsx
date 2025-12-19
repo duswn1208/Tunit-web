@@ -1,6 +1,6 @@
 import ProfileInfo from '../../profile/components/ProfileInfo';
 import { useState } from 'react';
-import ProfileEditModal from './ProfileEditModal';
+import TutorProfileEditModal from './TutorProfileEditModal';
 import FaqRegisterModal from './FaqRegisterModal';
 import StudentRegister from './StudentRegister';
 import { useAuth } from '@/shared/auth/AuthContext';
@@ -9,13 +9,15 @@ import { HiUserCircle } from 'react-icons/hi';
 import Button from '@/shared/components/Button';
 import { api } from '@/shared/lib/api';
 import { useToast } from '@/shared/contexts/ToastContext';
+import { useNavigate } from 'react-router-dom';
 
-export default function ProfileSection() {
+export default function TutorProfileSection() {
   const { showToast } = useToast();
   const { user } = useAuth();
   const { profileData, isLoading, error } = useProfileData();
   const [editOpen, setEditOpen] = useState(false);
   const [faqOpen, setFaqOpen] = useState(false);
+  const navigate = useNavigate();
 
   if (isLoading) {
     return (
@@ -62,18 +64,13 @@ export default function ProfileSection() {
     );
   }
 
-  // 임시 저장/등록 핸들러 (API 연동 필요)
-  const handleProfileSave = (data: any) => {
-    // TODO: 프로필 수정 API 연동
-    alert('프로필 정보가 저장되었습니다. (실제 저장은 API 연동 필요)');
-    setEditOpen(false);
-  };
-  const handleQnASave = async (data: { title: string; content: string }) => {
+  const handleProfileModify = async (data: any) => {
     try {
-      await api.post('/api/tutors/me/faqs', data);
-      showToast('QnA가 성공적으로 등록되었습니다.', 'success');
+      await api.post('/api/tutor/profile', data);
+      showToast('프로필 정보가 변경되었습니다.', 'success');
+      setEditOpen(false);
     } catch (error) {
-      showToast(error?.message || 'QnA 등록에 실패했습니다.', 'error');
+      showToast(error?.message || '프로필 변경에 실패했습니다.', 'error');
     }
   };
 
@@ -95,22 +92,23 @@ export default function ProfileSection() {
           <Button
             size="xs"
             className="min-w-0 px-2 py-0.5 text-xs h-6"
-            onClick={() => setFaqOpen(true)}
+            onClick={() =>
+              navigate('/mypage/tutor/faq', { state: { faqData: profileData?.faqData } })
+            }
           >
-            FAQ 등록
+            FAQ 관리
           </Button>
         </div>
       </div>
       <ProfileInfo />
       {user?.userRole?.tutor && <StudentRegister />}
       {editOpen && (
-        <ProfileEditModal
+        <TutorProfileEditModal
           profile={profileData}
-          onSave={handleProfileSave}
+          onSave={handleProfileModify}
           onClose={() => setEditOpen(false)}
         />
       )}
-      {faqOpen && <FaqRegisterModal onSave={handleQnASave} onClose={() => setFaqOpen(false)} />}
     </div>
   );
 }
