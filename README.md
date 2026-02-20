@@ -89,7 +89,7 @@ domain/{name}/
 
 ## 📋 환경 설정
 
-### 환경 변수 파일 생성
+### 환경 변수
 
 ```bash
 # .env.development (개발)
@@ -98,8 +98,6 @@ VITE_API_BASE_URL=http://localhost:8080
 # .env.production (배포)
 VITE_API_BASE_URL=https://your-api-server.com
 ```
-
-> ⚠️ **주의:** `.env.production`에 실제 API 서버 주소를 입력해야 합니다.
 
 ### Firebase 설정
 
@@ -115,26 +113,11 @@ const firebaseConfig = {
 
 ---
 
-## 📚 개발 가이드
+## 📚 프로젝트 문서
 
-### 필수 문서
-
-| 문서 | 설명 |
-|------|------|
-| **[CODE_STANDARDS.md](./CODE_STANDARDS.md)** | 🔥 코딩 규칙 (필독!) |
-| **[DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md)** | 디자인 시스템 (색상, 타이포) |
-| **[TODO.md](./TODO.md)** | 개선 필요 항목 |
-
-### 코드 작성 체크리스트
-
-작업 전에 **CODE_STANDARDS.md**를 꼭 읽어주세요!
-
-- [ ] 브레이크포인트: `768px`, `1024px`만 사용
-- [ ] CSS 변수 사용 (색상 하드코딩 금지)
-- [ ] 인라인 스타일 금지
-- [ ] `window.location.href` 대신 `navigate()` 사용
-- [ ] 컴포넌트 크기: 200줄 이하
-- [ ] Props 타입: `any` 금지
+- **[CODE_STANDARDS.md](./CODE_STANDARDS.md)** - 코딩 규칙 및 컨벤션
+- **[DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md)** - 디자인 시스템 (색상, 타이포그래피)
+- **[TODO.md](./TODO.md)** - 개선 필요 항목
 
 ---
 
@@ -190,38 +173,6 @@ ls -lh dist/
 
 ---
 
-## 🤝 Contributing
+## 📞 Contact
 
-### Commit 메시지 규칙
-
-```
-feat:     새로운 기능 추가
-fix:      버그 수정
-refactor: 리팩토링
-style:    코드 포맷팅
-chore:    빌드, 설정 변경
-docs:     문서 수정
-```
-
-**예시:**
-```bash
-git commit -m "feat: 레슨 예약 캘린더 추가"
-git commit -m "fix: BottomTabBar 라우팅 오류 수정"
-```
-
-### PR 전 체크리스트
-
-- [ ] `npm run build` 성공
-- [ ] **CODE_STANDARDS.md** 규칙 준수
-- [ ] 브라우저 콘솔 에러 없음
-- [ ] 모바일 반응형 테스트
-
----
-
-## 📞 문의
-
-프로젝트 관련 문의: [GitHub Issues](https://github.com/duswn1208/Tunit-web/issues)
-
----
-
-**Last Updated:** 2025-02-20
+프로젝트 관련 문의: [GitHub Repository](https://github.com/duswn1208/Tunit-web)
