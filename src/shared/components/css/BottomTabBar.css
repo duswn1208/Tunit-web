@@ -34,7 +34,7 @@
     transition: color 0.2s;
   }
   .tab-btn:active,
-  .tab-btn.selected {
+  .tab-btn.active {
     color: var(--brand-mint, #1ec9bb);
   }
   .tab-icon {

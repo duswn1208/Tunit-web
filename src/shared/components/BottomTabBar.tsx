@@ -1,3 +1,4 @@
+import { useNavigate, useLocation } from 'react-router-dom';
 import './css/BottomTabBar.css';
 
 // 아이콘은 예시로 SVG 인라인 사용, 실제로는 별도 파일/라이브러리 사용 권장
@@ -79,19 +80,22 @@ const tabs = [
 ];
 
 export default function BottomTabBar() {
-  // TODO: 실제 라우팅/선택 상태 연동 필요
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const isActive = (link: string) => {
+    if (link === '/') return location.pathname === '/';
+    return location.pathname.startsWith(link);
+  };
+
   return (
     <nav className="bottom-tab-bar">
       {tabs.map((tab) => (
         <button
           key={tab.key}
-          className="tab-btn"
+          className={`tab-btn ${isActive(tab.link) ? 'active' : ''}`}
           type="button"
-          onClick={() => {
-            if (tab.link) {
-              window.location.href = tab.link;
-            }
-          }}
+          onClick={() => navigate(tab.link)}
         >
           <span className="tab-icon">{tab.icon}</span>
           <span className="tab-label">{tab.label}</span>
