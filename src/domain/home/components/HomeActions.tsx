@@ -7,11 +7,7 @@ export default function HomeActions() {
   const navigate = useNavigate();
 
   const handleTutorSearch = () => {
-    if (!user) {
-      navigate('/auth/login', { state: { from: '/search' } });
-    } else {
-      navigate('/find/lessons');
-    }
+    navigate('/find/lessons');
   };
 
   const handleTutorRegistration = () => {

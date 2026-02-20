@@ -45,6 +45,7 @@ interface TuCalendarProps {
   events: any[];
   onSelectEvent?: (event: any) => void;
   onSelectSlot?: (slotInfo: any) => void;
+  onNavigate?: (date: Date) => void;
   statusStyleMap?: Record<string, { dot: string; text: string }>;
   size?: 'small' | 'medium' | 'large';
 }
@@ -55,11 +56,17 @@ export default function TuCalendar({
   events,
   onSelectEvent,
   onSelectSlot,
+  onNavigate,
   statusStyleMap,
   size = 'medium',
 }: TuCalendarProps) {
   const [view, setView] = useState<View>(Views.MONTH);
   const [date, setDate] = useState(new Date());
+
+  const handleNavigate = (newDate: Date) => {
+    setDate(newDate);
+    onNavigate?.(newDate);
+  };
 
   type CalendarEvent = {
     id: number | string;
@@ -85,7 +92,7 @@ export default function TuCalendar({
           view={view}
           onView={(v) => setView(v)}
           date={date}
-          onNavigate={setDate}
+          onNavigate={handleNavigate}
           culture="ko"
           style={{ height: '100%' }}
           messages={{

@@ -34,15 +34,18 @@ export default function TutorSearchPage() {
       .get('/api/users/profile/me')
       .then((res) => {
         const profile = res as StudentProfileResponse;
-        setStudentLessons(profile.studentInfo.lessonSubcategoryList);
-        setStudentRegions(profile.studentInfo.regionList);
+        if (profile.studentInfo) {
+          setStudentLessons(profile.studentInfo.lessonSubcategoryList || []);
+          setStudentRegions(profile.studentInfo.regionList || []);
+          // 프로필 기반 초기값 세팅
+          setSelectedRegionCodes(profile.studentInfo.regionList?.map((r) => r.code) || []);
+          setSelectedLessonCodes(profile.studentInfo.lessonSubcategoryList?.map((l) => l.code) || []);
+        }
         setLoading(false);
-        // 프로필 기반 초기값 세팅
-        setSelectedRegionCodes(profile.studentInfo.regionList.map((r) => r.code));
-        setSelectedLessonCodes(profile.studentInfo.lessonSubcategoryList.map((l) => l.code));
       })
       .catch((e) => {
-        console.error('학생 프로필 조회 실패', e);
+        console.log('프로필 없음 또는 비로그인 사용자', e);
+        // 로그인하지 않은 경우에도 튜터 검색 가능하도록 처리
         setLoading(false);
       });
   }, []);

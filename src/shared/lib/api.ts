@@ -23,11 +23,13 @@ async function baseApi<T>(input: RequestInfo, init: RequestInit = {}): Promise<T
     }
 
     if (res.status === 401) {
-      // 메인 페이지와 로그인 페이지는 리다이렉션하지 않음
-      const publicPaths = ['/', '/auth/login'];
-      if (!publicPaths.includes(window.location.pathname)) {
-        window.location.href = '/auth/login';
-      }
+      // 개발 중에는 401 에러 시 리다이렉트 비활성화
+      // TODO: 프로덕션 배포 시 활성화 필요
+      console.log('401 Unauthorized - 개발 모드에서는 리다이렉트 생략');
+      // const publicPaths = ['/', '/auth/login', '/find/lessons', '/tutors'];
+      // if (!publicPaths.some(path => window.location.pathname.startsWith(path))) {
+      //   window.location.href = '/auth/login';
+      // }
     }
 
     throw new Error(err.message || `HTTP ${res.status}`);

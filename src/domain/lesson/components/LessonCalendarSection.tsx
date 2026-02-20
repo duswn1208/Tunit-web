@@ -6,6 +6,7 @@ interface LessonCalendarSectionProps {
   lessonEvents: LessonEvent[];
   onSelectEvent: (event: LessonEvent) => void;
   onSelectSlot?: (slotInfo: any) => void;
+  onNavigate?: (date: Date) => void;
   statusStyleMap?: Record<string, { dot: string; text: string }>;
   size?: 'small' | 'medium' | 'large';
 }
@@ -14,6 +15,7 @@ const LessonCalendarSection: React.FC<LessonCalendarSectionProps> = ({
   lessonEvents,
   onSelectEvent,
   onSelectSlot,
+  onNavigate,
   statusStyleMap = statusStyle,
   size = 'medium',
 }) => {
@@ -24,6 +26,7 @@ const LessonCalendarSection: React.FC<LessonCalendarSectionProps> = ({
         events={lessonEvents}
         onSelectEvent={onSelectEvent}
         onSelectSlot={onSelectSlot}
+        onNavigate={onNavigate}
         statusStyleMap={statusStyleMap}
       />
     </div>

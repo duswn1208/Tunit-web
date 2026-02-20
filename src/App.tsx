@@ -28,6 +28,9 @@ import MyStudentsPage from './domain/contract/pages/MyStudentsPage.tsx';
 import ContractEditPage from './domain/contract/pages/ContractEditPage.tsx';
 import NotificationsPage from './domain/notification/pages/NotificationsPage.tsx';
 import TutorFaqManagementPage from './domain/mypage/pages/TutorFaqManagementPage.tsx';
+import GuestReservationPage from './domain/booking/pages/GuestReservationPage.tsx';
+import GuestReservationSuccessPage from './domain/booking/pages/GuestReservationSuccessPage.tsx';
+import GuestReservationVerifyPage from './domain/booking/pages/GuestReservationVerifyPage.tsx';
 
 // React Query 클라이언트 생성
 const queryClient = new QueryClient({
@@ -59,6 +62,10 @@ export default function App() {
                     element={<ContractRequestFormPage />}
                   />
                   <Route path="/tutors/:tutorId" element={<TutorDetailPage />} />
+                  {/* Guest Reservation Routes (No Login Required) */}
+                  <Route path="/tutors/:tutorId/guest-reservation" element={<GuestReservationPage />} />
+                  <Route path="/guest-reservation/success" element={<GuestReservationSuccessPage />} />
+                  <Route path="/guest-reservation/verify/:token" element={<GuestReservationVerifyPage />} />
                   <Route path="/student/my/lessons" element={<LessonStudentPage />} />
                   <Route path="/student/my/tutors" element={<MyTutorsPage />} />
                   <Route

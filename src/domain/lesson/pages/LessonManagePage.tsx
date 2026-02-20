@@ -22,10 +22,10 @@ export default function LessonManageLayout() {
   const [selectedEvent, setSelectedEvent] = useState<LessonEvent | null>(null);
   const [viewType, setViewType] = useState<'calendar' | 'list'>('calendar');
   const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [currentDate, setCurrentDate] = useState(new Date());
 
-  const now = new Date();
-  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-  const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+  const monthStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+  const monthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0, 23, 59, 59);
 
   const fetchLessons = () => {
     api
@@ -68,7 +68,7 @@ export default function LessonManageLayout() {
 
   useEffect(() => {
     fetchLessons();
-  }, [filterStudent, filterStatus]);
+  }, [filterStudent, filterStatus, currentDate]);
 
   const deleteLesson = async (lessonId?: number) => {
     if (!lessonId) return;
@@ -120,6 +120,7 @@ export default function LessonManageLayout() {
               lessonEvents={lessonSummary?.lessonList ?? []}
               onSelectEvent={setSelectedEvent}
               onSelectSlot={() => setShowRegisterModal(true)}
+              onNavigate={setCurrentDate}
               size="medium"
             />
           ) : (

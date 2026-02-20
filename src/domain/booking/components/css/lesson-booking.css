@@ -287,3 +287,75 @@
     font-size: 15px;
   }
 }
+
+/* Guest Reservation Page - 기존 스타일 통일 */
+.guest-reservation-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 16px 80px 16px;
+}
+
+.guest-reservation-container .regular-lesson-form-label {
+  font-weight: 700;
+  font-size: 16px;
+  margin: 24px 0 12px 0;
+  display: block;
+  color: #333;
+}
+
+.guest-reservation-container .regular-lesson-form-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.guest-reservation-container .regular-lesson-form-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.guest-reservation-container .regular-lesson-form-input:focus {
+  outline: none;
+  border-color: var(--brand-mint, #1ec9bb);
+}
+
+.guest-reservation-container textarea.regular-lesson-form-input {
+  min-height: 100px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.guest-reservation-container .select-box {
+  width: 100%;
+  padding: 12px;
+  font-size: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.guest-form-notice {
+  background: #f0f9ff;
+  border-left: 4px solid var(--brand-mint, #1ec9bb);
+  padding: 16px;
+  border-radius: 8px;
+  margin: 24px 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #555;
+}
+
+.guest-form-divider {
+  height: 8px;
+  background: #f8f9fa;
+  margin: 24px -16px;
+}
+
+@media (max-width: 767px) {
+  .guest-reservation-container {
+    padding: 0 12px 80px 12px;
+  }
+}

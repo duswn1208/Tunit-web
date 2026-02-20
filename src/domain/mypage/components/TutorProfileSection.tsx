@@ -16,7 +16,6 @@ export default function TutorProfileSection() {
   const { user } = useAuth();
   const { profileData, isLoading, error } = useProfileData();
   const [editOpen, setEditOpen] = useState(false);
-  const [faqOpen, setFaqOpen] = useState(false);
   const navigate = useNavigate();
 
   if (isLoading) {

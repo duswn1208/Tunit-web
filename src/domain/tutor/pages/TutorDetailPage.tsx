@@ -12,6 +12,7 @@ import '../css/tutor-detail.css';
 import '../css/tutor-calendar.css';
 import { useEffect, useState } from 'react';
 import useMediaQuery from '@/shared/hooks/useMediaQuery';
+import { useAuth } from '@/shared/auth/AuthContext';
 
 export default function TutorDetailPage() {
   const { tutorId: tutorProfileNo } = useParams();
@@ -19,6 +20,7 @@ export default function TutorDetailPage() {
 
   const { showToast } = useToast();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [selectedTab, setSelectedTab] = useState('레슨정보');
   const tabList = ['레슨정보', '레슨시간', '레슨후기', 'FAQ'];
   const { data, isLoading, error } = useTutorDetail(tutorProfileNo);
@@ -42,16 +44,31 @@ export default function TutorDetailPage() {
   // 프로필 카드 버튼 클릭 이벤트 리스너 등록 (예약/신청)
   useEffect(() => {
     function handleTrial() {
+      if (!user) {
+        // 비로그인 사용자는 게스트 예약 페이지로 이동
+        navigate(`/tutors/${tutorProfileNo}/guest-reservation`);
+        return;
+      }
       navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=trial`, {
         state: { tutor: data },
       });
     }
     function handleRegular() {
+      if (!user) {
+        showToast('로그인이 필요한 서비스입니다.', 'info');
+        navigate('/auth/login', { state: { from: `/tutors/${tutorProfileNo}` } });
+        return;
+      }
       navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=regular`, {
         state: { tutor: data },
       });
     }
     function handleFast() {
+      if (!user) {
+        showToast('로그인이 필요한 서비스입니다.', 'info');
+        navigate('/auth/login', { state: { from: `/tutors/${tutorProfileNo}` } });
+        return;
+      }
       navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=firstcome`, {
         state: { tutor: data },
       });
@@ -64,7 +81,7 @@ export default function TutorDetailPage() {
       window.removeEventListener('tutor-booking-regular', handleRegular);
       window.removeEventListener('tutor-booking-fast', handleFast);
     };
-  }, [navigate, tutorProfileNo, data]);
+  }, [navigate, tutorProfileNo, data, user, showToast]);
 
   if (isLoading || error || !data) {
     return null;
@@ -96,31 +113,46 @@ export default function TutorDetailPage() {
           <div className="floating-booking-buttons">
             <Button
               className="booking-button"
-              onClick={() =>
+              onClick={() => {
+                if (!user) {
+                  // 비로그인 사용자는 게스트 예약 페이지로 이동
+                  navigate(`/tutors/${tutorProfileNo}/guest-reservation`);
+                  return;
+                }
                 navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=trial`, {
                   state: { tutor: data },
-                })
-              }
+                });
+              }}
             >
               상담/체험 레슨 예약
             </Button>
             <Button
               className="booking-button booking-button--outline"
-              onClick={() =>
+              onClick={() => {
+                if (!user) {
+                  showToast('로그인이 필요한 서비스입니다.', 'info');
+                  navigate('/auth/login', { state: { from: `/tutors/${tutorProfileNo}` } });
+                  return;
+                }
                 navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=regular`, {
                   state: { tutor: data },
-                })
-              }
+                });
+              }}
             >
               정기레슨 신청
             </Button>
             <Button
               className="booking-button booking-button--fast"
-              onClick={() =>
+              onClick={() => {
+                if (!user) {
+                  showToast('로그인이 필요한 서비스입니다.', 'info');
+                  navigate('/auth/login', { state: { from: `/tutors/${tutorProfileNo}` } });
+                  return;
+                }
                 navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=firstcome`, {
                   state: { tutor: data },
-                })
-              }
+                });
+              }}
             >
               선착순 레슨 신청
             </Button>

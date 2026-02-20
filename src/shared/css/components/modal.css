@@ -9,14 +9,21 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  padding: 16px; /* 화면 상하 여백 추가 */
 }
+
 .modal-content {
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 4px 24px 0 rgba(30, 201, 187, 0.15);
-  padding: 32px 24px;
+  padding: 40px 32px; /* 내부 여백 확장 */
   min-width: 320px;
-  max-width: 560px;
+  max-width: 600px; /* 최대 너비 확장 */
   width: 100%;
   position: relative;
+  margin: 16px 0; /* 모달 상하 여백 */
+}
+
+.modal-content > * + * {
+  margin-top: 16px; /* 섹션 간 여백 추가 */
 }

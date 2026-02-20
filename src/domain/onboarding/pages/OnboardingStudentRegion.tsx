@@ -45,6 +45,11 @@ export default function OnboardingStudentRegion() {
     }
   };
 
+  function skipOnboarding() {
+    // 온보딩을 건너뛰고 메인 페이지로 이동
+    navigate('/');
+  }
+
   return (
     <OnboardingLayout
       step={4}
@@ -52,12 +57,19 @@ export default function OnboardingStudentRegion() {
       subtitle="시/도를 선택한 뒤, 구/군을 여러 개 선택하세요."
       bodyClassName="mls-body"
       footer={
-        <OnboardingNextButton
-          addClass="ui-btn--full"
-          disabled={selectedList.length === 0}
-          onClick={goNext}
-          label="다음"
-        ></OnboardingNextButton>
+        <div className="mls-footer" style={{ display: 'flex', gap: '8px' }}>
+          <OnboardingNextButton
+            addClass="ui-btn--full ui-btn--secondary"
+            onClick={skipOnboarding}
+            label="다음에 하기"
+          />
+          <OnboardingNextButton
+            addClass="ui-btn--full"
+            disabled={selectedList.length === 0}
+            onClick={goNext}
+            label="다음"
+          />
+        </div>
       }
     >
       <OnboardingRegionForm regionForm={regionForm} />
