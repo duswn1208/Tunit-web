@@ -33,12 +33,7 @@ export default function TutorProfileEditModal({
         <h2 className="text-lg font-bold mb-4">프로필 정보 수정</h2>
         <div className="mb-2">
           <label className="block text-sm mb-1">이름</label>
-          <input
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            className="w-full border rounded px-2 py-1"
-          />
+          <span className="w-full px-2 py-1 text-gray-700">{form.name}</span>
         </div>
         <div className="mb-2">
           <label className="block text-sm mb-1">닉네임</label>

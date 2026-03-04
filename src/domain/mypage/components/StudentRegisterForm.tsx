@@ -1,5 +1,6 @@
+import './StudentRegister.css';
 import SelectBox from '@/shared/components/SelectBox';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import FormField from '@/shared/components/FormField';
 import Button from '@/shared/components/Button';
 import DayChips from '@/domain/dayTime/components/DayChips';
@@ -12,6 +13,10 @@ import { RadioGroup } from '../../../shared/components';
 import { LessonStatus, LessonType } from '@/domain/lesson/types/lesson';
 import type { DayOfWeekNumber } from '@/shared/constants/date.ts';
 import { CONTRACT_TYPES, getContractTypeLabel } from '@/domain/booking/types/types.ts';
+import { useProfileData } from '../hooks/useProfileData';
+import { fetchTutorSchedule } from '@/domain/lesson/api/scheduleApi';
+import { format, addMonths } from 'date-fns';
+import type { LessonCalendarStatusDto } from '@/domain/lesson/types/lessonCalendar.types';
 
 interface StudentForm {
   studentName: string;
@@ -26,12 +31,59 @@ interface StudentForm {
   memo?: string;
 }
 
-// Props 타입 중복 제거
-export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => void }) {
+function generateSlots(startTime: string, endTime: string): string[] {
+  const slots: string[] = [];
+  let [h, m] = startTime.slice(0, 5).split(':').map(Number);
+  const [endH, endM] = endTime.slice(0, 5).split(':').map(Number);
+  while (h < endH || (h === endH && m < endM)) {
+    slots.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
+    m += 30;
+    if (m >= 60) { m = 0; h += 1; }
+  }
+  return slots;
+}
+
+export default function StudentRegisterForm({ onSuccess, initialDate }: { onSuccess?: () => void; initialDate?: string }) {
   const [lessonCategories, setLessonCategories] = useState<TutorLessonsCategory[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [categoryError, setCategoryError] = useState<string | null>(null);
-  const memoRef = useRef<HTMLTextAreaElement>(null);
+  const { profileData } = useProfileData();
+  const tutorProfileNo = profileData?.tutorProfile?.tutorProfileNo;
+  const [schedule, setSchedule] = useState<LessonCalendarStatusDto | null>(null);
+  const [availableTimeSlots, setAvailableTimeSlots] = useState<string[]>([]);
+  const [lessonDate, setLessonDate] = useState(initialDate || new Date().toISOString().slice(0, 10));
+
+  useEffect(() => {
+    if (!tutorProfileNo) return;
+    const today = format(new Date(), 'yyyy-MM-dd');
+    const twoMonthsLater = format(addMonths(new Date(), 2), 'yyyy-MM-dd');
+    fetchTutorSchedule({ startDate: today, endDate: twoMonthsLater }, tutorProfileNo)
+      .then(setSchedule)
+      .catch(() => setSchedule(null));
+  }, [tutorProfileNo]);
+
+  useEffect(() => {
+    if (!schedule || !lessonDate) {
+      setAvailableTimeSlots([]);
+      return;
+    }
+    const [y, mo, d] = lessonDate.split('-').map(Number);
+    const jsDay = new Date(y, mo - 1, d).getDay();
+    const dayOfWeekNum = jsDay === 0 ? 7 : jsDay;
+    const available = schedule.availableTimes?.find((v) => v.dayOfWeekNum === dayOfWeekNum);
+    if (!available) { setAvailableTimeSlots([]); return; }
+
+    const reservedSlots = [
+      ...(schedule.fixedLessonReservations ?? [])
+        .filter((r) => r.dayOfWeekNum === dayOfWeekNum)
+        .flatMap((r) => generateSlots(r.startTime, r.endTime)),
+      ...(schedule.lessonReservations ?? [])
+        .filter((r) => r.date === lessonDate)
+        .flatMap((r) => generateSlots(r.startTime, r.endTime)),
+    ];
+    const allSlots = generateSlots(available.startTime, available.endTime);
+    setAvailableTimeSlots(allSlots.filter((t) => !reservedSlots.includes(t)));
+  }, [schedule, lessonDate]);
 
   useEffect(() => {
     setLoadingCategories(true);
@@ -57,7 +109,7 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
     firstLessonDate: '',
     startTime: '',
     dayOfWeekSet: new Set<DayOfWeekNumber>(),
-    lessonDate: getToday(),
+    lessonDate: initialDate || getToday(),
     lessonType: LessonType.SINGLE,
     reservationStatus: LessonStatus.REQUESTED,
     memo: '',
@@ -79,33 +131,29 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
 
   const handleRegister = async () => {
     try {
-      //memo 추가
-      setForm((prev) => ({ ...prev, memo: memoRef.current?.value || '' }));
+      const payload = {
+        studentName: form.studentName,
+        phone: form.phone,
+        lesson: form.lesson,
+        lessonDate: form.lessonDate,
+        startTime: form.startTime,
+        reservationStatus: form.reservationStatus,
+        memo: form.memo,
+      };
 
-      const uri =
-        form.lessonType === LessonType.SINGLE ? '/api/lessons/reserve' : '/api/fixed-lessons/save';
-      const payload =
-        form.lessonType === LessonType.SINGLE
-          ? { ...form }
-          : {
-              ...form,
-              firstLessonDate: form.lessonDate,
-              dayOfWeekSet: Array.from(form.dayOfWeekSet),
-            };
-
-      await api.post(uri, payload).then((res) => {
-        alert(res);
-        setForm({
-          studentName: '',
-          phone: '',
-          lesson: '',
-          firstLessonDate: '',
-          startTime: '',
-          dayOfWeekSet: new Set<DayOfWeekNumber>(),
-          reservationStatus: 'REQUESTED',
-          lessonDate: '',
-          lessonType: 'single',
-        });
+      await api.post('/api/lessons/tutor/create', payload);
+      alert('레슨이 등록되었습니다.');
+      setForm({
+        studentName: '',
+        phone: '',
+        lesson: '',
+        firstLessonDate: '',
+        startTime: '',
+        dayOfWeekSet: new Set<DayOfWeekNumber>(),
+        reservationStatus: LessonStatus.REQUESTED,
+        lessonDate: lessonDate,
+        lessonType: LessonType.SINGLE,
+        memo: '',
       });
 
       if (typeof onSuccess === 'function') onSuccess();
@@ -176,11 +224,37 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
           <input
             id="lessonDate"
             name="lessonDate"
-            value={form.lessonDate}
-            readOnly
+            type="date"
+            value={lessonDate}
+            min={format(new Date(), 'yyyy-MM-dd')}
+            onChange={(e) => {
+              setLessonDate(e.target.value);
+              setForm((prev) => ({ ...prev, lessonDate: e.target.value, startTime: '' }));
+            }}
             className="ui-input"
           />
         </FormField>
+
+        {lessonDate && (
+          <FormField label="시작 시간" required>
+            {availableTimeSlots.length > 0 ? (
+              <div className="time-chips">
+                {availableTimeSlots.map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => setForm((prev) => ({ ...prev, startTime: t }))}
+                    className={`time-chip${form.startTime === t ? ' time-chip--selected' : ''}`}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <span className="time-chips-empty">해당 날짜에 가능한 시간이 없습니다</span>
+            )}
+          </FormField>
+        )}
 
         {form.lessonType === 'fixed' && (
           <FormField label="요일" required>
@@ -192,8 +266,8 @@ export default function StudentRegisterForm({ onSuccess }: { onSuccess?: () => v
           <textarea
             id="memo"
             name="memo"
-            value={''}
-            ref={memoRef}
+            value={form.memo}
+            onChange={(e) => setForm((prev) => ({ ...prev, memo: e.target.value }))}
             placeholder="해당 레슨에 대해 기억해야 할 내용이 있으면 적어주세요"
             className="ui-textarea"
           />

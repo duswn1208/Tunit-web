@@ -27,3 +27,8 @@
 .modal-content > * + * {
   margin-top: 16px; /* 섹션 간 여백 추가 */
 }
+
+.modal-content--sm {
+  max-height: 100vh;
+  overflow-y: auto;
+}

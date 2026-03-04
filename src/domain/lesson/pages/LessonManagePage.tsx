@@ -22,6 +22,7 @@ export default function LessonManageLayout() {
   const [selectedEvent, setSelectedEvent] = useState<LessonEvent | null>(null);
   const [viewType, setViewType] = useState<'calendar' | 'list'>('calendar');
   const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string>('');
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const monthStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -119,7 +120,14 @@ export default function LessonManageLayout() {
             <LessonCalendarSection
               lessonEvents={lessonSummary?.lessonList ?? []}
               onSelectEvent={setSelectedEvent}
-              onSelectSlot={() => setShowRegisterModal(true)}
+              onSelectSlot={(slotInfo: any) => {
+                const d = slotInfo?.start instanceof Date ? slotInfo.start : null;
+                const date = d
+                  ? `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+                  : '';
+                setSelectedDate(date);
+                setShowRegisterModal(true);
+              }}
               onNavigate={setCurrentDate}
               size="medium"
             />
@@ -134,7 +142,12 @@ export default function LessonManageLayout() {
           <LessonCardSection lessonSummary={lessonSummary} />
         </div>
       </div>
-      <LessonRegisterModal open={showRegisterModal} onClose={() => setShowRegisterModal(false)} />
+      <LessonRegisterModal
+        open={showRegisterModal}
+        initialDate={selectedDate}
+        onClose={() => setShowRegisterModal(false)}
+        onSuccess={() => { setShowRegisterModal(false); fetchLessons(); }}
+      />
       <LessonDetailModal
         open={!!selectedEvent}
         event={selectedEvent}

@@ -10,6 +10,7 @@ import OnboardingLesson from './domain/onboarding/pages/OnboardingLesson.tsx';
 import OnboardingRegion from './domain/onboarding/pages/OnboardingRegion.tsx';
 import OnboardingAvailability from './domain/onboarding/pages/OnboardingAvailability.tsx';
 import { AuthProvider } from '@/shared/auth/AuthContext.tsx';
+import PrivateRoute from '@/shared/auth/PrivateRoute.tsx';
 import { ToastProvider } from '@/shared/contexts/ToastContext';
 import { AlertProvider } from '@/shared/contexts/AlertContext';
 import RootLayout from './shared/layouts/RootLayout.tsx';
@@ -54,7 +55,7 @@ export default function App() {
                 <Route element={<RootLayout />}>
                   <Route path="/auth/login" element={<LoginPage />} />
                   <Route path="/" element={<HomePage />} />
-                  <Route path="/mypage" element={<MyPage />} />
+                  <Route path="/mypage" element={<PrivateRoute><MyPage /></PrivateRoute>} />
                   <Route path="/find/lessons" element={<TutorSearchPage />} />
                   <Route path="/tutors/:tutorId/booking" element={<TutorDetailPage />} />
                   <Route
