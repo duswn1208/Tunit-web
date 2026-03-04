@@ -1,4 +1,7 @@
 import Chip from '@/shared/components/Chip';
+import Modal from '@/shared/components/Modal';
+import TrialCandidateList from './TrialCandidateList';
+import { confirmTrialContract, rejectTrialContract } from '../api/trialContractApi';
 import type { Contract, ContractStatusCode, PaymentStatusCode } from '../types/contract';
 import { CONTRACT_STATUS_TRANSITIONS, getStatusLabel } from '../types/contract';
 import '../css/my-tutors.css';
@@ -9,6 +12,8 @@ import { updateContractAmount } from '../api/updateContractAmount';
 import { toAmPmFormat } from '@/domain/dayTime/lib/timeUtils';
 import { isFirstcome } from '@/domain/booking/types/types';
 import { useToast } from '@/shared/contexts/ToastContext';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale/ko';
 
 interface TutorContractCardProps {
   contract: Contract;
@@ -33,6 +38,10 @@ export default function TutorContractCard({
   const [editPrice, setEditPrice] = useState(false);
   const [priceInput, setPriceInput] = useState(contract.totalPrice);
   const [displayPrice, setDisplayPrice] = useState(contract.totalPrice);
+  
+  // 체험 레슨 모달 상태
+  const [showTrialModal, setShowTrialModal] = useState(false);
+  
   const handlePriceSave = async () => {
     try {
       await updateContractAmount(contract.contractNo, priceInput);
@@ -62,6 +71,55 @@ export default function TutorContractCard({
   const handlePaymentConfirm = () => {
     if (onPaymentConfirm) {
       onPaymentConfirm(contract.contractNo, 'PAID');
+    }
+  };
+
+  // 체험 레슨 확정 핸들러
+  const handleTrialConfirm = async (date: string, time: string) => {
+    try {
+      await confirmTrialContract(contract.contractNo, {
+        selectedDate: date,
+        selectedStartTime: time,
+      });
+      showToast('체험 레슨이 확정되었습니다!');
+      setShowTrialModal(false);
+      window.location.reload();
+    } catch (error: any) {
+      showToast(error?.message || '확정에 실패했습니다', 'error');
+    }
+  };
+
+  // 체험 레슨 거절 핸들러
+  const handleTrialReject = async (
+    reason: string,
+    alternatives?: Array<{ proposedDate: string; proposedStartTime: string }>
+  ) => {
+    try {
+      await rejectTrialContract(contract.contractNo, {
+        reason,
+        alternativeTimes: alternatives,
+      });
+
+      if (alternatives && alternatives.length > 0) {
+        showToast('대안 시간이 제안되었습니다');
+      } else {
+        showToast('체험 레슨이 거절되었습니다');
+      }
+      setShowTrialModal(false);
+      window.location.reload();
+    } catch (error: any) {
+      showToast(error?.message || '처리에 실패했습니다', 'error');
+    }
+  };
+
+  const formatDisplayDate = (dateStr: string, timeStr?: string) => {
+    try {
+      const dateObj = timeStr ? new Date(dateStr + 'T' + timeStr) : new Date(dateStr + 'T00:00:00');
+      return timeStr
+        ? format(dateObj, 'M월 d일 (E) HH:mm', { locale: ko })
+        : format(dateObj, 'M월 d일 (E)', { locale: ko });
+    } catch {
+      return timeStr ? `${dateStr} ${timeStr}` : dateStr;
     }
   };
 
@@ -153,6 +211,59 @@ export default function TutorContractCard({
       {/* 결제 상태 알림 */}
       {displayPaymentStatus && (
         <PaymentStatusAlert paymentStatus={displayPaymentStatus} onConfirm={handlePaymentConfirm} />
+      )}
+
+      {/* 체험 레슨 대기 중 - 후보 확인 버튼 */}
+      {contract.contractType.code === 'TRIAL' &&
+        contract.contractStatus.code === 'REQUESTED' &&
+        contract.trialCandidates &&
+        contract.trialCandidates.length > 0 && (
+          <div style={{ marginTop: 16 }}>
+            <button
+              className="ui-btn ui-btn--primary"
+              style={{ width: '100%' }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowTrialModal(true);
+              }}
+            >
+              체험 레슨 후보 시간 확인하기
+            </button>
+          </div>
+        )}
+
+      {/* 체험 레슨 확정됨 */}
+      {contract.contractType.code === 'TRIAL' &&
+        contract.contractStatus.code === 'ACTIVE' &&
+        contract.selectedCandidateDate && (
+          <div
+            style={{
+              marginTop: 16,
+              padding: 16,
+              backgroundColor: '#e8f5e9',
+              borderRadius: 8,
+              border: '1px solid #4caf50',
+            }}
+          >
+            <div style={{ fontSize: 14, fontWeight: 600, color: '#2e7d32', marginBottom: 4 }}>
+              ✅ 체험 레슨 확정
+            </div>
+            <div style={{ fontSize: 15 }}>
+              {formatDisplayDate(contract.selectedCandidateDate, contract.selectedCandidateTime)}
+            </div>
+          </div>
+        )}
+
+      {/* 모달 */}
+      {showTrialModal && contract.trialCandidates && (
+        <Modal open={showTrialModal} onClose={() => setShowTrialModal(false)}>
+          <TrialCandidateList
+            candidates={contract.trialCandidates}
+            onConfirm={handleTrialConfirm}
+            onReject={handleTrialReject}
+            onClose={() => setShowTrialModal(false)}
+          />
+        </Modal>
       )}
       {/* 개발 환경 전용 - 결제 상태 테스트 버튼
       {isDev && (

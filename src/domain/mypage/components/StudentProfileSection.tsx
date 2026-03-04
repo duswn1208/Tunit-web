@@ -14,7 +14,7 @@ import StudentProfileEditModal from './StudentProfileEditModal';
 export default function StudentProfileSection() {
   const { showToast } = useToast();
   const { user } = useAuth();
-  const { profileData, isLoading, error } = useProfileData();
+  const { profileData, isLoading, error, refetch } = useProfileData();
   const [editOpen, setEditOpen] = useState(false);
   const [faqOpen, setFaqOpen] = useState(false);
 
@@ -68,6 +68,7 @@ export default function StudentProfileSection() {
       await api.post('/api/tutor/profile', data);
       showToast('프로필 정보가 변경되었습니다.', 'success');
       setEditOpen(false);
+      await refetch();
     } catch (error) {
       showToast(error?.message || '프로필 변경에 실패했습니다.', 'error');
     }
@@ -106,7 +107,7 @@ export default function StudentProfileSection() {
           </Button>
         </div>
       </div>
-      <ProfileInfo />
+      <ProfileInfo profile={profileData} />
       {user?.userRole?.tutor && <StudentRegister />}
       {editOpen && (
         <StudentProfileEditModal

@@ -80,6 +80,23 @@ export type ContractSource = {
   label: string;
 };
 
+// 후보 시간 정보
+export interface CandidateTimeInfo {
+  id: number;
+  priority: number; // 1, 2, 3
+  candidateDate: string; // YYYY-MM-DD
+  candidateStartTime: string; // HH:mm
+  isAvailable: boolean | null; // null: 미확인, true: 가능, false: 불가
+}
+
+// 튜터 제안 시간 정보
+export interface ProposalTimeInfo {
+  id: number;
+  proposedDate: string; // YYYY-MM-DD
+  proposedStartTime: string; // HH:mm
+  isAccepted: boolean | null; // null: 대기, true: 수락, false: 거절
+}
+
 // 계약 정보 (실제 서버 DTO)
 export interface Contract {
   contractNo: number;
@@ -111,6 +128,12 @@ export interface Contract {
   currentLessonCount: number;
   reservable: boolean;
   scheduleList: Schedule[];
+  
+  // 체험 레슨 관련 추가
+  trialCandidates?: CandidateTimeInfo[];
+  tutorProposals?: ProposalTimeInfo[];
+  selectedCandidateDate?: string; // YYYY-MM-DD
+  selectedCandidateTime?: string; // HH:mm
 }
 
 export interface Schedule {

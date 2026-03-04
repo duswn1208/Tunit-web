@@ -4,6 +4,9 @@ import { fetchTutors } from '../api/tutorSearchApi';
 import Header from '@/shared/components/Header';
 import { TutorFilterBar } from '../components/TutorFilterBar';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/shared/auth/AuthContext';
+import { useToast } from '@/shared/contexts/ToastContext';
 import { api } from '../../../shared/lib/api.ts';
 import type { StudentRegion } from '../../region/types/student.ts';
 import type { TutorProfile } from '@/domain/tutor/api/types.ts';
@@ -20,6 +23,9 @@ export interface StudentProfileResponse {
 }
 
 export default function TutorSearchPage() {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { showToast } = useToast();
   const [loading, setLoading] = useState(true);
   const [studentLessons, setStudentLessons] = useState<{ code: string; label: string }[]>([]);
   const [studentRegions, setStudentRegions] = useState<StudentRegion[]>([]);
@@ -60,6 +66,54 @@ export default function TutorSearchPage() {
         setTutors([]);
       });
   }, [selectedRegionCodes, selectedLessonCodes, sortType, loading]);
+
+  // 예약 버튼 클릭 이벤트 리스너 등록
+  useEffect(() => {
+    function handleTrial(e: Event) {
+      const event = e as CustomEvent;
+      const tutorProfileNo = event.detail?.tutorProfileNo;
+      
+      if (!user) {
+        navigate(`/tutors/${tutorProfileNo}/guest-reservation`);
+        return;
+      }
+      navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=trial`);
+    }
+    
+    function handleRegular(e: Event) {
+      const event = e as CustomEvent;
+      const tutorProfileNo = event.detail?.tutorProfileNo;
+      
+      if (!user) {
+        showToast('로그인이 필요한 서비스입니다.', 'info');
+        navigate('/auth/login', { state: { from: `/tutors/${tutorProfileNo}` } });
+        return;
+      }
+      navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=regular`);
+    }
+    
+    function handleFast(e: Event) {
+      const event = e as CustomEvent;
+      const tutorProfileNo = event.detail?.tutorProfileNo;
+      
+      if (!user) {
+        showToast('로그인이 필요한 서비스입니다.', 'info');
+        navigate('/auth/login', { state: { from: `/tutors/${tutorProfileNo}` } });
+        return;
+      }
+      navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=firstcome`);
+    }
+    
+    window.addEventListener('tutor-booking-trial', handleTrial);
+    window.addEventListener('tutor-booking-regular', handleRegular);
+    window.addEventListener('tutor-booking-fast', handleFast);
+    
+    return () => {
+      window.removeEventListener('tutor-booking-trial', handleTrial);
+      window.removeEventListener('tutor-booking-regular', handleRegular);
+      window.removeEventListener('tutor-booking-fast', handleFast);
+    };
+  }, [navigate, user, showToast]);
 
   if (loading) {
     return <div>로딩 중...</div>;

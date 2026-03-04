@@ -1,14 +1,6 @@
-import { useEffect, useState } from 'react';
-import { api } from '../../../shared/lib/api.ts';
 import { HiUser, HiIdentification, HiCalendar, HiChatAlt2 } from 'react-icons/hi';
 
-export default function ProfileInfo() {
-  const [profile, setProfile] = useState<any>(null);
-
-  useEffect(() => {
-    api.get('/api/users/profile/me').then(setProfile);
-  }, []);
-
+export default function ProfileInfo({ profile }: { profile: any }) {
   if (!profile) {
     return null;
   }

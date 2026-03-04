@@ -75,9 +75,36 @@ export default function ContractRequestStep4({
             </span>
           </li>
           <li className="font-bold" style={{ color: 'var(--brand-red)' }}>
-            🗓️ 첫 레슨일:
+            {isTrial(step1?.contractType) ? '⏰ 체험 레슨 후보 시간:' : '🗓️ 첫 레슨일:'}
           </li>
-          {step2?.lessonDtList?.length > 0 && (
+          
+          {/* 체험 레슨: 후보 시간 표시 */}
+          {isTrial(step1?.contractType) && step2?.trialCandidates?.length > 0 && (
+            <div className="ml-4 my-2 space-y-2">
+              {step2.trialCandidates.map((candidate: any) => (
+                <div
+                  key={candidate.priority}
+                  className="flex items-center gap-2"
+                  style={{ color: 'var(--text-secondary)' }}
+                >
+                  <span className="font-semibold" style={{ color: 'var(--brand-red)' }}>
+                    {candidate.priority}순위:
+                  </span>
+                  <span>
+                    {new Date(candidate.candidateDate + 'T00:00:00').toLocaleDateString('ko-KR', {
+                      month: 'long',
+                      day: 'numeric',
+                      weekday: 'short',
+                    })}{' '}
+                    {candidate.candidateStartTime}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+          
+          {/* 정규/선착순 레슨: 첫 레슨일 표시 */}
+          {!isTrial(step1?.contractType) && step2?.lessonDtList?.length > 0 && (
             <div
               className="font-semibold ml-4 my-2 flex flex-wrap gap-2"
               style={{ color: 'var(--brand-red)' }}

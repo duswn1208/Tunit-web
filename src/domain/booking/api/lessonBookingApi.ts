@@ -14,6 +14,13 @@ export interface ContractRequestDto {
   memo?: string;
   emergencyContact?: string;
   totalPrice: number;
+  
+  // 체험 레슨용 추가
+  trialCandidates?: Array<{
+    priority: number;
+    candidateDate: string;
+    candidateStartTime: string;
+  }>;
 }
 
 export async function requestContract(data: ContractRequestDto) {

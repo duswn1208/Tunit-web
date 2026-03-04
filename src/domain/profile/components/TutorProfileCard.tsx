@@ -24,23 +24,47 @@ export function TutorProfileCard({ tutor, variant = 'full', isMobile }: TutorPro
       {!isMobile && (
         <div
           className="info-card-action-buttons"
-          style={{ position: 'absolute', top: 24, right: 24, zIndex: 2, display: 'flex', gap: 8 }}
+          style={{ 
+            position: 'absolute', 
+            top: 24, 
+            right: 24, 
+            zIndex: 2, 
+            display: 'flex', 
+            gap: 8,
+            pointerEvents: 'auto' // 이 영역은 클릭 가능
+          }}
+          onClick={(e) => e.stopPropagation()} // 부모 클릭 이벤트 차단
         >
           <Button
             className="booking-button"
-            onClick={() => window.dispatchEvent(new CustomEvent('tutor-booking-trial'))}
+            onClick={(e) => {
+              e.stopPropagation();
+              window.dispatchEvent(new CustomEvent('tutor-booking-trial', {
+                detail: { tutorProfileNo: tutor.tutorProfileNo }
+              }));
+            }}
           >
             상담/체험 레슨 예약
           </Button>
           <Button
             className="booking-button booking-button--outline"
-            onClick={() => window.dispatchEvent(new CustomEvent('tutor-booking-regular'))}
+            onClick={(e) => {
+              e.stopPropagation();
+              window.dispatchEvent(new CustomEvent('tutor-booking-regular', {
+                detail: { tutorProfileNo: tutor.tutorProfileNo }
+              }));
+            }}
           >
             정기레슨 신청
           </Button>
           <Button
             className="booking-button booking-button--fast"
-            onClick={() => window.dispatchEvent(new CustomEvent('tutor-booking-fast'))}
+            onClick={(e) => {
+              e.stopPropagation();
+              window.dispatchEvent(new CustomEvent('tutor-booking-fast', {
+                detail: { tutorProfileNo: tutor.tutorProfileNo }
+              }));
+            }}
           >
             선착순 레슨 예약
           </Button>

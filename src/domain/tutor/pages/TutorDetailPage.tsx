@@ -45,8 +45,8 @@ export default function TutorDetailPage() {
   useEffect(() => {
     function handleTrial() {
       if (!user) {
-        // 비로그인 사용자는 게스트 예약 페이지로 이동
-        navigate(`/tutors/${tutorProfileNo}/guest-reservation`);
+        showToast('로그인이 필요한 서비스입니다.', 'info');
+        navigate('/auth/login', { state: { from: `/tutors/${tutorProfileNo}` } });
         return;
       }
       navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=trial`, {
@@ -89,6 +89,36 @@ export default function TutorDetailPage() {
 
   return (
     <div className="tutor-detail-page">
+      {/* 뒤로 가기 버튼 */}
+      <div style={{ padding: '16px 16px 0', maxWidth: '1200px', margin: '0 auto' }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            padding: '8px 16px',
+            border: '1px solid #ddd',
+            borderRadius: 8,
+            background: 'white',
+            cursor: 'pointer',
+            fontSize: 15,
+            color: '#333',
+            transition: 'all 0.2s',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = '#f5f5f5';
+            e.currentTarget.style.borderColor = '#999';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'white';
+            e.currentTarget.style.borderColor = '#ddd';
+          }}
+        >
+          ← 목록으로
+        </button>
+      </div>
+      
       <div className="tutor-detail-container">
         <TutorProfileCard tutor={data} variant="full" isMobile={isMobile} />
       </div>

@@ -7,6 +7,13 @@ export const CONTRACT_TYPES = {
   TRIAL: 'TRIAL',
 } as const;
 
+// 체험 레슨 후보 시간
+export interface TrialCandidateTime {
+  priority: number; // 1, 2, 3
+  candidateDate: string; // YYYY-MM-DD
+  candidateStartTime: string; // HH:mm
+}
+
 // 타입 가드 함수들
 export const isRegular = (type: ContractType): type is 'REGULAR' => type === 'REGULAR';
 export const isFirstcome = (type: ContractType): type is 'FIRSTCOME' => type === 'FIRSTCOME';

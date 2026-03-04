@@ -4,7 +4,9 @@ import ContractRequestStep1 from '@/domain/booking/components/ContractRequestSte
 import ContractRequestStep2 from '@/domain/booking/components/ContractRequestStep2';
 import LLessonBookingStep3 from '@/domain/booking/components/ContractRequestStep3';
 import ContractRequestStep4 from '@/domain/booking/components/ContractRequestStep4';
+import TrialCandidateSelector from '@/domain/booking/components/TrialCandidateSelector';
 import { requestContract, updateContract } from '../api/lessonBookingApi';
+import { createTrialContract } from '@/domain/contract/api/trialContractApi';
 import {
   CONTRACT_TYPES,
   getContractTypeLessonCount,
@@ -74,6 +76,15 @@ export default function ContractRequestForm({
     initialData?.emergencyContact || defaultPhone || ''
   );
   const [weekCount, setWeekCount] = useState(initialData?.weekCount || 1);
+  
+  // 체험 레슨용 후보 시간 state 추가
+  const [trialCandidates, setTrialCandidates] = useState<
+    Array<{
+      priority: number;
+      candidateDate: string;
+      candidateStartTime: string;
+    }>
+  >([]);
 
   const handleNext = () => {
     setCurrentStep((prev) => prev + 1);
@@ -82,20 +93,41 @@ export default function ContractRequestForm({
     setCurrentStep((prev) => prev - 1);
   };
   const handleSubmit = async () => {
-    const bookingData = {
-      tutorProfileNo,
-      contractType,
-      lessonCategory: lessonCategory ? lessonCategory.value : '',
-      place,
-      weekCount,
-      lessonCount: getContractTypeLessonCount(contractType!, weekCount),
-      lessonDtList,
-      level,
-      memo,
-      emergencyContact,
-      totalPrice: lessonDtList.length * pricePerLesson,
-    };
     try {
+      // 체험 레슨인 경우
+      if (isTrial(contractType!)) {
+        await createTrialContract({
+          tutorProfileNo: Number(tutorProfileNo),
+          contractType: 'TRIAL',
+          lessonCategory: lessonCategory?.value || '',
+          place,
+          level,
+          memo,
+          emergencyContact,
+          totalPrice: pricePerLesson,
+          trialCandidates: trialCandidates,
+        });
+        
+        showToast('체험 레슨이 신청되었습니다. 튜터의 확인을 기다려주세요.');
+        navigate('/student/my/tutors');
+        return;
+      }
+      
+      // 기존 정규/선착순 레슨 처리
+      const bookingData = {
+        tutorProfileNo,
+        contractType,
+        lessonCategory: lessonCategory ? lessonCategory.value : '',
+        place,
+        weekCount,
+        lessonCount: getContractTypeLessonCount(contractType!, weekCount),
+        lessonDtList,
+        level,
+        memo,
+        emergencyContact,
+        totalPrice: lessonDtList.length * pricePerLesson,
+      };
+      
       if (mode === 'edit' && contractNo) {
         await updateContract(contractNo, bookingData);
         showToast('계약이 수정되었습니다.');
@@ -133,7 +165,16 @@ export default function ContractRequestForm({
           onNext={handleNext}
         />
       )}
-      {currentStep === 2 && (
+      {currentStep === 2 && isTrial(contractType!) && (
+        <TrialCandidateSelector
+          tutorProfileNo={tutorProfileNo}
+          candidates={trialCandidates}
+          onChange={setTrialCandidates}
+          onPrev={handlePrev}
+          onNext={handleNext}
+        />
+      )}
+      {currentStep === 2 && !isTrial(contractType!) && (
         <ContractRequestStep2
           tutorProfileNo={tutorProfileNo}
           contractType={contractType}
@@ -176,7 +217,10 @@ export default function ContractRequestForm({
             weekCount,
             lessonCount: getContractTypeLessonCount(contractType!, weekCount),
           }}
-          step2={{ lessonDtList }}
+          step2={{ 
+            lessonDtList,
+            trialCandidates: isTrial(contractType!) ? trialCandidates : undefined 
+          }}
           step3={{ level, memo, emergencyContact }}
           onPrev={handlePrev}
           onSubmit={handleSubmit}
