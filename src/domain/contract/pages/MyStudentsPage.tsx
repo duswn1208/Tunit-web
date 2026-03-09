@@ -10,8 +10,9 @@ import { getStatusLabel } from '../types/contract';
 import '../css/my-tutors.css';
 
 export default function MyStudentsPage() {
-  const [activeTab, setActiveTab] = useState(getStatusLabel('REQUESTED') + ' 학생');
-  const tabList = [
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
+
+  const baseTabList = [
     getStatusLabel('REQUESTED') + ' 학생',
     getStatusLabel('ACTIVE') + ' 학생',
     '종료된 학생',
@@ -19,10 +20,11 @@ export default function MyStudentsPage() {
 
   // 상태별 필터링 기준을 contract.ts 상수로 관리
   const statusMap: Record<string, ContractStatusCode[]> = {
-    [getStatusLabel('REQUESTED') + ' 학생']: ['REQUESTED', 'APPROVED'],
-    [getStatusLabel('ACTIVE') + ' 학생']: ['ACTIVE'],
+    [baseTabList[0]]: ['REQUESTED', 'APPROVED'],
+    [baseTabList[1]]: ['ACTIVE'],
     '종료된 학생': ['CANCELLED', 'TERMINATED', 'END'],
   };
+
   const { showToast } = useToast();
   const queryClient = useQueryClient();
 
@@ -96,22 +98,49 @@ export default function MyStudentsPage() {
     }
   }, [data, isLoading, showToast]);
 
+  // 탭별 카운트 계산 및 표시 레이블 생성
+  const tabList = baseTabList.map((tab) => {
+    if (!data) return tab;
+    const count = data.filter((c: Contract) =>
+      statusMap[tab]?.includes(c.contractStatus.code),
+    ).length;
+    return count > 0 ? `${tab} (${count})` : tab;
+  });
+
+  const activeTab = baseTabList[activeTabIndex];
+
   return (
     <div className="my-tutors-page">
       <div className="my-tutors-container">
         <Header title="내 학생" />
 
-        <Tab tabs={tabList} selected={activeTab} onSelect={setActiveTab} />
+        <Tab
+          tabs={tabList}
+          selected={tabList[activeTabIndex]}
+          onSelect={(displayTab) => {
+            const idx = tabList.indexOf(displayTab);
+            setActiveTabIndex(idx >= 0 ? idx : 0);
+          }}
+        />
 
         <div className="tutors-list">
-          {(() => {
-            console.log('MyStudentsPage data:', data); // 데이터 확인용 로그
+          {isLoading ? (
+            <div className="tutors-loading" style={{ gridColumn: '1 / -1' }}>
+              <div className="tutors-loading-card" />
+              <div className="tutors-loading-card" />
+            </div>
+          ) : (() => {
             const filtered =
               data?.filter((contract: Contract) =>
                 statusMap[activeTab]?.includes(contract.contractStatus.code),
               ) ?? [];
-            if (!isLoading && filtered.length === 0) {
-              return <p className="empty-message">학생이 없습니다</p>;
+            if (filtered.length === 0) {
+              return (
+                <div className="empty-state">
+                  <span className="empty-state-icon">🎓</span>
+                  <p className="empty-state-text">이 탭에 해당하는 학생이 없습니다</p>
+                </div>
+              );
             }
             return filtered.map((contract: Contract) => (
               <TutorContractCard

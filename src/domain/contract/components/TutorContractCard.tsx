@@ -30,7 +30,6 @@ export default function TutorContractCard({
 
   // 개발 환경에서만 사용 - 결제 상태 테스트용
   const [devPaymentStatus, setDevPaymentStatus] = useState<PaymentStatusCode | null>(null);
-  const isDev = import.meta.env.DEV;
   const { showToast } = useToast();
 
   // 총 금액 수정 상태
@@ -138,39 +137,68 @@ export default function TutorContractCard({
           <p className="tutor-card-location">{contract.place ?? '지정 장소'}</p>
         </div>
       </div>
-      <div className="tutor-card-date">
-        {contract.startDt} ~ {contract.endDt ?? '진행 중'} |{' '}
-        {!isFirstcome(contract.contractStatus.code) &&
-          `매주 ${contract.scheduleList
-            .map((schedule) => `${schedule.dayOfWeek}요일 ${toAmPmFormat(schedule.startTime)}`)
-            .join(', ')} `}{' '}
+
+      {/* 날짜 / 스케줄 */}
+      <div className="tutor-card-section">
+        <div className="tutor-card-info-row">
+          <span className="info-label">기간</span>
+          <span className="info-value">
+            {contract.startDt} ~ {contract.endDt ?? '진행 중'}
+          </span>
+        </div>
+        {!isFirstcome(contract.contractStatus.code) && contract.scheduleList.length > 0 && (
+          <div className="tutor-card-info-row">
+            <span className="info-label">스케줄</span>
+            <span className="info-value">
+              매주{' '}
+              {contract.scheduleList
+                .map((schedule) => `${schedule.dayOfWeek}요일 ${toAmPmFormat(schedule.startTime)}`)
+                .join(', ')}
+            </span>
+          </div>
+        )}
       </div>
-      <div className="tutor-card-lessons">
-        레슨: 주 {contract.weekCount}회 | 총 {contract.lessonCount}회
+
+      {/* 레슨 횟수 / 레벨 / 비상연락처 */}
+      <div className="tutor-card-section">
+        <div className="tutor-card-info-row">
+          <span className="info-label">레슨 횟수</span>
+          <span className="info-value">
+            주 {contract.weekCount}회 · 총 {contract.lessonCount}회
+          </span>
+        </div>
+        <div className="tutor-card-info-row">
+          <span className="info-label">레벨</span>
+          <span className="info-value">{contract.level}</span>
+        </div>
+        <div className="tutor-card-info-row">
+          <span className="info-label">비상연락처</span>
+          <span className="info-value">{contract.emergencyContact}</span>
+        </div>
       </div>
-      <div className="tutor-card-info">
-        <div>레벨: {contract.level}</div>
-        <div>비상연락처: {contract.emergencyContact}</div>
-      </div>
+
+      {/* 메모 */}
       {contract.memo && (
         <div className="tutor-card-memo">
           <strong>메모:</strong> {contract.memo}
         </div>
       )}
-      <div className="tutor-card-price flex items-center gap-2">
+
+      {/* 총 금액 */}
+      <div className="tutor-card-price">
         <span>총 금액:</span>
         {displayPaymentStatus === 'PENDING' && editPrice ? (
           <>
             <input
               type="number"
-              className="border rounded px-2 py-1 w-24 text-right text-sm"
+              className="price-edit-input"
               value={priceInput}
               min={0}
               onChange={(e) => setPriceInput(Number(e.target.value))}
               onClick={(e) => e.stopPropagation()}
             />
             <button
-              className="ml-1 px-2 py-1 text-xs bg-blue-500 text-white rounded"
+              className="price-save-btn"
               onClick={(e) => {
                 e.stopPropagation();
                 handlePriceSave();
@@ -179,7 +207,7 @@ export default function TutorContractCard({
               저장
             </button>
             <button
-              className="ml-1 px-2 py-1 text-xs bg-gray-200 rounded"
+              className="price-cancel-btn"
               onClick={(e) => {
                 e.stopPropagation();
                 setEditPrice(false);
@@ -194,7 +222,7 @@ export default function TutorContractCard({
             <span>{displayPrice.toLocaleString()}원</span>
             {displayPaymentStatus === 'PENDING' && (
               <button
-                className="ml-2 px-2 py-1 text-xs bg-gray-100 border border-gray-300 rounded"
+                className="price-edit-btn"
                 onClick={(e) => {
                   e.stopPropagation();
                   setEditPrice(true);
@@ -217,7 +245,7 @@ export default function TutorContractCard({
         contract.contractStatus.code === 'REQUESTED' &&
         contract.trialCandidates &&
         contract.trialCandidates.length > 0 && (
-          <div style={{ marginTop: 16 }}>
+          <div className="trial-candidate-btn-wrap">
             <button
               className="ui-btn ui-btn--primary"
               style={{ width: '100%' }}
@@ -235,19 +263,9 @@ export default function TutorContractCard({
       {contract.contractType.code === 'TRIAL' &&
         contract.contractStatus.code === 'ACTIVE' &&
         contract.selectedCandidateDate && (
-          <div
-            style={{
-              marginTop: 16,
-              padding: 16,
-              backgroundColor: '#e8f5e9',
-              borderRadius: 8,
-              border: '1px solid #4caf50',
-            }}
-          >
-            <div style={{ fontSize: 14, fontWeight: 600, color: '#2e7d32', marginBottom: 4 }}>
-              ✅ 체험 레슨 확정
-            </div>
-            <div style={{ fontSize: 15 }}>
+          <div className="trial-confirmed-box">
+            <div className="trial-confirmed-title">✅ 체험 레슨 확정</div>
+            <div className="trial-confirmed-date">
               {formatDisplayDate(contract.selectedCandidateDate, contract.selectedCandidateTime)}
             </div>
           </div>

@@ -21,59 +21,88 @@
   gap: 16px;
 }
 
+/* Loading skeleton */
+.tutors-loading {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.tutors-loading-card {
+  height: 200px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Tutor card */
 .tutor-card {
-  margin-bottom: 2%;
   padding: 16px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   background: #fff;
   position: relative;
+  transition: box-shadow 0.2s, transform 0.2s;
 }
 
-/* 결제 확인 필요 알림 */
-.payment-confirming-alert,
+.tutor-card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+/* 결제 상태 알림 */
 .payment-status-alert {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 12px 16px;
-  margin: 8px 0 8px 0;
+  margin: 8px 0;
   border-radius: 8px;
   border: 2px solid;
 }
 
-/* CONFIRMING 상태 - 빨간색 강조 */
+/* CONFIRMING - 빨간색 강조 + pulse */
 .payment-alert--confirming {
   background: linear-gradient(135deg, #ffe5e5 0%, #ffd6d6 100%);
   border-color: #ff6b6b;
   animation: pulse-glow 2s ease-in-out infinite;
 }
 
-/* REQUESTED 상태 - 노란색 */
+/* REQUESTED - 노란색 */
 .payment-alert--requested {
   background: #fff9e6;
   border-color: #ffd60a;
 }
 
-/* PAID 상태 - 초록색 */
+/* PAID - 초록색 */
 .payment-alert--paid {
   background: #e8f5e9;
   border-color: #4caf50;
 }
 
-/* PARTIAL 상태 - 주황색 */
+/* PARTIAL - 주황색 */
 .payment-alert--partial {
   background: #fff3e0;
   border-color: #ff9800;
 }
 
-/* REJECTED 상태 - 진한 빨강 */
+/* REJECTED - 진한 빨강 */
 .payment-alert--rejected {
   background: #ffebee;
   border-color: #f44336;
 }
 
-/* REFUNDED 상태 - 회색 */
+/* REFUNDED - 회색 */
 .payment-alert--refunded {
   background: #f5f5f5;
   border-color: #9e9e9e;
@@ -91,17 +120,6 @@
 
 .alert-icon {
   font-size: 20px;
-  animation: bounce 1s ease-in-out infinite;
-}
-
-@keyframes bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-4px);
-  }
 }
 
 .alert-text {
@@ -137,7 +155,7 @@
 
 .payment-confirm-btn {
   padding: 8px 16px;
-  background: #ff6b6b;
+  background: var(--brand-red);
   color: white;
   border: none;
   border-radius: 6px;
@@ -150,7 +168,7 @@
 }
 
 .payment-confirm-btn:hover {
-  background: #ff5252;
+  background: var(--brand-red-dark);
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
@@ -160,6 +178,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* 카드 헤더 */
 .tutor-card-header {
   display: flex;
   gap: 12px;
@@ -201,27 +220,38 @@
   color: #718096;
 }
 
-.tutor-card-date {
-  font-size: 14px;
-  color: #4a5568;
+/* 카드 섹션 구분 */
+.tutor-card-section {
   margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1f5f9;
 }
 
-.tutor-card-lessons {
-  font-size: 14px;
-  color: #4a5568;
-  margin-bottom: 8px;
-}
-
-.tutor-card-info {
-  font-size: 14px;
-  color: #4a5568;
-  margin-bottom: 8px;
+/* 정보 행 (label + value) */
+.tutor-card-info-row {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  gap: 8px;
+  font-size: 14px;
+  color: #4a5568;
+  margin-bottom: 4px;
 }
 
+.tutor-card-info-row:last-child {
+  margin-bottom: 0;
+}
+
+.info-label {
+  flex-shrink: 0;
+  color: #718096;
+  font-weight: 500;
+  min-width: 72px;
+}
+
+.info-value {
+  color: #2d3748;
+}
+
+/* 메모 */
 .tutor-card-memo {
   font-size: 13px;
   color: #2d3748;
@@ -229,18 +259,23 @@
   padding: 8px 10px;
   border-radius: 6px;
   margin-bottom: 8px;
-  border-left: 3px solid #1ec9bb;
+  border-left: 3px solid #94a3b8;
 }
 
 .tutor-card-memo strong {
-  color: #1ec9bb;
+  color: #64748b;
   margin-right: 4px;
 }
 
+/* 금액 */
 .tutor-card-price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 14px;
   font-weight: 600;
-  color: #ff4757;
+  color: var(--brand-red);
+  margin-bottom: 8px;
 }
 
 .tutor-card-price .price-original {
@@ -250,10 +285,72 @@
 }
 
 .tutor-card-price .price-paid {
-  color: #ff4757;
+  color: var(--brand-red);
   font-weight: 700;
 }
 
+/* 금액 수정 버튼들 */
+.price-edit-input {
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 4px 8px;
+  width: 96px;
+  text-align: right;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.price-edit-input:focus {
+  border-color: var(--brand-red);
+}
+
+.price-save-btn {
+  padding: 4px 8px;
+  font-size: 12px;
+  background: var(--brand-red);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.price-save-btn:hover {
+  background: var(--brand-red-dark);
+}
+
+.price-cancel-btn {
+  padding: 4px 8px;
+  font-size: 12px;
+  background: #e2e8f0;
+  color: #4a5568;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.price-cancel-btn:hover {
+  background: #cbd5e0;
+}
+
+.price-edit-btn {
+  padding: 4px 8px;
+  font-size: 12px;
+  background: #f7fafc;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.price-edit-btn:hover {
+  background: #edf2f7;
+}
+
+/* 카드 액션 버튼 영역 */
 .tutor-card-actions {
   margin-top: 12px;
   padding-top: 12px;
@@ -264,6 +361,7 @@
   gap: 8px;
 }
 
+/* 결제 금액 입력 */
 .payment-amount-input {
   display: flex;
   align-items: center;
@@ -288,7 +386,7 @@
 
 .payment-amount-input input:focus {
   outline: none;
-  border-color: #ff4757;
+  border-color: var(--brand-red);
 }
 
 .payment-amount-input span {
@@ -296,27 +394,21 @@
   color: #4a5568;
 }
 
-.empty-message {
-  text-align: center;
-  padding: 48px 0;
-  font-size: 15px;
-  color: #a0aec0;
-}
-
+/* 상태 변경 버튼 */
 .status-change-btn {
   padding: 6px 12px;
   font-size: 13px;
   font-weight: 500;
-  border: 1px solid #1ec9bb;
+  border: 1px solid var(--brand-red);
   background: #fff;
-  color: #1ec9bb;
+  color: var(--brand-red);
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .status-change-btn:hover {
-  background: #1ec9bb;
+  background: var(--brand-red);
   color: #fff;
 }
 
@@ -324,12 +416,13 @@
   transform: scale(0.98);
 }
 
+/* 결제 요청 버튼 */
 .payment-request-btn {
   padding: 8px 16px;
   font-size: 14px;
   font-weight: 600;
   border: none;
-  background: #ff4757;
+  background: var(--brand-red);
   color: #fff;
   border-radius: 6px;
   cursor: pointer;
@@ -338,11 +431,58 @@
 }
 
 .payment-request-btn:hover {
-  background: #ff3447;
+  background: var(--brand-red-dark);
 }
 
 .payment-request-btn:active {
   transform: scale(0.98);
+}
+
+/* 체험 레슨 확정 박스 */
+.trial-confirmed-box {
+  margin-top: 16px;
+  padding: 16px;
+  background-color: #e8f5e9;
+  border-radius: 8px;
+  border: 1px solid #4caf50;
+}
+
+.trial-confirmed-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2e7d32;
+  margin-bottom: 4px;
+}
+
+.trial-confirmed-date {
+  font-size: 15px;
+  color: #2d3748;
+}
+
+/* 체험 레슨 후보 버튼 래퍼 */
+.trial-candidate-btn-wrap {
+  margin-top: 16px;
+}
+
+/* 빈 상태 */
+.empty-state {
+  text-align: center;
+  padding: 48px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  grid-column: 1 / -1;
+}
+
+.empty-state-icon {
+  font-size: 36px;
+}
+
+.empty-state-text {
+  font-size: 15px;
+  color: #a0aec0;
+  margin: 0;
 }
 
 @media (max-width: 768px) {
@@ -356,6 +496,10 @@
   }
 
   .tutors-list {
+    grid-template-columns: 1fr;
+  }
+
+  .tutors-loading {
     grid-template-columns: 1fr;
   }
 }
