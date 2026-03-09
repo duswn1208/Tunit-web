@@ -30,39 +30,38 @@ export const statusStyle: Record<
   { bg: string; dot: string; text: string; border: string; label: string }
 > = {
   REQUESTED: {
-    bg: '#FFF9DB', // 연한 개나리색
-    dot: '#FFD60A', // 선명한 개나리색
-    text: '#2C2400', // 진한 텍스트
-    border: '#FFD60A', // dot과 동일
+    bg: '#F5F3FF',
+    dot: '#8B5CF6',
+    text: '#5B21B6',
+    border: '#8B5CF6',
     label: '레슨 신청',
   },
   ACTIVE: {
-    bg: '#E3F2FD', // 연한 파랑
-    dot: '#2196F3', // 선명한 파랑
-    text: '#0D47A1', // 진한 텍스트
-    border: '#2196F3', // dot과 동일
+    bg: '#EFF6FF',
+    dot: '#3B82F6',
+    text: '#1E40AF',
+    border: '#3B82F6',
     label: '레슨 확정',
   },
   COMPLETED: {
-    bg: '#E8F5E9', // 연한 초록
-    dot: '#4CAF50', // 선명한 초록
-    text: '#1B5E20', // 진한 텍스트
-    border: '#4CAF50', // dot과 동일
+    bg: '#F0FDF4',
+    dot: '#22C55E',
+    text: '#166534',
+    border: '#22C55E',
     label: '완료',
   },
   CANCELED: {
-    bg: '#FFEBEE', // 연한 빨강
-    dot: '#F44336', // 선명한 빨강
-    text: '#B71C1C', // 진한 텍스트
-    border: '#F44336', // dot과 동일
+    bg: '#FFF1F2',
+    dot: '#F87171',
+    text: '#9F1239',
+    border: '#F87171',
     label: '취소',
   },
   EXPIRED: {
-    // 만료
-    bg: '#F5F5F5', // 연한 회색
-    dot: '#9E9E9E', // 회색
-    text: '#424242', // 진한 텍스트
-    border: '#9E9E9E', // dot과 동일
+    bg: '#F8FAFC',
+    dot: '#94A3B8',
+    text: '#475569',
+    border: '#94A3B8',
     label: '만료/노쇼',
   },
 };

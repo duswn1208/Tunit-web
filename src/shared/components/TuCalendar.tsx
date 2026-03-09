@@ -15,14 +15,6 @@ const localizer = dateFnsLocalizer({
 
 // 커스텀 툴바 컴포넌트
 const CustomToolbar = ({ date, onNavigate, view, onView }: any) => {
-  const goToPrevMonth = () => {
-    onNavigate('PREV');
-  };
-
-  const goToNextMonth = () => {
-    onNavigate('NEXT');
-  };
-
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
@@ -42,14 +34,28 @@ const CustomToolbar = ({ date, onNavigate, view, onView }: any) => {
 
   return (
     <div className="custom-calendar-toolbar">
-      <button onClick={goToPrevMonth} className="calendar-nav-button">
-        &lt;
+      <div className="calendar-view-buttons">
+        <button
+          className={`calendar-view-btn${view === 'month' ? ' active' : ''}`}
+          onClick={() => onView('month')}
+        >
+          월
+        </button>
+        <button
+          className={`calendar-view-btn${view === 'week' ? ' active' : ''}`}
+          onClick={() => onView('week')}
+        >
+          주
+        </button>
+      </div>
+      <button onClick={() => onNavigate('PREV')} className="calendar-nav-button">
+        ‹
       </button>
       <span className="calendar-toolbar-label">
         {year}년 {month}월
       </span>
-      <button onClick={goToNextMonth} className="calendar-nav-button">
-        &gt;
+      <button onClick={() => onNavigate('NEXT')} className="calendar-nav-button">
+        ›
       </button>
     </div>
   );
@@ -131,15 +137,16 @@ export default function TuCalendar({
                     className="brand-chip-dot"
                     style={{ background: style.dot, marginRight: 6, verticalAlign: 'middle' }}
                   ></span>
-                  <b
+                  <span
                     className="lesson-calendar-name"
                     style={{
+                      fontWeight: 600,
                       color: style.text,
                       textDecoration: status === 'CANCELED' ? 'line-through' : undefined,
                     }}
                   >
                     {event.title}
-                  </b>
+                  </span>
                 </div>
               );
             },

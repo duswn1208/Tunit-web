@@ -104,15 +104,12 @@ export default function ScheduleManagePage() {
 
   return (
     <div className="lesson-manage-layout">
-      <Header title="스케줄 설정" />
+      <Header title="스케줄 설정" addClass="schedule-page-header" />
 
-      <div
-        className="schedule-manage-container"
-        style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}
-      >
+      <div className="schedule-manage-container">
         <ScheduleTabs activeTab={activeTab} onTabChange={setActiveTab} />
 
-        <div style={{ minHeight: '600px' }}>
+        <div className="schedule-manage-content">
           {activeTab === 'schedule' ? (
             <BasicScheduleSection
               isLoading={isLoading}

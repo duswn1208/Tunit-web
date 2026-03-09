@@ -31,7 +31,7 @@ export default function BasicScheduleSection({
 }: BasicScheduleSectionProps) {
   return (
     <div>
-      <p style={{ color: '#666' }}>매주 반복되는 레슨 시간을 수정하세요.</p>
+      <p className="schedule-section-desc">매주 반복되는 레슨 시간을 수정하세요.</p>
       <BasicScheduleForm
         isLoading={isLoading}
         selectedDays={selectedDays}

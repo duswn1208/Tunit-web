@@ -35,11 +35,11 @@
 }
 
 .tab-button.active {
-  background: #ff4757 !important;
+  background: var(--brand-red) !important;
   color: #ffffff;
   font-weight: 600;
 }
 
 .tab-button.active:hover {
-  background: #ff4757 !important;
+  background: var(--brand-red-dark) !important;
 }

@@ -104,24 +104,24 @@ export default function MyStudentsPage() {
         <Tab tabs={tabList} selected={activeTab} onSelect={setActiveTab} />
 
         <div className="tutors-list">
-          <div>
-            {(() => {
-              const filtered = data?.filter((contract: Contract) =>
+          {(() => {
+            console.log('MyStudentsPage data:', data); // 데이터 확인용 로그
+            const filtered =
+              data?.filter((contract: Contract) =>
                 statusMap[activeTab]?.includes(contract.contractStatus.code),
               ) ?? [];
-              if (!isLoading && filtered.length === 0) {
-                return <p className="empty-message">학생이 없습니다</p>;
-              }
-              return filtered.map((contract: Contract) => (
-                <TutorContractCard
-                  key={contract.contractNo}
-                  contract={contract}
-                  onStatusChange={handleStatusChange}
-                  onPaymentConfirm={handlePaymentConfirm}
-                />
-              ));
-            })()}
-          </div>
+            if (!isLoading && filtered.length === 0) {
+              return <p className="empty-message">학생이 없습니다</p>;
+            }
+            return filtered.map((contract: Contract) => (
+              <TutorContractCard
+                key={contract.contractNo}
+                contract={contract}
+                onStatusChange={handleStatusChange}
+                onPaymentConfirm={handlePaymentConfirm}
+              />
+            ));
+          })()}
         </div>
       </div>
     </div>

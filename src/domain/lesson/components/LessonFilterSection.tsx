@@ -21,6 +21,8 @@ const LessonFilterSection: React.FC<LessonFilterSectionProps> = ({
   filterStatus,
   setFilterStatus,
 }) => {
+  const hasFilter = filterStudent || filterStatus;
+
   return (
     <div className="lesson-manage-filter">
       <input
@@ -28,6 +30,7 @@ const LessonFilterSection: React.FC<LessonFilterSectionProps> = ({
         placeholder="학생명 검색"
         value={filterStudent}
         onChange={(e) => setFilterStudent(e.target.value)}
+        className={filterStudent ? 'filter-active' : ''}
       />
       <SelectBox
         id="lesson-status-filter"
@@ -36,8 +39,17 @@ const LessonFilterSection: React.FC<LessonFilterSectionProps> = ({
         options={statusOptions}
         onChange={setFilterStatus}
         placeholder="레슨 상태 선택"
-        className="lesson-status-select"
+        className={`lesson-status-select${filterStatus ? ' filter-active' : ''}`}
       />
+      {hasFilter && (
+        <button
+          type="button"
+          className="lesson-filter-reset"
+          onClick={() => { setFilterStudent(''); setFilterStatus(''); }}
+        >
+          초기화
+        </button>
+      )}
     </div>
   );
 };

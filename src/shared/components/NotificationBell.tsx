@@ -87,7 +87,7 @@ export default function NotificationBell() {
         onClick={handleClick}
         className={count > 0 ? 'clickable' : ''}
       >
-        <FontAwesomeIcon icon={faBell} className="text-2xl text-gray-500" />
+        <FontAwesomeIcon icon={faBell} className="text-2xl text-white" />
       </span>
       {count >= 10 && <span className="notification-count">'10+'</span>}
       {count < 10 && count > 0 && <span className="notification-count">{count}</span>}

@@ -7,6 +7,15 @@ interface LessonListSectionProps {
 }
 
 const LessonListSection: React.FC<LessonListSectionProps> = ({ lessonEvents, onSelectEvent }) => {
+  if (lessonEvents.length === 0) {
+    return (
+      <div className="lesson-list-empty">
+        <span className="lesson-list-empty-icon">📋</span>
+        <p>이번 달 레슨이 없습니다.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="lesson-list-view">
       <table className="lesson-list-table">
@@ -14,8 +23,7 @@ const LessonListSection: React.FC<LessonListSectionProps> = ({ lessonEvents, onS
           <tr>
             <th className="lesson-list-th">학생명</th>
             <th className="lesson-list-th">날짜</th>
-            <th className="lesson-list-th">시작</th>
-            <th className="lesson-list-th">종료</th>
+            <th className="lesson-list-th">시간</th>
             <th className="lesson-list-th">상태</th>
             <th className="lesson-list-th">카테고리</th>
           </tr>
@@ -27,15 +35,19 @@ const LessonListSection: React.FC<LessonListSectionProps> = ({ lessonEvents, onS
               <td className="lesson-list-td">{lesson.date.toLocaleDateString()}</td>
               <td className="lesson-list-td">
                 {lesson.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </td>
-              <td className="lesson-list-td">
+                {' ~ '}
                 {lesson.end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </td>
-              <td
-                className="lesson-list-td"
-                style={{ color: statusStyle[lesson?.status?.name].text }}
-              >
-                {lesson?.status?.label}
+              <td className="lesson-list-td">
+                <span
+                  className="lesson-list-status-chip"
+                  style={{
+                    color: statusStyle[lesson?.status?.name].text,
+                    backgroundColor: statusStyle[lesson?.status?.name].bg,
+                  }}
+                >
+                  {lesson?.status?.label}
+                </span>
               </td>
               <td className="lesson-list-td">
                 {typeof lesson.category === 'object' && lesson?.category?.label}

@@ -151,6 +151,27 @@
   margin-top: 4px;
 }
 
+/* react-calendar base styles */
+.react-calendar {
+  width: 100% !important;
+  max-width: none !important;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  line-height: 1.125;
+  padding: 1rem;
+}
+
+.react-calendar button {
+  margin: 0;
+  border: 0;
+  outline: none;
+}
+
+.react-calendar__month-view__days__day {
+  padding: 0.75em !important;
+  height: 60px;
+}
+
 /* Calendar tile styles */
 /* 일요일 빨간색 */
 .react-calendar__month-view__days__day--weekend:nth-of-type(7n + 1) abbr,

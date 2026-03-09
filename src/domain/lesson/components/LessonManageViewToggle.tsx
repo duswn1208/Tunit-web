@@ -10,27 +10,21 @@ const LessonManageViewToggle: React.FC<LessonManageViewToggleProps> = ({
   setViewType,
 }) => {
   return (
-    <div
-      className="lesson-view-toggle"
-      style={{ marginTop: 12, marginBottom: 8, display: 'flex', gap: 16 }}
-    >
-      <span
-        role="button"
-        tabIndex={0}
-        className={`lesson-view-toggle-tab${viewType === 'calendar' ? ' active' : ''}`}
+    <div className="lesson-view-segment">
+      <button
+        type="button"
+        className={`lesson-view-segment-btn${viewType === 'calendar' ? ' active' : ''}`}
         onClick={() => setViewType('calendar')}
       >
         캘린더
-      </span>
-      <span className="lesson-view-toggle-divider">|</span>
-      <span
-        role="button"
-        tabIndex={0}
-        className={`lesson-view-toggle-tab${viewType === 'list' ? ' active' : ''}`}
+      </button>
+      <button
+        type="button"
+        className={`lesson-view-segment-btn${viewType === 'list' ? ' active' : ''}`}
         onClick={() => setViewType('list')}
       >
         리스트
-      </span>
+      </button>
     </div>
   );
 };

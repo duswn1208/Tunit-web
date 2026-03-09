@@ -1,23 +1,22 @@
-[class^='rbc-'],
-[class*=' rbc-'] {
-  color: #979494 !important;
+.rbc-date-cell,
+.rbc-time-slot .rbc-label,
+.rbc-off-range {
+  color: #979494;
 }
 
 /* 활성화된 날짜 스타일 */
 .rbc-active {
   color: #fff !important;
-  background: var(--brand-mint) !important;
+  background: var(--brand-red) !important;
   border-radius: 12px !important;
-  box-shadow: 0 4px 12px rgba(79, 209, 197, 0.3) !important;
+  box-shadow: 0 4px 12px rgba(92, 107, 192, 0.3) !important;
   transform: scale(1.05);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .rbc-today {
-  color: #fff !important;
-  background: var(--brand-mint) !important;
-  border-radius: 12px !important;
-  box-shadow: 0 4px 12px rgba(79, 209, 197, 0.3) !important;
+  background: rgba(92, 107, 192, 0.12) !important;
+  height: 100% !important;
 }
 
 /* 선택 가능한 날짜 스타일 */
@@ -28,7 +27,6 @@
 
 .rbc-day-bg {
   text-align: center;
-  height: 60px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -38,20 +36,17 @@
 }
 
 .rbc-day-bg:hover {
-  background-color: #f0fffe !important;
-  transform: translateY(-2px);
+  background-color: rgba(92, 107, 192, 0.06) !important;
 }
 
 .rbc-day-bg.rbc-selected-cell {
-  background: var(--brand-mint) !important;
-  color: #fff !important;
-  border-radius: 12px !important;
-  box-shadow: 0 4px 12px rgba(79, 209, 197, 0.3) !important;
+  background: rgba(92, 107, 192, 0.15) !important;
+  border-radius: 4px !important;
 }
 
 /* 현재 날짜 강조 스타일 */
 .rbc-current {
-  color: var(--brand-mint) !important;
+  color: var(--brand-red) !important;
   font-weight: bold !important;
 }
 
@@ -74,7 +69,6 @@
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  width: 100% !important;
   font-weight: 500;
   border-radius: 50%;
   width: 36px !important;
@@ -83,7 +77,7 @@
 }
 
 .rbc-date-cell:hover a {
-  background-color: rgba(79, 209, 197, 0.1);
+  background-color: rgba(92, 107, 192, 0.1);
   transform: scale(1.1);
 }
 
@@ -145,13 +139,48 @@
 }
 
 .calendar-nav-button:hover {
-  background-color: var(--brand-mint-light);
-  color: var(--brand-mint);
+  background-color: rgba(92, 107, 192, 0.08);
+  color: var(--brand-red);
+}
+
+.calendar-view-buttons {
+  display: flex;
+  gap: 4px;
+  margin-right: 8px;
+}
+
+.calendar-view-btn {
+  background: none;
+  border: 1px solid #e2e8f0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  padding: 5px 12px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.calendar-view-btn:hover {
+  background-color: rgba(92, 107, 192, 0.08);
+  border-color: var(--brand-red);
+  color: var(--brand-red);
+}
+
+.calendar-view-btn.active {
+  background: var(--brand-red);
+  border-color: var(--brand-red);
+  color: #fff;
 }
 
 .custom-calendar-toolbar--day {
-  justify-content: flex-start;
-  gap: 16px;
+  position: relative;
+  justify-content: center;
+}
+
+.custom-calendar-toolbar--day .calendar-back-button {
+  position: absolute;
+  left: 0;
 }
 
 .calendar-back-button {
@@ -167,13 +196,17 @@
 }
 
 .calendar-back-button:hover {
-  background-color: var(--brand-mint-light);
-  border-color: var(--brand-mint);
-  color: var(--brand-mint);
+  background-color: rgba(92, 107, 192, 0.08);
+  border-color: var(--brand-red);
+  color: var(--brand-red);
 }
 
 .calendar-toolbar-label--day {
   font-size: 20px;
+}
+
+.rbc-event-label {
+  display: none;
 }
 
 /* 기본 툴바 숨기기 */
@@ -183,11 +216,11 @@
 
 .common-calendar-card {
   width: 100%;
-  max-width: 100%; /* 전체 너비 사용 */
+  max-width: 100%;
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 4px 24px 0 rgba(30, 201, 187, 0.1);
-  border: 2px solid var(--brand-red);
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border-light);
   padding: 24px;
   display: flex;
   flex-direction: column;
@@ -217,60 +250,17 @@
 .common-calendar-title {
   font-size: 24px;
   font-weight: 700;
-  color: var(--brand-mint);
+  color: var(--brand-red);
   margin-bottom: 8px;
   letter-spacing: -1px;
 }
 
-.react-calendar {
-  width: 100% !important;
-  max-width: none !important;
-  border: 1px solid #e0e0e0;
-  line-height: 1.125;
-  padding: 1rem;
-}
-
-.react-calendar button {
-  margin: 0;
-  border: 0;
-  outline: none;
-}
-
-.react-calendar__month-view__days__day {
-  padding: 1em !important;
-  height: 100px;
-}
-
-/* Calendar size variations */
-.small .react-calendar {
-  font-size: 0.875rem;
-}
-
-.small .react-calendar__month-view__days__day {
-  height: 80px;
-}
-
-.medium .react-calendar {
-  font-size: 1rem;
-}
-
-.medium .react-calendar__month-view__days__day {
-  height: 100px;
-}
-
-.large .react-calendar {
-  font-size: 1.125rem;
-}
-
-.large .react-calendar__month-view__days__day {
-  height: 120px;
-}
 
 .brand-chip-dot {
   display: inline-block;
   width: 6px;
   height: 6px;
-  /* border-radius: 50%; */
+  border-radius: 50%;
   background: var(--brand-red);
   margin: 0 auto;
   color: var(--brand-red);
@@ -390,7 +380,12 @@
     font-size: 0.9em;
   }
 
-  .react-calendar {
-    padding: 0.5rem;
+  .lesson-calendar-name {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    display: inline-block;
+    vertical-align: middle;
   }
 }

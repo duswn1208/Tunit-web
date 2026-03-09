@@ -196,16 +196,16 @@
 }
 
 .cta-button--primary {
-  background-color: #e11d48;
+  background-color: #5c6bc0;
   color: white;
   border: none;
-  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);
+  box-shadow: 0 4px 12px rgba(92, 107, 192, 0.3);
 }
 
 .cta-button--primary:hover {
-  background-color: #be123c;
+  background-color: #3949ab;
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(225, 29, 72, 0.4);
+  box-shadow: 0 8px 16px rgba(92, 107, 192, 0.4);
 }
 
 .cta-button--secondary {

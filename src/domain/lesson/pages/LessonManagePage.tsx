@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { type LessonEvent, type LessonSummary } from '@/domain/lesson/types/lessonCalendar.ts';
+import { type LessonEvent, type LessonSummary, type LessonStatus, statusStyle } from '@/domain/lesson/types/lessonCalendar.ts';
 import { api } from '../../../shared/lib/api.ts';
 import LessonCalendarSection from '@/domain/lesson/components/LessonCalendarSection.tsx';
-import LessonCardSection from '@/domain/lesson/components/LessonCardSection.tsx';
 import LessonDetailModal from '@/domain/lesson/components/LessonDetailModal.tsx';
 import Header from '@/shared/components/Header.tsx';
 import '@/shared/css/components/lesson-manage.css';
@@ -55,7 +54,6 @@ export default function LessonManageLayout() {
           );
         }
         if (filterStatus) {
-          console.log(mappedLessonList);
           mappedLessonList = mappedLessonList.filter(
             (l: { status: { name: string } }) => l.status.name === filterStatus
           );
@@ -96,51 +94,78 @@ export default function LessonManageLayout() {
 
   return (
     <div className="lesson-manage-layout">
-      <Header title="레슨 관리" />
-      <div className="lesson-manage-sub-header">
-        <LessonFilterSection
-          filterStudent={filterStudent}
-          setFilterStudent={setFilterStudent}
-          filterStatus={filterStatus}
-          setFilterStatus={setFilterStatus}
-        />
-
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <Button onClick={() => setShowRegisterModal(true)}>레슨 등록</Button>
-          <Button onClick={() => navigate('/tutor/schedule')} className="ui-btn--accent">
+      <div className="lesson-manage-top">
+        <Header title="레슨 관리" />
+        <div className="lesson-manage-top-actions">
+          <Button onClick={() => setShowRegisterModal(true)} size="sm">레슨 등록</Button>
+          <Button onClick={() => navigate('/tutor/schedule')} className="ui-btn--accent" size="sm">
             스케줄 설정
           </Button>
         </div>
       </div>
 
-      <LessonManageViewToggle viewType={viewType} setViewType={setViewType} />
+      <div className="lesson-stats-bar">
+        <div className="lesson-stat-item">
+          <span className="lesson-stat-value">{lessonSummary?.todayLessonCount ?? 0}</span>
+          <span className="lesson-stat-label">오늘</span>
+        </div>
+        <div className="lesson-stat-item">
+          <span className="lesson-stat-value">{lessonSummary?.thisWeekLessonCount ?? 0}</span>
+          <span className="lesson-stat-label">이번주 남은</span>
+        </div>
+        <div className="lesson-stat-item">
+          <span className="lesson-stat-value">{lessonSummary?.nextWeekLessonCount ?? 0}</span>
+          <span className="lesson-stat-label">다음주 예정</span>
+        </div>
+        <div className="lesson-stat-item lesson-stat-item--total">
+          <span className="lesson-stat-value">{lessonSummary?.totalLessonCount ?? 0}</span>
+          <span className="lesson-stat-label">이번달 전체</span>
+        </div>
+      </div>
+
+      <div className="lesson-manage-controls">
+        <div className="lesson-manage-controls-left">
+          <LessonManageViewToggle viewType={viewType} setViewType={setViewType} />
+          <div className="lesson-status-color-desc">
+            {(Object.keys(statusStyle) as LessonStatus[]).map((key) => (
+              <span key={key} style={{ color: statusStyle[key].dot }}>
+                ● {statusStyle[key].label}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className="lesson-manage-controls-right">
+          <LessonFilterSection
+            filterStudent={filterStudent}
+            setFilterStudent={setFilterStudent}
+            filterStatus={filterStatus}
+            setFilterStatus={setFilterStatus}
+          />
+        </div>
+      </div>
+
       <div className="lesson-manage-content">
-        <div className="lesson-manage-main">
-          {viewType === 'calendar' ? (
-            <LessonCalendarSection
-              lessonEvents={lessonSummary?.lessonList ?? []}
-              onSelectEvent={setSelectedEvent}
-              onSelectSlot={(slotInfo: any) => {
-                const d = slotInfo?.start instanceof Date ? slotInfo.start : null;
-                const date = d
-                  ? `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-                  : '';
-                setSelectedDate(date);
-                setShowRegisterModal(true);
-              }}
-              onNavigate={setCurrentDate}
-              size="medium"
-            />
-          ) : (
-            <LessonListSection
-              lessonEvents={lessonSummary?.lessonList ?? []}
-              onSelectEvent={setSelectedEvent}
-            />
-          )}
-        </div>
-        <div className="lesson-manage-sidebar">
-          <LessonCardSection lessonSummary={lessonSummary} />
-        </div>
+        {viewType === 'calendar' ? (
+          <LessonCalendarSection
+            lessonEvents={lessonSummary?.lessonList ?? []}
+            onSelectEvent={setSelectedEvent}
+            onSelectSlot={(slotInfo: any) => {
+              const d = slotInfo?.start instanceof Date ? slotInfo.start : null;
+              const date = d
+                ? `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+                : '';
+              setSelectedDate(date);
+              setShowRegisterModal(true);
+            }}
+            onNavigate={setCurrentDate}
+            size="medium"
+          />
+        ) : (
+          <LessonListSection
+            lessonEvents={lessonSummary?.lessonList ?? []}
+            onSelectEvent={setSelectedEvent}
+          />
+        )}
       </div>
       <LessonRegisterModal
         open={showRegisterModal}

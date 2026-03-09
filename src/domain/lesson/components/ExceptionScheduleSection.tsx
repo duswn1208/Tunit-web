@@ -39,9 +39,7 @@ export default function ExceptionScheduleSection() {
     try {
       const response = await api.get<ExceptionSchedule[]>('/api/tutor/schedule/holiday');
       setHolidays(response || []);
-      console.log('Fetched holidays:', response);
     } catch (error) {
-      console.error('휴무 목록 조회 실패:', error);
       // 에러 시 빈 배열 유지
     }
   };
@@ -50,7 +48,7 @@ export default function ExceptionScheduleSection() {
     if (selectedDates.length === 0) {
       // 첫 번째 날짜 선택
       setSelectedDates([date]);
-      setIsAllDay(false);
+      setIsAllDay(true);
       setReason('');
     } else if (selectedDates.length === 1) {
       // 두 번째 날짜 선택 - 기간으로 설정
@@ -89,8 +87,6 @@ export default function ExceptionScheduleSection() {
           endTime: isAllDay ? undefined : endTime,
           reason: reason || undefined,
         };
-
-        console.log('Adding holiday:', newHoliday);
 
         // API 호출
         const response = await api.post<ExceptionSchedule>(
@@ -176,7 +172,7 @@ export default function ExceptionScheduleSection() {
 
   return (
     <div className="exception-schedule-section">
-      <p className="exception-schedule-section__description">
+      <p className="exception-schedule-section__description schedule-section-desc">
         특정 날짜의 휴무나 일시적인 시간 변경을 등록하세요.
       </p>
 
@@ -294,16 +290,7 @@ export default function ExceptionScheduleSection() {
                           ? `${formatDate(holiday.date)} ~ ${formatDate(holiday.endDate)}`
                           : formatDate(holiday.date)}
                         {holiday.type && (
-                          <span
-                            style={{
-                              marginLeft: '8px',
-                              fontSize: '12px',
-                              color: '#666',
-                              backgroundColor: '#fee2e2',
-                              padding: '2px 8px',
-                              borderRadius: '4px',
-                            }}
-                          >
+                          <span className="holiday-type-badge">
                             {holiday.type.label}
                           </span>
                         )}

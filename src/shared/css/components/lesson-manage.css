@@ -1,3 +1,233 @@
+/* 스케줄 페이지 레이아웃 */
+.schedule-manage-container {
+  padding: 20px 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.schedule-page-header,
+.schedule-manage-container .mls-header {
+  text-align: center;
+  width: 100%;
+}
+
+.schedule-manage-container .tab-container {
+  justify-content: center;
+}
+
+.schedule-manage-content {
+  min-height: 600px;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.schedule-section-desc {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  margin: 0 0 16px;
+}
+
+/* 요일 칩 */
+.day-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.day-chip {
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border-input);
+  background: #f8fafc;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.day-chip:hover {
+  border-color: var(--brand-red);
+  color: var(--brand-red);
+}
+
+.day-chip--active {
+  background: var(--brand-red);
+  border-color: var(--brand-red);
+  color: #fff;
+}
+
+/* 엔트리 리스트 */
+.entry-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.entry-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.entry-list-text {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.entry-list-days {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.entry-list-time {
+  color: var(--text-muted);
+}
+
+.entry-list-empty {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0;
+  padding: 4px 0;
+}
+
+.entry-list-remove {
+  background: transparent;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 3px 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.entry-list-remove:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+/* 휴무 타입 뱃지 */
+.holiday-type-badge {
+  margin-left: 8px;
+  font-size: 12px;
+  color: #666;
+  background-color: #fee2e2;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* 스케줄 폼 */
+.schedule-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.schedule-form-loading {
+  background: #f9fafb;
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.schedule-form-step {
+  background: #fff;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.schedule-form-step-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.schedule-form-step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--brand-red);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.schedule-form-step-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.schedule-form-entries {
+  background: #fff;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 80px;
+}
+
+.schedule-form-entries-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.schedule-form-entries-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.schedule-form-entries-count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: var(--brand-red);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.schedule-form-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 4px;
+}
+
 /* 레슨 등록 모달 스타일 */
 .lesson-modal-overlay {
   position: fixed;
@@ -29,11 +259,110 @@
   border: none;
   cursor: pointer;
 }
-.lesson-manage-sub-header {
+/* 상단: 타이틀 + 레슨 등록 버튼 */
+.lesson-manage-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  margin-bottom: 4px;
+}
+
+.lesson-manage-top-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* 통계 바 */
+.lesson-stats-bar {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.lesson-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  padding: 10px 20px;
+  min-width: 90px;
+  flex: 1;
+}
+
+.lesson-stat-item--total {
+  border-color: var(--brand-red);
+}
+
+.lesson-stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.lesson-stat-item--total .lesson-stat-value {
+  color: var(--brand-red);
+}
+
+.lesson-stat-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* 컨트롤 바: 뷰 토글 + 범례 (왼쪽) / 필터 + 스케줄 설정 (오른쪽) */
+.lesson-manage-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 12px;
+  gap: 12px;
+}
+
+.lesson-manage-controls-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.lesson-manage-controls-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 세그먼트 뷰 토글 */
+.lesson-view-segment {
+  display: flex;
+  background: #f1f5f9;
+  border-radius: 8px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.lesson-view-segment-btn {
+  padding: 5px 16px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.lesson-view-segment-btn.active {
+  background: #fff;
+  color: var(--brand-red);
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 /* 리스트 뷰 테이블 스타일 */
 .lesson-list-view {
@@ -46,40 +375,47 @@
   font-size: 14px;
 }
 .lesson-list-th {
-  border-bottom: 1px solid #eee;
-  padding: 8px;
+  border-bottom: 2px solid #eee;
+  padding: 10px 12px;
   font-weight: 600;
+  color: var(--text-secondary);
+  text-align: center;
 }
 .lesson-list-tr {
   cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.lesson-list-tr:hover {
+  background-color: rgba(92, 107, 192, 0.05);
 }
 .lesson-list-td {
-  padding: 8px;
+  padding: 10px 12px;
   border-bottom: 1px solid #f5f5f5;
   text-align: center;
 }
-/* 캘린더/리스트 뷰 전환 탭 스타일 */
-.lesson-view-toggle {
+.lesson-list-status-chip {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+/* 빈 상태 */
+.lesson-list-empty {
   display: flex;
-  gap: 16px;
-  margin-top: 12px;
-  margin-bottom: 8px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  gap: 8px;
 }
-.lesson-view-toggle-tab {
-  cursor: pointer;
-  font-weight: 600;
+.lesson-list-empty-icon {
+  font-size: 36px;
+}
+.lesson-list-empty p {
   font-size: 15px;
-  padding: 6px;
-  color: #6e6c6c;
-}
-.lesson-view-toggle-tab.active {
-  color: var(--brand-red, #e14a4a);
-}
-.lesson-view-toggle-divider {
-  align-self: center;
-  color: #6e6c6c;
-  font-weight: 600;
-  font-size: 15px;
+  margin: 0;
 }
 /* 모달 헤더: 타이틀과 닫기 버튼을 한 줄에 나란히 */
 .lesson-modal-header-row {
@@ -87,7 +423,6 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
 }
 /* 모달 오버레이와 컨텐츠: 항상 화면 위에 오버레이 */
 .modal-overlay {
@@ -109,7 +444,7 @@
 .lesson-manage-layout {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   min-height: 80vh;
   padding: 0 20px;
   max-width: 1600px;
@@ -118,21 +453,8 @@
 }
 
 .lesson-manage-content {
-  display: flex;
-  gap: 24px;
-  margin-top: 16px;
   width: 100%;
   max-width: 1600px;
-}
-
-.lesson-manage-main {
-  flex: 1;
-  min-width: 0; /* flexbox 오버플로우 방지 */
-}
-
-.lesson-manage-sidebar {
-  width: 280px;
-  flex-shrink: 0;
 }
 
 .lesson-calendar-section {
@@ -213,24 +535,103 @@
 }
 .lesson-modal-card {
   position: relative;
-  min-width: 280px;
-  max-width: 560px;
+  min-width: 320px;
+  max-width: 480px;
   background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 24px 0 rgba(30, 201, 187, 0.1);
-  border: 2px solid var(--brand-red);
-  padding: 12px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--border-light);
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  color: #222;
+  gap: 20px;
 }
 
 .lesson-modal-card-title {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* 모달 info 영역 */
+.lesson-modal-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.lesson-modal-info-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 14px;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.lesson-modal-info-row:last-child {
+  border-bottom: none;
+}
+
+.lesson-modal-info-row--status {
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.lesson-modal-info-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  min-width: 32px;
+}
+
+.lesson-modal-info-value {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.lesson-modal-status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+/* 모달 footer (삭제 버튼) */
+.lesson-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-light);
+  margin-top: -4px;
+}
+
+/* 필터 초기화 버튼 */
+.lesson-filter-reset {
+  background: none;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.lesson-filter-reset:hover {
+  border-color: var(--brand-red);
   color: var(--brand-red);
-  padding: 0 6px;
+}
+
+/* 필터 활성 상태 */
+.lesson-manage-filter input.filter-active {
+  border-color: var(--brand-red);
+  outline: none;
 }
 
 .lesson-modal-card-status-row {
@@ -263,64 +664,57 @@
 }
 
 .lesson-modal-btn {
-  background: var(--brand-mint);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 4px 10px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 13px;
-  transition: background 0.2s;
-  min-width: 56px;
-  max-width: 100px;
-  flex: none;
-}
-
-.lesson-modal-btn:hover {
-  background: #159e99;
-}
-
-.lesson-modal-delete-btn {
-  background: var(--brand-red);
-  color: #fff;
-  border: none;
+  background: transparent;
+  color: var(--brand-red);
+  border: 1px solid var(--brand-red);
   border-radius: 6px;
   padding: 4px 12px;
   cursor: pointer;
   font-weight: 600;
   font-size: 13px;
-  box-shadow: 0 2px 8px 0 rgba(30, 201, 187, 0.08);
-  transition: background 0.2s;
-  min-width: 56px;
-  z-index: 2;
-  align-self: flex-end;
+  transition: all 0.15s;
+  flex: none;
+}
+
+.lesson-modal-btn:hover {
+  background: var(--brand-red);
+  color: #fff;
+}
+
+.lesson-modal-delete-btn {
+  background: transparent;
+  color: #ef4444;
+  border: 1px solid #ef4444;
+  border-radius: 6px;
+  padding: 6px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.15s;
 }
 
 .lesson-modal-delete-btn:hover {
-  background: #b91c1c;
+  background: #ef4444;
+  color: #fff;
 }
 
 .lesson-modal-close-btn {
-  position: absolute;
-  top: 16px;
-  right: 16px;
   background: transparent;
   border: none;
-  font-size: 24px;
-  color: #888;
+  font-size: 20px;
+  color: var(--text-muted);
   cursor: pointer;
-  z-index: 2;
-  transition: color 0.2s;
+  transition: color 0.15s;
+  padding: 2px;
+  line-height: 1;
 }
 
 .lesson-modal-close-btn:hover {
-  color: var(--brand-mint);
+  color: var(--text-primary);
 }
 .lesson-manage-filter {
   display: flex;
-  gap: 16px;
-  margin-top: 24px;
+  gap: 8px;
   align-items: center;
 }
 .lesson-manage-filter input,
@@ -331,115 +725,170 @@
   min-width: 120px;
 }
 
-/* 모바일 반응형 */
+/* ── 반응형 ── */
+
+/* 태블릿 (≤1024px) */
 @media (max-width: 1024px) {
-  .lesson-manage-content {
-    flex-direction: column;
-  }
-
-  .lesson-manage-sidebar {
-    width: 100%;
-  }
-
   .lesson-manage-layout {
     padding: 0 12px;
   }
+
+  .lesson-stats-bar {
+    gap: 8px;
+  }
+
+  .lesson-stat-item {
+    padding: 8px 12px;
+  }
+
+  .schedule-form {
+    max-width: 100%;
+  }
 }
 
+/* 모바일 (≤768px) */
 @media (max-width: 768px) {
   .lesson-manage-layout {
-    padding: 0 8px;
+    padding: 0 12px;
   }
 
-  .lesson-manage-sub-header {
-    flex-direction: column;
-    gap: 12px;
-    align-items: stretch;
-  }
-
-  .lesson-manage-filter {
-    flex-direction: column;
+  /* 상단 헤더 + 버튼 */
+  .lesson-manage-top {
+    flex-wrap: nowrap;
     gap: 8px;
+  }
+
+  .lesson-manage-top .mls-header {
+    min-width: 0;
+    flex-shrink: 1;
+  }
+
+  .lesson-manage-top .mls-header h2 {
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* 통계 바: 2×2 그리드 */
+  .lesson-stats-bar {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .lesson-stat-item {
+    padding: 10px;
+    min-width: unset;
+  }
+
+  /* 컨트롤 바: 세로 스택 */
+  .lesson-manage-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .lesson-manage-controls-left {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .lesson-manage-controls-right {
+    width: 100%;
+  }
+
+  /* 필터 */
+  .lesson-manage-filter {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+    width: 100%;
   }
 
   .lesson-manage-filter input,
   .lesson-manage-filter select {
-    width: 100%;
-    min-width: unset;
+    flex: 1;
+    min-width: 120px;
   }
 
-  .lesson-manage-content {
-    gap: 16px;
-  }
-
-  .lesson-view-toggle {
-    justify-content: center;
-  }
-
-  .lesson-card-section {
-    width: 100%;
-  }
-
-  .lesson-count-cards-wrapper {
-    width: 100%;
-  }
-
-  .lesson-count-card {
-    width: 100%;
-    min-width: unset;
-  }
-
-  .lesson-count-item {
-    padding: 6px 0;
-  }
-
-  .lesson-count-label {
-    font-size: 13px;
-  }
-
-  .lesson-count-value {
-    font-size: 16px;
-  }
-
+  /* 상태 범례 */
   .lesson-status-color-desc {
-    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px 12px;
   }
 
-  .lesson-modal-card {
-    max-width: 90vw;
-    min-width: unset;
-    padding: 16px;
-  }
-
-  .lesson-modal-card-title {
-    font-size: 18px;
-  }
-}
-
-@media (max-width: 480px) {
-  .lesson-manage-layout {
-    padding: 0 4px;
-  }
-
-  .lesson-view-toggle {
-    gap: 8px;
-  }
-
-  .lesson-view-toggle-tab {
-    font-size: 14px;
-  }
-
-  .lesson-modal-content {
-    padding: 20px;
-    min-width: 280px;
+  /* 리스트 테이블: 가로 스크롤 */
+  .lesson-list-view {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .lesson-list-table {
-    font-size: 12px;
+    min-width: 480px;
+  }
+
+  /* 모달 */
+  .lesson-modal-card {
+    min-width: unset;
+    width: 90vw;
+    padding: 20px;
+  }
+
+  /* 스케줄 폼 */
+  .schedule-form {
+    max-width: 100%;
+  }
+
+  .schedule-form-step,
+  .schedule-form-entries {
+    padding: 16px;
+  }
+
+  .schedule-form-footer {
+    justify-content: stretch;
+  }
+
+  .schedule-form-footer .ui-btn {
+    width: 100%;
+  }
+}
+
+/* 소형 모바일 (≤480px) */
+@media (max-width: 480px) {
+  .lesson-manage-layout {
+    padding: 0 8px;
+  }
+
+  .lesson-stat-value {
+    font-size: 18px;
+  }
+
+  .lesson-stat-label {
+    font-size: 11px;
+  }
+
+  .lesson-manage-filter {
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+
+  .lesson-manage-filter input,
+  .lesson-manage-filter select {
+    flex: 1;
+    min-width: 0;
+    width: 0;
   }
 
   .lesson-list-th,
   .lesson-list-td {
-    padding: 6px 4px;
+    padding: 8px 6px;
+    font-size: 12px;
+  }
+
+  .lesson-modal-card {
+    width: 95vw;
+    padding: 16px;
   }
 }

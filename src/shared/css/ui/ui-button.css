@@ -67,6 +67,12 @@
   transition: filter 0.12s ease, transform 0.06s ease;
 }
 
+.ui-btn--sm {
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 8px;
+}
+
 .ui-btn--accent {
   background: #fff;
   color: var(--brand-red);
