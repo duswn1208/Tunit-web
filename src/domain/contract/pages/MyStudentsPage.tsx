@@ -10,7 +10,7 @@ import { getStatusLabel } from '../types/contract';
 import '../css/my-tutors.css';
 
 export default function MyStudentsPage() {
-  const [activeTab, setActiveTab] = useState('전체 학생');
+  const [activeTab, setActiveTab] = useState(getStatusLabel('REQUESTED') + ' 학생');
   const tabList = [
     getStatusLabel('REQUESTED') + ' 학생',
     getStatusLabel('ACTIVE') + ' 학생',
@@ -96,8 +96,6 @@ export default function MyStudentsPage() {
     }
   }, [data, isLoading, showToast]);
 
-  console.log('Tutor Contract Data:', data);
-
   return (
     <div className="my-tutors-page">
       <div className="my-tutors-container">
@@ -107,19 +105,22 @@ export default function MyStudentsPage() {
 
         <div className="tutors-list">
           <div>
-            {data &&
-              data
-                .filter((contract: Contract) =>
-                  statusMap[activeTab]?.includes(contract.contractStatus.code)
-                )
-                .map((contract: Contract) => (
-                  <TutorContractCard
-                    key={contract.contractNo}
-                    contract={contract}
-                    onStatusChange={handleStatusChange}
-                    onPaymentConfirm={handlePaymentConfirm}
-                  />
-                ))}
+            {(() => {
+              const filtered = data?.filter((contract: Contract) =>
+                statusMap[activeTab]?.includes(contract.contractStatus.code),
+              ) ?? [];
+              if (!isLoading && filtered.length === 0) {
+                return <p className="empty-message">학생이 없습니다</p>;
+              }
+              return filtered.map((contract: Contract) => (
+                <TutorContractCard
+                  key={contract.contractNo}
+                  contract={contract}
+                  onStatusChange={handleStatusChange}
+                  onPaymentConfirm={handlePaymentConfirm}
+                />
+              ));
+            })()}
           </div>
         </div>
       </div>

@@ -149,6 +149,33 @@
   color: var(--brand-mint);
 }
 
+.custom-calendar-toolbar--day {
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.calendar-back-button {
+  background: none;
+  border: 1px solid #e2e8f0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #4a5568;
+  cursor: pointer;
+  padding: 6px 14px;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.calendar-back-button:hover {
+  background-color: var(--brand-mint-light);
+  border-color: var(--brand-mint);
+  color: var(--brand-mint);
+}
+
+.calendar-toolbar-label--day {
+  font-size: 20px;
+}
+
 /* 기본 툴바 숨기기 */
 .rbc-toolbar {
   display: none !important;

@@ -28,6 +28,8 @@ interface StudentForm {
   reservationStatus: LessonStatus;
   lessonDate: string;
   lessonType: LessonType;
+  price?: number;
+  weeklyCount?: number;
   memo?: string;
 }
 
@@ -49,6 +51,7 @@ export default function StudentRegisterForm({ onSuccess, initialDate }: { onSucc
   const [categoryError, setCategoryError] = useState<string | null>(null);
   const { profileData } = useProfileData();
   const tutorProfileNo = profileData?.tutorProfile?.tutorProfileNo;
+  const defaultPrice = profileData?.tutorProfile?.pricePerHour;
   const [schedule, setSchedule] = useState<LessonCalendarStatusDto | null>(null);
   const [availableTimeSlots, setAvailableTimeSlots] = useState<string[]>([]);
   const [lessonDate, setLessonDate] = useState(initialDate || new Date().toISOString().slice(0, 10));
@@ -86,6 +89,12 @@ export default function StudentRegisterForm({ onSuccess, initialDate }: { onSucc
   }, [schedule, lessonDate]);
 
   useEffect(() => {
+    if (defaultPrice != null) {
+      setForm((prev) => ({ ...prev, price: prev.price ?? defaultPrice }));
+    }
+  }, [defaultPrice]);
+
+  useEffect(() => {
     setLoadingCategories(true);
     fetchLessonCategories()
       .then((data) => {
@@ -112,6 +121,8 @@ export default function StudentRegisterForm({ onSuccess, initialDate }: { onSucc
     lessonDate: initialDate || getToday(),
     lessonType: LessonType.SINGLE,
     reservationStatus: LessonStatus.REQUESTED,
+    price: undefined,
+    weeklyCount: 1,
     memo: '',
   });
 
@@ -129,7 +140,22 @@ export default function StudentRegisterForm({ onSuccess, initialDate }: { onSucc
     });
   };
 
+  const validate = () => {
+    if (!form.lessonType) return '계약 형태를 선택해주세요.';
+    if (!form.lesson) return '레슨 유형을 선택해주세요.';
+    if (!form.studentName.trim()) return '학생 이름을 입력해주세요.';
+    if (!form.phone.trim()) return '전화번호를 입력해주세요.';
+    if (!form.lessonDate) return '레슨일을 선택해주세요.';
+    if (!form.startTime) return '시작 시간을 선택해주세요.';
+    return null;
+  };
+
   const handleRegister = async () => {
+    const error = validate();
+    if (error) {
+      alert(error);
+      return;
+    }
     try {
       const payload = {
         studentName: form.studentName,
@@ -138,6 +164,8 @@ export default function StudentRegisterForm({ onSuccess, initialDate }: { onSucc
         lessonDate: form.lessonDate,
         startTime: form.startTime,
         reservationStatus: form.reservationStatus,
+        price: (form.price ?? 0) * (form.weeklyCount ?? 1) * 4,
+        weeklyCount: form.weeklyCount,
         memo: form.memo,
       };
 
@@ -153,6 +181,8 @@ export default function StudentRegisterForm({ onSuccess, initialDate }: { onSucc
         reservationStatus: LessonStatus.REQUESTED,
         lessonDate: lessonDate,
         lessonType: LessonType.SINGLE,
+        price: undefined,
+        weeklyCount: 1,
         memo: '',
       });
 
@@ -200,26 +230,77 @@ export default function StudentRegisterForm({ onSuccess, initialDate }: { onSucc
             />
           )}
         </FormField>
-        <FormField label="학생 이름" htmlFor="studentName" required>
-          <input
-            id="studentName"
-            name="studentName"
-            value={form.studentName}
-            onChange={handleChange}
-            placeholder="학생 이름"
-            className="ui-input"
-          />
-        </FormField>
-        <FormField label="전화번호" htmlFor="phone" required>
-          <input
-            id="phone"
-            name="phone"
-            value={form.phone}
-            onChange={handleChange}
-            placeholder="전화번호"
-            className="ui-input"
-          />
-        </FormField>
+        <div className="form-row">
+          <FormField label="학생 이름" htmlFor="studentName" required>
+            <input
+              id="studentName"
+              name="studentName"
+              value={form.studentName}
+              onChange={handleChange}
+              placeholder="학생 이름"
+              className="ui-input"
+            />
+          </FormField>
+          <FormField label="전화번호" htmlFor="phone" required>
+            <input
+              id="phone"
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+              placeholder="전화번호"
+              className="ui-input"
+            />
+          </FormField>
+        </div>
+        <div className="form-row">
+          <FormField label="주당 횟수" htmlFor="weeklyCount">
+            <div className="input-with-suffix">
+              <input
+                id="weeklyCount"
+                name="weeklyCount"
+                type="number"
+                min={1}
+                max={7}
+                value={form.weeklyCount ?? ''}
+                onChange={(e) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    weeklyCount: e.target.value === '' ? undefined : Number(e.target.value),
+                  }))
+                }
+                placeholder="1"
+                className="ui-input"
+              />
+              <span className="input-suffix">회</span>
+            </div>
+          </FormField>
+          <FormField label="회당 가격" htmlFor="price">
+            <div className="input-with-suffix">
+              <input
+                id="price"
+                name="price"
+                type="number"
+                min={0}
+                value={form.price ?? ''}
+                onChange={(e) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    price: e.target.value === '' ? undefined : Number(e.target.value),
+                  }))
+                }
+                placeholder="0"
+                className="ui-input"
+              />
+              <span className="input-suffix">원</span>
+            </div>
+          </FormField>
+        </div>
+        {(form.weeklyCount ?? 0) > 0 && (form.price ?? 0) > 0 && (
+          <div className="price-total">
+            주 {form.weeklyCount}회 × {(form.price ?? 0).toLocaleString()}원 × 4주
+            <strong> = {((form.weeklyCount ?? 0) * (form.price ?? 0) * 4).toLocaleString()}원/월</strong>
+          </div>
+        )}
         <FormField label="레슨일" htmlFor="lessonDate" required>
           <input
             id="lessonDate"

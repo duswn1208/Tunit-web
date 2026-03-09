@@ -26,7 +26,6 @@ export default function TutorContractCard({
   onStatusChange,
   onPaymentConfirm,
 }: TutorContractCardProps) {
-  console.log('TutorContractCard contract:', contract);
   const navigate = useNavigate();
 
   // 개발 환경에서만 사용 - 결제 상태 테스트용
@@ -36,12 +35,12 @@ export default function TutorContractCard({
 
   // 총 금액 수정 상태
   const [editPrice, setEditPrice] = useState(false);
-  const [priceInput, setPriceInput] = useState(contract.totalPrice);
-  const [displayPrice, setDisplayPrice] = useState(contract.totalPrice);
-  
+  const [priceInput, setPriceInput] = useState(contract.totalPrice || 0);
+  const [displayPrice, setDisplayPrice] = useState(contract.totalPrice || 0);
+
   // 체험 레슨 모달 상태
   const [showTrialModal, setShowTrialModal] = useState(false);
-  
+
   const handlePriceSave = async () => {
     try {
       await updateContractAmount(contract.contractNo, priceInput);
@@ -92,7 +91,7 @@ export default function TutorContractCard({
   // 체험 레슨 거절 핸들러
   const handleTrialReject = async (
     reason: string,
-    alternatives?: Array<{ proposedDate: string; proposedStartTime: string }>
+    alternatives?: Array<{ proposedDate: string; proposedStartTime: string }>,
   ) => {
     try {
       await rejectTrialContract(contract.contractNo, {

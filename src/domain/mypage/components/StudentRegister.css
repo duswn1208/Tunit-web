@@ -93,6 +93,46 @@
   color: #333;
 }
 
+.form-row {
+  display: flex;
+  gap: 8px;
+}
+
+.form-row > * {
+  flex: 1;
+  min-width: 0;
+}
+
+.input-with-suffix {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.input-with-suffix .ui-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.input-suffix {
+  font-size: 13px;
+  color: #555;
+  white-space: nowrap;
+}
+
+.price-total {
+  font-size: 13px;
+  color: #555;
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-top: -2px;
+}
+
+.price-total strong {
+  color: var(--brand-mint, #1ec9bb);
+}
+
 .time-chips {
   display: flex;
   flex-wrap: wrap;
