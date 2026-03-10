@@ -16,6 +16,9 @@ export default function TutorProfileEditModal({
     careerYears: profile.tutorProfile?.careerYears || '',
     pricePerHour: profile.tutorProfile?.pricePerHour || '',
     durationMin: profile.tutorProfile?.durationMin || '',
+    bankName: profile.tutorProfile?.bankName || '',
+    accountHolder: profile.tutorProfile?.accountHolder || '',
+    accountNumber: profile.tutorProfile?.accountNumber || '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -78,6 +81,36 @@ export default function TutorProfileEditModal({
             value={form.introduce}
             onChange={handleChange}
             className="w-full border rounded px-2 py-1"
+          />
+        </div>
+        <hr className="my-4" />
+        <div className="mb-2">
+          <label className="block text-sm mb-1">은행명</label>
+          <input
+            name="bankName"
+            value={form.bankName}
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+            placeholder="예) 국민은행"
+          />
+        </div>
+        <div className="mb-2">
+          <label className="block text-sm mb-1">예금주</label>
+          <input
+            name="accountHolder"
+            value={form.accountHolder}
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+          />
+        </div>
+        <div className="mb-2">
+          <label className="block text-sm mb-1">계좌번호</label>
+          <input
+            name="accountNumber"
+            value={form.accountNumber}
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+            placeholder="- 없이 입력"
           />
         </div>
         <div className="flex justify-end gap-2 mt-4">

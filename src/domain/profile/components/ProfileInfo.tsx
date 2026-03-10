@@ -1,4 +1,4 @@
-import { HiUser, HiIdentification, HiCalendar, HiChatAlt2 } from 'react-icons/hi';
+import { HiUser, HiIdentification, HiCalendar, HiChatAlt2, HiCreditCard } from 'react-icons/hi';
 
 export default function ProfileInfo({ profile }: { profile: any }) {
   if (!profile) {
@@ -59,6 +59,32 @@ export default function ProfileInfo({ profile }: { profile: any }) {
           {profile?.tutorProfile?.introduce || '소개가 없습니다.'}
         </p>
       </div>
+      {/* 계좌 정보 */}
+      {profile?.tutorProfile && (
+        <>
+          <hr className="my-4" />
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <HiCreditCard className="text-gray-400 text-base" />
+              <span className="text-sm font-semibold text-gray-600">계좌 정보</span>
+            </div>
+            <div className="grid grid-cols-2 gap-2 text-sm text-gray-700">
+              <div>
+                <span className="text-gray-500">은행</span>
+                <span className="ml-2">{profile.tutorProfile.bankName || '-'}</span>
+              </div>
+              <div>
+                <span className="text-gray-500">예금주</span>
+                <span className="ml-2">{profile.tutorProfile.accountHolder || '-'}</span>
+              </div>
+              <div className="col-span-2">
+                <span className="text-gray-500">계좌번호</span>
+                <span className="ml-2">{profile.tutorProfile.accountNumber || '-'}</span>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

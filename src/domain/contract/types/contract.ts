@@ -134,6 +134,11 @@ export interface Contract {
   tutorProposals?: ProposalTimeInfo[];
   selectedCandidateDate?: string; // YYYY-MM-DD
   selectedCandidateTime?: string; // HH:mm
+
+  // 튜터 계좌 정보
+  tutorBankName?: string;
+  tutorAccountHolder?: string;
+  tutorAccountNumber?: string;
 }
 
 export interface Schedule {

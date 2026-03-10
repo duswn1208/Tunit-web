@@ -232,6 +232,16 @@ export default function StudentContractCard({
 
       {contract.contractStatus.code === 'APPROVED' && contract.paymentStatus.code === 'PENDING' && (
         <div className="tutor-card-actions">
+          {(contract.tutorBankName || contract.tutorAccountNumber) && (
+            <div className="tutor-account-info">
+              <div className="tutor-account-label">입금 계좌</div>
+              <div className="tutor-account-row">
+                <span>{contract.tutorBankName}</span>
+                <span>{contract.tutorAccountNumber}</span>
+                <span>{contract.tutorAccountHolder}</span>
+              </div>
+            </div>
+          )}
           <div className="payment-amount-input">
             <label htmlFor={`payment-${contract.contractNo}`}>결제 금액:</label>
             <input
