@@ -1,6 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useToast } from '@/shared/contexts/ToastContext';
-import TutorLessonInfo from '../components/TutorLessonInfo';
 import TutorScheduleInfo from '../components/TutorScheduleInfo';
 import TutorReviewSection from '../components/TutorReviewSection';
 import TutorFaqSection from '../components/TutorFaqSection.tsx';
@@ -14,8 +13,8 @@ import { useEffect, useRef, useState } from 'react';
 import useMediaQuery from '@/shared/hooks/useMediaQuery';
 import { useAuth } from '@/shared/auth/AuthContext';
 
-const TAB_LIST = ['레슨정보', '레슨시간', '레슨후기', 'FAQ'];
-const SECTION_IDS = ['section-lesson-info', 'section-schedule', 'section-review', 'section-faq'];
+const TAB_LIST = ['튜터소개', '레슨시간', '레슨후기', 'FAQ'];
+const SECTION_IDS = ['section-intro', 'section-schedule', 'section-review', 'section-faq'];
 
 export default function TutorDetailPage() {
   const { tutorId: tutorProfileNo } = useParams();
@@ -123,7 +122,7 @@ export default function TutorDetailPage() {
       </div>
 
       <div className="tutor-detail-container">
-        <TutorProfileCard tutor={data} variant="full" isMobile={isMobile} />
+        <TutorProfileCard tutor={data} variant="full" isMobile={isMobile} clickable={false} />
       </div>
 
       {/* 섹션 이동 탭 (sticky) */}
@@ -131,8 +130,11 @@ export default function TutorDetailPage() {
 
       <div className="info-grid-wrap">
         <div className="info-grid">
-          <div id="section-lesson-info" className="tutor-section">
-            <TutorLessonInfo lessonData={data} />
+          <div id="section-intro" className="tutor-section">
+            <div className="info-card">
+              <h2 className="info-title">튜터 소개</h2>
+              <p className="tutor-intro-text">{data.introduce || '아직 소개글이 없습니다.'}</p>
+            </div>
           </div>
           <div id="section-schedule" className="tutor-section">
             <TutorScheduleInfo scheduleData={data.tutorAvailableTimeList} />

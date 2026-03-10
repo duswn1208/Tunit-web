@@ -167,14 +167,10 @@
   gap: 1.5rem;
 }
 
-/* 레슨정보 카드 내 Chip은 border 없이 */
-.info-card .badge-group [class*='chip'] {
-  border: none;
-}
 
 /* 프로필 헤더 */
 .tutor-profile {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0;
 }
 
 .tutor-profile .ui-card-body {
@@ -183,46 +179,53 @@
 
 .tutor-profile-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.tutor-profile-header--clickable {
+  cursor: pointer;
 }
 
 .tutor-avatar {
-  width: 8rem;
-  height: 8rem;
+  width: 6rem;
+  height: 6rem;
   border-radius: 9999px;
   object-fit: cover;
-  border: 4px solid white;
+  border: 3px solid white;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
 }
 
 .tutor-avatar-placeholder {
-  width: 8rem;
-  height: 8rem;
+  width: 6rem;
+  height: 6rem;
   border-radius: 9999px;
   background-color: #f3f4f6;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
 }
 
 .tutor-info {
   flex: 1;
+  min-width: 0;
 }
 
 .tutor-name {
-  font-size: 1.875rem;
+  font-size: 1.375rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.375rem;
   color: #1f2937;
 }
 
-.tutor-intro {
+.tutor-intro-text {
   color: #4b5563;
-  font-size: 1.125rem;
-  margin-bottom: 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.75;
   white-space: pre-wrap;
 }
 
@@ -230,7 +233,89 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
+  margin-bottom: 0.625rem;
+}
+
+/* 레슨 과목 / 지역 태그 */
+.tutor-tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-top: 0.375rem;
+}
+
+.tutor-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.tutor-tag--career {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.tutor-tag--price {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.tutor-tag--rating {
+  background: #fef9c3;
+  color: #a16207;
+}
+
+.tutor-tag--lesson {
+  background: #e8eaf6;
+  color: var(--brand-red);
+}
+
+.tutor-tag--region {
+  background: #f0f9ff;
+  color: #0369a1;
+}
+
+.tutor-tag-icon {
+  font-size: 0.6875rem;
+  opacity: 0.7;
+}
+
+.tutor-tag--more {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+/* 데스크탑 예약 버튼 — 카드 하단 플로우 */
+.info-card-action-buttons {
+  display: flex;
+  gap: 0.625rem;
+  padding-top: 1rem;
+  margin-top: 0.25rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+/* 모바일: 세로 배치 */
+@media (max-width: 768px) {
+  .tutor-profile-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .tutor-badges,
+  .tutor-tag-row {
+    justify-content: center;
+  }
+
+  .tutor-intro {
+    text-align: center;
+  }
 }
 
 /* 예약 폼 스타일 */

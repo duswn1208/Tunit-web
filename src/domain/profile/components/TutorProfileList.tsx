@@ -9,7 +9,7 @@ export default function TutorProfileList({ tutors }: { tutors: TutorProfile[] })
           조건에 맞는 튜터가 없어요 😭
         </div>
       ) : (
-        tutors.map((tutor) => <TutorProfileCard key={tutor.tutorProfileNo} tutor={tutor} />)
+        tutors.map((tutor) => <TutorProfileCard key={tutor.tutorProfileNo} tutor={tutor} variant="summary" />)
       )}
     </div>
   );

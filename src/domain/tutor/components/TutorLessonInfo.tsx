@@ -1,4 +1,5 @@
-import Chip from '@/shared/components/Chip';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import type { TutorDetailResponse } from '../api/tutorApi';
 
 interface TutorLessonInfoProps {
@@ -12,27 +13,22 @@ export default function TutorLessonInfo({ lessonData }: TutorLessonInfoProps) {
       <div className="info-content">
         <div>
           <h3 className="info-subtitle">레슨 과목</h3>
-          <div className="badge-group">
+          <div className="tutor-tag-row">
             {lessonData.lessonSubcategoryList?.map((lesson) => (
-              <Chip
-                key={lesson.tutorLessonNo}
-                label={lesson.lessonCategory.label}
-                variant="gray"
-                size="md"
-                />
+              <span key={lesson.tutorLessonNo} className="tutor-tag tutor-tag--lesson">
+                {lesson.lessonCategory.label}
+              </span>
             ))}
           </div>
         </div>
         <div>
           <h3 className="info-subtitle">레슨 가능 지역</h3>
-          <div className="badge-group">
+          <div className="tutor-tag-row">
             {lessonData.regionList?.map((region) => (
-              <Chip
-                key={region.code}
-                label={region.label}
-                variant="gray"
-                size="md"
-                />
+              <span key={region.code} className="tutor-tag tutor-tag--region">
+                <FontAwesomeIcon icon={faMapMarkerAlt} className="tutor-tag-icon" />
+                {region.label}
+              </span>
             ))}
           </div>
         </div>
