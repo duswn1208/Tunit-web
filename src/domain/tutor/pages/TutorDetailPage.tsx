@@ -1,4 +1,4 @@
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useToast } from '@/shared/contexts/ToastContext';
 import TutorLessonInfo from '../components/TutorLessonInfo';
 import TutorScheduleInfo from '../components/TutorScheduleInfo';
@@ -10,9 +10,12 @@ import { Button } from '@/shared/components';
 import { useTutorDetail } from '../hooks/useTutorDetail';
 import '../css/tutor-detail.css';
 import '../css/tutor-calendar.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useMediaQuery from '@/shared/hooks/useMediaQuery';
 import { useAuth } from '@/shared/auth/AuthContext';
+
+const TAB_LIST = ['레슨정보', '레슨시간', '레슨후기', 'FAQ'];
+const SECTION_IDS = ['section-lesson-info', 'section-schedule', 'section-review', 'section-faq'];
 
 export default function TutorDetailPage() {
   const { tutorId: tutorProfileNo } = useParams();
@@ -21,27 +24,56 @@ export default function TutorDetailPage() {
   const { showToast } = useToast();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [selectedTab, setSelectedTab] = useState('레슨정보');
-  const tabList = ['레슨정보', '레슨시간', '레슨후기', 'FAQ'];
+  const isMobile = useMediaQuery('(max-width: 768px)');
   const { data, isLoading, error } = useTutorDetail(tutorProfileNo);
 
-  // 로딩/에러 토스트는 useEffect에서 처리
+  const [activeSection, setActiveSection] = useState('레슨정보');
+  const isScrollingToSection = useRef(false);
+
   useEffect(() => {
-    if (isLoading) {
-      showToast('로딩 중입니다...', 'info');
-    }
+    if (isLoading) showToast('로딩 중입니다...', 'info');
   }, [isLoading, showToast]);
 
   useEffect(() => {
-    if (error) {
-      showToast('죄송합니다. 튜터 정보를 찾을 수 없습니다.', 'error');
-    }
+    if (error) showToast('죄송합니다. 튜터 정보를 찾을 수 없습니다.', 'error');
   }, [error, showToast]);
 
-  // 모든 hook은 조건문보다 위에!
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  // 스크롤 스파이: 현재 보이는 섹션을 활성 탭으로 표시
+  useEffect(() => {
+    if (!data) return;
 
-  // 프로필 카드 버튼 클릭 이벤트 리스너 등록 (예약/신청)
+    const observers = SECTION_IDS.map((id, index) => {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting && !isScrollingToSection.current) {
+            setActiveSection(TAB_LIST[index]);
+          }
+        },
+        { rootMargin: '-60px 0px -45% 0px', threshold: 0 },
+      );
+      observer.observe(el);
+      return observer;
+    });
+
+    return () => observers.forEach((obs) => obs?.disconnect());
+  }, [data]);
+
+  // 탭 클릭 → 해당 섹션으로 스크롤
+  const handleTabSelect = (tab: string) => {
+    const index = TAB_LIST.indexOf(tab);
+    const el = document.getElementById(SECTION_IDS[index]);
+    if (!el) return;
+    setActiveSection(tab);
+    isScrollingToSection.current = true;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setTimeout(() => {
+      isScrollingToSection.current = false;
+    }, 800);
+  };
+
+  // 예약 이벤트 리스너
   useEffect(() => {
     function handleTrial() {
       if (!user) {
@@ -49,9 +81,7 @@ export default function TutorDetailPage() {
         navigate('/auth/login', { state: { from: `/tutors/${tutorProfileNo}` } });
         return;
       }
-      navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=trial`, {
-        state: { tutor: data },
-      });
+      navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=trial`, { state: { tutor: data } });
     }
     function handleRegular() {
       if (!user) {
@@ -59,9 +89,7 @@ export default function TutorDetailPage() {
         navigate('/auth/login', { state: { from: `/tutors/${tutorProfileNo}` } });
         return;
       }
-      navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=regular`, {
-        state: { tutor: data },
-      });
+      navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=regular`, { state: { tutor: data } });
     }
     function handleFast() {
       if (!user) {
@@ -69,9 +97,7 @@ export default function TutorDetailPage() {
         navigate('/auth/login', { state: { from: `/tutors/${tutorProfileNo}` } });
         return;
       }
-      navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=firstcome`, {
-        state: { tutor: data },
-      });
+      navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=firstcome`, { state: { tutor: data } });
     }
     window.addEventListener('tutor-booking-trial', handleTrial);
     window.addEventListener('tutor-booking-regular', handleRegular);
@@ -90,54 +116,35 @@ export default function TutorDetailPage() {
   return (
     <div className="tutor-detail-page">
       {/* 뒤로 가기 버튼 */}
-      <div style={{ padding: '16px 16px 0', maxWidth: '1200px', margin: '0 auto' }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            padding: '8px 16px',
-            border: '1px solid #ddd',
-            borderRadius: 8,
-            background: 'white',
-            cursor: 'pointer',
-            fontSize: 15,
-            color: '#333',
-            transition: 'all 0.2s',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = '#f5f5f5';
-            e.currentTarget.style.borderColor = '#999';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'white';
-            e.currentTarget.style.borderColor = '#ddd';
-          }}
-        >
+      <div className="detail-back-button-wrap">
+        <button className="detail-back-button" onClick={() => navigate(-1)}>
           ← 목록으로
         </button>
       </div>
-      
+
       <div className="tutor-detail-container">
         <TutorProfileCard tutor={data} variant="full" isMobile={isMobile} />
       </div>
 
-      <Tab tabs={tabList} selected={selectedTab} onSelect={setSelectedTab} />
+      {/* 섹션 이동 탭 (sticky) */}
+      <Tab tabs={TAB_LIST} selected={activeSection} onSelect={handleTabSelect} />
 
-      {/* info-card wrapper + 버튼 그룹 */}
-      <div style={{ position: 'relative' }}>
-        {/* 데스크탑: info-card-action-buttons는 TutorProfileCard로 이동됨 */}
+      <div className="info-grid-wrap">
         <div className="info-grid">
-          {selectedTab === '레슨정보' && <TutorLessonInfo lessonData={data} />}
-          {selectedTab === '레슨시간' && (
+          <div id="section-lesson-info" className="tutor-section">
+            <TutorLessonInfo lessonData={data} />
+          </div>
+          <div id="section-schedule" className="tutor-section">
             <TutorScheduleInfo scheduleData={data.tutorAvailableTimeList} />
-          )}
-          {selectedTab === '레슨후기' && (
+          </div>
+          <div id="section-review" className="tutor-section">
             <TutorReviewSection tutorId={parseInt(tutorProfileNo, 10)} />
-          )}
-          {selectedTab === 'FAQ' && <TutorFaqSection faqData={data.tutorFaqList} />}
+          </div>
+          <div id="section-faq" className="tutor-section">
+            <TutorFaqSection faqData={data.tutorFaqList} />
+          </div>
         </div>
+
         {/* 모바일: 하단 플로팅 버튼 */}
         {isMobile && (
           <div className="floating-booking-buttons">
@@ -145,13 +152,10 @@ export default function TutorDetailPage() {
               className="booking-button"
               onClick={() => {
                 if (!user) {
-                  // 비로그인 사용자는 게스트 예약 페이지로 이동
                   navigate(`/tutors/${tutorProfileNo}/guest-reservation`);
                   return;
                 }
-                navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=trial`, {
-                  state: { tutor: data },
-                });
+                navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=trial`, { state: { tutor: data } });
               }}
             >
               상담/체험 레슨 예약
@@ -164,9 +168,7 @@ export default function TutorDetailPage() {
                   navigate('/auth/login', { state: { from: `/tutors/${tutorProfileNo}` } });
                   return;
                 }
-                navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=regular`, {
-                  state: { tutor: data },
-                });
+                navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=regular`, { state: { tutor: data } });
               }}
             >
               정기레슨 신청
@@ -179,9 +181,7 @@ export default function TutorDetailPage() {
                   navigate('/auth/login', { state: { from: `/tutors/${tutorProfileNo}` } });
                   return;
                 }
-                navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=firstcome`, {
-                  state: { tutor: data },
-                });
+                navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=firstcome`, { state: { tutor: data } });
               }}
             >
               선착순 레슨 신청

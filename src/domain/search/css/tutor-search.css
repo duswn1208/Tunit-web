@@ -2,10 +2,16 @@
   display: flex;
   gap: 8px;
   overflow-x: auto;
-  padding: 8px 0 12px 0;
+  padding: 8px 16px 12px;
   position: sticky;
   top: 0;
   z-index: 10;
+  background: #f8f9fb;
+  border-bottom: 1px solid #ebebeb;
+  scrollbar-width: none;
+}
+.tutor-filter-bar::-webkit-scrollbar {
+  display: none;
 }
 
 .filter-chip {
@@ -34,225 +40,61 @@
   box-sizing: border-box;
   background: #f8f9fb;
   min-height: 100vh;
-  padding-bottom: 32px;
+  padding: 12px 16px 32px;
 }
 
-.tutor-profile-card {
-  background-color: #fff;
-  border: 1px solid var(--brand-red);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  width: 100%;
-  box-sizing: border-box;
+/* 검색 목록 전용: 상세 페이지 대비 compact하게 */
+.tutor-profile-list .tutor-avatar,
+.tutor-profile-list .tutor-avatar-placeholder {
+  width: 4rem;
+  height: 4rem;
+}
+
+.tutor-profile-list .tutor-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.tutor-profile-list .tutor-intro {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.tutor-profile-list .tutor-badges {
+  gap: 0.5rem;
+}
+
+.tutor-profile-list .info-card {
+  padding: 1rem;
+  margin-bottom: 0;
   cursor: pointer;
-  transition: all 0.2s ease;
-  outline: none;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s ease;
 }
 
-.tutor-profile-card:hover {
-  border-color: var(--brand-red);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  transform: translateY(-1px);
+.tutor-profile-list .info-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.tutor-profile-card:focus-visible {
-  border-color: var(--brand-red);
-  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+.tutor-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  padding: 48px 0;
+  font-size: 18px;
+  width: 100%;
 }
 
-.tutor-profile-card .tutor-profile-image {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  object-fit: cover;
-  background: #f5f5f5;
-}
-
-.tutor-profile-card .tutor-profile-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: #f5f5f5;
+.search-page-loading {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #999;
-}
-
-.tutor-profile-card .tutor-info {
-  flex: 1;
-}
-
-.tutor-profile-card .tutor-name {
-  font-weight: 700;
-  font-size: 24px;
-  margin-bottom: 8px;
-}
-
-.tutor-profile-card .tutor-introduce {
-  position: relative;
+  min-height: 200px;
   color: #9ca3af;
-  font-size: 14px;
-  line-height: 1.5;
-  margin: 0 0 12px 0;
-  padding: 0 24px;
-  font-style: italic;
-}
-
-.tutor-profile-card .tutor-introduce .quote-icon-left {
-  position: absolute;
-  left: 0;
-  top: 2px;
-  color: #9ca3af;
-  font-size: 16px;
-}
-
-.tutor-profile-card .tutor-introduce .quote-icon-right {
-  display: inline-block;
-  color: #9ca3af;
-  font-size: 16px;
-  margin-left: 4px;
-  vertical-align: baseline;
-}
-
-.tutor-profile-card .tutor-region {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 4px 0;
-}
-
-.tutor-profile-card .region-chip {
-  background-color: #f0f9ff;
-  color: #0369a1;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 13px;
-  border: 1px solid #7dd3fc;
-  white-space: nowrap;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  transition: all 0.2s ease;
-}
-
-.tutor-profile-card .region-chip:hover {
-  background-color: #e0f2fe;
-}
-
-.tutor-profile-card .region-chip i {
-  font-size: 12px;
-}
-
-.tutor-profile-card .tutor-lessons {
-  margin-top: 8px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
-.tutor-profile-card .lesson-chip {
-  background-color: #ffebee;
-  color: var(--brand-red);
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 13px;
-  border: 1px solid var(--brand-red);
-  white-space: nowrap;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.tutor-profile-card .lesson-chip:hover {
-  background-color: #ffcdd2;
-}
-
-.tutor-profile-card .tutor-rating {
-  margin-top: 4px;
-  color: #f7b500;
-  font-weight: 600;
-}
-
-.tutor-profile-card .tutor-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  font-size: 14px;
-  color: #666;
-  margin: 8px 0;
-}
-
-.tutor-profile-card .tutor-meta > span {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.tutor-profile-card .tutor-meta i {
-  font-size: 14px;
-}
-
-.tutor-profile-card .tutor-career i.gold {
-  color: #f59e0b;
-}
-
-.tutor-profile-card .tutor-career i.silver {
-  color: #666666;
-}
-
-.tutor-profile-card .tutor-career i.bronze {
-  color: #cd7f32;
-}
-
-.tutor-profile-card .tutor-price i {
-  color: #ffd700;
-}
-
-.tutor-profile-card .tutor-region i {
-  color: #2563eb;
-}
-
-.tutor-profile-card .career-icon {
-  font-size: 16px;
-}
-
-.tutor-profile-card .career-badge {
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 13px;
-}
-
-.tutor-profile-card .career-icon.bronze,
-.tutor-profile-card .career-badge.bronze {
-  color: #cd7f32;
-}
-.tutor-profile-card .career-badge.bronze {
-  background-color: #fff1e7;
-  border: 1px solid #ffcdb2;
-}
-
-.tutor-profile-card .career-icon.silver,
-.tutor-profile-card .career-badge.silver {
-  color: #666666;
-}
-.tutor-profile-card .career-badge.silver {
-  background-color: #f5f5f5;
-  border: 1px solid #e0e0e0;
-}
-
-.tutor-profile-card .career-icon.gold,
-.tutor-profile-card .career-badge.gold {
-  color: #f59e0b;
-}
-.tutor-profile-card .career-badge.gold {
-  background-color: #fef3c7;
-  border: 1px solid #fcd34d;
+  font-size: 15px;
 }
 
 /* 드롭다운/바텀시트 다중선택 UI */

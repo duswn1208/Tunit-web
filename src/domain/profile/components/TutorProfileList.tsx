@@ -5,18 +5,7 @@ export default function TutorProfileList({ tutors }: { tutors: TutorProfile[] })
   return (
     <div className="tutor-profile-list">
       {tutors.length === 0 ? (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#aaa',
-            padding: '48px 0',
-            fontSize: '18px',
-            width: '100%',
-          }}
-        >
+        <div className="tutor-empty-state">
           조건에 맞는 튜터가 없어요 😭
         </div>
       ) : (

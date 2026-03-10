@@ -48,7 +48,7 @@ export default function TutorReviewSection({ tutorId }: TutorReviewSectionProps)
     return (
       <div className="info-card">
         <h2 className="info-title">레슨 후기</h2>
-        <div style={{ padding: '40px', textAlign: 'center', color: '#888' }}>로딩 중...</div>
+        <div className="card-state">로딩 중...</div>
       </div>
     );
   }
@@ -57,7 +57,7 @@ export default function TutorReviewSection({ tutorId }: TutorReviewSectionProps)
     return (
       <div className="info-card">
         <h2 className="info-title">레슨 후기</h2>
-        <div style={{ padding: '40px', textAlign: 'center', color: '#ef4444' }}>{error}</div>
+        <div className="card-state card-state--error">{error}</div>
       </div>
     );
   }
@@ -66,9 +66,7 @@ export default function TutorReviewSection({ tutorId }: TutorReviewSectionProps)
     return (
       <div className="info-card">
         <h2 className="info-title">레슨 후기</h2>
-        <div style={{ padding: '40px', textAlign: 'center', color: '#888' }}>
-          아직 작성된 후기가 없습니다.
-        </div>
+        <div className="card-state">아직 작성된 후기가 없습니다.</div>
       </div>
     );
   }

@@ -17,7 +17,6 @@ export function TutorProfileCard({ tutor, variant = 'full', isMobile }: TutorPro
   const handleClick = () => {
     navigate(`/tutors/${tutor.tutorProfileNo}`);
   };
-  console.log('TutorProfileCard render', { tutor, variant, isMobile });
   return (
     <div className="tutor-profile info-card" style={{ position: 'relative' }}>
       {/* 데스크탑: 프로필 카드 우측 상단 버튼 */}

@@ -26,7 +26,7 @@ export default function TutorFaqSection({ faqData }: TutorFaqInfoProps) {
     return (
       <div className="info-card">
         <h2 className="info-title">자주 묻는 질문</h2>
-        <div style={{ color: '#888', padding: 24 }}>등록된 FAQ가 없습니다.</div>
+        <div className="card-state">등록된 FAQ가 없습니다.</div>
       </div>
     );
   }

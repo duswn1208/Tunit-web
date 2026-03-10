@@ -116,7 +116,7 @@ export default function TutorSearchPage() {
   }, [navigate, user, showToast]);
 
   if (loading) {
-    return <div>로딩 중...</div>;
+    return <div className="search-page-loading">튜터를 찾고 있어요...</div>;
   }
 
   return (

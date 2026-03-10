@@ -19,8 +19,7 @@ export default function TutorLessonInfo({ lessonData }: TutorLessonInfoProps) {
                 label={lesson.lessonCategory.label}
                 variant="gray"
                 size="md"
-                style={{ border: 'none' }}
-              />
+                />
             ))}
           </div>
         </div>
@@ -33,8 +32,7 @@ export default function TutorLessonInfo({ lessonData }: TutorLessonInfoProps) {
                 label={region.label}
                 variant="gray"
                 size="md"
-                style={{ border: 'none' }}
-              />
+                />
             ))}
           </div>
         </div>
