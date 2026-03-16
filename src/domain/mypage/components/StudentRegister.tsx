@@ -1,29 +1,28 @@
 import { useState } from 'react';
-import Header from '@/shared/components/Header';
+import { HiUserAdd } from 'react-icons/hi';
+import Tab from '@/shared/components/Tab';
 import ExcelUploader from './ExcelUploader';
-import { useRef } from 'react';
-import StudentRegisterButtonGroup from './StudentRegisterButtonGroup';
 import StudentRegisterForm from './StudentRegisterForm';
+import './StudentRegister.css';
+import '@/shared/css/components/tab.css';
+
+const TABS = ['엑셀 업로드', '직접 입력'] as const;
+type TabLabel = (typeof TABS)[number];
 
 export default function StudentRegister() {
-  const [mode, setMode] = useState<'excel' | 'manual'>('excel');
-  const excelInputRef = useRef<HTMLInputElement>(null);
-
-  // 엑셀 업로드 버튼 클릭 시 input 트리거
-  const handleExcelButtonClick = () => {
-    excelInputRef.current?.click();
-  };
+  const [selectedTab, setSelectedTab] = useState<TabLabel>('엑셀 업로드');
 
   return (
-    <div style={{ marginTop: 24, padding: 24, background: '#f8f8f8', borderRadius: 8 }}>
-      <Header title="학생등록" />
-      <StudentRegisterButtonGroup
-        mode={mode}
-        onChange={setMode}
-        onExcelClick={handleExcelButtonClick}
-      />
-      {mode === 'excel' && <ExcelUploader inputRef={excelInputRef} />}
-      {mode === 'manual' && <StudentRegisterForm />}
+    <div className="student-register-container">
+      <div className="student-register-header">
+        <div className="student-register-header-icon">
+          <HiUserAdd />
+        </div>
+        <h3 className="student-register-header-title">학생 등록</h3>
+      </div>
+      <Tab tabs={[...TABS]} selected={selectedTab} onSelect={(tab) => setSelectedTab(tab as TabLabel)} />
+      {selectedTab === '엑셀 업로드' && <ExcelUploader />}
+      {selectedTab === '직접 입력' && <StudentRegisterForm />}
     </div>
   );
 }

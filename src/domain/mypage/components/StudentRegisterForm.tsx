@@ -1,6 +1,7 @@
 import './StudentRegister.css';
 import SelectBox from '@/shared/components/SelectBox';
 import { useState, useEffect } from 'react';
+import { useToast } from '@/shared/contexts/ToastContext';
 import FormField from '@/shared/components/FormField';
 import Button from '@/shared/components/Button';
 import DayChips from '@/domain/dayTime/components/DayChips';
@@ -46,6 +47,7 @@ function generateSlots(startTime: string, endTime: string): string[] {
 }
 
 export default function StudentRegisterForm({ onSuccess, initialDate }: { onSuccess?: () => void; initialDate?: string }) {
+  const { showToast } = useToast();
   const [lessonCategories, setLessonCategories] = useState<TutorLessonsCategory[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [categoryError, setCategoryError] = useState<string | null>(null);
@@ -153,7 +155,7 @@ export default function StudentRegisterForm({ onSuccess, initialDate }: { onSucc
   const handleRegister = async () => {
     const error = validate();
     if (error) {
-      alert(error);
+      showToast(error, 'error');
       return;
     }
     try {
@@ -170,7 +172,7 @@ export default function StudentRegisterForm({ onSuccess, initialDate }: { onSucc
       };
 
       await api.post('/api/lessons/tutor/create', payload);
-      alert('레슨이 등록되었습니다.');
+      showToast('레슨이 등록되었습니다.', 'success');
       setForm({
         studentName: '',
         phone: '',
@@ -188,173 +190,199 @@ export default function StudentRegisterForm({ onSuccess, initialDate }: { onSucc
 
       if (typeof onSuccess === 'function') onSuccess();
     } catch (err) {
-      alert('등록 실패: ' + (err as Error).message);
+      showToast('등록 실패: ' + (err as Error).message, 'error');
     }
   };
 
   return (
     <div className="student-register-form">
-      <div className="student-register-fields">
-        <FormField label="계약 형태" htmlFor="lessonType" required>
-          <RadioGroup
-            name="lessonType"
-            defaultValue="single"
-            onChange={(value: string) =>
-              setForm((prev) => ({ ...prev, lessonType: value as LessonType }))
-            }
-            options={Object.values(CONTRACT_TYPES).map((type) => ({
-              label: getContractTypeLabel(type),
-              value: type,
-            }))}
-          />
-        </FormField>
-        <FormField label="레슨 유형" htmlFor="lesson" required>
-          {loadingCategories ? (
-            <div style={{ padding: '8px 0' }}>레슨명 불러오는 중...</div>
-          ) : categoryError ? (
-            <div style={{ color: 'red', padding: '8px 0' }}>
-              레슨명 불러오기 실패: {categoryError}
-            </div>
-          ) : (
-            <SelectBox
-              id="lesson"
-              name="lesson"
-              value={form.lesson}
-              options={lessonCategories.map((cat) => ({
-                value: cat.lessonCategory.code,
-                label: cat.lessonCategory.label,
+      {/* 계약 정보 */}
+      <div className="form-section">
+        <div className="form-section-label">계약 정보</div>
+        <div className="student-register-fields">
+          <FormField label="계약 형태" htmlFor="lessonType" required>
+            <RadioGroup
+              name="lessonType"
+              defaultValue="single"
+              onChange={(value: string) =>
+                setForm((prev) => ({ ...prev, lessonType: value as LessonType }))
+              }
+              options={Object.values(CONTRACT_TYPES).map((type) => ({
+                label: getContractTypeLabel(type),
+                value: type,
               }))}
-              onChange={(value) => setForm((prev) => ({ ...prev, lesson: value }))}
-              placeholder="레슨명 선택"
-              className="ui-input"
-            />
-          )}
-        </FormField>
-        <div className="form-row">
-          <FormField label="학생 이름" htmlFor="studentName" required>
-            <input
-              id="studentName"
-              name="studentName"
-              value={form.studentName}
-              onChange={handleChange}
-              placeholder="학생 이름"
-              className="ui-input"
             />
           </FormField>
-          <FormField label="전화번호" htmlFor="phone" required>
-            <input
-              id="phone"
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-              placeholder="전화번호"
-              className="ui-input"
-            />
-          </FormField>
-        </div>
-        <div className="form-row">
-          <FormField label="주당 횟수" htmlFor="weeklyCount">
-            <div className="input-with-suffix">
-              <input
-                id="weeklyCount"
-                name="weeklyCount"
-                type="number"
-                min={1}
-                max={7}
-                value={form.weeklyCount ?? ''}
-                onChange={(e) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    weeklyCount: e.target.value === '' ? undefined : Number(e.target.value),
-                  }))
-                }
-                placeholder="1"
-                className="ui-input"
-              />
-              <span className="input-suffix">회</span>
-            </div>
-          </FormField>
-          <FormField label="회당 가격" htmlFor="price">
-            <div className="input-with-suffix">
-              <input
-                id="price"
-                name="price"
-                type="number"
-                min={0}
-                value={form.price ?? ''}
-                onChange={(e) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    price: e.target.value === '' ? undefined : Number(e.target.value),
-                  }))
-                }
-                placeholder="0"
-                className="ui-input"
-              />
-              <span className="input-suffix">원</span>
-            </div>
-          </FormField>
-        </div>
-        {(form.weeklyCount ?? 0) > 0 && (form.price ?? 0) > 0 && (
-          <div className="price-total">
-            주 {form.weeklyCount}회 × {(form.price ?? 0).toLocaleString()}원 × 4주
-            <strong> = {((form.weeklyCount ?? 0) * (form.price ?? 0) * 4).toLocaleString()}원/월</strong>
-          </div>
-        )}
-        <FormField label="레슨일" htmlFor="lessonDate" required>
-          <input
-            id="lessonDate"
-            name="lessonDate"
-            type="date"
-            value={lessonDate}
-            min={format(new Date(), 'yyyy-MM-dd')}
-            onChange={(e) => {
-              setLessonDate(e.target.value);
-              setForm((prev) => ({ ...prev, lessonDate: e.target.value, startTime: '' }));
-            }}
-            className="ui-input"
-          />
-        </FormField>
-
-        {lessonDate && (
-          <FormField label="시작 시간" required>
-            {availableTimeSlots.length > 0 ? (
-              <div className="time-chips">
-                {availableTimeSlots.map((t) => (
-                  <button
-                    key={t}
-                    type="button"
-                    onClick={() => setForm((prev) => ({ ...prev, startTime: t }))}
-                    className={`time-chip${form.startTime === t ? ' time-chip--selected' : ''}`}
-                  >
-                    {t}
-                  </button>
-                ))}
+          <FormField label="레슨 유형" htmlFor="lesson" required>
+            {loadingCategories ? (
+              <div style={{ padding: '8px 0', fontSize: 13, color: 'var(--text-muted)' }}>레슨명 불러오는 중...</div>
+            ) : categoryError ? (
+              <div style={{ color: '#e53e3e', padding: '8px 0', fontSize: 13 }}>
+                레슨명 불러오기 실패: {categoryError}
               </div>
             ) : (
-              <span className="time-chips-empty">해당 날짜에 가능한 시간이 없습니다</span>
+              <SelectBox
+                id="lesson"
+                name="lesson"
+                value={form.lesson}
+                options={lessonCategories.map((cat) => ({
+                  value: cat.lessonCategory.code,
+                  label: cat.lessonCategory.label,
+                }))}
+                onChange={(value) => setForm((prev) => ({ ...prev, lesson: value }))}
+                placeholder="레슨명 선택"
+                className="ui-input"
+              />
             )}
           </FormField>
-        )}
+          <div className="form-row">
+            <FormField label="주당 횟수" htmlFor="weeklyCount">
+              <div className="input-with-suffix">
+                <input
+                  id="weeklyCount"
+                  name="weeklyCount"
+                  type="number"
+                  min={1}
+                  max={7}
+                  value={form.weeklyCount ?? ''}
+                  onChange={(e) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      weeklyCount: e.target.value === '' ? undefined : Number(e.target.value),
+                    }))
+                  }
+                  placeholder="1"
+                  className="ui-input"
+                />
+                <span className="input-suffix">회</span>
+              </div>
+            </FormField>
+            <FormField label="회당 가격" htmlFor="price">
+              <div className="input-with-suffix">
+                <input
+                  id="price"
+                  name="price"
+                  type="number"
+                  min={0}
+                  value={form.price ?? ''}
+                  onChange={(e) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      price: e.target.value === '' ? undefined : Number(e.target.value),
+                    }))
+                  }
+                  placeholder="0"
+                  className="ui-input"
+                />
+                <span className="input-suffix">원</span>
+              </div>
+            </FormField>
+          </div>
+          {(form.weeklyCount ?? 0) > 0 && (form.price ?? 0) > 0 && (
+            <div className="price-total">
+              주 {form.weeklyCount}회 × {(form.price ?? 0).toLocaleString()}원 × 4주
+              <strong>= {((form.weeklyCount ?? 0) * (form.price ?? 0) * 4).toLocaleString()}원/월</strong>
+            </div>
+          )}
+        </div>
+      </div>
 
-        {form.lessonType === 'fixed' && (
-          <FormField label="요일" required>
-            <DayChips multi={true} selected={form.dayOfWeekSet} onToggle={handleDayToggle} />
+      {/* 학생 정보 */}
+      <div className="form-section">
+        <div className="form-section-label">학생 정보</div>
+        <div className="student-register-fields">
+          <div className="form-row">
+            <FormField label="학생 이름" htmlFor="studentName" required>
+              <input
+                id="studentName"
+                name="studentName"
+                value={form.studentName}
+                onChange={handleChange}
+                placeholder="학생 이름"
+                className="ui-input"
+              />
+            </FormField>
+            <FormField label="전화번호" htmlFor="phone" required>
+              <input
+                id="phone"
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+                placeholder="010-0000-0000"
+                className="ui-input"
+              />
+            </FormField>
+          </div>
+        </div>
+      </div>
+
+      {/* 일정 */}
+      <div className="form-section">
+        <div className="form-section-label">레슨 일정</div>
+        <div className="student-register-fields">
+          <FormField label="레슨일" htmlFor="lessonDate" required>
+            <input
+              id="lessonDate"
+              name="lessonDate"
+              type="date"
+              value={lessonDate}
+              min={format(new Date(), 'yyyy-MM-dd')}
+              onChange={(e) => {
+                setLessonDate(e.target.value);
+                setForm((prev) => ({ ...prev, lessonDate: e.target.value, startTime: '' }));
+              }}
+              className="ui-input"
+            />
           </FormField>
-        )}
 
-        <FormField label="메모" htmlFor="memo">
-          <textarea
-            id="memo"
-            name="memo"
-            value={form.memo}
-            onChange={(e) => setForm((prev) => ({ ...prev, memo: e.target.value }))}
-            placeholder="해당 레슨에 대해 기억해야 할 내용이 있으면 적어주세요"
-            className="ui-textarea"
-          />
-        </FormField>
+          {lessonDate && (
+            <FormField label="시작 시간" required>
+              {availableTimeSlots.length > 0 ? (
+                <div className="time-chips">
+                  {availableTimeSlots.map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setForm((prev) => ({ ...prev, startTime: t }))}
+                      className={`time-chip${form.startTime === t ? ' time-chip--selected' : ''}`}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <span className="time-chips-empty">해당 날짜에 가능한 시간이 없습니다</span>
+              )}
+            </FormField>
+          )}
 
-        <Button onClick={handleRegister}>등록</Button>
+          {form.lessonType === 'fixed' && (
+            <FormField label="요일" required>
+              <DayChips multi={true} selected={form.dayOfWeekSet} onToggle={handleDayToggle} />
+            </FormField>
+          )}
+        </div>
+      </div>
+
+      {/* 메모 */}
+      <div className="form-section">
+        <div className="form-section-label">추가 정보</div>
+        <div className="student-register-fields">
+          <FormField label="메모" htmlFor="memo">
+            <textarea
+              id="memo"
+              name="memo"
+              value={form.memo}
+              onChange={(e) => setForm((prev) => ({ ...prev, memo: e.target.value }))}
+              placeholder="해당 레슨에 대해 기억해야 할 내용이 있으면 적어주세요"
+              className="ui-textarea"
+            />
+          </FormField>
+        </div>
+      </div>
+
+      <div className="register-submit-row">
+        <Button onClick={handleRegister}>등록하기</Button>
       </div>
     </div>
   );
