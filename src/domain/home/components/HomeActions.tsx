@@ -23,8 +23,8 @@ export default function HomeActions() {
       <button className="cta-button cta-button--primary" onClick={handleTutorSearch}>
         내게 맞는 튜터 찾아보기
       </button>
-      <button className="cta-button cta-button--secondary" onClick={handleTutorRegistration}>
-        튜터로 레슨 등록하기
+      <button className="cta-button-text-link" onClick={handleTutorRegistration}>
+        튜터로 등록하기 →
       </button>
     </div>
   );

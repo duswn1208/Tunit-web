@@ -1,3 +1,5 @@
+import HomeActions from './HomeActions.tsx';
+
 export default function HomeHeader() {
   return (
     <div className="home-header">
@@ -8,6 +10,7 @@ export default function HomeHeader() {
           지금 바로 시작하세요!
         </h1>
         <p className="sub-title">{`아직도 카톡으로 일정 조율하나요? 🤯`}</p>
+        <HomeActions />
         <div className="hero-image">
           <img
             src="/images/main_kakaotalk.PNG"

@@ -9,7 +9,7 @@ export default function HomeLessonTypeDesc() {
           <div className="home-lesson-type-desc-title">선착순 레슨</div>
           <div className="home-lesson-type-desc-subtitle">원하는 일정을 자유롭게</div>
           <div className="home-lesson-type-desc-desc">
-            마지막일, 튜터가 등록한 일정 중 원하는 시간에 바로 신청할 수 있어요.
+            튜터가 등록한 일정 중 원하는 시간에 바로 신청할 수 있어요.
             <br />
             일정이 자주 바뀌거나, 원하는 시간에만 수업을 듣고 싶은 학생에게 추천해요.
           </div>
