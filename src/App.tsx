@@ -13,6 +13,7 @@ import { AuthProvider } from '@/shared/auth/AuthContext.tsx';
 import PrivateRoute from '@/shared/auth/PrivateRoute.tsx';
 import { ToastProvider } from '@/shared/contexts/ToastContext';
 import { AlertProvider } from '@/shared/contexts/AlertContext';
+import ErrorBoundary from '@/shared/components/ErrorBoundary';
 import RootLayout from './shared/layouts/RootLayout.tsx';
 import OnboardingStudentLesson from './domain/onboarding/pages/OnboardingStudentLesson.tsx';
 import OnboardingStudentRegion from './domain/onboarding/pages/OnboardingStudentRegion.tsx';
@@ -51,6 +52,7 @@ export default function App() {
         <ToastProvider>
           <AlertProvider>
             <BrowserRouter>
+              <ErrorBoundary>
               <Routes>
                 <Route element={<RootLayout />}>
                   <Route path="/auth/login" element={<LoginPage />} />
@@ -93,6 +95,7 @@ export default function App() {
                 </Route>
               </Routes>
               <BottomTabBar />
+              </ErrorBoundary>
             </BrowserRouter>
           </AlertProvider>
         </ToastProvider>
