@@ -30,6 +30,7 @@ import MyStudentsPage from './domain/contract/pages/MyStudentsPage.tsx';
 import ContractEditPage from './domain/contract/pages/ContractEditPage.tsx';
 import NotificationsPage from './domain/notification/pages/NotificationsPage.tsx';
 import TutorFaqManagementPage from './domain/mypage/pages/TutorFaqManagementPage.tsx';
+import TutorCareerHistoryManagementPage from './domain/mypage/pages/TutorCareerHistoryManagementPage.tsx';
 import GuestReservationPage from './domain/booking/pages/GuestReservationPage.tsx';
 import GuestReservationSuccessPage from './domain/booking/pages/GuestReservationSuccessPage.tsx';
 import GuestReservationVerifyPage from './domain/booking/pages/GuestReservationVerifyPage.tsx';
@@ -91,6 +92,10 @@ export default function App() {
                   />
                   <Route path="/notifications" element={<NotificationsPage />} />
                   <Route path="/mypage/tutor/faq" element={<TutorFaqManagementPage />} />
+                  <Route
+                    path="/mypage/tutor/career-history"
+                    element={<TutorCareerHistoryManagementPage />}
+                  />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Route>
               </Routes>
