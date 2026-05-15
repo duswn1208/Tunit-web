@@ -12,6 +12,7 @@ import { updateContractAmount } from '../api/updateContractAmount';
 import { toAmPmFormat } from '@/domain/dayTime/lib/timeUtils';
 import { isFirstcome } from '@/domain/booking/types/types';
 import { useToast } from '@/shared/contexts/ToastContext';
+import { useAlert } from '@/shared/contexts/AlertContext';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale/ko';
 
@@ -31,6 +32,7 @@ export default function TutorContractCard({
   // 개발 환경에서만 사용 - 결제 상태 테스트용
   const [devPaymentStatus, setDevPaymentStatus] = useState<PaymentStatusCode | null>(null);
   const { showToast } = useToast();
+  const { showAlert } = useAlert();
 
   // 총 금액 수정 상태
   const [editPrice, setEditPrice] = useState(false);
@@ -83,7 +85,10 @@ export default function TutorContractCard({
       setShowTrialModal(false);
       window.location.reload();
     } catch (error: any) {
-      showToast(error?.message || '확정에 실패했습니다', 'error');
+      showAlert({
+        title: '확정할 수 없어요',
+        message: error?.message || '체험 레슨 확정에 실패했습니다.',
+      });
     }
   };
 
@@ -106,7 +111,10 @@ export default function TutorContractCard({
       setShowTrialModal(false);
       window.location.reload();
     } catch (error: any) {
-      showToast(error?.message || '처리에 실패했습니다', 'error');
+      showAlert({
+        title: alternatives && alternatives.length > 0 ? '대안 제안에 실패했어요' : '거절에 실패했어요',
+        message: error?.message || '처리 중 오류가 발생했습니다.',
+      });
     }
   };
 
@@ -124,6 +132,15 @@ export default function TutorContractCard({
   // 개발 환경에서 표시할 실제 결제 상태
   const displayPaymentStatus = devPaymentStatus || contract.paymentStatus?.code;
 
+  const isTrial =
+    contract.contractType?.code === 'TRIAL' ||
+    (contract.contractType as unknown as string) === 'TRIAL';
+  const isTrialPendingSelection =
+    isTrial && !contract.selectedCandidateDate && (contract.trialCandidates?.length ?? 0) > 0;
+  const placeText = contract.place?.trim() ? contract.place : '장소 미정';
+  const levelText = contract.level?.trim() ? contract.level : '-';
+  const emergencyText = contract.emergencyContact?.trim() ? contract.emergencyContact : '-';
+
   return (
     <div className="tutor-card" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
       <div className="tutor-card-header">
@@ -134,7 +151,7 @@ export default function TutorContractCard({
             </h3>
             <Chip label={contract.contractStatus.label} />
           </div>
-          <p className="tutor-card-location">{contract.place ?? '지정 장소'}</p>
+          <p className="tutor-card-location">{placeText}</p>
         </div>
       </div>
 
@@ -161,19 +178,21 @@ export default function TutorContractCard({
 
       {/* 레슨 횟수 / 레벨 / 비상연락처 */}
       <div className="tutor-card-section">
-        <div className="tutor-card-info-row">
-          <span className="info-label">레슨 횟수</span>
-          <span className="info-value">
-            주 {contract.weekCount}회 · 총 {contract.lessonCount}회
-          </span>
-        </div>
+        {!isTrial && contract.weekCount > 0 && contract.lessonCount > 0 && (
+          <div className="tutor-card-info-row">
+            <span className="info-label">레슨 횟수</span>
+            <span className="info-value">
+              주 {contract.weekCount}회 · 총 {contract.lessonCount}회
+            </span>
+          </div>
+        )}
         <div className="tutor-card-info-row">
           <span className="info-label">레벨</span>
-          <span className="info-value">{contract.level}</span>
+          <span className="info-value">{levelText}</span>
         </div>
         <div className="tutor-card-info-row">
           <span className="info-label">비상연락처</span>
-          <span className="info-value">{contract.emergencyContact}</span>
+          <span className="info-value">{emergencyText}</span>
         </div>
       </div>
 
@@ -240,24 +259,69 @@ export default function TutorContractCard({
         <PaymentStatusAlert paymentStatus={displayPaymentStatus} onConfirm={handlePaymentConfirm} />
       )}
 
-      {/* 체험 레슨 대기 중 - 후보 확인 버튼 */}
-      {contract.contractType.code === 'TRIAL' &&
-        contract.contractStatus.code === 'REQUESTED' &&
-        contract.trialCandidates &&
-        contract.trialCandidates.length > 0 && (
-          <div className="trial-candidate-btn-wrap">
-            <button
-              className="ui-btn ui-btn--primary"
-              style={{ width: '100%' }}
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowTrialModal(true);
-              }}
-            >
-              체험 레슨 후보 시간 확인하기
-            </button>
+      {/* 체험 레슨 후보 시간 - 날짜 선택 전(REQUESTED/APPROVED 모두) 인라인 노출 */}
+      {isTrialPendingSelection && (
+        <div className="trial-candidates-inline">
+          <div className="trial-candidates-title">
+            학생이 제안한 시간 (최대 3개) — 확정할 시간을 선택해주세요
           </div>
-        )}
+          <div className="trial-candidates-list">
+            {contract.trialCandidates!.map((c) => {
+              const unavailable = c.isAvailable === false;
+              return (
+                <div
+                  key={c.id}
+                  className={`trial-candidate-row${unavailable ? ' is-unavailable' : ''}`}
+                >
+                  <div className="trial-candidate-info">
+                    <span className="trial-candidate-priority">{c.priority}순위</span>
+                    <span className="trial-candidate-datetime">
+                      {formatDisplayDate(c.candidateDate)} {c.candidateStartTime}
+                    </span>
+                    {unavailable && (
+                      <span className="trial-candidate-badge trial-candidate-badge--no">
+                        불가
+                      </span>
+                    )}
+                    {c.isAvailable === true && (
+                      <span className="trial-candidate-badge trial-candidate-badge--ok">
+                        가능
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    className="trial-candidate-confirm-btn"
+                    disabled={unavailable}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (unavailable) {
+                        showAlert({
+                          title: '확정할 수 없어요',
+                          message:
+                            '이 시간은 튜터님의 가능 시간대를 벗어나 확정할 수 없어요. 다른 후보를 선택하거나 대안 시간을 제안해주세요.',
+                        });
+                        return;
+                      }
+                      handleTrialConfirm(c.candidateDate, c.candidateStartTime);
+                    }}
+                  >
+                    이 시간 확정
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+          <button
+            className="trial-candidate-reject-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowTrialModal(true);
+            }}
+          >
+            거절 / 대안 시간 제안하기
+          </button>
+        </div>
+      )}
 
       {/* 체험 레슨 확정됨 */}
       {contract.contractType.code === 'TRIAL' &&
@@ -348,19 +412,26 @@ export default function TutorContractCard({
         </div>
       )} */}
 
-      {availableTransitions.length > 0 && (
-        <div className="tutor-card-actions">
-          {availableTransitions.map((status) => (
-            <button
-              key={status}
-              className="status-change-btn"
-              onClick={() => handleStatusChange(status)}
-            >
-              {getStatusLabel(status)}
-            </button>
-          ))}
-        </div>
-      )}
+      {(() => {
+        // 체험레슨이 날짜 미선택 상태면 승인/진행중 전이를 숨기고 CANCEL만 노출
+        const transitions = isTrialPendingSelection
+          ? availableTransitions.filter((s) => s === 'CANCELLED')
+          : availableTransitions;
+        if (transitions.length === 0) return null;
+        return (
+          <div className="tutor-card-actions">
+            {transitions.map((status) => (
+              <button
+                key={status}
+                className="status-change-btn"
+                onClick={() => handleStatusChange(status)}
+              >
+                {getStatusLabel(status)}
+              </button>
+            ))}
+          </div>
+        );
+      })()}
     </div>
   );
 }

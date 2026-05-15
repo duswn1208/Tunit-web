@@ -494,6 +494,122 @@
   margin-top: 16px;
 }
 
+/* 체험 레슨 후보 인라인 노출 */
+.trial-candidates-inline {
+  margin-top: 12px;
+  padding: 14px;
+  background: #f7f8fc;
+  border: 1px solid #e0e7ff;
+  border-radius: 10px;
+}
+
+.trial-candidates-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4338ca;
+  margin-bottom: 10px;
+}
+
+.trial-candidates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.trial-candidate-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #fff;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.trial-candidate-info {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.trial-candidate-priority {
+  flex-shrink: 0;
+  font-weight: 600;
+  color: #6366f1;
+  font-size: 12px;
+}
+
+.trial-candidate-datetime {
+  color: #2d3748;
+  font-weight: 500;
+}
+
+.trial-candidate-confirm-btn {
+  flex-shrink: 0;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  background: var(--brand-red);
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.trial-candidate-confirm-btn:hover:not(:disabled) {
+  background: var(--brand-red-dark);
+}
+
+.trial-candidate-confirm-btn:disabled {
+  background: #cbd5e0;
+  color: #f7fafc;
+  cursor: not-allowed;
+}
+
+.trial-candidate-row.is-unavailable {
+  opacity: 0.75;
+}
+
+.trial-candidate-badge {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.trial-candidate-badge--ok {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.trial-candidate-badge--no {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.trial-candidate-reject-btn {
+  width: 100%;
+  padding: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  background: #fff;
+  color: #64748b;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.trial-candidate-reject-btn:hover {
+  background: #f1f5f9;
+}
+
 /* 빈 상태 */
 .empty-state {
   text-align: center;

@@ -47,7 +47,10 @@ export default function StudentContractCard({
       showToast('체험 레슨이 확정되었습니다!');
       window.location.reload();
     } catch (error: any) {
-      showToast(error?.message || '제안 수락에 실패했습니다', 'error');
+      showAlert({
+        title: '수락할 수 없어요',
+        message: error?.message || '제안 수락에 실패했습니다.',
+      });
     }
   };
 
@@ -114,6 +117,17 @@ export default function StudentContractCard({
   // 현재 상태에서 변경 가능한 상태들
   const availableStatuses = CONTRACT_STATUS_TRANSITIONS_STUDENT[contract.contractStatus.code] || [];
 
+  const isTrial =
+    contract.contractType?.code === 'TRIAL' ||
+    (contract.contractType as unknown as string) === 'TRIAL';
+  const placeText = contract.place?.trim() ? contract.place : '장소 미정';
+  const scheduleText =
+    (contract as any).dayOfWeek && (contract as any).startTime
+      ? `${(contract as any).dayOfWeek} ${(contract as any).startTime}`
+      : '일정 미정';
+  const memoText = contract.memo?.trim() ? contract.memo : '-';
+  const emergencyText = contract.emergencyContact?.trim() ? contract.emergencyContact : '-';
+
   return (
     <div className="tutor-card" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
       <div className="tutor-card-header">
@@ -123,15 +137,25 @@ export default function StudentContractCard({
             <Chip label={contract.contractStatus.label} />
           </div>
           <p className="tutor-card-location">
-            {contract.place ?? '지정 장소'} | {contract.dayOfWeek} {contract.startTime}
+            {placeText} | {scheduleText}
           </p>
         </div>
       </div>
       <div className="tutor-card-date">
         {contract.startDt} ~ {contract.endDt ?? '진행 중'}
       </div>
-      <div className="tutor-card-lessons">
-        레슨: 주 {contract.weekCount}회 | 총 {contract.lessonCount}회
+      {!isTrial && contract.weekCount > 0 && contract.lessonCount > 0 && (
+        <div className="tutor-card-lessons">
+          레슨: 주 {contract.weekCount}회 | 총 {contract.lessonCount}회
+        </div>
+      )}
+      <div className="tutor-card-info-row">
+        <span className="info-label">요청</span>
+        <span className="info-value">{memoText}</span>
+      </div>
+      <div className="tutor-card-info-row">
+        <span className="info-label">비상 연락처</span>
+        <span className="info-value">{emergencyText}</span>
       </div>
       <div className="tutor-card-price">
         총 금액:{' '}
