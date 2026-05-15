@@ -1,0 +1,74 @@
+.career-history-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.career-history-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.career-history-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.career-history-group-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.career-history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.career-history-item {
+  padding: 12px 14px;
+  background: #fff;
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.career-history-item-main {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.career-history-item-title {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.career-history-item-subtitle {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.career-history-item-period {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.career-history-item-desc {
+  margin: 4px 0 0 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}

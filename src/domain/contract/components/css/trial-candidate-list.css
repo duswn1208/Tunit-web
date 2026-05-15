@@ -1,0 +1,184 @@
+/* TrialCandidateList 모달 내부 스타일
+ * Modal.tsx의 .modal-content가 이미 padding 40px 32px를 가지므로
+ * 여기서는 추가 패딩 없이 내부 레이아웃만 다룬다.
+ * 또한 .modal-content > * + * { margin-top: 16px } 전역 규칙 영향을 받지 않도록
+ * 단일 wrapper로 묶고 내부 간격은 직접 제어한다.
+ */
+
+.trial-modal {
+  color: var(--text-primary);
+}
+
+.trial-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.trial-modal-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.trial-modal-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+
+.trial-modal-close:hover {
+  background: #f1f5f9;
+  color: var(--text-primary);
+}
+
+.trial-modal-helper {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0 0 16px 0;
+}
+
+/* 후보 시간 리스트 */
+.trial-modal-candidates {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.trial-modal-candidate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #fff;
+  border: 1.5px solid var(--border-light);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+}
+
+.trial-modal-candidate:hover:not(:disabled) {
+  border-color: var(--brand-red-light);
+  background: #fafbff;
+}
+
+.trial-modal-candidate.is-selected {
+  border-color: var(--brand-red);
+  background: #f5f6ff;
+  box-shadow: 0 0 0 3px rgba(var(--brand-red-rgb), 0.12);
+}
+
+.trial-modal-candidate.is-unavailable,
+.trial-modal-candidate:disabled {
+  background: #f8fafc;
+  color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.trial-modal-candidate-main {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+
+.trial-modal-priority {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--brand-red);
+  padding: 2px 8px;
+  background: #f0f1ff;
+  border-radius: 999px;
+}
+
+.trial-modal-datetime {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.trial-modal-badge {
+  flex-shrink: 0;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.trial-modal-badge--ok {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.trial-modal-badge--no {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* 액션 버튼 영역 */
+.trial-modal-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* 거절 폼 */
+.trial-modal-reject {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.trial-modal-reject-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.trial-modal-textarea {
+  width: 100%;
+  min-height: 88px;
+  padding: 12px 14px;
+  border: 1px solid var(--border-input);
+  border-radius: 10px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--text-primary);
+  background: #fff;
+  resize: vertical;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.trial-modal-textarea:focus {
+  outline: none;
+  border-color: var(--brand-red);
+  box-shadow: 0 0 0 3px rgba(var(--brand-red-rgb), 0.12);
+}
+
+/* modal-content > * + * 전역 margin 충돌 방지 */
+.modal-content > .trial-modal + * {
+  margin-top: 0;
+}
+.trial-modal > * + * {
+  margin-top: 0;
+}

@@ -4,11 +4,15 @@ import AlternativeTimeSelector from './AlternativeTimeSelector';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale/ko';
 import type { CandidateTimeInfo } from '../types/contract';
+import './css/trial-candidate-list.css';
 
 interface TrialCandidateListProps {
   candidates: CandidateTimeInfo[];
   onConfirm: (date: string, time: string) => void;
-  onReject: (reason: string, alternatives?: Array<{ proposedDate: string; proposedStartTime: string }>) => void;
+  onReject: (
+    reason: string,
+    alternatives?: Array<{ proposedDate: string; proposedStartTime: string }>,
+  ) => void;
   onClose: () => void;
 }
 
@@ -48,140 +52,80 @@ export default function TrialCandidateList({
   };
 
   return (
-    <div style={{ padding: 16 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <h3 style={{ fontSize: 16, fontWeight: 600, margin: 0 }}>
-          학생이 제안한 후보 시간
-        </h3>
-        <button
-          onClick={onClose}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: 24,
-            cursor: 'pointer',
-            padding: 0,
-            width: 32,
-            height: 32,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
+    <div className="trial-modal">
+      <div className="trial-modal-header">
+        <h3 className="trial-modal-title">학생이 제안한 후보 시간</h3>
+        <button type="button" className="trial-modal-close" onClick={onClose} aria-label="닫기">
           ×
         </button>
       </div>
 
-      {/* 후보 시간 목록 */}
-      <div style={{ marginBottom: 24 }}>
-        {candidates
-          .sort((a, b) => a.priority - b.priority)
-          .map((candidate) => (
-            <div
-              key={candidate.id}
-              onClick={() => setSelectedCandidate(candidate)}
-              style={{
-                padding: 16,
-                backgroundColor: selectedCandidate?.id === candidate.id ? '#e3f2fd' : '#f8f9fa',
-                border: selectedCandidate?.id === candidate.id ? '2px solid #1976d2' : '1px solid #ddd',
-                borderRadius: 8,
-                marginBottom: 12,
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <div style={{ fontSize: 13, color: '#666', marginBottom: 4 }}>
-                    {candidate.priority}순위
-                  </div>
-                  <div style={{ fontSize: 15, fontWeight: 500 }}>
-                    {formatDisplayDate(candidate.candidateDate, candidate.candidateStartTime)}
-                  </div>
-                </div>
-
-                {candidate.isAvailable === true && (
-                  <span
-                    style={{
-                      padding: '4px 12px',
-                      backgroundColor: '#4caf50',
-                      color: 'white',
-                      borderRadius: 12,
-                      fontSize: 12,
-                      fontWeight: 600,
-                    }}
-                  >
-                    가능
-                  </span>
-                )}
-                {candidate.isAvailable === false && (
-                  <span
-                    style={{
-                      padding: '4px 12px',
-                      backgroundColor: '#f44336',
-                      color: 'white',
-                      borderRadius: 12,
-                      fontSize: 12,
-                      fontWeight: 600,
-                    }}
-                  >
-                    불가
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
-      </div>
-
-      {/* 액션 버튼 */}
       {!showRejectForm && (
-        <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
-          <Button
-            className="ui-btn--primary"
-            onClick={handleConfirm}
-            disabled={!selectedCandidate || selectedCandidate.isAvailable === false}
-            style={{ flex: 1 }}
-          >
-            이 시간으로 확정
-          </Button>
-          <Button
-            className="ui-btn--outlined"
-            onClick={() => setShowRejectForm(true)}
-            style={{ flex: 1 }}
-          >
-            거절/대안 제안
-          </Button>
-        </div>
+        <>
+          <p className="trial-modal-helper">확정할 시간을 선택해주세요</p>
+          <div className="trial-modal-candidates">
+            {candidates
+              .slice()
+              .sort((a, b) => a.priority - b.priority)
+              .map((candidate) => {
+                const isSelected = selectedCandidate?.id === candidate.id;
+                const isUnavailable = candidate.isAvailable === false;
+                return (
+                  <button
+                    type="button"
+                    key={candidate.id}
+                    onClick={() => !isUnavailable && setSelectedCandidate(candidate)}
+                    disabled={isUnavailable}
+                    className={`trial-modal-candidate${isSelected ? ' is-selected' : ''}${
+                      isUnavailable ? ' is-unavailable' : ''
+                    }`}
+                  >
+                    <div className="trial-modal-candidate-main">
+                      <span className="trial-modal-priority">{candidate.priority}순위</span>
+                      <span className="trial-modal-datetime">
+                        {formatDisplayDate(candidate.candidateDate, candidate.candidateStartTime)}
+                      </span>
+                    </div>
+                    {candidate.isAvailable === true && (
+                      <span className="trial-modal-badge trial-modal-badge--ok">가능</span>
+                    )}
+                    {candidate.isAvailable === false && (
+                      <span className="trial-modal-badge trial-modal-badge--no">불가</span>
+                    )}
+                  </button>
+                );
+              })}
+          </div>
+
+          <div className="trial-modal-actions">
+            <Button
+              className="ui-btn--outlined"
+              onClick={() => setShowRejectForm(true)}
+              style={{ flex: 1 }}
+            >
+              거절 / 대안 제안
+            </Button>
+            <Button
+              className="ui-btn--primary"
+              onClick={handleConfirm}
+              disabled={!selectedCandidate || selectedCandidate.isAvailable === false}
+              style={{ flex: 1 }}
+            >
+              이 시간으로 확정
+            </Button>
+          </div>
+        </>
       )}
 
-      {/* 거절 폼 */}
       {showRejectForm && (
-        <div
-          style={{
-            padding: 16,
-            backgroundColor: '#fff3e0',
-            borderRadius: 8,
-            border: '1px solid #ffb74d',
-          }}
-        >
-          <h4 style={{ fontSize: 15, fontWeight: 600, marginBottom: 12 }}>
-            거절 사유 및 대안 제안
-          </h4>
+        <div className="trial-modal-reject">
+          <h4 className="trial-modal-reject-title">거절 사유와 대안 시간을 알려주세요</h4>
 
           <textarea
             value={rejectReason}
             onChange={(e) => setRejectReason(e.target.value)}
             placeholder="거절 사유를 입력해주세요"
-            style={{
-              width: '100%',
-              minHeight: 80,
-              padding: 12,
-              borderRadius: 8,
-              border: '1px solid #ddd',
-              fontSize: 14,
-              marginBottom: 16,
-              resize: 'vertical',
-            }}
+            className="trial-modal-textarea"
           />
 
           <AlternativeTimeSelector
@@ -189,7 +133,7 @@ export default function TrialCandidateList({
             onChange={setAlternativeTimes}
           />
 
-          <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
+          <div className="trial-modal-actions">
             <Button
               className="ui-btn--outlined"
               onClick={() => {
@@ -201,11 +145,7 @@ export default function TrialCandidateList({
             >
               취소
             </Button>
-            <Button
-              className="ui-btn--primary"
-              onClick={handleReject}
-              style={{ flex: 1 }}
-            >
+            <Button className="ui-btn--primary" onClick={handleReject} style={{ flex: 1 }}>
               제출
             </Button>
           </div>

@@ -6,3 +6,4 @@ export { default as ChipList } from './ChipList.tsx';
 export { default as Alert } from './Alert.tsx';
 
 export { default as NotificationBell } from './NotificationBell.tsx';
+export { default as ErrorBoundary } from './ErrorBoundary.tsx';

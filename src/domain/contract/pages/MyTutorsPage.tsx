@@ -71,16 +71,14 @@ export default function MyTutorsPage() {
         <Tab tabs={tabList} selected={activeTab} onSelect={setActiveTab} />
 
         <div className="tutors-list">
-          <div>
-            {data &&
-              (data as any).map((contract: any) => (
-                <StudentContractCard
-                  key={contract.contractNo}
-                  contract={contract}
-                  onPaymentRequest={handlePaymentRequest}
-                />
-              ))}
-          </div>
+          {data &&
+            (data as any).map((contract: any) => (
+              <StudentContractCard
+                key={contract.contractNo}
+                contract={contract}
+                onPaymentRequest={handlePaymentRequest}
+              />
+            ))}
         </div>
       </div>
     </div>

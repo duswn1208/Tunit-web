@@ -92,6 +92,13 @@ export default function TutorProfileSection() {
           <Button
             size="xs"
             className="min-w-0 px-2 py-0.5 text-xs h-6"
+            onClick={() => navigate('/mypage/tutor/career-history')}
+          >
+            경력 관리
+          </Button>
+          <Button
+            size="xs"
+            className="min-w-0 px-2 py-0.5 text-xs h-6"
             onClick={() =>
               navigate('/mypage/tutor/faq', { state: { faqData: profileData?.faqData } })
             }

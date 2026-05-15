@@ -1,5 +1,6 @@
 import type { Category } from '../../onboarding/types/onboarding.ts';
 import type { Region } from '../../region/types/regions';
+import type { CareerHistory } from './careerHistoryApi';
 
 export interface TutorDetail {
   tutorProfileNo: string;
@@ -26,6 +27,7 @@ export interface TutorDetail {
     endTime: string;
   }>;
   tutorFaqList?: Array<TutorFaq>;
+  careerHistoryList?: Array<CareerHistory>;
 }
 
 export interface TutorFaq {

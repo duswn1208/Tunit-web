@@ -3,6 +3,7 @@ import { useToast } from '@/shared/contexts/ToastContext';
 import TutorScheduleInfo from '../components/TutorScheduleInfo';
 import TutorReviewSection from '../components/TutorReviewSection';
 import TutorFaqSection from '../components/TutorFaqSection.tsx';
+import TutorCareerHistorySection from '../components/TutorCareerHistorySection';
 import Tab from '@/shared/components/Tab.tsx';
 import { TutorProfileCard } from '../../profile/components/TutorProfileCard.tsx';
 import { Button } from '@/shared/components';
@@ -135,6 +136,7 @@ export default function TutorDetailPage() {
               <h2 className="info-title">튜터 소개</h2>
               <p className="tutor-intro-text">{data.introduce || '아직 소개글이 없습니다.'}</p>
             </div>
+            <TutorCareerHistorySection careerHistoryList={data.careerHistoryList} />
           </div>
           <div id="section-schedule" className="tutor-section">
             <TutorScheduleInfo scheduleData={data.tutorAvailableTimeList} />

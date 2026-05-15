@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Button from '@/shared/components/Button';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale/ko';
+import './css/alternative-time-selector.css';
 
 interface AlternativeTime {
   proposedDate: string;
@@ -41,18 +42,18 @@ export default function AlternativeTimeSelector({
 
     const dateStr = format(selectedDate, 'yyyy-MM-dd');
 
-    // 중복 체크
     if (alternatives.some((a) => a.proposedDate === dateStr && a.proposedStartTime === selectedTime)) {
       alert('이미 선택한 시간입니다.');
       return;
     }
 
-    const newAlt: AlternativeTime = {
-      proposedDate: dateStr,
-      proposedStartTime: selectedTime,
-    };
-
-    onChange([...alternatives, newAlt]);
+    onChange([
+      ...alternatives,
+      {
+        proposedDate: dateStr,
+        proposedStartTime: selectedTime,
+      },
+    ]);
     setSelectedDate(null);
     setSelectedTime('');
   };
@@ -70,9 +71,9 @@ export default function AlternativeTimeSelector({
     }
   };
 
-  // 간단한 달력 (날짜 선택)
   const renderCalendar = () => {
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const currentYear = today.getFullYear();
     const currentMonth = today.getMonth();
 
@@ -81,126 +82,81 @@ export default function AlternativeTimeSelector({
     const daysInMonth = lastDay.getDate();
     const startDayOfWeek = firstDay.getDay();
 
-    const days = [];
+    const cells: React.ReactNode[] = [];
 
-    // 빈 칸 채우기
     for (let i = 0; i < startDayOfWeek; i++) {
-      days.push(<div key={`empty-${i}`} style={{ padding: 8 }} />);
+      cells.push(<div key={`empty-${i}`} className="alt-cal-cell alt-cal-cell--empty" />);
     }
 
-    // 날짜 채우기
     for (let day = 1; day <= daysInMonth; day++) {
       const date = new Date(currentYear, currentMonth, day);
-      const isPast = date < today && date.toDateString() !== today.toDateString();
+      const isPast = date < today;
       const isSelected = selectedDate?.toDateString() === date.toDateString();
+      const isToday = date.toDateString() === today.toDateString();
 
-      days.push(
-        <div
+      cells.push(
+        <button
+          type="button"
           key={day}
           onClick={() => !isPast && setSelectedDate(date)}
-          style={{
-            padding: 8,
-            textAlign: 'center',
-            cursor: isPast ? 'not-allowed' : 'pointer',
-            backgroundColor: isSelected ? '#1976d2' : 'transparent',
-            color: isPast ? '#ccc' : isSelected ? 'white' : '#333',
-            borderRadius: 4,
-            fontWeight: isSelected ? 600 : 400,
-          }}
+          disabled={isPast}
+          className={`alt-cal-cell alt-cal-day${isSelected ? ' is-selected' : ''}${
+            isPast ? ' is-past' : ''
+          }${isToday ? ' is-today' : ''}`}
         >
           {day}
-        </div>
+        </button>,
       );
     }
 
     return (
-      <div style={{ marginBottom: 16 }}>
-        <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 12, textAlign: 'center' }}>
+      <div className="alt-cal">
+        <div className="alt-cal-title">
           {currentYear}년 {currentMonth + 1}월
         </div>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(7, 1fr)',
-            gap: 4,
-            marginBottom: 8,
-          }}
-        >
-          {['일', '월', '화', '수', '목', '금', '토'].map((day) => (
-            <div key={day} style={{ padding: 8, textAlign: 'center', fontWeight: 600, fontSize: 13 }}>
-              {day}
+        <div className="alt-cal-weekdays">
+          {['일', '월', '화', '수', '목', '금', '토'].map((d) => (
+            <div key={d} className="alt-cal-weekday">
+              {d}
             </div>
           ))}
         </div>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(7, 1fr)',
-            gap: 4,
-          }}
-        >
-          {days}
-        </div>
+        <div className="alt-cal-grid">{cells}</div>
       </div>
     );
   };
 
   return (
-    <div>
-      <h4 style={{ fontSize: 14, fontWeight: 600, marginBottom: 12 }}>
-        대안 시간 제안 (선택사항, 최대 5개)
-      </h4>
+    <div className="alt-selector">
+      <h4 className="alt-selector-title">대안 시간 제안 (선택, 최대 5개)</h4>
 
-      {/* 선택된 대안 시간 목록 */}
-      {alternatives.map((alt, index) => (
-        <div
-          key={index}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: '8px 12px',
-            backgroundColor: '#f5f5f5',
-            borderRadius: 6,
-            marginBottom: 8,
-            fontSize: 14,
-          }}
-        >
-          <span>
-            {formatDisplayDate(alt.proposedDate)} {alt.proposedStartTime}
-          </span>
-          <button
-            onClick={() => handleRemove(index)}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#f44336',
-              cursor: 'pointer',
-              fontSize: 14,
-              padding: '4px 8px',
-            }}
-          >
-            삭제
-          </button>
+      {alternatives.length > 0 && (
+        <div className="alt-selector-list">
+          {alternatives.map((alt, index) => (
+            <div key={`${alt.proposedDate}-${alt.proposedStartTime}`} className="alt-selector-row">
+              <span className="alt-selector-row-text">
+                {formatDisplayDate(alt.proposedDate)} {alt.proposedStartTime}
+              </span>
+              <button
+                type="button"
+                onClick={() => handleRemove(index)}
+                className="alt-selector-remove"
+              >
+                삭제
+              </button>
+            </div>
+          ))}
         </div>
-      ))}
+      )}
 
-      {/* 대안 시간 추가 UI */}
       {alternatives.length < 5 && (
-        <div style={{ marginTop: 16 }}>
+        <div className="alt-selector-add">
           {renderCalendar()}
 
           <select
             value={selectedTime}
             onChange={(e) => setSelectedTime(e.target.value)}
-            style={{
-              width: '100%',
-              padding: 12,
-              borderRadius: 8,
-              border: '1px solid #ddd',
-              fontSize: 14,
-              marginTop: 12,
-            }}
+            className="alt-selector-time"
           >
             <option value="">시간 선택</option>
             {timeOptions.map((time) => (
@@ -211,10 +167,10 @@ export default function AlternativeTimeSelector({
           </select>
 
           <Button
-            className="ui-btn--secondary"
+            className="ui-btn--outlined"
             onClick={handleAdd}
             disabled={!selectedDate || !selectedTime}
-            style={{ marginTop: 12, width: '100%' }}
+            style={{ width: '100%' }}
           >
             대안 시간 추가
           </Button>
