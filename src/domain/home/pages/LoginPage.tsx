@@ -7,7 +7,7 @@ export default function LoginPage() {
 
   const handleSocialLogin = (provider: 'naver' | 'kakao' | 'google' | 'apple') => {
     const redirectUri = encodeURIComponent(from);
-    window.location.href = `http://localhost:8080/oauth2/authorization/${provider}?redirect_uri=${redirectUri}`;
+    window.location.href = `/oauth2/authorization/${provider}?redirect_uri=${redirectUri}`;
   };
 
   return (
