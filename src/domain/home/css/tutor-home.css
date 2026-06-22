@@ -1,0 +1,127 @@
+.tutor-home {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 32px 0;
+}
+
+/* ── Hero ── */
+.tutor-home-hero {
+  text-align: center;
+  padding: 48px 24px;
+  background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%);
+  border-radius: 20px;
+}
+
+.tutor-home-greeting {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #2c3e50;
+  line-height: 1.3;
+  margin-bottom: 12px;
+  word-break: keep-all;
+}
+
+.tutor-home-sub {
+  font-size: 1.1rem;
+  color: #546e7a;
+}
+
+/* ── Quick Actions ── */
+.tutor-home-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.tutor-home-action-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  background: white;
+  border: 1px solid #e8eef4;
+  border-radius: 16px;
+  padding: 24px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.tutor-home-action-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-color: var(--color-primary);
+}
+
+.tutor-home-action-icon {
+  font-size: 1.75rem;
+  margin-bottom: 6px;
+}
+
+.tutor-home-action-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.tutor-home-action-desc {
+  font-size: 0.9rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* ── Manage ── */
+.tutor-home-manage {
+  background: #f8f9fa;
+  border-radius: 16px;
+  padding: 28px 24px;
+}
+
+.tutor-home-manage-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 16px;
+}
+
+.tutor-home-manage-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tutor-home-manage-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tutor-home-manage-link:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: #f5f3ff;
+}
+
+.tutor-home-manage-arrow {
+  color: #94a3b8;
+}
+
+@media (max-width: 768px) {
+  .tutor-home-actions {
+    grid-template-columns: 1fr;
+  }
+  .tutor-home-greeting {
+    font-size: 1.6rem;
+  }
+}
