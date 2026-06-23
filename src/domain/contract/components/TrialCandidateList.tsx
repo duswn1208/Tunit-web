@@ -39,7 +39,11 @@ export default function TrialCandidateList({
       alert('거절 사유를 입력해주세요');
       return;
     }
-    onReject(rejectReason, alternativeTimes.length > 0 ? alternativeTimes : undefined);
+    if (alternativeTimes.length === 0) {
+      alert('대안 시간을 추가해주세요');
+      return;
+    }
+    onReject(rejectReason, alternativeTimes);
   };
 
   const formatDisplayDate = (dateStr: string, timeStr: string) => {
