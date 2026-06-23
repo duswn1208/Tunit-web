@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import '../css/home.css';
-
+import '../css/home.css'
 export default function HomeBottomCTA() {
   const navigate = useNavigate();
 

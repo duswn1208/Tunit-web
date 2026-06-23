@@ -21,7 +21,6 @@ export default function ContractEditPage() {
     enabled: !!contractNo,
   });
 
-  console.log(contract);
   if (isLoading) {
     return (
       <div style={{ padding: '20px', textAlign: 'center' }}>

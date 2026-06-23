@@ -57,6 +57,14 @@
   padding: 0 !important;
 }
 
+/* 잠정(체험 1순위 후보) 이벤트: 점선 테두리로 미확정 표시 */
+.rbc-event--candidate {
+  border: 1px dashed #a855f7 !important;
+  background: #f5f3ff !important;
+  border-radius: 6px !important;
+  padding: 1px 4px !important;
+}
+
 /* 날짜 셀 숫자 스타일 */
 .rbc-date-cell {
   text-align: center !important;

@@ -47,10 +47,26 @@ export default function LessonManageLayout() {
           id: item.lessonReservationNo,
           category: item.category,
         }));
+        // 미확정 체험의 1순위 후보 시간을 "잠정(점선)" 이벤트로 변환
+        let candidateEvents = (data.trialCandidates ?? []).map((item: any) => ({
+          title: `${item.studentName}(체험·잠정)`,
+          status: 'CANDIDATE',
+          studentName: item.studentName,
+          date: new Date(item.date),
+          start: new Date(`${item.date}T${item.startTime}`),
+          end: new Date(`${item.date}T${item.endTime}`),
+          allDay: false,
+          id: `trial-${item.contractNo}`,
+          contractNo: item.contractNo,
+        }));
+
         // 필터 적용
         if (filterStudent) {
           mappedLessonList = mappedLessonList.filter((l: { studentName: string | string[] }) =>
             l.studentName.includes(filterStudent)
+          );
+          candidateEvents = candidateEvents.filter((c: { studentName: string }) =>
+            c.studentName.includes(filterStudent)
           );
         }
         if (filterStatus) {
@@ -58,9 +74,11 @@ export default function LessonManageLayout() {
             (l: { status: { name: string } }) => l.status.name === filterStatus
           );
         }
+        // 상태 필터가 없을 때만 잠정 후보를 함께 노출(특정 상태로 필터 시 제외)
+        const lessonList = filterStatus ? mappedLessonList : [...mappedLessonList, ...candidateEvents];
         setLessonSummary({
           ...data,
-          lessonList: mappedLessonList,
+          lessonList,
         });
       });
   };
@@ -148,7 +166,11 @@ export default function LessonManageLayout() {
         {viewType === 'calendar' ? (
           <LessonCalendarSection
             lessonEvents={lessonSummary?.lessonList ?? []}
-            onSelectEvent={setSelectedEvent}
+            onSelectEvent={(event: any) => {
+              // 잠정(체험 후보) 이벤트는 실제 예약이 아니므로 상세 모달을 열지 않음
+              if (event?.status === 'CANDIDATE') return;
+              setSelectedEvent(event);
+            }}
             onSelectSlot={(slotInfo: any) => {
               const d = slotInfo?.start instanceof Date ? slotInfo.start : null;
               const date = d
@@ -162,7 +184,9 @@ export default function LessonManageLayout() {
           />
         ) : (
           <LessonListSection
-            lessonEvents={lessonSummary?.lessonList ?? []}
+            lessonEvents={(lessonSummary?.lessonList ?? []).filter(
+              (l: any) => l.status !== 'CANDIDATE'
+            )}
             onSelectEvent={setSelectedEvent}
           />
         )}

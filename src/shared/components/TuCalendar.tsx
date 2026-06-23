@@ -126,16 +126,31 @@ export default function TuCalendar({
           onSelectEvent={onSelectEvent}
           onSelectSlot={onSelectSlot}
           selectable={!!onSelectSlot}
+          eventPropGetter={(event: any) => {
+            const status = event.status?.name || event.status;
+            // 잠정(체험 후보) 이벤트: 점선 테두리 + 투명 배경
+            return status === 'CANDIDATE' ? { className: 'rbc-event--candidate' } : {};
+          }}
           components={{
             toolbar: CustomToolbar,
             event: ({ event }: { event: any }) => {
               const status = event.status?.name || event.status;
               const style = statusStyleMap?.[status] || { dot: '#636e72', text: '#636e72' };
+              const isCandidate = status === 'CANDIDATE';
               return (
                 <div>
                   <span
                     className="brand-chip-dot"
-                    style={{ background: style.dot, marginRight: 6, verticalAlign: 'middle' }}
+                    style={
+                      isCandidate
+                        ? {
+                            background: 'transparent',
+                            border: `1.5px dashed ${style.dot}`,
+                            marginRight: 6,
+                            verticalAlign: 'middle',
+                          }
+                        : { background: style.dot, marginRight: 6, verticalAlign: 'middle' }
+                    }
                   ></span>
                   <span
                     className="lesson-calendar-name"

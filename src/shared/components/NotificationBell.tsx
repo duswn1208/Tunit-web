@@ -37,7 +37,6 @@ export default function NotificationBell() {
       try {
         const list = await api.get<any[]>('/api/notifications/unread');
         setNotifications(list);
-        console.log('Fetched Notifications:', list);
         setOpen(true);
       } catch (e) {
         setNotifications([]);

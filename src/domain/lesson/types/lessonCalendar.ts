@@ -1,4 +1,4 @@
-export type LessonStatus = 'REQUESTED' | 'ACTIVE' | 'COMPLETED' | 'CANCELED' | 'EXPIRED';
+export type LessonStatus = 'REQUESTED' | 'ACTIVE' | 'COMPLETED' | 'CANCELED' | 'EXPIRED' | 'CANDIDATE';
 
 export type LessonEvent = {
   studentName: string;
@@ -63,5 +63,12 @@ export const statusStyle: Record<
     text: '#475569',
     border: '#94A3B8',
     label: '만료/노쇼',
+  },
+  CANDIDATE: {
+    bg: '#F5F3FF',
+    dot: '#A855F7',
+    text: '#7E22CE',
+    border: '#A855F7',
+    label: '체험 신청(잠정)',
   },
 };
