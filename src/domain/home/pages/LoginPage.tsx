@@ -13,7 +13,7 @@ export default function LoginPage() {
   return (
     <div className="login-container">
       {/* 로고 이미지 */}
-      <img src="/public/brand_logo.png" alt="Tunit Logo" className="login-logo" />
+      <img src="/brand_logo.png" alt="Tunit Logo" className="login-logo" />
 
       {/* 메인 타이틀 */}
       <h1 className="login-title">

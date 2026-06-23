@@ -7,10 +7,10 @@ import RootHeaderBase from './RootHeaderBase.tsx';
 import { useAuth } from '@/shared/auth/AuthContext.tsx';
 
 export default function RootLayout() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   let HeaderComponent = RootHeaderBase;
 
-  if (user) {
+  if (!loading && user) {
     if (user.userRole?.tutor) HeaderComponent = RootHeaderTutor;
     else if (user.userRole?.student) HeaderComponent = RootHeaderStudent;
   }
