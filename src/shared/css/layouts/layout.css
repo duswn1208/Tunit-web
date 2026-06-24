@@ -54,3 +54,16 @@
     max-width: 100%;
   }
 }
+
+/* 하단 탭바가 보이는 구간(≤600px): 고정 탭바에 콘텐츠가 가리지 않도록 처리 */
+@media (max-width: 600px) {
+  /* 푸터(약관·고객센터 링크)는 유지하되, 고정 탭바에 가리지 않도록 하단 여백 확보 */
+  .footer {
+    padding: 28px 20px;
+    padding-bottom: calc(28px + 56px + env(safe-area-inset-bottom, 0px));
+  }
+  .footer-links {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+}

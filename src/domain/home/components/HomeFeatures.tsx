@@ -1,9 +1,7 @@
-import { BsPersonCheck, BsCalendarCheck, BsShieldCheck, BsGrid } from 'react-icons/bs';
-
 export default function HomeFeatures() {
   const features = [
     {
-      icon: <BsPersonCheck className="feature-icon" />,
+      icon: <i className="fas fa-user-check feature-icon" aria-hidden="true" />,
       title: '나만을 위한 맞춤 레슨',
       description: (
         <>
@@ -13,7 +11,7 @@ export default function HomeFeatures() {
       ),
     },
     {
-      icon: <BsShieldCheck className="feature-icon" />,
+      icon: <i className="fas fa-shield-halved feature-icon" aria-hidden="true" />,
       title: '믿을 수 있는 튜터 프로필',
       description: (
         <>
@@ -24,7 +22,7 @@ export default function HomeFeatures() {
       ),
     },
     {
-      icon: <BsCalendarCheck className="feature-icon" />,
+      icon: <i className="fas fa-calendar-check feature-icon" aria-hidden="true" />,
       title: '간편한 스케줄 관리 & 결제',
       description: (
         <>
@@ -35,7 +33,7 @@ export default function HomeFeatures() {
       ),
     },
     {
-      icon: <BsGrid className="feature-icon" />,
+      icon: <i className="fas fa-table-cells-large feature-icon" aria-hidden="true" />,
       title: '다양한 분야의 레슨',
       description: (
         <>

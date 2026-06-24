@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faMapMarkerAlt, faStar } from '@fortawesome/free-solid-svg-icons';
 import { fetchTutors } from '@/domain/search/api/tutorSearchApi';
 import { getMainLessonCategory, getSubLessonCategory } from '@/domain/lesson/api/categoryApi';
 import { categoryIcons } from '@/domain/lesson/lib/categoryIcons';
@@ -103,7 +103,7 @@ export default function HomeSampleTutors() {
                   <div className="sample-tutor-name">{tutor.userInfo.nickname}</div>
                   <div className="sample-tutor-meta">
                     경력 {tutor.careerYears}년
-                    {tutor.rating && <span> · ★ {tutor.rating}</span>}
+                    {tutor.rating && <span> · <FontAwesomeIcon icon={faStar} style={{ color: 'var(--lesson-firstcome)' }} /> {tutor.rating}</span>}
                   </div>
                 </div>
               </div>
@@ -133,7 +133,7 @@ export default function HomeSampleTutors() {
 
       <div className="sample-tutors-more">
         <button className="cta-button cta-button--outline" onClick={() => navigate('/find/lessons')}>
-          튜터 전체 보기 →
+          튜터 전체 보기 <i className="fas fa-arrow-right" aria-hidden="true"></i>
         </button>
       </div>
     </section>

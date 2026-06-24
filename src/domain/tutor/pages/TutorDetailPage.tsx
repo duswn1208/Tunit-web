@@ -124,7 +124,7 @@ export default function TutorDetailPage() {
       {/* 뒤로 가기 버튼 */}
       <div className="detail-back-button-wrap">
         <button className="tutor-detail-back-btn" onClick={() => navigate(-1)}>
-          ← 목록으로
+          <i className="fas fa-arrow-left" aria-hidden="true"></i> 목록으로
         </button>
       </div>
 
@@ -147,7 +147,7 @@ export default function TutorDetailPage() {
             <div className="tutor-hero-info">
               <div className="tutor-hero-name">{tutorName}</div>
               {data.rating && (
-                <div className="tutor-hero-rating">⭐ {data.rating}</div>
+                <div className="tutor-hero-rating"><i className="fas fa-star" aria-hidden="true"></i> {data.rating}</div>
               )}
               <div className="tutor-hero-badges">
                 <span className="tutor-hero-badge tutor-hero-badge--career">경력 {data.careerYears}년</span>

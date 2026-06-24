@@ -176,7 +176,7 @@ export default function StudentContractCard({
         contract.tutorProposals.length > 0 && (
           <div style={{ marginTop: 16 }}>
             <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 12 }}>
-              🎯 튜터가 제안한 시간
+              <i className="fas fa-bullseye" aria-hidden="true"></i> 튜터가 제안한 시간
             </div>
             {contract.tutorProposals
               .filter((p) => p.isAccepted === null)
@@ -218,10 +218,10 @@ export default function StudentContractCard({
                   {candidate.priority}순위: {formatDisplayDate(candidate.candidateDate)} {candidate.candidateStartTime}
                 </span>
                 {candidate.isAvailable === true && (
-                  <span style={{ color: '#4caf50', fontSize: 12 }}>✓ 가능</span>
+                  <span style={{ color: 'var(--lesson-completed)', fontSize: 12 }}><i className="fas fa-check" aria-hidden="true"></i> 가능</span>
                 )}
                 {candidate.isAvailable === false && (
-                  <span style={{ color: '#f44336', fontSize: 12 }}>✗ 불가</span>
+                  <span style={{ color: 'var(--lesson-cancelled)', fontSize: 12 }}><i className="fas fa-xmark" aria-hidden="true"></i> 불가</span>
                 )}
               </div>
             ))}
@@ -239,13 +239,13 @@ export default function StudentContractCard({
             <div
               style={{
                 padding: 16,
-                backgroundColor: '#e8f5e9',
+                backgroundColor: 'var(--lesson-completed-bg)',
                 borderRadius: 8,
-                border: '1px solid #4caf50',
+                border: '1px solid var(--lesson-completed)',
               }}
             >
-              <div style={{ fontSize: 14, fontWeight: 600, color: '#2e7d32', marginBottom: 4 }}>
-                ✅ 체험 레슨 확정
+              <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--lesson-completed)', marginBottom: 4 }}>
+                <i className="fas fa-circle-check" aria-hidden="true"></i> 체험 레슨 확정
               </div>
               <div style={{ fontSize: 15 }}>
                 {formatDisplayDate(contract.selectedCandidateDate, contract.selectedCandidateTime)}

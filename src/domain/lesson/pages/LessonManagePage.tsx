@@ -159,7 +159,7 @@ export default function LessonManageLayout() {
 
       {pendingCount > 0 && (
         <div className="lesson-pending-banner">
-          <span className="lesson-pending-banner__icon">⚠</span>
+          <span className="lesson-pending-banner__icon"><i className="fas fa-exclamation-circle" aria-hidden="true"></i></span>
           <span className="lesson-pending-banner__text">
             {pendingCount}개의 레슨 신청이 대기 중입니다
           </span>
@@ -167,7 +167,7 @@ export default function LessonManageLayout() {
             className="lesson-pending-banner__btn"
             onClick={() => setFilterStatus('REQUESTED')}
           >
-            확인하기 →
+            확인하기 <i className="fas fa-arrow-right" aria-hidden="true"></i>
           </button>
         </div>
       )}

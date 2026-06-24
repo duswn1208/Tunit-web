@@ -172,7 +172,7 @@ export default function MyStudentsPage() {
             if (filtered.length === 0) {
               return (
                 <div className="empty-state">
-                  <span className="empty-state-icon">🎓</span>
+                  <span className="empty-state-icon"><i className="fas fa-user-graduate" aria-hidden="true"></i></span>
                   <p className="empty-state-text">이 탭에 해당하는 학생이 없습니다</p>
                 </div>
               );

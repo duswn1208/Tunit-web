@@ -137,7 +137,7 @@ export default function TutorSearchPage() {
       <Header title="튜터 찾기" />
       <div className="tutor-search-bar-wrap">
         <div className="tutor-search-bar">
-          <span className="tutor-search-bar-icon">🔍</span>
+          <span className="tutor-search-bar-icon"><i className="fas fa-magnifying-glass" aria-hidden="true"></i></span>
           <input
             type="text"
             placeholder="이름, 종목, 지역으로 검색"

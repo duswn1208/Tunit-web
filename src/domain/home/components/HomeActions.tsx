@@ -24,7 +24,7 @@ export default function HomeActions() {
         내게 맞는 튜터 찾아보기
       </button>
       <button className="cta-button-text-link" onClick={handleTutorRegistration}>
-        튜터로 등록하기 →
+        튜터로 등록하기 <i className="fas fa-arrow-right" aria-hidden="true"></i>
       </button>
     </div>
   );

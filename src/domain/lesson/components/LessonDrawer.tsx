@@ -85,7 +85,7 @@ const LessonDrawer: React.FC<LessonDrawerProps> = ({
             onClick={onClose}
             aria-label="닫기"
           >
-            ✕
+            <i className="fas fa-xmark" aria-hidden="true"></i>
           </button>
         </div>
 

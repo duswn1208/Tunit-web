@@ -43,7 +43,7 @@ export function TutorInfo({ tutorInfo, onClickTutor, onClickChat }: TutorInfoPro
       <span className="chat-btn-tooltip-wrap">
         <Button className="chat-mini-btn" size="sm" onClick={onClickChat}>
           <span role="img" aria-label="채팅" style={{ fontSize: '1em', marginRight: 2 }}>
-            💬
+            <i className="fas fa-comment-dots" aria-hidden="true"></i>
           </span>
         </Button>
         <span className="chat-btn-tooltip">튜터에게 채팅을 걸 수 있어요</span>

@@ -37,7 +37,7 @@ export default function HomeFaq() {
           <div key={i} className={`faq-item${openIndex === i ? ' faq-item--open' : ''}`}>
             <button className="faq-question" onClick={() => toggle(i)}>
               <span>{faq.q}</span>
-              <span className="faq-chevron">{openIndex === i ? '▲' : '▼'}</span>
+              <span className="faq-chevron"><i className={openIndex === i ? 'fas fa-chevron-up' : 'fas fa-chevron-down'} aria-hidden="true"></i></span>
             </button>
             {openIndex === i && <div className="faq-answer">{faq.a}</div>}
           </div>

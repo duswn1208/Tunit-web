@@ -5,7 +5,7 @@ export default function HomeLessonTypeDesc() {
     <section className="home-lesson-type-desc-section">
       <div className="home-lesson-type-desc-container">
         <div className="home-lesson-type-desc-item">
-          <div className="home-lesson-type-desc-icon">🕒</div>
+          <div className="home-lesson-type-desc-icon"><i className="fas fa-clock" aria-hidden="true"></i></div>
           <div className="home-lesson-type-desc-title">선착순 레슨</div>
           <div className="home-lesson-type-desc-subtitle">원하는 일정을 자유롭게</div>
           <div className="home-lesson-type-desc-desc">
@@ -17,7 +17,7 @@ export default function HomeLessonTypeDesc() {
         {/* 구분선 */}
         <div className="home-lesson-type-desc-divider"></div>
         <div className="home-lesson-type-desc-item home-lesson-type-desc-item--right">
-          <div className="home-lesson-type-desc-icon">📅</div>
+          <div className="home-lesson-type-desc-icon"><i className="fas fa-calendar-check" aria-hidden="true"></i></div>
           <div className="home-lesson-type-desc-title">정기 레슨</div>
           <div className="home-lesson-type-desc-subtitle">매주 같은 요일, 같은 시간에</div>
           <div className="home-lesson-type-desc-desc">
