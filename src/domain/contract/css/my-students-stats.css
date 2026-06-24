@@ -1,0 +1,218 @@
+/* 통계 바 */
+.mys-stats-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.mys-stat-card {
+  flex: 1;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: default;
+}
+
+.mys-stat-card--active {
+  border-color: #0075FF;
+}
+
+.mys-stat-card--pending {
+  border-color: #F7A300;
+}
+
+.mys-stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+
+.mys-stat-card--active .mys-stat-value {
+  color: #0075FF;
+}
+
+.mys-stat-card--pending .mys-stat-value {
+  color: #F7A300;
+}
+
+.mys-stat-label {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+/* 페이지 헤더 (제목 + 초대 버튼) */
+.mys-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+/* 학생 초대 버튼 */
+.mys-invite-btn {
+  padding: 8px 16px;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-btn);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+
+.mys-invite-btn:hover {
+  background: #3d47b3;
+  box-shadow: 0 4px 12px rgba(79, 89, 214, 0.25);
+}
+
+/* 계약 카드 아바타 */
+.contract-card-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  flex-shrink: 0;
+  letter-spacing: -0.5px;
+}
+
+/* 호버 퀵 액션 */
+.contract-card-quick-actions {
+  display: none;
+  gap: 6px;
+}
+
+.tutor-card:hover .contract-card-quick-actions {
+  display: flex;
+}
+
+.contract-card-quick-btn {
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: var(--transition-base);
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+}
+
+.contract-card-quick-btn:hover {
+  background: var(--bg-base);
+}
+
+.contract-card-quick-btn--danger {
+  border-color: #F04452;
+  color: #F04452;
+}
+
+.contract-card-quick-btn--danger:hover {
+  background: #fff5f6;
+}
+
+/* 진행률 도트 */
+.progress-dots {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.progress-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #E5E8EB;
+}
+
+.progress-dot--filled {
+  background: var(--color-primary);
+}
+
+/* 컴팩트 메타 정보 */
+.contract-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-bottom: 10px;
+}
+
+.contract-card-meta__item {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* 수강료 강조 */
+.contract-card-price-amount {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+}
+
+/* 체험 레슨 카드 */
+.contract-card--trial {
+  background: #FFFBEE;
+  border-color: #F7A300 !important;
+}
+
+.trial-cta-btn {
+  padding: 6px 12px;
+  background: #F7A300;
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-btn);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+
+.trial-cta-btn:hover {
+  background: #d98e00;
+}
+
+/* 종료 학생 카드 */
+.contract-card--ended {
+  opacity: 0.6;
+}
+
+.contract-card-reregister-btn {
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--color-primary);
+  background: var(--bg-surface);
+  color: var(--color-primary);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+
+.contract-card-reregister-btn:hover {
+  background: var(--color-primary-bg);
+}
+
+@media (max-width: 768px) {
+  .mys-stats-bar {
+    gap: 8px;
+  }
+
+  .mys-stat-card {
+    padding: 10px 12px;
+  }
+
+  .mys-stat-value {
+    font-size: 18px;
+  }
+}
