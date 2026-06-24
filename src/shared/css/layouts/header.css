@@ -1,59 +1,71 @@
-.notification-bell {
-  position: relative;
-  display: inline-block;
-  margin-right: 16px;
-  font-size: 22px;
-  cursor: pointer;
-}
-.notification-count {
-  position: absolute;
-  top: -6px;
-  right: -10px;
-  background: #ff5252;
-  color: #fff;
-  border-radius: 50%;
-  padding: 2px 7px;
-  font-size: 12px;
-  font-weight: bold;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-}
-/* src/components/header.css */
 .app-header {
   position: sticky;
   top: 0;
-  background: linear-gradient(to right, #5c6bc0, #606fc2);
-  color: #fff;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  z-index: 10;
-  box-shadow: 0 2px 8px rgba(92, 107, 192, 0.2);
+  height: 52px;
+  background: #5B5EA6;
+  border-bottom: none;
+  z-index: 100;
 }
+
 .app-header__inner {
-  /* max-width: 1200px; */
+  height: 100%;
   margin: 0 auto;
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 16px 24px;
+  gap: 8px;
+  padding: 0 24px;
 }
+
 .brand {
   font-weight: 800;
-  font-size: 24px;
+  font-size: 17px;
   color: #fff;
   text-decoration: none;
-  letter-spacing: 0.5px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  letter-spacing: -0.5px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
+  flex-shrink: 0;
 }
+
+.brand__mark {
+  width: 22px;
+  height: 22px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 20px;
+}
+
 .nav a {
-  color: #ccc;
+  color: rgba(255, 255, 255, 0.75);
   text-decoration: none;
-  margin: 0 8px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+  transition: var(--transition-base);
 }
+
 .nav a:hover {
   color: #fff;
+  background: rgba(255, 255, 255, 0.15);
 }
+
+.nav a.active {
+  color: #fff;
+  font-weight: 700;
+  background: none;
+}
+
 .right {
   margin-left: auto;
   display: flex;
@@ -63,84 +75,168 @@
 
 .auth-buttons {
   display: flex;
-  gap: 12px;
+  gap: 8px;
   align-items: center;
 }
 
 .login-button {
-  padding: 8px 16px;
-  border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0.15);
-  color: white;
+  padding: 7px 16px;
+  border-radius: var(--radius-btn);
+  background: #2D2E3F;
+  color: #fff;
   font-weight: 600;
+  font-size: 13px;
   text-decoration: none;
-  transition: background-color 0.2s ease;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: var(--transition-base);
+  border: none;
+  cursor: pointer;
 }
 
 .login-button:hover {
-  background-color: rgba(255, 255, 255, 0.25);
+  background: #3d3e52;
+  color: #fff;
 }
 
 .login {
   background: #fff;
-  color: #111;
-  border: 0;
-  padding: 8px 12px;
-  border-radius: 8px;
+  color: var(--color-primary);
+  border: none;
+  padding: 7px 16px;
+  border-radius: var(--radius-btn);
+  font-size: 13px;
+  font-weight: 700;
   cursor: pointer;
+  transition: var(--transition-base);
 }
-.user {
-  position: relative;
+
+.login:hover {
+  background: rgba(255, 255, 255, 0.9);
 }
+
 .avatar {
-  min-width: 34px;
-  height: auto;
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px solid #666;
-  background: #666;
+  height: 32px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.18);
   color: #fff;
   cursor: pointer;
-  white-space: normal;
-  word-break: keep-all;
-  line-height: 1.2;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px 0 12px;
+  letter-spacing: -0.2px;
+  transition: var(--transition-base);
+  gap: 5px;
 }
+
+.avatar::after {
+  content: '▾';
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.avatar:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.user {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .menu {
   position: absolute;
   right: 0;
-  top: 42px;
-  background: #1b1b1b;
-  border: 1px solid #333;
-  border-radius: 8px;
-  padding: 8px;
+  top: 40px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-card);
+  padding: 6px;
   min-width: 160px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 2px;
+  z-index: 200;
 }
+
 .menu a,
 .menu button {
-  color: #ddd;
+  color: var(--text-secondary);
   background: none;
-  border: 0;
+  border: none;
   text-align: left;
-  padding: 6px 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
   cursor: pointer;
   text-decoration: none;
+  font-size: 14px;
+  font-weight: 400;
+  transition: var(--transition-base);
 }
+
 .menu a:hover,
 .menu button:hover {
-  background: #2a2a2a;
+  background: var(--bg-base);
+  color: var(--text-primary);
 }
+
 .menu__name {
-  color: #ffffff;
-  padding: 4px 8px;
+  color: var(--text-tertiary);
+  padding: 6px 12px;
   font-size: 12px;
+  font-weight: 500;
+}
+
+.notification-bell {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 16px;
+  transition: var(--transition-base);
+  flex-shrink: 0;
+}
+
+.notification-bell:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.notification-count {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  background: #F04452;
+  color: #fff;
+  border-radius: 50%;
+  min-width: 16px;
+  height: 16px;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+  line-height: 1;
 }
 
 @media (max-width: 600px) {
   .nav {
     display: none !important;
+  }
+
+  .app-header__inner {
+    padding: 0 16px;
   }
 }
