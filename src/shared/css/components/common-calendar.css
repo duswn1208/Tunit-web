@@ -397,3 +397,71 @@
     vertical-align: middle;
   }
 }
+
+/* ===== 커스텀 캘린더 이벤트 칩 ===== */
+.rbc-event--custom {
+  background: transparent !important;
+  border: none !important;
+  padding: 1px 2px !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.tu-cal-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  font-size: 11px;
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.tu-cal-chip--recurring {
+  padding-left: 8px;
+}
+
+.tu-cal-chip__accent-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 5px 0 0 5px;
+}
+
+.tu-cal-chip__title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+
+.tu-cal-chip__badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.tu-cal-chip__badge--trial { background: #FF6B35; color: #fff; }
+.tu-cal-chip__badge--firstcome { background: #F7A300; color: #fff; }
+
+.tu-cal-chip--candidate {
+  background: transparent;
+  border: 1.5px dashed #A855F7;
+  color: #7E22CE;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

@@ -13,6 +13,11 @@ import Button from '@/shared/components/Button.tsx';
 import { toAmPmFormat } from '@/domain/dayTime/lib/timeUtils.ts';
 import { useNavigate } from 'react-router-dom';
 
+const AVATAR_COLORS = ['#4F59D6','#6B4EFF','#0075FF','#00B386','#FF6B35','#F7A300','#F04452'];
+function getAvatarColor(name: string) {
+  return AVATAR_COLORS[name.charCodeAt(0) % AVATAR_COLORS.length];
+}
+
 export default function LessonManageLayout() {
   const navigate = useNavigate();
   const [filterStudent, setFilterStudent] = useState('');
@@ -23,6 +28,17 @@ export default function LessonManageLayout() {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [currentDate, setCurrentDate] = useState(new Date());
+
+  const pendingCount = (lessonSummary?.lessonList ?? []).filter((l: any) => l.status?.name === 'REQUESTED').length;
+
+  const today = new Date();
+  const todayLessons = (lessonSummary?.lessonList ?? []).filter((l: any) => {
+    if (l.status === 'CANDIDATE' || l.status?.name === 'CANDIDATE') return false;
+    const d = l.date instanceof Date ? l.date : new Date(l.date);
+    return d.getFullYear() === today.getFullYear() &&
+      d.getMonth() === today.getMonth() &&
+      d.getDate() === today.getDate();
+  });
 
   const monthStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
   const monthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0, 23, 59, 59);
@@ -123,23 +139,75 @@ export default function LessonManageLayout() {
       </div>
 
       <div className="lesson-stats-bar">
-        <div className="lesson-stat-item">
+        <div className="lesson-stat-item" onClick={() => setFilterStatus('')}>
           <span className="lesson-stat-value">{lessonSummary?.todayLessonCount ?? 0}</span>
           <span className="lesson-stat-label">오늘</span>
         </div>
-        <div className="lesson-stat-item">
+        <div className="lesson-stat-item" onClick={() => setFilterStatus('')}>
           <span className="lesson-stat-value">{lessonSummary?.thisWeekLessonCount ?? 0}</span>
           <span className="lesson-stat-label">이번주 남은</span>
         </div>
-        <div className="lesson-stat-item">
-          <span className="lesson-stat-value">{lessonSummary?.nextWeekLessonCount ?? 0}</span>
-          <span className="lesson-stat-label">다음주 예정</span>
+        <div className="lesson-stat-item lesson-stat-item--pending" onClick={() => setFilterStatus('REQUESTED')}>
+          <span className="lesson-stat-value">{pendingCount}</span>
+          <span className="lesson-stat-label">신청 대기</span>
         </div>
-        <div className="lesson-stat-item lesson-stat-item--total">
+        <div className="lesson-stat-item lesson-stat-item--total" onClick={() => setFilterStatus('')}>
           <span className="lesson-stat-value">{lessonSummary?.totalLessonCount ?? 0}</span>
           <span className="lesson-stat-label">이번달 전체</span>
         </div>
       </div>
+
+      {pendingCount > 0 && (
+        <div className="lesson-pending-banner">
+          <span className="lesson-pending-banner__icon">⚠</span>
+          <span className="lesson-pending-banner__text">
+            {pendingCount}개의 레슨 신청이 대기 중입니다
+          </span>
+          <button
+            className="lesson-pending-banner__btn"
+            onClick={() => setFilterStatus('REQUESTED')}
+          >
+            확인하기 →
+          </button>
+        </div>
+      )}
+
+      {todayLessons.length > 0 && (
+        <div className="lesson-today-strip">
+          <div className="lesson-today-strip__header">
+            <span className="lesson-today-strip__title">오늘의 레슨</span>
+            <span className="lesson-today-strip__count">{todayLessons.length}개</span>
+          </div>
+          <div className="lesson-today-strip__scroll">
+            {todayLessons.map((lesson: any) => (
+              <div key={lesson.id} className="lesson-today-card" onClick={() => setSelectedEvent(lesson)}>
+                <div className="lesson-today-card__avatar" style={{ background: getAvatarColor(lesson.studentName) + '22', color: getAvatarColor(lesson.studentName) }}>
+                  {lesson.studentName.slice(0, 2)}
+                </div>
+                <div className="lesson-today-card__info">
+                  <span className="lesson-today-card__name">{lesson.studentName}</span>
+                  <span className="lesson-today-card__time">
+                    {lesson.start instanceof Date ? lesson.start.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : ''} –
+                    {lesson.end instanceof Date ? lesson.end.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) : ''}
+                  </span>
+                </div>
+                {lesson.status?.allowedNextStatuses?.find((s: any) => s.name === 'ACTIVE') && (
+                  <button className="lesson-today-card__btn lesson-today-card__btn--confirm"
+                    onClick={(e) => { e.stopPropagation(); changeLessonStatus(lesson.id, 'ACTIVE'); }}>
+                    확정
+                  </button>
+                )}
+                {lesson.status?.allowedNextStatuses?.find((s: any) => s.name === 'CANCELED') && (
+                  <button className="lesson-today-card__btn lesson-today-card__btn--cancel"
+                    onClick={(e) => { e.stopPropagation(); changeLessonStatus(lesson.id, 'CANCELED'); }}>
+                    취소
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="lesson-manage-controls">
         <div className="lesson-manage-controls-left">

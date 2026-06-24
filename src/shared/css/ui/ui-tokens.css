@@ -1,21 +1,81 @@
+/* =============================================
+   튜닛 Design System v1.0 — Design Tokens
+   ============================================= */
+
 :root {
-  --brand-red: #ff5a5f;
-  --brand-mint: #b0bec5;
+  /* === Brand === */
+  --color-primary: #4F59D6;
+  --color-primary-bg: #EEEFFE;
+  --color-primary-dark: #3d47b3;
+  --color-primary-light: #6370d8;
+  --color-primary-rgb: 79, 89, 214;
 
-  --fg-muted: #6b7280;
-  --border: rgba(0, 0, 0, 0.16);
-  --border-strong: rgba(0, 0, 0, 0.24);
-  --card-bg: #3e3e3e;
-  --input-bg: #fff;
-  --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
+  /* === Backgrounds === */
+  --bg-base: #F9FAFB;
+  --bg-surface: #FFFFFF;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --border: rgba(255, 255, 255, 0.12);
-    --border-strong: rgba(255, 255, 255, 0.2);
-    --card-bg: #3e3e3e;
-    --input-bg: #f6f2f2;
-    --shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
-  }
+  /* === Text === */
+  --text-primary: #191F28;
+  --text-secondary: #4E5968;
+  --text-tertiary: #8B95A1;
+
+  /* === Border === */
+  --border: #E5E8EB;
+
+  /* === Lesson Status Colors === */
+  --lesson-pending:        #6B4EFF;
+  --lesson-pending-bg:     #F3F0FF;
+  --lesson-confirmed:      #0075FF;
+  --lesson-confirmed-bg:   #E8F3FF;
+  --lesson-completed:      #00B386;
+  --lesson-completed-bg:   #E6FAF5;
+  --lesson-cancelled:      #F04452;
+  --lesson-cancelled-bg:   #FFF0F1;
+  --lesson-expired:        #8B95A1;
+  --lesson-expired-bg:     #F2F4F6;
+  --lesson-trial:          #FF6B35;
+  --lesson-trial-bg:       #FFF3EE;
+  --lesson-firstcome:      #F7A300;
+  --lesson-firstcome-bg:   #FFFBEE;
+  --lesson-recurring:      #4F59D6;
+  --lesson-recurring-bg:   #EEEFFE;
+
+  /* === Radius === */
+  --radius-card:   12px;
+  --radius-btn:    10px;
+  --radius-chip:   5px;
+  --radius-modal:  16px;
+  --radius-input:  10px;
+  --radius-avatar: 50%;
+
+  /* === Shadows === */
+  --shadow-card:   0 2px 12px rgba(0, 0, 0, 0.06);
+  --shadow-hover:  0 4px 16px rgba(79, 89, 214, 0.10);
+  --shadow-drawer: -8px 0 48px rgba(0, 0, 0, 0.12);
+  --shadow-brand:  0 2px 8px rgba(79, 89, 214, 0.28);
+
+  /* === Transitions === */
+  --transition-base:   all 0.15s ease;
+  --transition-drawer: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  --transition-bg:     opacity 0.25s ease;
+
+  /* === Backwards Compatibility Aliases === */
+  --brand-red:          var(--color-primary);
+  --brand-red-rgb:      var(--color-primary-rgb);
+  --brand-red-dark:     var(--color-primary-dark);
+  --brand-red-light:    var(--color-primary-light);
+  --brand-mint:         #8B95A1;
+  --bg-gray:            var(--bg-base);
+  --bg-modal:           var(--bg-surface);
+  --bg-modal-rgb:       255, 255, 255;
+  --border-light:       var(--border);
+  --border-input:       var(--border);
+  --border-strong:      #C9CDD2;
+  --shadow-sm:          var(--shadow-card);
+  --shadow-md:          var(--shadow-card);
+  --shadow-lg:          var(--shadow-hover);
+  --input-bg:           var(--bg-surface);
+  --gradient-brand:     linear-gradient(135deg, #4F59D6 0%, #6370d8 100%);
+  --fg-muted:           var(--text-tertiary);
+  --card-bg:            var(--bg-surface);
 }

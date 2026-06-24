@@ -128,40 +128,46 @@ export default function TuCalendar({
           selectable={!!onSelectSlot}
           eventPropGetter={(event: any) => {
             const status = event.status?.name || event.status;
-            // 잠정(체험 후보) 이벤트: 점선 테두리 + 투명 배경
-            return status === 'CANDIDATE' ? { className: 'rbc-event--candidate' } : {};
+            if (status === 'CANDIDATE') return { className: 'rbc-event--candidate' };
+            return { className: 'rbc-event--custom', style: { background: 'transparent', border: 'none', padding: 0 } };
           }}
           components={{
             toolbar: CustomToolbar,
             event: ({ event }: { event: any }) => {
               const status = event.status?.name || event.status;
-              const style = statusStyleMap?.[status] || { dot: '#636e72', text: '#636e72' };
               const isCandidate = status === 'CANDIDATE';
+              const categoryName = event.category?.name || '';
+              const isRecurring = categoryName === 'RECURRING';
+              const isTrial = categoryName === 'TRIAL';
+              const isFirstcome = categoryName === 'FIRSTCOME';
+
+              const statusColorMap: Record<string, { bg: string; color: string }> = {
+                REQUESTED: { bg: '#F3F0FF', color: '#6B4EFF' },
+                ACTIVE: { bg: '#E8F3FF', color: '#0075FF' },
+                COMPLETED: { bg: '#E6FAF5', color: '#00B386' },
+                CANCELED: { bg: '#FFF0F1', color: '#F04452' },
+                EXPIRED: { bg: '#F2F4F6', color: '#8B95A1' },
+              };
+              const chipStyle = statusColorMap[status] || { bg: '#F2F4F6', color: '#8B95A1' };
+
+              if (isCandidate) {
+                return (
+                  <div className="tu-cal-chip tu-cal-chip--candidate">
+                    <span className="tu-cal-chip__dot tu-cal-chip__dot--dashed" />
+                    <span className="tu-cal-chip__title">{event.title}</span>
+                  </div>
+                );
+              }
+
               return (
-                <div>
-                  <span
-                    className="brand-chip-dot"
-                    style={
-                      isCandidate
-                        ? {
-                            background: 'transparent',
-                            border: `1.5px dashed ${style.dot}`,
-                            marginRight: 6,
-                            verticalAlign: 'middle',
-                          }
-                        : { background: style.dot, marginRight: 6, verticalAlign: 'middle' }
-                    }
-                  ></span>
-                  <span
-                    className="lesson-calendar-name"
-                    style={{
-                      fontWeight: 600,
-                      color: style.text,
-                      textDecoration: status === 'CANCELED' ? 'line-through' : undefined,
-                    }}
-                  >
-                    {event.title}
-                  </span>
+                <div
+                  className={`tu-cal-chip${isRecurring ? ' tu-cal-chip--recurring' : ''}`}
+                  style={{ background: chipStyle.bg, color: chipStyle.color, borderColor: chipStyle.color + '40' }}
+                >
+                  {isRecurring && <span className="tu-cal-chip__accent-bar" style={{ background: chipStyle.color }} />}
+                  <span className="tu-cal-chip__title" style={{ color: chipStyle.color }}>{event.title}</span>
+                  {isTrial && <span className="tu-cal-chip__badge tu-cal-chip__badge--trial">체험</span>}
+                  {isFirstcome && <span className="tu-cal-chip__badge tu-cal-chip__badge--firstcome">선착순</span>}
                 </div>
               );
             },

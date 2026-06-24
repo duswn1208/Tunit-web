@@ -2,6 +2,8 @@ import clsx from 'clsx';
 import React from 'react';
 import './css/button-tooltip.css';
 
+type Variant = 'default' | 'outline' | 'ghost' | 'soft' | 'danger';
+
 type Props = {
   children: React.ReactNode;
   type?: 'button' | 'submit';
@@ -9,9 +11,19 @@ type Props = {
   loading?: boolean;
   className?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  size?: 'sm' | 'xs' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
+  variant?: Variant;
+  full?: boolean;
   title?: string;
   tooltip?: string;
+};
+
+const VARIANT_CLASS: Record<Variant, string> = {
+  default: '',
+  outline: 'ui-btn--outline',
+  ghost: 'ui-btn--ghost',
+  soft: 'ui-btn--soft',
+  danger: 'ui-btn--danger',
 };
 
 export default function Button({
@@ -22,18 +34,26 @@ export default function Button({
   className,
   onClick,
   size,
+  variant = 'default',
+  full,
   title,
   tooltip,
 }: Props) {
   return (
     <div
       className={tooltip ? 'button-with-tooltip' : undefined}
-      style={{ display: 'inline-block', position: 'relative' }}
+      style={{ display: full ? 'block' : 'inline-block', position: 'relative' }}
     >
       <button
         type={type}
         disabled={disabled || loading}
-        className={clsx('ui-btn', className, size === 'sm' && 'ui-btn--sm')}
+        className={clsx(
+          'ui-btn',
+          VARIANT_CLASS[variant],
+          size === 'sm' && 'ui-btn--sm',
+          (size === 'lg' || full) && 'ui-btn--full',
+          className,
+        )}
         onClick={onClick}
         aria-busy={loading || undefined}
         title={title}

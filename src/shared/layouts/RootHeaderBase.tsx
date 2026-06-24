@@ -26,6 +26,7 @@ export default function RootHeaderBase({ nav }: { nav: React.ReactNode }) {
     <header className="app-header">
       <div className="app-header__inner">
         <Link to="/" className="brand">
+          <span className="brand__mark" />
           튜닛
         </Link>
         {user?.userRole && nav}

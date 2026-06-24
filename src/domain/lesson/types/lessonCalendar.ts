@@ -23,6 +23,7 @@ export type LessonSummary = {
   thisMonthLessonCount: number;
   totalLessonCount: number;
   lessonList: LessonEvent[];
+  pendingLessonCount?: number;
 };
 
 export const statusStyle: Record<
@@ -30,39 +31,39 @@ export const statusStyle: Record<
   { bg: string; dot: string; text: string; border: string; label: string }
 > = {
   REQUESTED: {
-    bg: '#F5F3FF',
-    dot: '#8B5CF6',
-    text: '#5B21B6',
-    border: '#8B5CF6',
-    label: '레슨 신청',
+    bg: '#F3F0FF',
+    dot: '#6B4EFF',
+    text: '#6B4EFF',
+    border: '#6B4EFF',
+    label: '신청',
   },
   ACTIVE: {
-    bg: '#EFF6FF',
-    dot: '#3B82F6',
-    text: '#1E40AF',
-    border: '#3B82F6',
-    label: '레슨 확정',
+    bg: '#E8F3FF',
+    dot: '#0075FF',
+    text: '#0075FF',
+    border: '#0075FF',
+    label: '확정',
   },
   COMPLETED: {
-    bg: '#F0FDF4',
-    dot: '#22C55E',
-    text: '#166534',
-    border: '#22C55E',
+    bg: '#E6FAF5',
+    dot: '#00B386',
+    text: '#00B386',
+    border: '#00B386',
     label: '완료',
   },
   CANCELED: {
-    bg: '#FFF1F2',
-    dot: '#F87171',
-    text: '#9F1239',
-    border: '#F87171',
+    bg: '#FFF0F1',
+    dot: '#F04452',
+    text: '#F04452',
+    border: '#F04452',
     label: '취소',
   },
   EXPIRED: {
-    bg: '#F8FAFC',
-    dot: '#94A3B8',
-    text: '#475569',
-    border: '#94A3B8',
-    label: '만료/노쇼',
+    bg: '#F2F4F6',
+    dot: '#8B95A1',
+    text: '#8B95A1',
+    border: '#8B95A1',
+    label: '만료',
   },
   CANDIDATE: {
     bg: '#F5F3FF',

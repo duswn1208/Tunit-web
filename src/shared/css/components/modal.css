@@ -1,34 +1,66 @@
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.3);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.36);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  padding: 16px; /* 화면 상하 여백 추가 */
+  padding: 20px;
+  animation: modal-fade-in 0.2s ease;
 }
 
 .modal-content {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 24px 0 rgba(30, 201, 187, 0.15);
-  padding: 40px 32px; /* 내부 여백 확장 */
+  background: var(--bg-surface);
+  border-radius: var(--radius-modal);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.14);
+  padding: 36px 32px;
   min-width: 320px;
-  max-width: 600px; /* 최대 너비 확장 */
+  max-width: 560px;
   width: 100%;
   position: relative;
-  margin: 16px 0; /* 모달 상하 여백 */
+  animation: modal-slide-up 0.25s ease;
 }
 
 .modal-content > * + * {
-  margin-top: 16px; /* 섹션 간 여백 추가 */
+  margin-top: 16px;
 }
 
 .modal-content--sm {
-  max-height: 100vh;
-  overflow-y: auto;
+  max-width: 400px;
+  padding: 28px 24px;
+}
+
+.modal-content--lg {
+  max-width: 720px;
+}
+
+@keyframes modal-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes modal-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal-content {
+    border-radius: var(--radius-modal) var(--radius-modal) 0 0;
+    max-width: 100%;
+    width: 100%;
+    padding: 28px 20px 36px;
+  }
 }

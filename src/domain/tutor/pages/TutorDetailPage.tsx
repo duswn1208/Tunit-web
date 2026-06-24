@@ -5,14 +5,16 @@ import TutorReviewSection from '../components/TutorReviewSection';
 import TutorFaqSection from '../components/TutorFaqSection.tsx';
 import TutorCareerHistorySection from '../components/TutorCareerHistorySection';
 import Tab from '@/shared/components/Tab.tsx';
-import { TutorProfileCard } from '../../profile/components/TutorProfileCard.tsx';
-import { Button } from '@/shared/components';
 import { useTutorDetail } from '../hooks/useTutorDetail';
 import '../css/tutor-detail.css';
 import '../css/tutor-calendar.css';
 import { useEffect, useRef, useState } from 'react';
-import useMediaQuery from '@/shared/hooks/useMediaQuery';
 import { useAuth } from '@/shared/auth/AuthContext';
+
+const ACCENT_COLORS = ['#4F59D6', '#6B4EFF', '#0075FF', '#00B386', '#FF6B35', '#F7A300', '#F04452'];
+function getAvatarColor(name: string) {
+  return ACCENT_COLORS[name.charCodeAt(0) % ACCENT_COLORS.length];
+}
 
 const TAB_LIST = ['튜터소개', '레슨시간', '레슨후기', 'FAQ'];
 const SECTION_IDS = ['section-intro', 'section-schedule', 'section-review', 'section-faq'];
@@ -24,7 +26,6 @@ export default function TutorDetailPage() {
   const { showToast } = useToast();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const isMobile = useMediaQuery('(max-width: 768px)');
   const { data, isLoading, error } = useTutorDetail(tutorProfileNo);
 
   const [activeSection, setActiveSection] = useState('레슨정보');
@@ -113,21 +114,64 @@ export default function TutorDetailPage() {
     return null;
   }
 
+  const tutorName = data.userInfo?.nickname || '튜터';
+  const avatarColor = getAvatarColor(tutorName);
+  const visibleLessons = data.lessonSubcategoryList?.slice(0, 4) ?? [];
+  const extraLessons = (data.lessonSubcategoryList?.length ?? 0) - visibleLessons.length;
+
   return (
     <div className="tutor-detail-page">
       {/* 뒤로 가기 버튼 */}
       <div className="detail-back-button-wrap">
-        <button className="detail-back-button" onClick={() => navigate(-1)}>
+        <button className="tutor-detail-back-btn" onClick={() => navigate(-1)}>
           ← 목록으로
         </button>
       </div>
 
+      {/* 히어로 카드 */}
       <div className="tutor-detail-container">
-        <TutorProfileCard tutor={data} variant="full" isMobile={isMobile} clickable={false} />
+        <div className="tutor-hero-card">
+          <div className="tutor-hero-header">
+            {data.photoUrl ? (
+              <div className="tutor-hero-avatar">
+                <img src={data.photoUrl} alt={tutorName} />
+              </div>
+            ) : (
+              <div
+                className="tutor-hero-avatar"
+                style={{ background: avatarColor + '22', color: avatarColor }}
+              >
+                {tutorName.slice(0, 2)}
+              </div>
+            )}
+            <div className="tutor-hero-info">
+              <div className="tutor-hero-name">{tutorName}</div>
+              {data.rating && (
+                <div className="tutor-hero-rating">⭐ {data.rating}</div>
+              )}
+              <div className="tutor-hero-badges">
+                <span className="tutor-hero-badge tutor-hero-badge--career">경력 {data.careerYears}년</span>
+                <span className="tutor-hero-badge tutor-hero-badge--price">시간당 {data.pricePerHour.toLocaleString()}원</span>
+              </div>
+              {visibleLessons.length > 0 && (
+                <div className="tutor-hero-tags">
+                  {visibleLessons.map((lesson) => (
+                    <span key={lesson.tutorLessonNo} className="tutor-hero-tag">
+                      {lesson.lessonCategory.label}
+                    </span>
+                  ))}
+                  {extraLessons > 0 && <span className="tutor-hero-tag">+{extraLessons}</span>}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* 섹션 이동 탭 (sticky) */}
-      <Tab tabs={TAB_LIST} selected={activeSection} onSelect={handleTabSelect} />
+      <div className="tutor-detail-tabs">
+        <Tab tabs={TAB_LIST} selected={activeSection} onSelect={handleTabSelect} />
+      </div>
 
       <div className="info-grid-wrap">
         <div className="info-grid">
@@ -149,49 +193,47 @@ export default function TutorDetailPage() {
           </div>
         </div>
 
-        {/* 모바일: 하단 플로팅 버튼 */}
-        {isMobile && (
-          <div className="floating-booking-buttons">
-            <Button
-              className="booking-button"
-              onClick={() => {
-                if (!user) {
-                  navigate(`/tutors/${tutorProfileNo}/guest-reservation`);
-                  return;
-                }
-                navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=trial`, { state: { tutor: data } });
-              }}
-            >
-              상담/체험 레슨 예약
-            </Button>
-            <Button
-              className="booking-button booking-button--outline"
-              onClick={() => {
-                if (!user) {
-                  showToast('로그인이 필요한 서비스입니다.', 'info');
-                  navigate('/auth/login', { state: { from: `/tutors/${tutorProfileNo}` } });
-                  return;
-                }
-                navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=regular`, { state: { tutor: data } });
-              }}
-            >
-              정기레슨 신청
-            </Button>
-            <Button
-              className="booking-button booking-button--fast"
-              onClick={() => {
-                if (!user) {
-                  showToast('로그인이 필요한 서비스입니다.', 'info');
-                  navigate('/auth/login', { state: { from: `/tutors/${tutorProfileNo}` } });
-                  return;
-                }
-                navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=firstcome`, { state: { tutor: data } });
-              }}
-            >
-              선착순 레슨 신청
-            </Button>
-          </div>
-        )}
+        {/* 하단 CTA 버튼 */}
+        <div className="tutor-detail-cta">
+          <button
+            className="ui-btn ui-btn--full"
+            onClick={() => {
+              if (!user) {
+                navigate(`/tutors/${tutorProfileNo}/guest-reservation`);
+                return;
+              }
+              navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=trial`, { state: { tutor: data } });
+            }}
+          >
+            상담 / 체험 레슨 예약
+          </button>
+          <button
+            className="ui-btn ui-btn--outline ui-btn--full"
+            onClick={() => {
+              if (!user) {
+                showToast('로그인이 필요한 서비스입니다.', 'info');
+                navigate('/auth/login', { state: { from: `/tutors/${tutorProfileNo}` } });
+                return;
+              }
+              navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=regular`, { state: { tutor: data } });
+            }}
+          >
+            정기레슨 신청
+          </button>
+          <button
+            className="ui-btn ui-btn--soft ui-btn--full"
+            onClick={() => {
+              if (!user) {
+                showToast('로그인이 필요한 서비스입니다.', 'info');
+                navigate('/auth/login', { state: { from: `/tutors/${tutorProfileNo}` } });
+                return;
+              }
+              navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=firstcome`, { state: { tutor: data } });
+            }}
+          >
+            선착순 레슨 예약
+          </button>
+        </div>
       </div>
     </div>
   );

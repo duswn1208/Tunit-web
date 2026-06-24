@@ -1,19 +1,121 @@
-.booking-button--outline {
-  background: #fff !important;
-  color: var(--brand-red) !important;
-  border: 2px solid var(--brand-red) !important;
+/* ── 히어로 카드 ── */
+.tutor-hero-card {
+  background: #fff;
+  border: 1px solid #E5E8EB;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 0;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+.tutor-hero-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.tutor-hero-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.tutor-hero-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tutor-hero-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tutor-hero-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: #191F28;
+  letter-spacing: -0.5px;
+}
+
+.tutor-hero-rating {
+  font-size: 14px;
+  color: #4E5968;
+}
+
+.tutor-hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tutor-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
   font-weight: 600;
-  transition: all 0.2s;
 }
-.booking-button--outline:hover {
-  background: #e8eaf6 !important;
-  color: var(--brand-red-dark) !important;
-  border-color: var(--brand-red-dark) !important;
+
+.tutor-hero-badge--career {
+  background: #E8F3FF;
+  color: #0075FF;
 }
-.booking-button--fast {
-  background: linear-gradient(135deg, var(--brand-red) 0%, var(--brand-red-light) 100%) !important;
-  border: none !important;
-  color: white !important;
+
+.tutor-hero-badge--price {
+  background: #E6FAF5;
+  color: #00B386;
+}
+
+.tutor-hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tutor-hero-tag {
+  padding: 3px 10px;
+  background: #F9FAFB;
+  color: #4E5968;
+  border-radius: 999px;
+  font-size: 12px;
+  border: 1px solid #E5E8EB;
+}
+
+/* ── CTA 버튼 영역 ── */
+.tutor-detail-cta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 0;
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  border-top: 1px solid #E5E8EB;
+  z-index: 5;
+}
+
+/* Soft 버튼 (황색) */
+.ui-btn--soft {
+  background: #FFFBEE;
+  color: #7A5700;
+  border: 1px solid #F7A300 !important;
+  box-shadow: none !important;
+}
+.ui-btn--soft:hover {
+  background: #F7A300 !important;
+  color: #fff !important;
 }
 /* 뒤로 가기 버튼 */
 .detail-back-button-wrap {
@@ -22,67 +124,51 @@
   padding: 1.25rem 1.5rem 0;
 }
 
-.detail-back-button {
+.tutor-detail-back-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 14px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background: white;
-  cursor: pointer;
+  padding: 8px 14px;
+  border: 1.5px solid var(--border, #E5E8EB);
+  border-radius: 10px;
+  background: #fff;
+  color: #4E5968;
   font-size: 14px;
-  color: #555;
-  transition: background 0.2s, border-color 0.2s;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-bottom: 16px;
 }
 
-.detail-back-button:hover {
-  background: #f5f5f5;
-  border-color: #999;
+.tutor-detail-back-btn:hover {
+  border-color: #4F59D6;
+  color: #4F59D6;
 }
 
-/* 모바일 하단 플로팅 예약/신청 버튼 */
+/* 모바일: 히어로 카드 세로 배치 */
 @media (max-width: 768px) {
-  .floating-booking-buttons {
-    position: fixed;
-    left: 0;
-    bottom: 56px;
-    width: 100vw;
-    background: rgba(255, 255, 255, 0.98);
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
-    z-index: 9999;
+  .tutor-hero-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
-  /* 첫 번째 버튼(상담/체험)은 단독 줄 full-width */
-  .floating-booking-buttons .booking-button:first-child {
-    width: 100%;
-    flex: none;
-    padding: 0.6rem 0;
-    font-size: 0.95rem;
-    border-radius: 0.5rem;
+
+  .tutor-hero-badges,
+  .tutor-hero-tags {
+    justify-content: center;
   }
-  /* 나머지 두 버튼은 반반 나눔 */
-  .floating-booking-buttons .booking-button:not(:first-child) {
-    flex: 1;
-    padding: 0.5rem 0;
-    font-size: 0.85rem;
-    border-radius: 0.5rem;
-    min-width: 0;
-  }
-  /* info-card 우측 상단 버튼 숨김 */
-  .info-card-action-buttons {
-    display: none !important;
+
+  /* CTA 스티키 하단 - 모바일에서 safe-area 추가 */
+  .tutor-detail-cta {
+    padding: 12px 0 calc(12px + env(safe-area-inset-bottom));
   }
 }
 
 /* 레이아웃 */
 .tutor-detail-page {
   min-height: 100vh;
-  background-color: #f3f4f6;
-  padding-bottom: 3rem;
+  background-color: #F9FAFB;
+  padding-bottom: 160px;
 }
 
 /* 모든 섹션의 공통 너비/패딩 기준 */
@@ -104,16 +190,21 @@
   position: relative;
 }
 
-/* 탭 — 스크롤 시 상단 고정 */
-.tutor-detail-page .tab-container {
-  max-width: 860px;
-  margin: 0.75rem auto 0;
-  padding: 0.5rem 1.5rem 0.625rem;
-  background: #f3f4f6;
+/* 탭 래퍼 — 스크롤 시 헤더 아래 고정 */
+.tutor-detail-tabs {
   position: sticky;
-  top: 0;
-  z-index: 20;
-  margin-bottom: 0;
+  top: 52px;
+  background: #fff;
+  z-index: 10;
+  border-bottom: 1px solid #E5E8EB;
+  margin: 0;
+}
+
+.tutor-detail-tabs .tab-container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  background: transparent;
 }
 
 /* 각 섹션 — sticky 탭 높이만큼 스크롤 오프셋 */
@@ -129,14 +220,11 @@
     padding-right: 1rem;
   }
 
-  .tutor-detail-page .tab-container {
+  .tutor-detail-tabs .tab-container {
     max-width: 100%;
-    padding: 0.5rem 1rem;
+    padding: 0 1rem;
   }
 
-  .tutor-detail-page {
-    padding-bottom: 140px;
-  }
 }
 
 /* 공통 카드 스타일 */

@@ -1,20 +1,24 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale/ko';
 import Chip from '@/shared/components/Chip';
 import Modal from '@/shared/components/Modal';
+import { toAmPmFormat } from '@/domain/dayTime/lib/timeUtils';
+import { useToast } from '@/shared/contexts/ToastContext';
+import { useAlert } from '@/shared/contexts/AlertContext';
 import TrialCandidateList from './TrialCandidateList';
+import PaymentStatusAlert from './PaymentStatusAlert';
 import { confirmTrialContract, rejectTrialContract } from '../api/trialContractApi';
 import type { Contract, ContractStatusCode, PaymentStatusCode } from '../types/contract';
 import { CONTRACT_STATUS_TRANSITIONS, getStatusLabel } from '../types/contract';
 import '../css/my-tutors.css';
-import { useNavigate } from 'react-router-dom';
-import PaymentStatusAlert from './PaymentStatusAlert';
-import { useState } from 'react';
-import { updateContractAmount } from '../api/updateContractAmount';
-import { toAmPmFormat } from '@/domain/dayTime/lib/timeUtils';
-import { isFirstcome } from '@/domain/booking/types/types';
-import { useToast } from '@/shared/contexts/ToastContext';
-import { useAlert } from '@/shared/contexts/AlertContext';
-import { format } from 'date-fns';
-import { ko } from 'date-fns/locale/ko';
+import '../css/my-students-stats.css';
+
+const ACCENT_COLORS = ['#4F59D6', '#6B4EFF', '#0075FF', '#00B386', '#FF6B35', '#F7A300', '#F04452'];
+function getAvatarColor(name: string): string {
+  return ACCENT_COLORS[name.charCodeAt(0) % ACCENT_COLORS.length];
+}
 
 interface TutorContractCardProps {
   contract: Contract;
@@ -29,29 +33,14 @@ export default function TutorContractCard({
 }: TutorContractCardProps) {
   const navigate = useNavigate();
 
-  // 개발 환경에서만 사용 - 결제 상태 테스트용
-  const [devPaymentStatus, setDevPaymentStatus] = useState<PaymentStatusCode | null>(null);
   const { showToast } = useToast();
   const { showAlert } = useAlert();
 
-  // 총 금액 수정 상태
-  const [editPrice, setEditPrice] = useState(false);
-  const [priceInput, setPriceInput] = useState(contract.totalPrice || 0);
-  const [displayPrice, setDisplayPrice] = useState(contract.totalPrice || 0);
+  const displayPrice = contract.totalPrice || 0;
 
   // 체험 레슨 모달 상태
   const [showTrialModal, setShowTrialModal] = useState(false);
 
-  const handlePriceSave = async () => {
-    try {
-      await updateContractAmount(contract.contractNo, priceInput);
-      setDisplayPrice(priceInput);
-      setEditPrice(false);
-      showToast('총 금액이 성공적으로 변경되었습니다.');
-    } catch (e: any) {
-      showToast(e?.message || '총 금액 변경에 실패했습니다.', 'error');
-    }
-  };
   const availableTransitions = CONTRACT_STATUS_TRANSITIONS[contract.contractStatus.code];
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -129,130 +118,169 @@ export default function TutorContractCard({
     }
   };
 
-  // 개발 환경에서 표시할 실제 결제 상태
-  const displayPaymentStatus = devPaymentStatus || contract.paymentStatus?.code;
+  const displayPaymentStatus = contract.paymentStatus?.code;
 
   const isTrial =
     contract.contractType?.code === 'TRIAL' ||
     (contract.contractType as unknown as string) === 'TRIAL';
   const isTrialPendingSelection =
     isTrial && !contract.selectedCandidateDate && (contract.trialCandidates?.length ?? 0) > 0;
+  const isEnded = ['CANCELLED', 'TERMINATED', 'END'].includes(contract.contractStatus.code);
   const placeText = contract.place?.trim() ? contract.place : '장소 미정';
-  const levelText = contract.level?.trim() ? contract.level : '-';
+  const levelText = contract.level?.trim() ? contract.level : null;
   const emergencyText = contract.emergencyContact?.trim() ? contract.emergencyContact : '-';
 
+  // 아바타 색상
+  const avatarColor = getAvatarColor(contract.studentName);
+  const avatarName = contract.studentName.slice(0, 2);
+
+  // 진행률 도트 (총 레슨 수 기준, 최대 10개 표시)
+  const totalDots = Math.min(contract.lessonCount || 0, 10);
+  const filledDots = Math.min(contract.currentLessonCount || 0, totalDots);
+
+  const cardClassName = [
+    'tutor-card',
+    isTrial ? 'contract-card--trial' : '',
+    isEnded ? 'contract-card--ended' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
-    <div className="tutor-card" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
+    <div className={cardClassName} onClick={handleCardClick} style={{ cursor: 'pointer' }}>
       <div className="tutor-card-header">
+        {/* 컬러 아바타 */}
+        <div
+          className="contract-card-avatar"
+          style={{ background: avatarColor + '22', color: avatarColor }}
+        >
+          {avatarName}
+        </div>
+
         <div className="tutor-card-content">
           <div className="tutor-card-title-row">
             <h3 className="tutor-card-title">
-              {contract.studentName} 학생, {contract.lessonName}
+              {contract.studentName} 학생
             </h3>
             <Chip label={contract.contractStatus.label} />
           </div>
-          <p className="tutor-card-location">{placeText}</p>
+          <p className="tutor-card-location">
+            {contract.lessonName}
+            {levelText && (
+              <span
+                style={{
+                  marginLeft: 6,
+                  fontSize: 11,
+                  fontWeight: 600,
+                  padding: '2px 6px',
+                  borderRadius: 4,
+                  background: avatarColor + '22',
+                  color: avatarColor,
+                }}
+              >
+                {levelText}
+              </span>
+            )}
+          </p>
+          <p className="tutor-card-location" style={{ marginTop: 2 }}>
+            {placeText}
+          </p>
         </div>
-      </div>
 
-      {/* 날짜 / 스케줄 */}
-      <div className="tutor-card-section">
-        <div className="tutor-card-info-row">
-          <span className="info-label">기간</span>
-          <span className="info-value">
-            {contract.startDt} ~ {contract.endDt ?? '진행 중'}
+        {/* 수강료 */}
+        <div style={{ textAlign: 'right', flexShrink: 0 }}>
+          <span className="contract-card-price-amount">
+            {displayPrice.toLocaleString()}원
           </span>
         </div>
-        {!isFirstcome(contract.contractStatus.code) && contract.scheduleList.length > 0 && (
-          <div className="tutor-card-info-row">
-            <span className="info-label">스케줄</span>
-            <span className="info-value">
-              매주{' '}
-              {contract.scheduleList
-                .map((schedule) => `${schedule.dayOfWeek}요일 ${toAmPmFormat(schedule.startTime)}`)
-                .join(', ')}
-            </span>
-          </div>
+      </div>
+
+      {/* 호버 퀵 액션 */}
+      <div className="contract-card-quick-actions" style={{ marginBottom: 8 }}>
+        <button
+          className="contract-card-quick-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`/tutor/my/lessons?contractNo=${contract.contractNo}`);
+          }}
+        >
+          레슨 보기
+        </button>
+        {!isEnded && (
+          <button
+            className="contract-card-quick-btn contract-card-quick-btn--danger"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleStatusChange('TERMINATED');
+            }}
+          >
+            중단
+          </button>
+        )}
+        {isEnded && (
+          <button
+            className="contract-card-reregister-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              // TODO: 재등록 처리
+            }}
+          >
+            재등록
+          </button>
         )}
       </div>
 
-      {/* 레슨 횟수 / 레벨 / 비상연락처 */}
-      <div className="tutor-card-section">
-        {!isTrial && contract.weekCount > 0 && contract.lessonCount > 0 && (
-          <div className="tutor-card-info-row">
-            <span className="info-label">레슨 횟수</span>
-            <span className="info-value">
-              주 {contract.weekCount}회 · 총 {contract.lessonCount}회
-            </span>
-          </div>
+      {/* 컴팩트 정보 */}
+      <div className="contract-card-meta">
+        <span className="contract-card-meta__item">
+          📍 {placeText}
+        </span>
+        {!isTrial && contract.scheduleList.length > 0 && (
+          <span className="contract-card-meta__item">
+            📅 매주{' '}
+            {contract.scheduleList
+              .map((s) => `${s.dayOfWeek}요일 ${toAmPmFormat(s.startTime)}`)
+              .join(', ')}
+          </span>
         )}
-        <div className="tutor-card-info-row">
-          <span className="info-label">레벨</span>
-          <span className="info-value">{levelText}</span>
-        </div>
-        <div className="tutor-card-info-row">
-          <span className="info-label">비상연락처</span>
-          <span className="info-value">{emergencyText}</span>
-        </div>
+        {!isTrial && contract.lessonCount > 0 && (
+          <span className="contract-card-meta__item">
+            이번달 {contract.currentLessonCount}/{contract.lessonCount}회
+          </span>
+        )}
       </div>
 
-      {/* 메모 */}
-      {contract.memo && (
-        <div className="tutor-card-memo">
-          <strong>메모:</strong> {contract.memo}
+      {/* 진행률 도트 (ACTIVE이고 레슨 횟수 있을 때만) */}
+      {contract.contractStatus.code === 'ACTIVE' && totalDots > 0 && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+          <span style={{ fontSize: 12, color: 'var(--text-tertiary)', flexShrink: 0 }}>
+            {contract.currentLessonCount}/{contract.lessonCount}회
+          </span>
+          <div className="progress-dots">
+            {Array.from({ length: totalDots }).map((_, i) => (
+              <div
+                key={i}
+                className={`progress-dot${i < filledDots ? ' progress-dot--filled' : ''}`}
+              />
+            ))}
+          </div>
         </div>
       )}
 
-      {/* 총 금액 */}
-      <div className="tutor-card-price">
-        <span>총 금액:</span>
-        {displayPaymentStatus === 'PENDING' && editPrice ? (
-          <>
-            <input
-              type="number"
-              className="price-edit-input"
-              value={priceInput}
-              min={0}
-              onChange={(e) => setPriceInput(Number(e.target.value))}
-              onClick={(e) => e.stopPropagation()}
-            />
-            <button
-              className="price-save-btn"
-              onClick={(e) => {
-                e.stopPropagation();
-                handlePriceSave();
-              }}
-            >
-              저장
-            </button>
-            <button
-              className="price-cancel-btn"
-              onClick={(e) => {
-                e.stopPropagation();
-                setEditPrice(false);
-                setPriceInput(displayPrice);
-              }}
-            >
-              취소
-            </button>
-          </>
-        ) : (
-          <>
-            <span>{displayPrice.toLocaleString()}원</span>
-            {displayPaymentStatus === 'PENDING' && (
-              <button
-                className="price-edit-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setEditPrice(true);
-                }}
-              >
-                수정
-              </button>
-            )}
-          </>
-        )}
-      </div>
+      {/* 체험 레슨 CTA (ACTIVE 상태이고 날짜가 확정된 체험 레슨) */}
+      {isTrial && contract.contractStatus.code === 'ACTIVE' && (
+        <div style={{ marginBottom: 8 }}>
+          <button
+            className="trial-cta-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              // TODO: 정식 등록 제안 모달
+            }}
+          >
+            정식 등록 제안 →
+          </button>
+        </div>
+      )}
 
       {/* 결제 상태 알림 */}
       {displayPaymentStatus && (
@@ -418,17 +446,42 @@ export default function TutorContractCard({
           ? availableTransitions.filter((s) => s === 'CANCELLED')
           : availableTransitions;
         if (transitions.length === 0) return null;
+
+        const isPendingStatus =
+          contract.contractStatus.code === 'REQUESTED' ||
+          contract.contractStatus.code === 'APPROVED';
+
         return (
           <div className="tutor-card-actions">
-            {transitions.map((status) => (
-              <button
-                key={status}
-                className="status-change-btn"
-                onClick={() => handleStatusChange(status)}
-              >
-                {getStatusLabel(status)}
-              </button>
-            ))}
+            {transitions.map((status) => {
+              const isAccept = status === 'ACTIVE' || status === 'APPROVED';
+              const isReject = status === 'CANCELLED' || status === 'TERMINATED';
+              const btnStyle: React.CSSProperties =
+                isPendingStatus && isAccept
+                  ? {
+                      background: 'var(--color-primary)',
+                      color: '#fff',
+                      border: '1px solid var(--color-primary)',
+                      fontWeight: 700,
+                    }
+                  : isPendingStatus && isReject
+                    ? {
+                        background: '#fff',
+                        color: '#F04452',
+                        border: '1px solid #F04452',
+                      }
+                    : {};
+              return (
+                <button
+                  key={status}
+                  className="status-change-btn"
+                  style={btnStyle}
+                  onClick={() => handleStatusChange(status)}
+                >
+                  {getStatusLabel(status)}
+                </button>
+              );
+            })}
           </div>
         );
       })()}

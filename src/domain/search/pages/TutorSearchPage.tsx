@@ -33,8 +33,10 @@ export default function TutorSearchPage() {
   const [selectedRegionCodes, setSelectedRegionCodes] = useState<string[]>([]);
   const [selectedLessonCodes, setSelectedLessonCodes] = useState<string[]>([]);
   const [sortType, setSortType] = useState<string>('REVIEW');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   // 튜터 리스트
   const [tutors, setTutors] = useState<TutorProfile[]>([]);
+
   useEffect(() => {
     api
       .get('/api/users/profile/me')
@@ -72,18 +74,18 @@ export default function TutorSearchPage() {
     function handleTrial(e: Event) {
       const event = e as CustomEvent;
       const tutorProfileNo = event.detail?.tutorProfileNo;
-      
+
       if (!user) {
         navigate(`/tutors/${tutorProfileNo}/guest-reservation`);
         return;
       }
       navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=trial`);
     }
-    
+
     function handleRegular(e: Event) {
       const event = e as CustomEvent;
       const tutorProfileNo = event.detail?.tutorProfileNo;
-      
+
       if (!user) {
         showToast('로그인이 필요한 서비스입니다.', 'info');
         navigate('/auth/login', { state: { from: `/tutors/${tutorProfileNo}` } });
@@ -91,11 +93,11 @@ export default function TutorSearchPage() {
       }
       navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=regular`);
     }
-    
+
     function handleFast(e: Event) {
       const event = e as CustomEvent;
       const tutorProfileNo = event.detail?.tutorProfileNo;
-      
+
       if (!user) {
         showToast('로그인이 필요한 서비스입니다.', 'info');
         navigate('/auth/login', { state: { from: `/tutors/${tutorProfileNo}` } });
@@ -103,11 +105,11 @@ export default function TutorSearchPage() {
       }
       navigate(`/tutors/${tutorProfileNo}/lesson-booking?type=firstcome`);
     }
-    
+
     window.addEventListener('tutor-booking-trial', handleTrial);
     window.addEventListener('tutor-booking-regular', handleRegular);
     window.addEventListener('tutor-booking-fast', handleFast);
-    
+
     return () => {
       window.removeEventListener('tutor-booking-trial', handleTrial);
       window.removeEventListener('tutor-booking-regular', handleRegular);
@@ -119,9 +121,31 @@ export default function TutorSearchPage() {
     return <div className="search-page-loading">튜터를 찾고 있어요...</div>;
   }
 
+  const filteredTutors = searchQuery.trim()
+    ? tutors.filter((t) => {
+        const q = searchQuery.trim().toLowerCase();
+        const name = t.userInfo?.nickname?.toLowerCase() ?? '';
+        const intro = t.introduce?.toLowerCase() ?? '';
+        const lessons = t.lessonSubcategoryList?.map((l) => l.lessonCategory.label.toLowerCase()).join(' ') ?? '';
+        const regions = t.regionList?.map((r) => r.label.toLowerCase()).join(' ') ?? '';
+        return name.includes(q) || intro.includes(q) || lessons.includes(q) || regions.includes(q);
+      })
+    : tutors;
+
   return (
     <div>
       <Header title="튜터 찾기" />
+      <div className="tutor-search-bar-wrap">
+        <div className="tutor-search-bar">
+          <span className="tutor-search-bar-icon">🔍</span>
+          <input
+            type="text"
+            placeholder="이름, 종목, 지역으로 검색"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+      </div>
       <TutorFilterBar
         initialRegion={studentRegions}
         initialLessons={studentLessons}
@@ -134,7 +158,7 @@ export default function TutorSearchPage() {
         }
         onSortChange={setSortType}
       />
-      <TutorProfileList tutors={tutors} />
+      <TutorProfileList tutors={filteredTutors} />
     </div>
   );
 }

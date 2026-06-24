@@ -8,6 +8,7 @@ import { api } from '@/shared/lib/api';
 import type { Contract, ContractStatusCode, PaymentStatusCode } from '../types/contract';
 import { getStatusLabel } from '../types/contract';
 import '../css/my-tutors.css';
+import '../css/my-students-stats.css';
 
 export default function MyStudentsPage() {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
@@ -98,6 +99,15 @@ export default function MyStudentsPage() {
     }
   }, [data, isLoading, showToast]);
 
+  // 통계 계산
+  const allContracts = data || [];
+  const activeContracts = allContracts.filter(
+    (c: Contract) => c.contractStatus.code === 'ACTIVE',
+  );
+  const pendingContracts = allContracts.filter((c: Contract) =>
+    ['REQUESTED', 'APPROVED'].includes(c.contractStatus.code),
+  );
+
   // 탭별 카운트 계산 및 표시 레이블 생성
   const tabList = baseTabList.map((tab) => {
     if (!data) return tab;
@@ -113,6 +123,31 @@ export default function MyStudentsPage() {
     <div className="my-tutors-page">
       <div className="my-tutors-container">
         <Header title="내 학생" />
+
+        <div className="mys-page-header">
+          <button className="mys-invite-btn" onClick={() => { /* TODO: 학생 초대 모달 */ }}>
+            + 학생 초대
+          </button>
+        </div>
+
+        <div className="mys-stats-bar">
+          <div className="mys-stat-card">
+            <span className="mys-stat-value">{allContracts.length}</span>
+            <span className="mys-stat-label">전체 학생</span>
+          </div>
+          <div className="mys-stat-card mys-stat-card--active">
+            <span className="mys-stat-value">{activeContracts.length}</span>
+            <span className="mys-stat-label">진행중</span>
+          </div>
+          <div className="mys-stat-card mys-stat-card--pending">
+            <span className="mys-stat-value">{pendingContracts.length}</span>
+            <span className="mys-stat-label">신청 대기</span>
+          </div>
+          <div className="mys-stat-card">
+            <span className="mys-stat-value">{activeContracts.length}</span>
+            <span className="mys-stat-label">고정 레슨</span>
+          </div>
+        </div>
 
         <Tab
           tabs={tabList}

@@ -2,134 +2,124 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 0 8px;
-  border-radius: 16px;
+  padding: 0 10px;
+  border-radius: var(--radius-chip);
   font-weight: 500;
+  font-family: inherit;
+  letter-spacing: -0.2px;
   cursor: default;
-  transition: all 0.2s ease;
+  transition: var(--transition-base);
   border: none;
+  white-space: nowrap;
 }
 
 /* Sizes */
 .mls-chip-sm {
-  height: 24px;
+  height: 22px;
   font-size: 12px;
+  padding: 0 8px;
 }
 
 .mls-chip-md {
-  height: 32px;
-  font-size: 14px;
+  height: 28px;
+  font-size: 13px;
 }
 
 .mls-chip-lg {
-  height: 40px;
-  font-size: 16px;
+  height: 36px;
+  font-size: 14px;
+  padding: 0 14px;
 }
 
-/* Variants */
-.chip.filled {
-  background-color: #f3f4f6;
-  color: #4b5563;
-}
-
-.chip.filled:hover {
-  background-color: #e5e7eb;
-}
-
-.chip.outlined {
-  border: 1px solid #e5e7eb;
-  color: #4b5563;
-}
-
-.chip.outlined:hover {
-  background-color: #f9fafb;
-}
-
+/* === General Variants === */
 .mls-chip-blue {
-  background-color: #dbeafe;
-  color: #1d4ed8;
+  background-color: var(--lesson-confirmed-bg);
+  color: var(--lesson-confirmed);
 }
-
-.mls-chip-blue:hover {
-  background-color: #bfdbfe;
-}
+.mls-chip-blue:hover { filter: brightness(0.96); }
 
 .mls-chip-red {
-  background-color: #fecaca;
-  color: #b91c1c;
+  background-color: var(--lesson-cancelled-bg);
+  color: var(--lesson-cancelled);
 }
-
-.mls-chip-red:hover {
-  background-color: #fca5a1;
-}
+.mls-chip-red:hover { filter: brightness(0.96); }
 
 .mls-chip-green {
-  background-color: #dcfce7;
-  color: #15803d;
+  background-color: var(--lesson-completed-bg);
+  color: var(--lesson-completed);
 }
-
-.mls-chip-green:hover {
-  background-color: #bbf7d0;
-}
+.mls-chip-green:hover { filter: brightness(0.96); }
 
 .mls-chip-yellow {
-  background-color: #fef9c3;
-  color: #a16207;
+  background-color: var(--lesson-firstcome-bg);
+  color: var(--lesson-firstcome);
 }
-
-.mls-chip-yellow:hover {
-  background-color: #fef08a;
-}
+.mls-chip-yellow:hover { filter: brightness(0.96); }
 
 .mls-chip-gray {
-  background-color: #f3f4f6;
-  color: #4b5563;
+  background-color: var(--lesson-expired-bg);
+  color: var(--lesson-expired);
+}
+.mls-chip-gray:hover { filter: brightness(0.96); }
+
+.mls-chip-purple {
+  background-color: var(--lesson-pending-bg);
+  color: var(--lesson-pending);
+}
+.mls-chip-purple:hover { filter: brightness(0.96); }
+
+/* Default (no variant class) */
+.mls-chip:not([class*='mls-chip-']) {
+  background-color: var(--color-primary-bg);
+  color: var(--color-primary);
 }
 
-.mls-chip-gray:hover {
-  background-color: #e5e7eb;
+/* === Lesson Status Chips === */
+.lesson-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-chip);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
 }
+
+.lesson-chip--pending   { background: var(--lesson-pending-bg);   color: var(--lesson-pending); }
+.lesson-chip--confirmed { background: var(--lesson-confirmed-bg); color: var(--lesson-confirmed); }
+.lesson-chip--completed { background: var(--lesson-completed-bg); color: var(--lesson-completed); }
+.lesson-chip--cancelled { background: var(--lesson-cancelled-bg); color: var(--lesson-cancelled); }
+.lesson-chip--expired   { background: var(--lesson-expired-bg);   color: var(--lesson-expired); }
+.lesson-chip--trial     { background: var(--lesson-trial-bg);     color: var(--lesson-trial); }
+.lesson-chip--firstcome { background: var(--lesson-firstcome-bg); color: var(--lesson-firstcome); }
+.lesson-chip--recurring { background: var(--lesson-recurring-bg); color: var(--lesson-recurring); }
 
 /* Selected state */
 .mls-chip.selected {
-  border: 1px solid;
-  border-color: currentColor;
-}
-
-/* Selected variants */
-.mls-chip-blue.selected {
-  background-color: #dbeafe;
-  color: #1d4ed8;
-}
-
-.mls-chip-green.selected {
-  background-color: #dcfce7;
-  color: #15803d;
-}
-
-.mls-chip-yellow.selected {
-  background-color: #fef9c3;
-  color: #a16207;
+  border: 1.5px solid currentColor;
 }
 
 /* Remove button */
-.chip-remove {
+.mls-chip-remove {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  background-color: transparent;
+  background: transparent;
+  border: none;
   color: currentColor;
   cursor: pointer;
-  opacity: 0.7;
-  transition: all 0.2s ease;
-  font-size: 16px;
-  margin-right: -4px;
+  opacity: 0.6;
+  transition: var(--transition-base);
+  font-size: 12px;
+  margin-right: -2px;
+  padding: 0;
 }
 
-.chip-remove:hover {
+.mls-chip-remove:hover {
   opacity: 1;
-  background-color: rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.08);
 }
