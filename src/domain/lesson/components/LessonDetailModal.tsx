@@ -2,6 +2,8 @@ import React from 'react';
 import Modal from '@/shared/components/Modal';
 import LessonDetailCard from './LessonDetailCard';
 import { type LessonEvent } from '../types/lessonCalendar';
+import { useAuth } from '@/shared/auth/AuthContext';
+import { LessonLogSection } from './LessonLogSection';
 
 interface LessonDetailModalProps {
   open: boolean;
@@ -18,10 +20,16 @@ const LessonDetailModal: React.FC<LessonDetailModalProps> = ({
   onDelete,
   onChangeStatus,
 }) => {
+  const { user } = useAuth();
+  const isTutor = user?.userRole?.tutor ?? false;
+
   if (!event) return null;
   console.log('LessonDetailModal event:', event);
+
+  const isCompleted = event.status.name === 'COMPLETED';
+
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={onClose} className={isCompleted ? 'lesson-log-modal-scroll' : undefined}>
       <LessonDetailCard
         studentName={event.studentName}
         category={event.category.label}
@@ -36,6 +44,9 @@ const LessonDetailModal: React.FC<LessonDetailModalProps> = ({
         onDelete={onDelete}
         onClose={onClose}
       />
+      {isCompleted && (
+        <LessonLogSection lessonReservationNo={event.id} isTutor={isTutor} />
+      )}
     </Modal>
   );
 };

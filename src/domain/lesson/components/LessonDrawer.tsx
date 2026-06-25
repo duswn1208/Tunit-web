@@ -1,32 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 import { statusStyle, type LessonEvent, type LessonStatus } from '@/domain/lesson/types/lessonCalendar';
+import { categoryIcons } from '@/domain/lesson/lib/categoryIcons';
 import Chip from '@/shared/components/Chip';
-import Button from '@/shared/components/Button';
+import { useAuth } from '@/shared/auth/AuthContext';
+import { useLessonLog } from '../hooks/useLessonLog';
+import { useContractDetail } from '@/domain/contract/hooks/useContractList';
+import { LessonLogSection } from './LessonLogSection';
 import '../css/lesson-drawer.css';
 
-const ACCENT_COLORS = ['#4F59D6', '#6B4EFF', '#0075FF', '#00B386', '#FF6B35', '#F7A300', '#F04452'];
-
-function getAvatarColor(name: string): string {
-  const idx = name.charCodeAt(0) % ACCENT_COLORS.length;
-  return ACCENT_COLORS[idx];
-}
-
-/** 상태 이름(REQUESTED 등) → Chip variant 매핑 */
 const STATUS_TO_CHIP: Record<string, 'pending' | 'confirmed' | 'completed' | 'cancelled' | 'expired'> = {
   REQUESTED: 'pending',
   ACTIVE: 'confirmed',
   COMPLETED: 'completed',
   CANCELED: 'cancelled',
   EXPIRED: 'expired',
-};
-
-/** 다음 상태 버튼의 variant */
-const NEXT_STATUS_VARIANT: Record<string, 'default' | 'outline' | 'ghost' | 'danger'> = {
-  ACTIVE: 'default',
-  COMPLETED: 'outline',
-  CANCELLED: 'danger',
-  CANCELED: 'danger',
 };
 
 interface LessonDrawerProps {
@@ -44,12 +33,25 @@ const LessonDrawer: React.FC<LessonDrawerProps> = ({
   onDelete,
   onChangeStatus,
 }) => {
+  const { user } = useAuth();
+  const isTutor = user?.userRole?.tutor ?? false;
+  const [logMode, setLogMode] = useState<'view' | 'write' | 'edit'>('view');
+
+  const isCompleted = event?.status?.name === 'COMPLETED';
+  const { data: log } = useLessonLog(isCompleted && event ? event.id : null);
+  const { data: contract } = useContractDetail(event?.contractNo);
+
+  useEffect(() => {
+    setLogMode('view');
+  }, [event?.id]);
+
   if (!event) return null;
 
-  const avatarColor = getAvatarColor(event.studentName);
   const statusName = event.status?.name ?? '';
   const chipVariant = STATUS_TO_CHIP[statusName] ?? 'expired';
-  const statusInfo = statusStyle[statusName as LessonStatus];
+  const categoryName = typeof event.category === 'object' ? event.category.name : '';
+  const categoryLabel = typeof event.category === 'object' ? event.category.label : String(event.category);
+  const categoryIcon = categoryIcons[categoryName]?.icon ?? '✨';
 
   const handleChangeStatus = (next: { name: LessonStatus; label: string }) => {
     if (!event.id || !onChangeStatus) return;
@@ -60,16 +62,23 @@ const LessonDrawer: React.FC<LessonDrawerProps> = ({
     if (onDelete) onDelete(event.id as number);
   };
 
+  const showLogFooterBtn = isCompleted && isTutor && logMode === 'view';
+
+  const lessonProgress = contract
+    ? `${contract.currentLessonCount} / ${contract.lessonCount}회`
+    : null;
+  const progressPct = contract
+    ? Math.min(100, Math.round((contract.currentLessonCount / contract.lessonCount) * 100))
+    : 0;
+
   return (
     <>
-      {/* 배경 오버레이 */}
       <div
         className={`lesson-drawer-overlay${open ? ' lesson-drawer-overlay--open' : ''}`}
         onClick={onClose}
         aria-hidden="true"
       />
 
-      {/* 드로어 패널 */}
       <div
         className={`lesson-drawer${open ? ' lesson-drawer--open' : ''}`}
         role="dialog"
@@ -78,93 +87,142 @@ const LessonDrawer: React.FC<LessonDrawerProps> = ({
       >
         {/* 헤더 */}
         <div className="lesson-drawer__header">
-          <span className="lesson-drawer__title">레슨 상세</span>
+          <div className="lesson-drawer__header-icon">
+            <span>{categoryIcon}</span>
+          </div>
+          <div className="lesson-drawer__header-text">
+            <span className="lesson-drawer__header-title">{categoryLabel} 레슨</span>
+            <span className="lesson-drawer__header-subtitle">레슨 상세</span>
+          </div>
           <button
             type="button"
             className="lesson-drawer__close"
             onClick={onClose}
             aria-label="닫기"
           >
-            <i className="fas fa-xmark" aria-hidden="true"></i>
+            <i className="fas fa-xmark" aria-hidden="true" />
           </button>
         </div>
 
-        {/* 학생 아바타 + 이름 */}
-        <div className="lesson-drawer__student">
-          <div
-            className="lesson-drawer__avatar"
-            style={{ background: avatarColor + '22', color: avatarColor }}
-          >
-            {event.studentName.slice(0, 2)}
-          </div>
-          <div className="lesson-drawer__student-info">
-            <span className="lesson-drawer__student-name">{event.studentName}</span>
+        {/* 스크롤 본문 */}
+        <div className="lesson-drawer__body">
+
+          {/* 학생 + 상태 요약 */}
+          <div className="lesson-drawer__summary">
+            <span className="lesson-drawer__summary-student">{event.studentName}</span>
             <Chip variant={chipVariant} label={event.status?.label ?? statusName} />
           </div>
-        </div>
 
-        {/* 레슨 정보 */}
-        <div className="lesson-drawer__info-block">
-          <div className="lesson-drawer__info-row">
-            <span className="lesson-drawer__info-label">카테고리</span>
-            <span className="lesson-drawer__info-value">
-              {typeof event.category === 'object' ? event.category.label : event.category} 레슨
-            </span>
+          {/* 날짜 + 시간 (한 줄) */}
+          <div className="lesson-drawer__datetime">
+            <i className="far fa-calendar lesson-drawer__datetime-icon" aria-hidden="true" />
+            {event.date ? format(event.date, 'yyyy년 M월 d일 (EEE)', { locale: ko }) : ''}
+            <span className="lesson-drawer__datetime-sep">·</span>
+            {event.start ? format(event.start, 'HH:mm') : ''}–{event.end ? format(event.end, 'HH:mm') : ''}
           </div>
-          <div className="lesson-drawer__info-row">
-            <span className="lesson-drawer__info-label">날짜</span>
-            <span className="lesson-drawer__info-value">
-              {event.date ? format(event.date, 'yyyy년 MM월 dd일 (EEE)', { locale: undefined }) : ''}
-            </span>
-          </div>
-          <div className="lesson-drawer__info-row">
-            <span className="lesson-drawer__info-label">시간</span>
-            <span className="lesson-drawer__info-value">
-              {event.start ? format(event.start, 'HH:mm') : ''} –{' '}
-              {event.end ? format(event.end, 'HH:mm') : ''}
-            </span>
-          </div>
-          {statusInfo && (
-            <div className="lesson-drawer__info-row">
-              <span className="lesson-drawer__info-label">상태</span>
-              <span className="lesson-drawer__info-value lesson-drawer__info-value--status">
-                <span
-                  className="lesson-drawer__status-dot"
-                  style={{ background: statusInfo.dot }}
-                />
-                {event.status?.label}
-              </span>
+
+          {/* 계약 진행 정보 */}
+          {contract && (
+            <div className="lesson-drawer__contract-section">
+              {/* 회차 진행 */}
+              <div className="lesson-drawer__contract-progress">
+                <div className="lesson-drawer__contract-progress-header">
+                  <span className="lesson-drawer__contract-label">레슨 진행</span>
+                  <span className="lesson-drawer__contract-count">{lessonProgress} 완료</span>
+                </div>
+                <div className="lesson-drawer__progress-bar">
+                  <div
+                    className="lesson-drawer__progress-fill"
+                    style={{ width: `${progressPct}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* 기타 계약 정보 */}
+              <div className="lesson-drawer__contract-rows">
+                {contract.place && (
+                  <div className="lesson-drawer__contract-row">
+                    <i className="fas fa-location-dot lesson-drawer__contract-icon" aria-hidden="true" />
+                    <span>{contract.place}</span>
+                  </div>
+                )}
+                {contract.emergencyContact && (
+                  <div className="lesson-drawer__contract-row">
+                    <i className="fas fa-phone lesson-drawer__contract-icon" aria-hidden="true" />
+                    <span>{contract.emergencyContact}</span>
+                  </div>
+                )}
+                {contract.memo && (
+                  <div className="lesson-drawer__contract-row lesson-drawer__contract-row--memo">
+                    <i className="fas fa-note-sticky lesson-drawer__contract-icon" aria-hidden="true" />
+                    <span>{contract.memo}</span>
+                  </div>
+                )}
+              </div>
             </div>
           )}
+
+          {/* 상태 변경 */}
+          {event.status?.allowedNextStatuses && event.status.allowedNextStatuses.length > 0 && (
+            <div className="lesson-drawer__status-actions">
+              <span className="lesson-drawer__section-label">상태 변경</span>
+              <div className="lesson-drawer__status-btn-group">
+                {event.status.allowedNextStatuses.map((next) => {
+                  const style = statusStyle[next.name as LessonStatus];
+                  return (
+                    <button
+                      key={next.name}
+                      type="button"
+                      className="lesson-drawer__status-btn"
+                      style={style ? { color: style.text, borderColor: style.border, background: style.bg } : undefined}
+                      onClick={() => handleChangeStatus(next)}
+                    >
+                      {next.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* 레슨 일지 (완료 상태만) */}
+          {isCompleted && (
+            <div className="lesson-drawer__log-section">
+              <LessonLogSection
+                lessonReservationNo={event.id as number}
+                isTutor={isTutor}
+                externalMode={logMode}
+                onExternalModeChange={setLogMode}
+                hideTriggerButtons={true}
+              />
+            </div>
+          )}
+
         </div>
 
-        {/* 상태 변경 버튼 */}
-        {event.status?.allowedNextStatuses && event.status.allowedNextStatuses.length > 0 && (
-          <div className="lesson-drawer__status-actions">
-            <span className="lesson-drawer__section-label">상태 변경</span>
-            <div className="lesson-drawer__status-btn-group">
-              {event.status.allowedNextStatuses.map((next) => (
-                <Button
-                  key={next.name}
-                  variant={NEXT_STATUS_VARIANT[next.name] ?? 'outline'}
-                  size="sm"
-                  onClick={() => handleChangeStatus(next)}
-                >
-                  {next.label}
-                </Button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* 삭제 버튼 */}
-        {onDelete && (
-          <div className="lesson-drawer__footer">
-            <Button variant="danger" size="sm" onClick={handleDelete}>
-              레슨 삭제
-            </Button>
-          </div>
-        )}
+        {/* 고정 푸터 */}
+        <div className="lesson-drawer__footer">
+          {onDelete && (
+            <button
+              type="button"
+              className="lesson-drawer__delete-btn"
+              onClick={handleDelete}
+            >
+              <i className="fas fa-trash-can" aria-hidden="true" />
+              삭제
+            </button>
+          )}
+          {showLogFooterBtn && (
+            <button
+              type="button"
+              className="lesson-drawer__log-btn"
+              onClick={() => setLogMode(log ? 'edit' : 'write')}
+            >
+              <i className="fas fa-pencil" aria-hidden="true" />
+              {log ? '일지 수정' : '일지 작성'}
+            </button>
+          )}
+        </div>
       </div>
     </>
   );

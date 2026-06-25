@@ -6,11 +6,11 @@
 .lesson-drawer-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.36);
+  background: rgba(0, 0, 0, 0.28);
   opacity: 0;
   pointer-events: none;
   transition: var(--transition-bg);
-  z-index: 49;
+  z-index: 150;
 }
 
 .lesson-drawer-overlay--open {
@@ -30,10 +30,10 @@
   box-shadow: var(--shadow-drawer);
   transform: translateX(100%);
   transition: var(--transition-drawer);
-  z-index: 50;
+  z-index: 200;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .lesson-drawer--open {
@@ -44,17 +44,46 @@
 .lesson-drawer__header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 20px 24px 16px;
+  gap: 12px;
+  padding: 18px 20px 16px;
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
 }
 
-.lesson-drawer__title {
-  font-size: 17px;
+.lesson-drawer__header-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.lesson-drawer__header-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.lesson-drawer__header-title {
+  font-size: 16px;
   font-weight: 700;
   color: var(--text-primary);
   letter-spacing: -0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lesson-drawer__header-subtitle {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  letter-spacing: -0.2px;
 }
 
 .lesson-drawer__close {
@@ -70,6 +99,7 @@
   align-items: center;
   justify-content: center;
   transition: var(--transition-base);
+  flex-shrink: 0;
 }
 
 .lesson-drawer__close:hover {
@@ -77,99 +107,142 @@
   color: var(--text-primary);
 }
 
-/* 학생 정보 영역 */
-.lesson-drawer__student {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 20px 24px;
-  border-bottom: 1px solid var(--border);
-}
-
-.lesson-drawer__avatar {
-  width: 52px;
-  height: 52px;
-  border-radius: var(--radius-avatar);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: 700;
-  flex-shrink: 0;
-  letter-spacing: -0.5px;
-}
-
-.lesson-drawer__student-info {
+/* 본문 스크롤 영역 */
+.lesson-drawer__body {
+  flex: 1;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 6px;
 }
 
-.lesson-drawer__student-name {
+/* 학생 + 상태 요약 행 */
+.lesson-drawer__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 0;
+}
+
+.lesson-drawer__summary-student {
   font-size: 18px;
   font-weight: 700;
   color: var(--text-primary);
-  letter-spacing: -0.3px;
+  letter-spacing: -0.4px;
 }
 
-/* 정보 블록 */
-.lesson-drawer__info-block {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-  margin: 16px 24px;
-  overflow: hidden;
-}
-
-.lesson-drawer__info-row {
+/* 날짜 + 시간 한 줄 */
+.lesson-drawer__datetime {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 12px 16px;
+  gap: 6px;
+  padding: 6px 20px 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  letter-spacing: -0.2px;
   border-bottom: 1px solid var(--border);
-  font-size: 14px;
 }
 
-.lesson-drawer__info-row:last-child {
-  border-bottom: none;
+.lesson-drawer__datetime-icon {
+  color: var(--text-tertiary);
+  font-size: 12px;
 }
 
-.lesson-drawer__info-label {
+.lesson-drawer__datetime-sep {
+  color: var(--text-tertiary);
+  margin: 0 2px;
+}
+
+/* 계약 진행 섹션 */
+.lesson-drawer__contract-section {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.lesson-drawer__contract-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lesson-drawer__contract-progress-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lesson-drawer__contract-label {
   font-size: 12px;
   font-weight: 600;
   color: var(--text-tertiary);
-  min-width: 52px;
-  flex-shrink: 0;
+  letter-spacing: -0.1px;
 }
 
-.lesson-drawer__info-value {
-  color: var(--text-primary);
-  font-weight: 500;
+.lesson-drawer__contract-count {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: -0.2px;
 }
 
-.lesson-drawer__info-value--status {
+.lesson-drawer__progress-bar {
+  height: 6px;
+  background: var(--bg-base);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.lesson-drawer__progress-fill {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: 99px;
+  transition: width 0.4s ease;
+  min-width: 4px;
+}
+
+/* 계약 기타 정보 (장소·연락처·메모) */
+.lesson-drawer__contract-rows {
   display: flex;
-  align-items: center;
-  gap: 6px;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.lesson-drawer__status-dot {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+.lesson-drawer__contract-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  letter-spacing: -0.2px;
+}
+
+.lesson-drawer__contract-row--memo {
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+.lesson-drawer__contract-icon {
+  color: var(--text-tertiary);
+  font-size: 12px;
+  margin-top: 2px;
   flex-shrink: 0;
+  width: 14px;
+  text-align: center;
 }
 
 /* 상태 변경 영역 */
 .lesson-drawer__status-actions {
-  padding: 0 24px 16px;
+  padding: 14px 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  border-bottom: 1px solid var(--border);
 }
 
 .lesson-drawer__section-label {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--text-tertiary);
   text-transform: uppercase;
@@ -182,11 +255,91 @@
   gap: 8px;
 }
 
-/* 푸터 */
+.lesson-drawer__status-btn {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  border: 1.5px solid;
+  border-radius: var(--radius-btn);
+  background: transparent;
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+
+.lesson-drawer__status-btn:hover {
+  opacity: 0.8;
+}
+
+/* 레슨 일지 섹션 */
+.lesson-drawer__log-section {
+  padding: 20px 20px 8px;
+  flex: 1;
+}
+
+.lesson-drawer__log-section .lesson-log-wrap {
+  padding: 0;
+}
+
+.lesson-drawer__log-section .lesson-log-view {
+  background: var(--bg-base);
+  border-radius: var(--radius-card);
+  padding: 14px 16px;
+  gap: 12px;
+}
+
+/* 고정 푸터 */
 .lesson-drawer__footer {
-  margin-top: auto;
-  padding: 16px 24px 24px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px 20px;
   border-top: 1px solid var(--border);
+}
+
+.lesson-drawer__delete-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  border: 1.5px solid var(--lesson-cancelled);
+  border-radius: var(--radius-btn);
+  background: transparent;
+  color: var(--lesson-cancelled);
+  cursor: pointer;
+  transition: var(--transition-base);
+  flex-shrink: 0;
+}
+
+.lesson-drawer__delete-btn:hover {
+  background: rgba(240, 68, 82, 0.06);
+}
+
+.lesson-drawer__log-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  border: none;
+  border-radius: var(--radius-btn);
+  background: var(--color-primary);
+  color: #fff;
+  cursor: pointer;
+  transition: var(--transition-base);
+  box-shadow: var(--shadow-brand);
+}
+
+.lesson-drawer__log-btn:hover {
+  background: #3d47c2;
 }
 
 /* 모바일 */

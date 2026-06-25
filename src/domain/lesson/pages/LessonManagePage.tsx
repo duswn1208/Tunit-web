@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { type LessonEvent, type LessonSummary, type LessonStatus, statusStyle } from '@/domain/lesson/types/lessonCalendar.ts';
 import { api } from '../../../shared/lib/api.ts';
 import LessonCalendarSection from '@/domain/lesson/components/LessonCalendarSection.tsx';
-import LessonDetailModal from '@/domain/lesson/components/LessonDetailModal.tsx';
+import LessonDrawer from '@/domain/lesson/components/LessonDrawer.tsx';
 import Header from '@/shared/components/Header.tsx';
 import '@/shared/css/components/lesson-manage.css';
 import LessonListSection from '@/domain/lesson/components/LessonListSection.tsx';
@@ -62,6 +62,7 @@ export default function LessonManageLayout() {
           allDay: false,
           id: item.lessonReservationNo,
           category: item.category,
+          contractNo: item.contractNo,
         }));
         // 미확정 체험의 1순위 후보 시간을 "잠정(점선)" 이벤트로 변환
         let candidateEvents = (data.trialCandidates ?? []).map((item: any) => ({
@@ -265,7 +266,7 @@ export default function LessonManageLayout() {
         onClose={() => setShowRegisterModal(false)}
         onSuccess={() => { setShowRegisterModal(false); fetchLessons(); }}
       />
-      <LessonDetailModal
+      <LessonDrawer
         open={!!selectedEvent}
         event={selectedEvent}
         onClose={() => setSelectedEvent(null)}

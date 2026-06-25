@@ -14,6 +14,7 @@ export type LessonEvent = {
   title: string;
   category: { label: string; name: string };
   id: number;
+  contractNo?: number;
 };
 
 export type LessonSummary = {

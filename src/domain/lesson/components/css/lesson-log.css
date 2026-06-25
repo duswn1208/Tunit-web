@@ -1,0 +1,417 @@
+.lesson-log-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: var(--bg-surface);
+  padding: 12px 0 0;
+}
+
+.lesson-log-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.lesson-log-section-icon {
+  color: var(--color-primary);
+  font-size: 14px;
+}
+
+/* Field display */
+.lesson-log-view {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lesson-log-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lesson-log-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: -0.2px;
+}
+
+.lesson-log-value {
+  font-size: 14px;
+  color: var(--text-primary);
+  line-height: 1.65;
+  letter-spacing: -0.2px;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+.lesson-log-value--empty {
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+.lesson-log-muted {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  letter-spacing: -0.2px;
+  margin: 0;
+}
+
+.lesson-log-required {
+  color: var(--color-primary);
+}
+
+.lesson-log-hint {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-tertiary);
+}
+
+.lesson-log-hint-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+  margin-left: 6px;
+}
+
+/* Form */
+.lesson-log-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lesson-log-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lesson-log-textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  letter-spacing: -0.2px;
+  color: var(--text-primary);
+  resize: vertical;
+  outline: none;
+  box-sizing: border-box;
+  transition: var(--transition-base);
+}
+
+.lesson-log-textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-bg);
+}
+
+/* Buttons */
+.lesson-log-btn-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.lesson-log-btn {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  border-radius: var(--radius-btn);
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+
+.lesson-log-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.lesson-log-btn--primary:disabled {
+  background: #BCC0EE;
+  box-shadow: none;
+  opacity: 1;
+}
+
+.lesson-log-btn--primary {
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: var(--shadow-brand);
+}
+
+.lesson-log-btn--primary:hover:not(:disabled) {
+  background: #3d47c2;
+}
+
+.lesson-log-btn--ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.lesson-log-btn--ghost:hover:not(:disabled) {
+  background: var(--bg-base);
+}
+
+/* Feedback counter */
+.lesson-log-feedback-counter {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-align: right;
+  letter-spacing: -0.2px;
+}
+
+/* Write modal header (UnwrittenLessonLogList) */
+.log-modal-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.log-modal-header-main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.log-modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+
+.log-modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-tertiary);
+  font-size: 18px;
+  line-height: 1;
+  padding: 2px;
+  flex-shrink: 0;
+  transition: var(--transition-base);
+}
+
+.log-modal-close:hover {
+  color: var(--text-primary);
+}
+
+.log-modal-header-sub {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.log-modal-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  letter-spacing: -0.2px;
+}
+
+.log-modal-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+.log-modal-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 8px 0 0;
+}
+
+/* Q&A */
+.lesson-log-qa {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.lesson-log-qa-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  color: var(--text-secondary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lesson-log-qa-icon {
+  color: var(--text-tertiary);
+  font-size: 13px;
+}
+
+/* 일지 없음 — 드로어 빈 상태 카드 */
+.lesson-log-empty-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 28px 20px;
+  background: var(--bg-base);
+  border-radius: var(--radius-card);
+  border: 1.5px dashed var(--border);
+  text-align: center;
+}
+
+.lesson-log-empty-card__icon {
+  font-size: 28px;
+  color: var(--color-primary);
+  opacity: 0.35;
+}
+
+.lesson-log-empty-card__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: -0.3px;
+  margin: 0;
+}
+
+.lesson-log-empty-card__hint {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  letter-spacing: -0.2px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* 빈 상태 (질문 없음) */
+.lesson-log-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 0 16px;
+  color: var(--text-tertiary);
+  font-size: 13px;
+  letter-spacing: -0.2px;
+}
+
+.lesson-log-empty-icon {
+  font-size: 28px;
+  opacity: 0.45;
+}
+
+.lesson-log-qa-bubble {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--bg-base);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 10px 12px;
+}
+
+.lesson-log-qa-bubble--reply {
+  background: var(--color-primary-bg);
+  border-color: #D4D7FC;
+}
+
+.lesson-log-pending {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  font-style: italic;
+  letter-spacing: -0.2px;
+  margin: 0;
+}
+
+/* Modal scroll override */
+.lesson-log-modal-scroll {
+  overflow-y: auto;
+  max-height: min(85vh, 700px);
+}
+
+/* Unwritten lesson log list (in TutorContractCard) */
+.unwritten-log-section {
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.unwritten-log-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  color: var(--text-secondary);
+}
+
+.unwritten-log-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.unwritten-log-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.unwritten-log-date {
+  font-size: 13px;
+  letter-spacing: -0.2px;
+  color: var(--text-primary);
+}
+
+.unwritten-log-btn {
+  padding: 5px 12px !important;
+  font-size: 12px !important;
+  flex-shrink: 0;
+}
+
+/* Unwritten log modal header */
+.unwritten-log-modal-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 16px;
+}
+
+.unwritten-log-modal-date {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--text-primary);
+}
+
+.unwritten-log-modal-time {
+  font-size: 13px;
+  letter-spacing: -0.2px;
+  color: var(--text-tertiary);
+}
