@@ -12,6 +12,7 @@ import PaymentStatusAlert from './PaymentStatusAlert';
 import { confirmTrialContract, rejectTrialContract } from '../api/trialContractApi';
 import type { Contract, ContractStatusCode, PaymentStatusCode } from '../types/contract';
 import { CONTRACT_STATUS_TRANSITIONS, getStatusLabel } from '../types/contract';
+import { UnwrittenLessonLogList } from '@/domain/lesson/components/UnwrittenLessonLogList';
 import '../css/my-tutors.css';
 import '../css/my-students-stats.css';
 
@@ -193,41 +194,6 @@ export default function TutorContractCard({
             {displayPrice.toLocaleString()}원
           </span>
         </div>
-      </div>
-
-      {/* 호버 퀵 액션 */}
-      <div className="contract-card-quick-actions" style={{ marginBottom: 8 }}>
-        <button
-          className="contract-card-quick-btn"
-          onClick={(e) => {
-            e.stopPropagation();
-            navigate(`/tutor/my/lessons?contractNo=${contract.contractNo}`);
-          }}
-        >
-          레슨 보기
-        </button>
-        {!isEnded && (
-          <button
-            className="contract-card-quick-btn contract-card-quick-btn--danger"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleStatusChange('TERMINATED');
-            }}
-          >
-            중단
-          </button>
-        )}
-        {isEnded && (
-          <button
-            className="contract-card-reregister-btn"
-            onClick={(e) => {
-              e.stopPropagation();
-              // TODO: 재등록 처리
-            }}
-          >
-            재등록
-          </button>
-        )}
       </div>
 
       {/* 컴팩트 정보 */}
@@ -439,6 +405,14 @@ export default function TutorContractCard({
           </button>
         </div>
       )} */}
+
+      {contract.contractStatus.code === 'ACTIVE' && (
+        <UnwrittenLessonLogList
+          contractNo={contract.contractNo}
+          studentName={contract.studentName}
+          lessonName={contract.lessonName}
+        />
+      )}
 
       {(() => {
         // 체험레슨이 날짜 미선택 상태면 승인/진행중 전이를 숨기고 CANCEL만 노출
