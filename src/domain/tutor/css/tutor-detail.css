@@ -190,21 +190,56 @@
   position: relative;
 }
 
-/* 탭 래퍼 — 스크롤 시 헤더 아래 고정 */
+/* 탭 래퍼 — 스크롤 시 헤더 아래 고정. 히어로 카드와 동일 너비(860 컨테이너 - 거터) */
 .tutor-detail-tabs {
   position: sticky;
   top: 52px;
-  background: #fff;
   z-index: 10;
-  border-bottom: 1px solid #E5E8EB;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 10px 1.5rem;
+  box-sizing: border-box;
+  /* 페이지색 배경 — 스티키 시 스크롤 콘텐츠 가림(폭은 카드와 동일) */
+  background: var(--bg-base);
+}
+
+/* 버튼을 감싸는 트랙(뒷배경) */
+.tutor-detail-tabs .tab-container {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+  padding: 4px;
+  gap: 4px;
   margin: 0;
 }
 
-.tutor-detail-tabs .tab-container {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
+/* 탭 4개를 동일 너비로 균등하게 펼침 + 다듬기 */
+.tutor-detail-tabs .tab-button {
+  flex: 1;
+  text-align: center;
+  padding: 8px 12px;
+  border-radius: 7px;
   background: transparent;
+  color: var(--text-secondary);
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.tutor-detail-tabs .tab-button:hover {
+  background: var(--bg-base);
+  color: var(--text-primary);
+}
+
+.tutor-detail-tabs .tab-button.active {
+  background: var(--color-primary) !important;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: var(--shadow-brand);
+}
+
+.tutor-detail-tabs .tab-button.active:hover {
+  background: var(--color-primary-dark) !important;
+  color: #fff;
 }
 
 /* 각 섹션 — sticky 탭 높이만큼 스크롤 오프셋 */
@@ -220,9 +255,10 @@
     padding-right: 1rem;
   }
 
-  .tutor-detail-tabs .tab-container {
+  .tutor-detail-tabs {
     max-width: 100%;
-    padding: 0 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
 }
