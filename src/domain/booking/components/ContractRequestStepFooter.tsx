@@ -5,6 +5,7 @@ interface ContractRequestStepFooterProps {
   nextDisabled?: boolean;
   prevLabel?: string;
   nextType?: 'button' | 'submit';
+  nextFlex?: number;
 }
 
 export default function ContractRequestStepFooter({
@@ -14,6 +15,7 @@ export default function ContractRequestStepFooter({
   nextDisabled = false,
   prevLabel = '이전',
   nextType = 'button',
+  nextFlex = 1,
 }: ContractRequestStepFooterProps) {
   return (
     <div style={{ display: 'flex', gap: 8, marginTop: 32 }}>
@@ -39,11 +41,11 @@ export default function ContractRequestStepFooter({
         onClick={onNext}
         disabled={nextDisabled}
         style={{
-          flex: 1,
+          flex: nextFlex,
           padding: '12px 0',
           borderRadius: 8,
           border: 'none',
-          background: nextDisabled ? '#eee' : 'var(--brand-red)',
+          background: nextDisabled ? '#eee' : 'var(--color-primary)',
           color: nextDisabled ? '#aaa' : '#fff',
           fontWeight: 600,
         }}
