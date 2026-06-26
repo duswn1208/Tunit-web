@@ -2,7 +2,7 @@
   position: sticky;
   top: 0;
   height: 52px;
-  background: #5B5EA6;
+  background: var(--color-primary);
   border-bottom: none;
   z-index: 100;
 }
@@ -18,21 +18,20 @@
 
 .brand {
   font-weight: 800;
-  font-size: 17px;
+  font-size: 21px;
   color: #fff;
   text-decoration: none;
   letter-spacing: -0.5px;
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
   flex-shrink: 0;
 }
 
 .brand__mark {
-  width: 22px;
-  height: 22px;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  background: url('/brand_logo.png') center / contain no-repeat;
   display: inline-block;
   flex-shrink: 0;
 }
@@ -82,9 +81,9 @@
 .login-button {
   padding: 7px 16px;
   border-radius: var(--radius-btn);
-  background: #2D2E3F;
-  color: #fff;
-  font-weight: 600;
+  background: #fff;
+  color: var(--color-primary);
+  font-weight: 700;
   font-size: 13px;
   text-decoration: none;
   transition: var(--transition-base);
@@ -93,8 +92,7 @@
 }
 
 .login-button:hover {
-  background: #3d3e52;
-  color: #fff;
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .login {
@@ -217,7 +215,7 @@
   position: absolute;
   top: -3px;
   right: -3px;
-  background: #F04452;
+  background: var(--lesson-cancelled);
   color: #fff;
   border-radius: 50%;
   min-width: 16px;
